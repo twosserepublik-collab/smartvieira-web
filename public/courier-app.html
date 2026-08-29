@@ -169,20 +169,79 @@
 
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-[10px] font-bold text-slate-300 mb-1">📍 Inicio de Tramo Cubierto</label>
-            <select id="courierRouteStart" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white">
+            <label class="block text-[10px] font-bold text-slate-300 mb-1">📍 Inicio de Tramo</label>
+            <select id="courierRouteStart" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-cyan-400">
               <option value="toda">Toda la ruta (Cualquier inicio)</option>
-              <option value="inicio">Inicio principal</option>
-              <option value="sarria">Sarria</option>
-              <option value="ferrol">Ferrol</option>
+              <optgroup label="Camino Francés">
+                <option value="sarria">Sarria</option>
+                <option value="portomarín">Portomarín</option>
+                <option value="palas de rei">Palas de Rei</option>
+                <option value="melide">Melide</option>
+                <option value="arzúa">Arzúa</option>
+                <option value="o pino">O Pino / O Pedrouzo</option>
+              </optgroup>
+              <optgroup label="Camino Inglés">
+                <option value="ferrol">Ferrol</option>
+                <option value="a coruña">A Coruña</option>
+                <option value="neda">Neda</option>
+                <option value="pontedeume">Pontedeume</option>
+                <option value="betanzos">Betanzos</option>
+                <option value="mesía">Mesía / Bruma</option>
+                <option value="oroso">Oroso / Sigüeiro</option>
+              </optgroup>
+              <optgroup label="Camino Portugués">
+                <option value="tui">Tui</option>
+                <option value="porriño">O Porriño</option>
+                <option value="a guarda">A Guarda</option>
+                <option value="baiona">Baiona</option>
+                <option value="vigo">Vigo</option>
+                <option value="pontevedra">Pontevedra</option>
+                <option value="caldas">Caldas de Reis</option>
+                <option value="padrón">Padrón</option>
+              </optgroup>
+              <optgroup label="Otros Caminos">
+                <option value="ribadeo">Ribadeo</option>
+                <option value="mondoñedo">Mondoñedo</option>
+                <option value="vilalba">Vilalba</option>
+                <option value="sobrado">Sobrado</option>
+                <option value="oviedo">Oviedo</option>
+                <option value="fonsagrada">Fonsagrada</option>
+                <option value="lugo">Lugo</option>
+                <option value="ourense">Ourense</option>
+                <option value="cea">Cea</option>
+                <option value="lalín">Lalín</option>
+                <option value="silleda">Silleda</option>
+                <option value="santiago">Santiago de Compostela</option>
+              </optgroup>
             </select>
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-slate-300 mb-1">🏁 Fin de Tramo Cubierto</label>
-            <select id="courierRouteEnd" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white">
+            <label class="block text-[10px] font-bold text-slate-300 mb-1">🏁 Fin de Tramo</label>
+            <select id="courierRouteEnd" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-cyan-400">
               <option value="toda">Toda la ruta (Cualquier fin)</option>
-              <option value="fin">Fin principal</option>
               <option value="santiago">Santiago de Compostela</option>
+              <optgroup label="Fisterra / Muxía">
+                <option value="negreira">Negreira</option>
+                <option value="olveiroa">Olveiroa</option>
+                <option value="fisterra">Fisterra</option>
+                <option value="muxía">Muxía</option>
+              </optgroup>
+              <optgroup label="Fin en Etapas Intermedias">
+                <option value="portomarín">Portomarín</option>
+                <option value="palas de rei">Palas de Rei</option>
+                <option value="melide">Melide</option>
+                <option value="arzúa">Arzúa</option>
+                <option value="o pino">O Pino / O Pedrouzo</option>
+                <option value="pontedeume">Pontedeume</option>
+                <option value="betanzos">Betanzos</option>
+                <option value="mesía">Mesía / Bruma</option>
+                <option value="oroso">Oroso / Sigüeiro</option>
+                <option value="porriño">O Porriño</option>
+                <option value="pontevedra">Pontevedra</option>
+                <option value="caldas">Caldas de Reis</option>
+                <option value="padrón">Padrón</option>
+                <option value="lugo">Lugo</option>
+              </optgroup>
             </select>
           </div>
         </div>
