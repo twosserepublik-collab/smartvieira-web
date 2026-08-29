@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vieira App Test - Escáner & Control BLE ESP32-S3</title>
+  <style>
+    :root {
+      --bg: #0e1b2e;
+      --card: #1c2b42;
+      --gold: #e5a93c;
+      --amber: #d48b28;
+      --text: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 20px; text-align: center; }
+    .container { max-width: 480px; margin: 0 auto; }
+    .header { margin-bottom: 24px; }
+    .logo { font-size: 32px; margin-bottom: 8px; }
+    h1 { font-size: 22px; font-weight: 800; color: var(--gold); }
+    p { font-size: 13px; color: #a0aec0; margin-top: 4px; }
+    .card { background: var(--card); border: 1px solid rgba(229, 169, 60, 0.3); border-radius: 20px; padding: 20px; margin-bottom: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    .btn { display: block; width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-connect { background: linear-gradient(135deg, var(--gold), var(--amber)); color: #0e1b2e; box-shadow: 0 4px 15px rgba(229, 169, 60, 0.4); }
+    .btn-red { background: #e53e3e; color: white; }
+    .btn-green { background: #38a169; color: white; }
+    .btn-blue { background: #3182ce; color: white; }
+    .btn-blink { background: #805ad5; color: white; }
+    .btn-off { background: #4a5568; color: white; }
+    .btn:active { transform: scale(0.97); opacity: 0.9; }
+    .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #2d3748; color: #a0aec0; margin-bottom: 12px; }
+    .status-connected { background: rgba(56, 161, 105, 0.2); color: #48bb78; border: 1px solid #48bb78; }
+    .log-box { background: #080f1a; border-radius: 12px; padding: 12px; font-family: monospace; font-size: 11px; color: #63b3ed; text-align: left; max-height: 140px; overflow-y: auto; margin-top: 12px; border: 1px solid #1a202c; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🐚⚡</div>
+      <h1>Vieira BLE Mobile Tester</h1>
+      <p>App de Prueba para Transportistas y Peregrinos (ESP32-S3 SuperMini)</p>
+    </div>
+
+    <div class="card">
+      <div id="statusBadge" class="status-badge">Desconectado</div>
+      <button id="btnConnect" class="btn btn-connect" onclick="connectBLE()">Conectar ESP32-S3 (BLE)</button>
+    </div>
+
+    <div id="controlPanel" class="card" style="opacity: 0.5; pointer-events: none;">
+      <h3 style="font-size: 14px; margin-bottom: 14px; color: var(--gold);">Controles de Luz LED RGB</h3>
+      
+      <div class="grid-2">
+        <button class="btn btn-red" onclick="sendCommand('PICKUP:255,0,0')">🔴 Empresa A (Rojo)</button>
+        <button class="btn btn-green" onclick="sendCommand('PICKUP:0,255,0')">🟢 Empresa B (Verde)</button>
+      </div>
+
+      <div class="grid-2">
+        <button class="btn btn-blue" onclick="sendCommand('PICKUP:0,0,255')">🔵 Empresa C (Azul)</button>
+        <button class="btn btn-blink" onclick="sendCommand('DELIVERY:255,255,0')">✨ Parpadeo Entrega</button>
+      </div>
+
+      <button class="btn btn-off" onclick="sendCommand('OFF')">🔌 Apagar LED</button>
+    </div>
+
+    <div class="card">
+      <h4 style="font-size: 12px; color: #a0aec0; margin-bottom: 6px;">Consola de Eventos BLE</h4>
+      <div id="logBox" class="log-box">Esperando acción de usuario...</div>
+    </div>
+  </div>
+
+  <script>
+    // Canonical 128-bit UUID format (8-4-4-4-12)
+    const SERVICE_UUID = "49535649-4549-5241-424c-453030313031";
+    const CHARACTERISTIC_UUID = "49535649-4549-5241-424c-453030313032";
+
+    let bleDevice = null;
+    let bleCharacteristic = null;
+
+    function log(msg) {
+      const box = document.getElementById('logBox');
+      const time = new Date().toLocaleTimeString();
+      box.innerHTML += `<div>[${time}] ${msg}</div>`;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    async function connectBLE() {
+      try {
+        log("Buscando Vieira-SmartShell-S3...");
+        
+        // Scan by name or acceptAllDevices
+        bleDevice = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true,
+          optionalServices: [SERVICE_UUID]
+        });
+
+        log(`Dispositivo seleccionado: ${bleDevice.name || 'Sin Nombre'}`);
+        bleDevice.addEventListener('gattserverdisconnected', onDisconnected);
+
+        const server = await bleDevice.gatt.connect();
+        log("Servidor GATT conectado!");
+
+        const service = await server.getPrimaryService(SERVICE_UUID);
+        bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+        document.getElementById('statusBadge').innerText = "CONECTADO A ESP32-S3";
+        document.getElementById('statusBadge').className = "status-badge status-connected";
+        document.getElementById('controlPanel').style.opacity = "1";
+        document.getElementById('controlPanel').style.pointerEvents = "auto";
+        document.getElementById('btnConnect').innerText = "Reconectar";
+
+        log("¡Listo para enviar comandos de luz!");
+      } catch (err) {
+        log(`Error BLE: ${err.message}`);
+      }
+    }
+
+    function onDisconnected() {
+      document.getElementById('statusBadge').innerText = "Desconectado";
+      document.getElementById('statusBadge').className = "status-badge";
+      document.getElementById('controlPanel').style.opacity = "0.5";
+      document.getElementById('controlPanel').style.pointerEvents = "none";
+      log("Dispositivo desconectado.");
+    }
+
+    async function sendCommand(cmd) {
+      if (!bleCharacteristic) {
+        log("Error: Dispositivo no conectado.");
+        return;
+      }
+      try {
+        const encoder = new TextEncoder();
+        await bleCharacteristic.writeValue(encoder.encode(cmd));
+        log(`Comando enviado con éxito: ${cmd}`);
+      } catch (err) {
+        log(`Error al enviar ${cmd}: ${err.message}`);
+      }
+    }
+  </script>
+</body>
+</html>

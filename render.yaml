@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: smartvieira-server
+    env: node
+    region: frankfurt
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: COURIER_ACCESS_CODE
+        value: VIEIRA-COURIER-2026
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false

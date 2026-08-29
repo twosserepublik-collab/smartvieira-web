@@ -1,0 +1,24 @@
+{
+  "name": "SmartVieira - App del Repartidor",
+  "short_name": "Vieira Courier",
+  "description": "App Oficial de Furgones de Traslado de Equipaje SmartVieira",
+  "start_url": "/courier-app.html",
+  "display": "standalone",
+  "background_color": "#0B132B",
+  "theme_color": "#4895EF",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=VieiraCourier",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=VieiraCourier",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

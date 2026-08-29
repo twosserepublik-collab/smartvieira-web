@@ -1,0 +1,24 @@
+{
+  "name": "SmartVieira - App Oficial del Peregrino",
+  "short_name": "Vieira Peregrino",
+  "description": "App Oficial de la Concha Inteligente SmartVieira para el Camino de Santiago",
+  "start_url": "/pilgrim-app.html",
+  "display": "standalone",
+  "background_color": "#0A1128",
+  "theme_color": "#E5A93C",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=VieiraPilgrim",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=VieiraPilgrim",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
