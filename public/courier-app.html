@@ -157,12 +157,15 @@
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">Ruta *</label>
           <select id="courierRoutes" required class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-cyan-400">
-            <option value="camino-ingles">Camino Ingles (Ferrol - Santiago)</option>
-            <option value="camino-frances">Camino Frances (Sarria - Santiago)</option>
-            <option value="camino-portugues">Camino Portugues (Tui - Santiago)</option>
+            <option value="camino-frances">Camino Francés (Sarria - Santiago)</option>
+            <option value="camino-ingles">Camino Inglés (Ferrol - Santiago)</option>
+            <option value="camino-portugues">Camino Portugués (Tui - Santiago)</option>
+            <option value="camino-portugues-costa">Camino Portugués de la Costa (A Guarda - Santiago)</option>
             <option value="camino-norte">Camino del Norte (Ribadeo - Santiago)</option>
             <option value="camino-primitivo">Camino Primitivo (Oviedo - Santiago)</option>
-            <option value="camino-sanabres">Camino Sanabres (Ourense - Santiago)</option>
+            <option value="camino-sanabres">Camino Sanabrés (Ourense - Santiago)</option>
+            <option value="camino-fisterra-muxia">Camino a Fisterra y Muxía</option>
+            <option value="camino-invierno">Camino de Invierno (Ponferrada - Santiago)</option>
             <option value="todas-las-rutas">Todas las Rutas Jacobeas</option>
           </select>
         </div>
@@ -171,77 +174,11 @@
           <div>
             <label class="block text-[10px] font-bold text-slate-300 mb-1">📍 Inicio de Tramo</label>
             <select id="courierRouteStart" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-cyan-400">
-              <option value="toda">Toda la ruta (Cualquier inicio)</option>
-              <optgroup label="Camino Francés">
-                <option value="sarria">Sarria</option>
-                <option value="portomarín">Portomarín</option>
-                <option value="palas de rei">Palas de Rei</option>
-                <option value="melide">Melide</option>
-                <option value="arzúa">Arzúa</option>
-                <option value="o pino">O Pino / O Pedrouzo</option>
-              </optgroup>
-              <optgroup label="Camino Inglés">
-                <option value="ferrol">Ferrol</option>
-                <option value="a coruña">A Coruña</option>
-                <option value="neda">Neda</option>
-                <option value="pontedeume">Pontedeume</option>
-                <option value="betanzos">Betanzos</option>
-                <option value="mesía">Mesía / Bruma</option>
-                <option value="oroso">Oroso / Sigüeiro</option>
-              </optgroup>
-              <optgroup label="Camino Portugués">
-                <option value="tui">Tui</option>
-                <option value="porriño">O Porriño</option>
-                <option value="a guarda">A Guarda</option>
-                <option value="baiona">Baiona</option>
-                <option value="vigo">Vigo</option>
-                <option value="pontevedra">Pontevedra</option>
-                <option value="caldas">Caldas de Reis</option>
-                <option value="padrón">Padrón</option>
-              </optgroup>
-              <optgroup label="Otros Caminos">
-                <option value="ribadeo">Ribadeo</option>
-                <option value="mondoñedo">Mondoñedo</option>
-                <option value="vilalba">Vilalba</option>
-                <option value="sobrado">Sobrado</option>
-                <option value="oviedo">Oviedo</option>
-                <option value="fonsagrada">Fonsagrada</option>
-                <option value="lugo">Lugo</option>
-                <option value="ourense">Ourense</option>
-                <option value="cea">Cea</option>
-                <option value="lalín">Lalín</option>
-                <option value="silleda">Silleda</option>
-                <option value="santiago">Santiago de Compostela</option>
-              </optgroup>
             </select>
           </div>
           <div>
             <label class="block text-[10px] font-bold text-slate-300 mb-1">🏁 Fin de Tramo</label>
             <select id="courierRouteEnd" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-cyan-400">
-              <option value="toda">Toda la ruta (Cualquier fin)</option>
-              <option value="santiago">Santiago de Compostela</option>
-              <optgroup label="Fisterra / Muxía">
-                <option value="negreira">Negreira</option>
-                <option value="olveiroa">Olveiroa</option>
-                <option value="fisterra">Fisterra</option>
-                <option value="muxía">Muxía</option>
-              </optgroup>
-              <optgroup label="Fin en Etapas Intermedias">
-                <option value="portomarín">Portomarín</option>
-                <option value="palas de rei">Palas de Rei</option>
-                <option value="melide">Melide</option>
-                <option value="arzúa">Arzúa</option>
-                <option value="o pino">O Pino / O Pedrouzo</option>
-                <option value="pontedeume">Pontedeume</option>
-                <option value="betanzos">Betanzos</option>
-                <option value="mesía">Mesía / Bruma</option>
-                <option value="oroso">Oroso / Sigüeiro</option>
-                <option value="porriño">O Porriño</option>
-                <option value="pontevedra">Pontevedra</option>
-                <option value="caldas">Caldas de Reis</option>
-                <option value="padrón">Padrón</option>
-                <option value="lugo">Lugo</option>
-              </optgroup>
             </select>
           </div>
         </div>
@@ -336,27 +273,42 @@
       return path;
     }
 
+    const ROUTE_TOWNS = {
+      'camino-frances': ['Sarria', 'Portomarín', 'Palas de Rei', 'Melide', 'Arzúa', 'O Pedrouzo', 'Santiago'],
+      'camino-ingles': ['Ferrol', 'Neda', 'Pontedeume', 'Betanzos', 'Bruma', 'Sigüeiro', 'Santiago'],
+      'camino-portugues': ['Tui', 'O Porriño', 'Redondela', 'Pontevedra', 'Caldas', 'Padrón', 'Santiago'],
+      'camino-portugues-costa': ['A Guarda', 'Oia', 'Baiona', 'Vigo', 'Redondela', 'Pontevedra', 'Caldas', 'Padrón', 'Santiago'],
+      'camino-norte': ['Ribadeo', 'Mondoñedo', 'Vilalba', 'Baamonde', 'Sobrado', 'Santiago'],
+      'camino-primitivo': ['Oviedo', 'A Fonsagrada', 'Castroverde', 'Lugo', 'Melide', 'Arzúa', 'O Pedrouzo', 'Santiago'],
+      'camino-sanabres': ['Ourense', 'Cea', 'Dozón', 'Lalín', 'Silleda', 'Santiago'],
+      'camino-fisterra-muxia': ['Santiago', 'Negreira', 'Olveiroa', 'Fisterra', 'Muxía'],
+      'camino-invierno': ['Ponferrada', 'O Barco de Valdeorras', 'A Rúa', 'Quiroga', 'Monforte de Lemos', 'Chantada', 'Rodeiro', 'Lalín', 'Silleda', 'A Estrada', 'Vedra', 'Boqueixón', 'Santiago']
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       const routesEl = document.getElementById('courierRoutes');
-      if (routesEl) {
+      const startEl = document.getElementById('courierRouteStart');
+      const endEl = document.getElementById('courierRouteEnd');
+
+      if (routesEl && startEl && endEl) {
         routesEl.addEventListener('change', function() {
           const r = this.value;
-          const start = document.getElementById('courierRouteStart');
-          const end = document.getElementById('courierRouteEnd');
-          
-          if(start) {
-            const optgroupsStart = start.querySelectorAll('optgroup');
-            optgroupsStart.forEach(g => {
-              if (r === 'todas-las-rutas') g.style.display = 'block';
-              else if (r === 'camino-frances' && g.label === 'Camino Francés') g.style.display = 'block';
-              else if (r === 'camino-ingles' && g.label === 'Camino Inglés') g.style.display = 'block';
-              else if (r === 'camino-portugues' && g.label === 'Camino Portugués') g.style.display = 'block';
-              else if (['camino-norte', 'camino-primitivo', 'camino-sanabres'].includes(r) && g.label === 'Otros Caminos') g.style.display = 'block';
-              else g.style.display = 'none';
-            });
-            start.value = 'toda';
+          startEl.innerHTML = '<option value="toda">Toda la ruta (Cualquier inicio)</option>';
+          endEl.innerHTML = '<option value="toda">Toda la ruta (Cualquier fin)</option>';
+
+          let towns = [];
+          if (r === 'todas-las-rutas') {
+             const all = new Set();
+             Object.values(ROUTE_TOWNS).forEach(arr => arr.forEach(t => all.add(t)));
+             towns = Array.from(all).sort();
+          } else {
+             towns = ROUTE_TOWNS[r] || [];
           }
-          if(end) end.value = 'toda';
+
+          towns.forEach(t => {
+            startEl.innerHTML += `<option value="${t.toLowerCase()}">${t}</option>`;
+            endEl.innerHTML += `<option value="${t.toLowerCase()}">${t}</option>`;
+          });
         });
         routesEl.dispatchEvent(new Event('change'));
       }
