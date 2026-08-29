@@ -155,28 +155,35 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">Ruta Jacobea Principal *</label>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Ruta *</label>
           <select id="courierRoutes" required class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-cyan-400">
-            <option value="Camino Inglés (Ferrol / A Coruña → Santiago)">Camino Inglés (Ferrol / A Coruña → Santiago)</option>
-            <option value="Camino Francés (Sarria → Santiago)">Camino Francés (Sarria → Santiago)</option>
-            <option value="Camino Portugués Interior (Tui → Santiago)">Camino Portugués Interior (Tui → Santiago)</option>
-            <option value="Camino Portugués Costa (A Guarda → Santiago)">Camino Portugués de la Costa (A Guarda → Santiago)</option>
-            <option value="Camino del Norte (Ribadeo → Santiago)">Camino del Norte (Ribadeo → Santiago)</option>
-            <option value="Camino Primitivo (Oviedo / Lugo → Santiago)">Camino Primitivo (Oviedo / Lugo → Santiago)</option>
-            <option value="Camino Sanabrés / Vía de la Plata (Ourense → Santiago)">Camino Sanabrés / Vía de la Plata (Ourense → Santiago)</option>
-            <option value="Camino a Fisterra y Muxía (Santiago → Epílogo)">Camino a Fisterra y Muxía (Santiago → Epílogo)</option>
-            <option value="Todas las Rutas Jacobeas">Todas las Rutas Jacobeas</option>
+            <option value="camino-ingles">Camino Ingles (Ferrol - Santiago)</option>
+            <option value="camino-frances">Camino Frances (Sarria - Santiago)</option>
+            <option value="camino-portugues">Camino Portugues (Tui - Santiago)</option>
+            <option value="camino-norte">Camino del Norte (Ribadeo - Santiago)</option>
+            <option value="camino-primitivo">Camino Primitivo (Oviedo - Santiago)</option>
+            <option value="camino-sanabres">Camino Sanabres (Ourense - Santiago)</option>
+            <option value="todas-las-rutas">Todas las Rutas Jacobeas</option>
           </select>
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[10px] font-bold text-slate-300 mb-1">📍 Inicio de Tramo Cubierto</label>
-            <input type="text" id="courierRouteStart" placeholder="Ej. Betanzos (o inicio)" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white">
+            <select id="courierRouteStart" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white">
+              <option value="toda">Toda la ruta (Cualquier inicio)</option>
+              <option value="inicio">Inicio principal</option>
+              <option value="sarria">Sarria</option>
+              <option value="ferrol">Ferrol</option>
+            </select>
           </div>
           <div>
             <label class="block text-[10px] font-bold text-slate-300 mb-1">🏁 Fin de Tramo Cubierto</label>
-            <input type="text" id="courierRouteEnd" placeholder="Ej. Sigüeiro (o fin)" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white">
+            <select id="courierRouteEnd" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white">
+              <option value="toda">Toda la ruta (Cualquier fin)</option>
+              <option value="fin">Fin principal</option>
+              <option value="santiago">Santiago de Compostela</option>
+            </select>
           </div>
         </div>
 
