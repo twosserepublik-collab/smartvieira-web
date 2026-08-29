@@ -1413,16 +1413,38 @@
 
           if (!categoryMatch) return false;
 
-          // Check sub-route section if specified by courier
-          if (c.routeStart && c.routeStart.trim().length > 0) {
+          // Geographic town order matching for intermediate points
+          const TOWNS_ORDER = {
+            'camino-frances': ['cebreiro', 'triacastela', 'sarria', 'portomarín', 'palas de rei', 'melide', 'arzúa', 'o pino', 'santiago'],
+            'camino-ingles': ['ferrol', 'a coruña', 'neda', 'pontedeume', 'betanzos', 'mesía', 'oroso', 'santiago'],
+            'camino-portugues-interior': ['tui', 'porriño', 'pontevedra', 'caldas', 'padrón', 'santiago'],
+            'camino-portugues-costa': ['a guarda', 'baiona', 'vigo', 'pontevedra', 'santiago'],
+            'camino-del-norte': ['ribadeo', 'mondoñedo', 'vilalba', 'sobrado', 'santiago'],
+            'camino-primitivo': ['oviedo', 'fonsagrada', 'lugo', 'santiago'],
+            'camino-sanabres': ['ourense', 'cea', 'lalín', 'silleda', 'santiago'],
+            'camino-fisterra-muxia': ['santiago', 'negreira', 'olveiroa', 'fisterra', 'muxía']
+          };
+
+          const routeTowns = TOWNS_ORDER[chosenRouteId] || [];
+          
+          if (c.routeStart && c.routeStart.trim().length > 0 && c.routeStart !== 'toda' && c.routeStart !== 'inicio') {
             const cStart = c.routeStart.toLowerCase();
-            if (!pickLower.includes(cStart) && !cStart.includes('toda') && !cStart.includes('inicio') && !cStart.includes('ferrol') && !cStart.includes('sarria')) {
+            const cStartIndex = routeTowns.findIndex(t => cStart.includes(t));
+            const pPickIndex = routeTowns.findIndex(t => pickLower.includes(t));
+            
+            // If both towns are recognized, and the pilgrim starts BEFORE the courier's coverage starts, filter out.
+            if (cStartIndex > -1 && pPickIndex > -1 && pPickIndex < cStartIndex) {
               return false;
             }
           }
-          if (c.routeEnd && c.routeEnd.trim().length > 0) {
+
+          if (c.routeEnd && c.routeEnd.trim().length > 0 && c.routeEnd !== 'toda' && c.routeEnd !== 'fin') {
             const cEnd = c.routeEnd.toLowerCase();
-            if (!dropLower.includes(cEnd) && !cEnd.includes('toda') && !cEnd.includes('fin') && !cEnd.includes('santiago')) {
+            const cEndIndex = routeTowns.findIndex(t => cEnd.includes(t));
+            const pDropIndex = routeTowns.findIndex(t => dropLower.includes(t));
+            
+            // If both towns are recognized, and the pilgrim ends AFTER the courier's coverage ends, filter out.
+            if (cEndIndex > -1 && pDropIndex > -1 && pDropIndex > cEndIndex) {
               return false;
             }
           }
