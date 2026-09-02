@@ -433,7 +433,9 @@
             routeEnd:    document.getElementById('courierRouteEnd').value.trim(),
             accessCode:  document.getElementById('courierAccessCode').value,
             email:       email,
-            password:    document.getElementById('courierRegPass').value
+            password:    document.getElementById('courierRegPass').value,
+            cif: document.getElementById('regCif') ? document.getElementById('regCif').value.trim() : '',
+            pricePerBag: document.getElementById('regPrice') ? (parseFloat(document.getElementById('regPrice').value) || 6.50) : 6.50
           })
         });
         const data = await res.json();
