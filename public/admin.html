@@ -273,16 +273,7 @@
       reader.readAsText(file);
       event.target.value = '';
     }
-);
-        const data = await res.json();
-        if (data.success && data.database) {
-          dbState = data.database;
-          renderTables();
-        }
-      } catch (err) {
-        console.error("Error al cargar base de datos:", err);
-      }
-    }
+
 
     function renderTables() {
       if (!dbState) return;

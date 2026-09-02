@@ -266,7 +266,7 @@ const server = http.createServer(async (req, res) => {
   if (reqPath === '/api/admin/login' && req.method === 'POST') {
     try {
       const body = await parseRequestBody(req);
-      if (body.user === ADMIN_CREDENTIALS.user && body.pass === ADMIN_CREDENTIALS.pass) {
+      if ((body.user || '').trim().toLowerCase() === ADMIN_CREDENTIALS.user.toLowerCase() && (body.pass || '').trim() === ADMIN_CREDENTIALS.pass) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ success: true, token: 'admin_secure_token_12345' }));
       } else {
