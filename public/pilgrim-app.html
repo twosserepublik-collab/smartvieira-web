@@ -103,7 +103,7 @@
         <svg class="w-6 h-6"><use href="#icon-vieira-shell"></use></svg>
       </div>
       <div>
-        <h1 class="text-base font-black tracking-tight text-white">Vieira<span class="text-amber-400">.</span></h1>
+        <h1 class="text-base font-black tracking-tight text-white">Vieira<span class="text-amber-400">.</span> <span class="text-[10px] text-white/50">v13.3.0</span></h1>
         <p class="text-[9px] text-amber-300/90 font-extrabold uppercase tracking-wider -mt-1">App Oficial del Peregrino</p>
       </div>
     </div>
@@ -2038,7 +2038,7 @@
       document.getElementById('paymentBox').classList.add('hidden');
 
       try {
-        const res = await fetch(getApiUrl('/api/admin/database'));
+        const res = await fetch(getApiUrl('/api/admin/database?code=VIEIRA-COURIER-2026'));
         const data = await res.json();
         
         let allCouriers = (data.success && data.database) ? (data.database.couriers || []) : [];
