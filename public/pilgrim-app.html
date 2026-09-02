@@ -2024,6 +2024,14 @@
 
     let availableCouriersFromDb = [];
 
+    function calculateFinalPrice(courierTariff) {
+          const T = parseFloat(courierTariff || 5.00);
+          // P = (T + 1.00 (beneficio) + 0.21 (IVA 21%) + 0.25 (fijo Stripe)) / (1 - 0.015 (variable Stripe))
+          // P = (T + 1.46) / 0.985
+          let P = (T + 1.46) / 0.985;
+          return (Math.ceil(P * 100) / 100).toFixed(2); // Redondear a 2 decimales hacia arriba por seguridad
+        }
+
     async function wizardGoToMarketplace() {
       const pick = document.getElementById('pickupHostelSelect').value;
       const drop = document.getElementById('dropoffHostelSelect').value;
@@ -2049,14 +2057,6 @@
         const dropLower = drop.toLowerCase();
 
         
-        function calculateFinalPrice(courierTariff) {
-          const T = parseFloat(courierTariff || 5.00);
-          // P = (T + 1.00 (beneficio) + 0.21 (IVA 21%) + 0.25 (fijo Stripe)) / (1 - 0.015 (variable Stripe))
-          // P = (T + 1.46) / 0.985
-          let P = (T + 1.46) / 0.985;
-          return (Math.ceil(P * 100) / 100).toFixed(2); // Redondear a 2 decimales hacia arriba por seguridad
-        }
-
         const matchingCouriers = allCouriers.filter(c => {
           if (!c.routes) return true;
           const rLower = c.routes.toLowerCase();
@@ -2155,7 +2155,7 @@
                   <strong class="text-sm text-white block">${c.companyName}</strong>
                   <span class="text-[10px] text-amber-300 font-extrabold">Conductor: ${c.driverName} (${c.vehicle || 'Furgón'})</span>
                 </div>
-                <span class="text-amber-400 font-black text-sm">6.50 €</span>
+                <span class="text-amber-400 font-black text-sm">${calculateFinalPrice(c.pricePerBag)} �</span>
               </div>
               <div class="flex justify-between text-[11px] text-slate-400 border-t border-slate-800/80 pt-1.5">
                 <span>Tramo: ${c.routeStart ? (c.routeStart + ' → ' + c.routeEnd) : c.routes}</span>
