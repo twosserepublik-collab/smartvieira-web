@@ -212,7 +212,7 @@
             <td class="font-mono text-[11px] text-cyan-400">${c.id}</td>
             <td class="font-bold text-white">${c.companyName}</td>
             <td>${c.driverName}</td>
-              <td>${c.vehicle || '-'}</td>
+              <td>${c.vehicle || '-'}</td><td class="font-mono text-amber-300 text-[11px]">${c.cif || '-'}</td><td class="font-bold text-emerald-400">${c.pricePerBag ? c.pricePerBag + ' �' : '6.50 �'}</td>
               <td>${c.routes || '-'}</td>
               <td>${c.routeStart || 'Toda'} &rarr; ${c.routeEnd || 'Toda'}</td>
               <td class="font-mono text-slate-300">${c.email}</td>
