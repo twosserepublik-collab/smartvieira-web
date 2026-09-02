@@ -464,6 +464,8 @@ const server = http.createServer(async (req, res) => {
         passwordHash: hash,
         salt: salt,
         accessCode: accessCode.trim(),
+          cif: cif || '',
+          pricePerBag: pricePerBag || 6.50,
         createdAt: new Date().toISOString()
       };
 
