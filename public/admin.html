@@ -18,6 +18,28 @@
 </head>
 <body class="min-h-screen p-4 md:p-8 space-y-6">
 
+  <div id="adminLoginOverlay" class="fixed inset-0 z-50 bg-[#0A1128] flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl p-8 max-w-sm w-full space-y-6 border border-cyan-500/30 shadow-2xl">
+      <div class="text-center">
+        <h2 class="text-2xl font-black text-white mb-1">Acceso Seguro</h2>
+        <p class="text-xs text-slate-400">Panel de Administraci�n SmartVieira</p>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Usuario</label>
+          <input type="text" id="adminUser" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none" placeholder="Ej: admin">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Contrase�a</label>
+          <input type="password" id="adminPass" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none" placeholder="��������">
+        </div>
+        <button onclick="loginAdmin()" class="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm shadow-lg transition-all">Entrar al Panel</button>
+        <p id="loginError" class="text-red-400 text-xs text-center hidden font-bold mt-2"></p>
+      </div>
+    </div>
+  </div>
+
+
   <!-- Header -->
   <div class="max-w-6xl mx-auto glass-card rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center shadow-2xl border border-amber-500/40">
     <div class="flex items-center space-x-3">
