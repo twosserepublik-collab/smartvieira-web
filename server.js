@@ -259,7 +259,75 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ── 1. REGISTER PILGRIM ───────────────────────────────────────────────
-  if (reqPath === '/api/register/pilgrim' && req.method === 'POST') {
+  
+  // ADMIN SECURE ENDPOINTS
+  let ADMIN_CREDENTIALS = { user: 'admin', pass: 'admin' };
+
+  if (reqPath === '/api/admin/login' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      if (body.user === ADMIN_CREDENTIALS.user && body.pass === ADMIN_CREDENTIALS.pass) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: true, token: 'admin_secure_token_12345' }));
+      } else {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, error: 'Credenciales incorrectas' }));
+      }
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, error: 'Error del servidor' }));
+    }
+  }
+
+  function isAdminValid(req, queryParams) {
+    const auth = req.headers['authorization'];
+    return (auth === 'Bearer admin_secure_token_12345') || (queryParams.code === 'VIEIRA-COURIER-2026');
+  }
+
+  if (reqPath === '/api/admin/database-secure' && req.method === 'GET') {
+    if (!isAdminValid(req, queryParams)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'No autorizado' }));
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ success: true, database: loadDb() }));
+  }
+
+  if (reqPath === '/api/admin/backup-secure' && req.method === 'GET') {
+    if (queryParams.token !== 'admin_secure_token_12345') {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'No autorizado' }));
+    }
+    const dbData = fs.readFileSync(DB_FILE, 'utf8');
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Content-Disposition': 'attachment; filename="smartvieira_backup_' + Date.now() + '.json"'
+    });
+    return res.end(dbData);
+  }
+
+  if (reqPath === '/api/admin/restore-secure' && req.method === 'POST') {
+    if (!isAdminValid(req, queryParams)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'No autorizado' }));
+    }
+    try {
+      const backupData = await parseRequestBody(req);
+      if (!backupData.pilgrims || !backupData.couriers) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Formato de backup inv�lido' }));
+      }
+      fs.writeFileSync(DB_FILE, JSON.stringify(backupData, null, 2), 'utf8');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, message: 'Base de datos restaurada' }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Error del servidor' }));
+    }
+  }
+
+
+    if (reqPath === '/api/register/pilgrim' && req.method === 'POST') {
     try {
       const body = await parseRequestBody(req);
       const { name, surname, language, email, password, smartVieiraId } = body;
@@ -364,7 +432,7 @@ const server = http.createServer(async (req, res) => {
   if (reqPath === '/api/register/courier' && req.method === 'POST') {
     try {
       const body = await parseRequestBody(req);
-      const { companyName, driverName, vehicle, routes, routeStart, routeEnd, accessCode, email, password } = body;
+      const { companyName, driverName, vehicle, routes, routeStart, routeEnd, accessCode, email, password, cif, pricePerBag } = body;
 
       if (!companyName || !driverName || !email || !password || !accessCode) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
