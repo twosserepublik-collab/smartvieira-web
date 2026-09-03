@@ -220,6 +220,93 @@
   <script>
     let dbState = null;
 
+      let adminToken = sessionStorage.getItem('adminToken');
+
+      async function loginAdmin() {
+        const user = document.getElementById('adminUser').value.trim();
+        const pass = document.getElementById('adminPass').value;
+        const errEl = document.getElementById('loginError');
+        errEl.classList.add('hidden');
+
+        try {
+          const res = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user, pass })
+          });
+          const data = await res.json();
+          if (data.success) {
+            adminToken = data.token;
+            sessionStorage.setItem('adminToken', adminToken);
+            document.getElementById('adminLoginOverlay').classList.add('hidden');
+            fetchDatabaseData();
+          } else {
+            errEl.innerText = data.message || 'Credenciales incorrectas';
+            errEl.classList.remove('hidden');
+          }
+        } catch (err) {
+          errEl.innerText = 'Error de red';
+          errEl.classList.remove('hidden');
+        }
+      }
+
+      function getApiUrl(path) { return path; }
+
+      async function fetchDatabaseData() {
+        if (!adminToken) return;
+        try {
+          const res = await fetch('/api/admin/database-secure', {
+            headers: { 'Authorization': 'Bearer ' + adminToken }
+          });
+          const data = await res.json();
+          
+          if (data.success && data.database) {
+            dbState = data.database;
+            renderTables();
+          } else {
+            if (res.status === 401) {
+              sessionStorage.removeItem('adminToken');
+              location.reload();
+            }
+            console.error('Error fetching database:', data);
+          }
+        } catch (err) {
+          console.error('Network error fetching database:', err);
+        }
+      }
+
+      function downloadBackup() {
+        if (!adminToken) return;
+        window.location.href = '/api/admin/backup-secure?token=' + adminToken;
+      }
+
+      async function restoreBackup(event) {
+        if (!adminToken) return;
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('backup', file);
+
+        try {
+          const res = await fetch('/api/admin/restore-secure', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + adminToken },
+            body: formData
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert('Base de datos restaurada correctamente');
+            location.reload();
+          } else {
+            alert('Error: ' + data.message);
+          }
+        } catch (err) {
+          alert('Error de red al restaurar');
+        }
+      }
+
+
     window.onload = () => {
       if (adminToken) {
         document.getElementById('adminLoginOverlay').classList.add('hidden');
