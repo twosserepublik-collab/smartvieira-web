@@ -362,6 +362,20 @@
         currentCourier = JSON.parse(saved);
         document.getElementById('courierAuthSection').classList.add('hidden');
         document.getElementById('courierDashboard').classList.remove('hidden');
+
+      // Initialize active state from database (defaults to true if undefined)
+      isCourierActive = (currentCourier.isActive !== false);
+      const btn = document.getElementById('btnToggleStatus');
+      if (btn) {
+        if (isCourierActive) {
+          btn.className = "w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2";
+          btn.innerHTML = "? ESTOY ACTIVO";
+        } else {
+          btn.className = "w-full py-3 rounded-2xl bg-slate-700 hover:bg-slate-600 text-slate-300 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 border border-slate-500";
+          btn.innerHTML = "? EN PAUSA (Oculto)";
+        }
+      }
+
         setupCourierDashboard();
       } else {
         document.getElementById('courierDashboard').classList.add('hidden');
@@ -509,10 +523,10 @@
         
         try {
           await fetch(getApiUrl('/api/courier/status'), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + courierToken },
-            body: JSON.stringify({ isActive: isCourierActive })
-          });
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ courierId: currentCourier.id, isActive: isCourierActive })
+            });
         } catch(e) {}
       }
 
@@ -520,9 +534,10 @@
         if (!confirm('?? �Est�s seguro de que quieres enviar una alerta de EMERGENCIA al administrador? Le llegar� un aviso para redistribuir tus mochilas.')) return;
         try {
           const res = await fetch(getApiUrl('/api/courier/emergency'), {
-            method: 'POST',
-            headers: { 'Authorization': 'Bearer ' + courierToken }
-          });
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ courierId: currentCourier.id })
+            });
           const data = await res.json();
           if(data.success) {
             alert('?? Alerta enviada. El administrador se pondr� en contacto contigo a tu m�vil enseguida.');

@@ -566,6 +566,50 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ── 6. GET ALL ACTIVE RESERVATIONS (FOR COURIERS) ─────────────────────
+  
+  // -- COURIER STATUS UPDATE ---------------------------------------
+  if (reqPath === '/api/courier/status' && req.method === 'POST') {
+    let bodyObj;
+    try { bodyObj = JSON.parse(body); } catch(e) { return res.end(JSON.stringify({success:false})); }
+    
+    const db = loadDb();
+    const courier = db.couriers.find(c => c.id === bodyObj.courierId);
+    if(courier) {
+      courier.isActive = bodyObj.isActive;
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true }));
+    }
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ success: false, message: 'Repartidor no encontrado' }));
+  }
+
+  // -- COURIER EMERGENCY -------------------------------------------
+  if (reqPath === '/api/courier/emergency' && req.method === 'POST') {
+    let bodyObj;
+    try { bodyObj = JSON.parse(body); } catch(e) { return res.end(JSON.stringify({success:false})); }
+
+    const db = loadDb();
+    const courier = db.couriers.find(c => c.id === bodyObj.courierId);
+    if(courier) {
+      db.emergencies = db.emergencies || [];
+      db.emergencies.push({
+        id: 'em_' + Date.now(),
+        courierId: courier.id,
+        companyName: courier.companyName,
+        driverName: courier.driverName,
+        phone: courier.phone,
+        timestamp: new Date().toISOString(),
+        resolved: false
+      });
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true }));
+    }
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ success: false, message: 'Repartidor no encontrado' }));
+  }
+
   if (reqPath === '/api/courier/reservations' && req.method === 'GET') {
     const db = loadDb();
     res.writeHead(200, { 'Content-Type': 'application/json' });
