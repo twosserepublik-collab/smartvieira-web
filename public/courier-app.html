@@ -203,7 +203,12 @@
           <label class="block text-xs font-bold text-slate-300 mb-1">Tu Tarifa por Mochila (�)</label>
           <input type="number" step="0.10" id="regPrice" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none" placeholder="Ej: 5.00">
         </div>
-        <div>
+        
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Tel�fono M�vil *</label>
+            <input type="tel" id="regPhone" required class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-cyan-400" placeholder="+34 600 000 000">
+          </div>
+<div>
           <label class="block text-xs font-bold text-slate-300 mb-1">Correo Electrónico *</label>
           <input type="email" id="courierRegEmail" required placeholder="repartidor@empresa.com" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-cyan-400">
         </div>
@@ -235,7 +240,18 @@
         </div>
       </div>
 
-      <!-- ===== RECOGIDA MASIVA ===== -->
+      
+        <!-- ACTIVE TOGGLE & EMERGENCY -->
+        <div class="grid grid-cols-2 gap-4">
+          <button id="btnToggleStatus" onclick="toggleStatus()" class="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2">
+            ? ESTOY ACTIVO
+          </button>
+          <button onclick="triggerEmergency()" class="w-full py-3 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2">
+            ?? EMERGENCIA
+          </button>
+        </div>
+
+        <!-- ===== RECOGIDA MASIVA ===== -->
       <div class="glass-card rounded-3xl p-5 border border-amber-500/40 space-y-3 shadow-xl">
         <div>
           <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest block">Recogida de Mochilas</span>

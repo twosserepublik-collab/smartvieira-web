@@ -104,7 +104,11 @@
       <button onclick="showDbTab('tabReservations')" id="btnTabReservations" class="px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white">
         💳 Reservas y Pagos Stripe
       </button>
-    </div>
+    
+        <button id="btnTabEmergencies" onclick="showDbTab('tabEmergencies')" class="px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white flex items-center gap-1">
+          ?? Alertas Emergencia <span id="emBadge" class="bg-red-500 text-white px-2 rounded-full hidden">0</span>
+        </button>
+</div>
 
     <!-- TABLE 1: PILGRIMS -->
     <div id="tabPilgrims" class="glass-card rounded-3xl p-6 border border-amber-500/30 space-y-4 shadow-xl">
