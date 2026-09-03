@@ -379,10 +379,17 @@
         tbodyC.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-slate-500">Sin empresas repartidoras registradas</td></tr>';
       } else {
         tbodyC.innerHTML = couriers.map(c => `
-          <tr>
-            <td class="font-mono text-[11px] text-cyan-400">${c.id}</td>
-            <td class="font-bold text-white">${c.companyName}</td>
-            <td>${c.driverName}</td>
+            <tr class="${c.isActive === false ? 'opacity-50 grayscale' : ''}">
+              <td class="font-mono text-[11px] text-cyan-400">${c.id}</td>
+              <td class="font-bold text-white">${c.companyName}</td>
+              <td>${c.driverName}</td>
+              <td class="font-mono text-amber-300 font-bold">${c.phone || 'N/A'}</td>
+              <td>
+                ${c.isActive === false 
+                  ? '<span class="bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] font-bold">PAUSA</span>' 
+                  : '<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 border border-emerald-500/40 rounded text-[10px] font-bold">ACTIVO</span>'
+                }
+              </td>
               <td>${c.vehicle || '-'}</td><td class="font-mono text-amber-300 text-[11px]">${c.cif || '-'}</td><td class="font-bold text-emerald-400">${c.pricePerBag ? c.pricePerBag + ' �' : '6.50 �'}</td>
               <td>${c.routes || '-'}</td>
               <td>${c.routeStart || 'Toda'} &rarr; ${c.routeEnd || 'Toda'}</td>
