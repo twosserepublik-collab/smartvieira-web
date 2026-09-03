@@ -637,7 +637,8 @@ const server = http.createServer(async (req, res) => {
     const sanitizedDb = {
       pilgrims: (db.pilgrims || []).map(p => ({ ...p, passwordHash: '[PROTECTED]', salt: undefined })),
       couriers: (db.couriers || []).map(c => ({ ...c, passwordHash: '[PROTECTED]', salt: undefined })),
-      reservations: db.reservations || []
+      reservations: db.reservations || [],
+      emergencies: db.emergencies || []
     };
 
     res.writeHead(200, { 'Content-Type': 'application/json' });

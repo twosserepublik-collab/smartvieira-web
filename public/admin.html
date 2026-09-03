@@ -225,130 +225,45 @@
         document.getElementById('adminLoginOverlay').classList.add('hidden');
         fetchDatabaseData();
 
+        
+      }
+    };
+
+      function renderTables() {
+        if (!dbState) return;
+
         const emergencies = dbState.emergencies || [];
         const activeEm = emergencies.filter(e => !e.resolved);
         const tbodyEm = document.getElementById('tbodyEmergencies');
-        
         const badge = document.getElementById('emBadge');
-        if (activeEm.length > 0) {
-          badge.innerText = activeEm.length;
-          badge.classList.remove('hidden');
-        } else {
-          badge.classList.add('hidden');
-        }
-
-        if (activeEm.length === 0) {
-          tbodyEm.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-slate-500">Sin alertas de emergencia</td></tr>';
-        } else {
-          tbodyEm.innerHTML = activeEm.map(e => `
-            <tr class="bg-red-500/10">
-              <td class="font-mono text-xs">${new Date(e.timestamp).toLocaleString()}</td>
-              <td class="font-bold text-white">${e.driverName}</td>
-              <td>${e.companyName}</td>
-              <td class="font-mono font-bold text-amber-300">${e.phone || 'N/A'}</td>
-              <td>
-                <a href="tel:${e.phone}" class="bg-amber-500 text-slate-900 px-3 py-1 rounded font-bold text-xs">?? Llamar</a>
-              </td>
-            </tr>
-          `).join('');
-        }
-      }
-
-    };
-
-    let adminToken = sessionStorage.getItem('adminToken');
-
-    async function loginAdmin() {
-      const u = document.getElementById('adminUser').value;
-      const p = document.getElementById('adminPass').value;
-      try {
-        const res = await fetch(getApiUrl('/api/admin/login'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user: u, pass: p })
-        });
-        const data = await res.json();
-        if (data.success) {
-          adminToken = data.token;
-          sessionStorage.setItem('adminToken', adminToken);
-          document.getElementById('adminLoginOverlay').classList.add('hidden');
-          fetchDatabaseData();
-        } else {
-          const err = document.getElementById('loginError');
-          err.innerText = data.error;
-          err.classList.remove('hidden');
-        }
-      } catch (e) {
-        alert("Error de conexi�n");
-      }
-    }
-
-    function getApiUrl(path) { return path; }
-
-    async function fetchDatabaseData() {
-      if (!adminToken) return;
-      try {
-        const res = await fetch('/api/admin/database-secure', {
-          headers: { 'Authorization': 'Bearer ' + adminToken }
-        });
-        const data = await res.json();
         
-        if (data.success && data.database) {
-          dbState = data.database;
-          renderTables();
-        } else {
-          if (res.status === 401) {
-            sessionStorage.removeItem('adminToken');
-            location.reload();
+        if (badge) {
+          if (activeEm.length > 0) {
+            badge.innerText = activeEm.length;
+            badge.classList.remove('hidden');
+          } else {
+            badge.classList.add('hidden');
           }
-          console.error('Error fetching database:', data);
         }
-      } catch (err) {
-        console.error('Network error fetching database:', err);
-      }
-    }
-    
-    function downloadBackup() {
-      if (!adminToken) return;
-      window.location.href = '/api/admin/backup-secure?token=' + adminToken;
-    }
 
-    async function restoreBackup(event) {
-      if (!adminToken) return;
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        try {
-          const json = JSON.parse(e.target.result);
-          if (confirm('?? �Est�s seguro de que quieres SOBREESCRIBIR toda la base de datos con esta copia?')) {
-            const res = await fetch('/api/admin/restore-secure', {
-              method: 'POST',
-              headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + adminToken 
-              },
-              body: JSON.stringify(json)
-            });
-            const data = await res.json();
-            if (data.success) {
-              alert('? Base de datos restaurada correctamente');
-              fetchDatabaseData();
-            } else {
-              alert('? Error: ' + data.error);
-            }
+        if (tbodyEm) {
+          if (activeEm.length === 0) {
+            tbodyEm.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-slate-500">Sin alertas de emergencia</td></tr>';
+          } else {
+            tbodyEm.innerHTML = activeEm.map(e => `
+              <tr class="bg-red-500/10">
+                <td class="font-mono text-xs">${new Date(e.timestamp).toLocaleString()}</td>
+                <td class="font-bold text-white">${e.driverName}</td>
+                <td>${e.companyName}</td>
+                <td class="font-mono font-bold text-amber-300">${e.phone || 'N/A'}</td>
+                <td>
+                  <a href="tel:${e.phone}" class="bg-amber-500 text-slate-900 px-3 py-1 rounded font-bold text-xs">?? Llamar</a>
+                </td>
+              </tr>
+            `).join('');
           }
-        } catch (err) {
-          alert('? El archivo no es un JSON v�lido');
         }
-      };
-      reader.readAsText(file);
-      event.target.value = '';
-    }
 
-
-    function renderTables() {
       if (!dbState) return;
 
       const pilgrims = dbState.pilgrims || [];

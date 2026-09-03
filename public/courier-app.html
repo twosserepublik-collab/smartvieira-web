@@ -243,9 +243,16 @@
       
         <!-- ACTIVE TOGGLE & EMERGENCY -->
         <div class="grid grid-cols-2 gap-4">
-          <button id="btnToggleStatus" onclick="toggleStatus()" class="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2">
-            ? ESTOY ACTIVO
-          </button>
+          
+          <!-- INTERRUPTOR ESTADO -->
+          <div class="w-full py-3 rounded-2xl bg-slate-800 border border-slate-700 shadow-lg flex items-center justify-between px-5 cursor-pointer" onclick="toggleStatus()">
+            <span id="lblToggleStatus" class="text-emerald-400 font-black text-xs">? ACTIVO</span>
+            <div class="relative">
+              <div id="trackToggleStatus" class="block w-10 h-6 rounded-full bg-emerald-500 transition-colors"></div>
+              <div id="dotToggleStatus" class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform translate-x-4"></div>
+            </div>
+          </div>
+
           <button onclick="triggerEmergency()" class="w-full py-3 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2">
             ?? EMERGENCIA
           </button>
@@ -507,28 +514,41 @@
     }
 
     // ── DASHBOARD SETUP ───────────────────────────────────────────
-    async 
-      // --- NUEVAS FUNCIONES ---
-      let isCourierActive = true;
-      async function toggleStatus() {
-        isCourierActive = !isCourierActive;
-        const btn = document.getElementById('btnToggleStatus');
-        if (isCourierActive) {
-          btn.className = "w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2";
-          btn.innerHTML = "? ESTOY ACTIVO";
-        } else {
-          btn.className = "w-full py-3 rounded-2xl bg-slate-700 hover:bg-slate-600 text-slate-300 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 border border-slate-500";
-          btn.innerHTML = "? EN PAUSA (Oculto)";
+    // --- NUEVAS FUNCIONES ---
+      
+        let isCourierActive = true;
+        async function toggleStatus() {
+          isCourierActive = !isCourierActive;
+          const lbl = document.getElementById('lblToggleStatus');
+          const track = document.getElementById('trackToggleStatus');
+          const dot = document.getElementById('dotToggleStatus');
+          
+          if (isCourierActive) {
+            lbl.className = "text-emerald-400 font-black text-xs";
+            lbl.innerHTML = "? ACTIVO";
+            track.className = "block w-10 h-6 rounded-full bg-emerald-500 transition-colors";
+            dot.className = "dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform translate-x-4";
+          } else {
+            lbl.className = "text-slate-400 font-black text-xs";
+            lbl.innerHTML = "? INACTIVO";
+            track.className = "block w-10 h-6 rounded-full bg-slate-600 transition-colors";
+            dot.className = "dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform translate-x-0";
+          }
+          
+
+          currentCourier.isActive = isCourierActive;
+          localStorage.setItem('vieira_courier_session', JSON.stringify(currentCourier));
+          
+          try {
+
+            await fetch(getApiUrl('/api/courier/status'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ courierId: currentCourier.id, isActive: isCourierActive })
+              });
+          } catch(e) {}
         }
-        
-        try {
-          await fetch(getApiUrl('/api/courier/status'), {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ courierId: currentCourier.id, isActive: isCourierActive })
-            });
-        } catch(e) {}
-      }
+
 
       async function triggerEmergency() {
         if (!confirm('?? �Est�s seguro de que quieres enviar una alerta de EMERGENCIA al administrador? Le llegar� un aviso para redistribuir tus mochilas.')) return;
