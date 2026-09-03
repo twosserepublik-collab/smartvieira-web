@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vieira-app-FINAL-v13.3.1';
+const CACHE_NAME = 'vieira-app-FINAL-v13.3.2';
 const urlsToCache = [
   '/',
   '/pilgrim-app.html',
@@ -22,7 +22,7 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Borrando caché antigua:', cacheName);
+            console.log('Borrando cachï¿½ antigua:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -32,7 +32,7 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Estrategia NETWORK-FIRST para garantizar siempre la última versión
+  // Estrategia NETWORK-FIRST para garantizar siempre la ï¿½ltima versiï¿½n
   event.respondWith(
     fetch(event.request)
       .then(response => {

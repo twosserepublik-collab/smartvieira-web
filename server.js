@@ -570,7 +570,7 @@ const server = http.createServer(async (req, res) => {
   // -- COURIER STATUS UPDATE ---------------------------------------
   if (reqPath === '/api/courier/status' && req.method === 'POST') {
     let bodyObj;
-    try { bodyObj = JSON.parse(body); } catch(e) { return res.end(JSON.stringify({success:false})); }
+    try { bodyObj = await parseRequestBody(req); } catch(e) { return res.end(JSON.stringify({success:false})); }
     
     const db = loadDb();
     const courier = db.couriers.find(c => c.id === bodyObj.courierId);
@@ -587,7 +587,7 @@ const server = http.createServer(async (req, res) => {
   // -- COURIER EMERGENCY -------------------------------------------
   if (reqPath === '/api/courier/emergency' && req.method === 'POST') {
     let bodyObj;
-    try { bodyObj = JSON.parse(body); } catch(e) { return res.end(JSON.stringify({success:false})); }
+    try { bodyObj = await parseRequestBody(req); } catch(e) { return res.end(JSON.stringify({success:false})); }
 
     const db = loadDb();
     const courier = db.couriers.find(c => c.id === bodyObj.courierId);
