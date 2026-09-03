@@ -435,6 +435,7 @@
             email:       email,
             password:    document.getElementById('courierRegPass').value,
             cif: document.getElementById('regCif') ? document.getElementById('regCif').value.trim() : '',
+            phone: document.getElementById('regPhone') ? document.getElementById('regPhone').value.trim() : '',
             pricePerBag: document.getElementById('regPrice') ? (parseFloat(document.getElementById('regPrice').value) || 6.50) : 6.50
           })
         });
@@ -476,7 +477,47 @@
     }
 
     // ── DASHBOARD SETUP ───────────────────────────────────────────
-    async function setupCourierDashboard() {
+    async 
+      // --- NUEVAS FUNCIONES ---
+      let isCourierActive = true;
+      async function toggleStatus() {
+        isCourierActive = !isCourierActive;
+        const btn = document.getElementById('btnToggleStatus');
+        if (isCourierActive) {
+          btn.className = "w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2";
+          btn.innerHTML = "? ESTOY ACTIVO";
+        } else {
+          btn.className = "w-full py-3 rounded-2xl bg-slate-700 hover:bg-slate-600 text-slate-300 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 border border-slate-500";
+          btn.innerHTML = "? EN PAUSA (Oculto)";
+        }
+        
+        try {
+          await fetch(getApiUrl('/api/courier/status'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + courierToken },
+            body: JSON.stringify({ isActive: isCourierActive })
+          });
+        } catch(e) {}
+      }
+
+      async function triggerEmergency() {
+        if (!confirm('?? �Est�s seguro de que quieres enviar una alerta de EMERGENCIA al administrador? Le llegar� un aviso para redistribuir tus mochilas.')) return;
+        try {
+          const res = await fetch(getApiUrl('/api/courier/emergency'), {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + courierToken }
+          });
+          const data = await res.json();
+          if(data.success) {
+            alert('?? Alerta enviada. El administrador se pondr� en contacto contigo a tu m�vil enseguida.');
+          }
+        } catch(e) {
+          alert('Error al enviar la alerta.');
+        }
+      }
+
+      function setupCourierDashboard() {
+
       document.getElementById('txtCourierHeader').innerText = `🚚 ${currentCourier.driverName}`;
       document.getElementById('txtCourierCompanyBadge').innerText = currentCourier.companyName;
       document.getElementById('txtDriverVehicle').innerText = `${currentCourier.driverName} • ${currentCourier.vehicle || 'Furgón'}`;

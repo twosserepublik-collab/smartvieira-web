@@ -103,7 +103,7 @@ function verifyToken(token) {
 function loadDb() {
   try {
     if (!fs.existsSync(DB_FILE)) {
-      const initialDb = { pilgrims: [], couriers: [], reservations: [] };
+      const initialDb = { pilgrims: [], couriers: [], reservations: [], emergencies: [] };
       fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), 'utf8');
       return initialDb;
     }
@@ -432,7 +432,7 @@ const server = http.createServer(async (req, res) => {
   if (reqPath === '/api/register/courier' && req.method === 'POST') {
     try {
       const body = await parseRequestBody(req);
-      const { companyName, driverName, vehicle, routes, routeStart, routeEnd, accessCode, email, password, cif, pricePerBag } = body;
+      const { companyName, driverName, vehicle, routes, routeStart, routeEnd, accessCode, email, password, cif, pricePerBag, phone } = body;
 
       if (!companyName || !driverName || !email || !password || !accessCode) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -466,6 +466,8 @@ const server = http.createServer(async (req, res) => {
         accessCode: accessCode.trim(),
           cif: cif || '',
           pricePerBag: pricePerBag || 6.50,
+          phone: (phone || '').trim(),
+          isActive: true,
         createdAt: new Date().toISOString()
       };
 

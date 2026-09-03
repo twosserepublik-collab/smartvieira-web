@@ -139,7 +139,7 @@
               
               <th>ID Empresa</th>
               <th>Empresa</th>
-              <th>Repartidor / Conductor</th>
+              <th>Repartidor / Conductor</th><th>Tel�fono</th><th>Estado</th>
               <th>Veh�culo</th>
               <th>CIF / NIF</th>
               <th>Tarifa (�)</th>
@@ -182,7 +182,29 @@
       </div>
     </div>
 
-    <!-- DIRECT FILE LINK & API HELP -->
+    
+      <!-- TABLE 4: EMERGENCIES -->
+      <div id="tabEmergencies" class="hidden glass-card rounded-3xl p-6 border border-red-500/50 space-y-4 shadow-xl">
+        <h2 class="text-lg font-black text-white flex items-center gap-2">?? Panel de Emergencias Activas</h2>
+        <div class="table-container rounded-2xl border border-red-900">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha/Hora</th>
+                <th>Repartidor</th>
+                <th>Empresa</th>
+                <th>Tel�fono</th>
+                <th>Acci�n</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyEmergencies">
+              <tr><td colspan="5" class="text-center py-6 text-slate-500">Sin alertas de emergencia</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DIRECT FILE LINK & API HELP -->
     <div class="glass-card rounded-2xl p-5 border border-slate-800 text-xs leading-relaxed space-y-2 text-slate-400">
       <strong class="text-amber-400 font-bold block text-sm">📁 Ubicación Física del Archivo de Base de Datos:</strong>
       <p class="font-mono text-[11px] text-slate-300">C:\Users\o0o_t\.gemini\antigravity\scratch\vieira-web\database.json</p>
@@ -198,7 +220,36 @@
       if (adminToken) {
         document.getElementById('adminLoginOverlay').classList.add('hidden');
         fetchDatabaseData();
+
+        const emergencies = dbState.emergencies || [];
+        const activeEm = emergencies.filter(e => !e.resolved);
+        const tbodyEm = document.getElementById('tbodyEmergencies');
+        
+        const badge = document.getElementById('emBadge');
+        if (activeEm.length > 0) {
+          badge.innerText = activeEm.length;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+
+        if (activeEm.length === 0) {
+          tbodyEm.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-slate-500">Sin alertas de emergencia</td></tr>';
+        } else {
+          tbodyEm.innerHTML = activeEm.map(e => `
+            <tr class="bg-red-500/10">
+              <td class="font-mono text-xs">${new Date(e.timestamp).toLocaleString()}</td>
+              <td class="font-bold text-white">${e.driverName}</td>
+              <td>${e.companyName}</td>
+              <td class="font-mono font-bold text-amber-300">${e.phone || 'N/A'}</td>
+              <td>
+                <a href="tel:${e.phone}" class="bg-amber-500 text-slate-900 px-3 py-1 rounded font-bold text-xs">?? Llamar</a>
+              </td>
+            </tr>
+          `).join('');
+        }
       }
+
     };
 
     let adminToken = sessionStorage.getItem('adminToken');
@@ -366,15 +417,18 @@
       document.getElementById('tabPilgrims').classList.add('hidden');
       document.getElementById('tabCouriers').classList.add('hidden');
       document.getElementById('tabReservations').classList.add('hidden');
+      if(document.getElementById('tabEmergencies')) document.getElementById('tabEmergencies').classList.add('hidden');
       document.getElementById(tabId).classList.remove('hidden');
 
       document.getElementById('btnTabPilgrims').className = "px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white";
       document.getElementById('btnTabCouriers').className = "px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white";
       document.getElementById('btnTabReservations').className = "px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white";
+      if(document.getElementById('btnTabEmergencies')) document.getElementById('btnTabEmergencies').className = "px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white flex items-center gap-1";
 
       if (tabId === 'tabPilgrims') document.getElementById('btnTabPilgrims').className = "px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black text-xs";
       if (tabId === 'tabCouriers') document.getElementById('btnTabCouriers').className = "px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs";
       if (tabId === 'tabReservations') document.getElementById('btnTabReservations').className = "px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs";
+      if (tabId === 'tabEmergencies') document.getElementById('btnTabEmergencies').className = "px-4 py-2 rounded-xl bg-red-500 text-white font-black text-xs flex items-center gap-1";
     }
   </script>
 

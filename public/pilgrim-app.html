@@ -2058,6 +2058,7 @@
 
         
         const matchingCouriers = allCouriers.filter(c => {
+            if (c.isActive === false) return false;
           if (!c.routes) return true;
           const rLower = c.routes.toLowerCase();
           
