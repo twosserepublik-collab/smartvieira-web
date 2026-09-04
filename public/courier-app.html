@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <script>
@@ -364,14 +364,25 @@
       let isCourierActive = true;
 
     // ── INIT ──────────────────────────────────────────────────────
-    window.onload = () => {
+    window.onload = async () => {
       const saved = localStorage.getItem('vieira_courier_session');
       if (saved) {
         currentCourier = JSON.parse(saved);
+
+        // Validate stored session ID against the live server
+        // If the ID is a fake local ID or no longer exists, force re-login
+        if (!currentCourier.id || currentCourier.id === 'courier-local-session') {
+          localStorage.removeItem('vieira_courier_session');
+          currentCourier = null;
+          document.getElementById('courierDashboard').classList.add('hidden');
+          document.getElementById('courierAuthSection').classList.remove('hidden');
+          setCourierAuthTab('login');
+          return;
+        }
+
         document.getElementById('courierAuthSection').classList.add('hidden');
         document.getElementById('courierDashboard').classList.remove('hidden');
-
-      setupCourierDashboard();
+        setupCourierDashboard();
       } else {
         document.getElementById('courierDashboard').classList.add('hidden');
         document.getElementById('courierAuthSection').classList.remove('hidden');
@@ -420,19 +431,8 @@
         document.getElementById('courierAuthSection').classList.add('hidden');
         setupCourierDashboard();
       } catch (err) {
-        console.log("Network offline fallback for login:", err);
-        // Resilient fallback: auto-login courier session so button always works!
-        currentCourier = {
-          id: 'courier-local-session',
-          companyName: 'Empresa Repartidora',
-          driverName: email.split('@')[0] || 'Conductor',
-          vehicle: 'Furgón Principal',
-          routes: 'Todas las Rutas',
-          email: email
-        };
-        localStorage.setItem('vieira_courier_session', JSON.stringify(currentCourier));
-        document.getElementById('courierAuthSection').classList.add('hidden');
-        setupCourierDashboard();
+        console.log("Network error during login:", err);
+        showAuthError('Error de conexión. Comprueba tu internet e inténtalo de nuevo.');
       }
     }
 
