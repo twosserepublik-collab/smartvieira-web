@@ -285,25 +285,30 @@
         const file = event.target.files[0];
         if (!file) return;
 
-        const formData = new FormData();
-        formData.append('backup', file);
-
-        try {
-          const res = await fetch('/api/admin/restore-secure', {
-            method: 'POST',
-            headers: { 'Authorization': 'Bearer ' + adminToken },
-            body: formData
-          });
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          try {
+            const jsonStr = e.target.result;
+            const res = await fetch('/api/admin/restore-secure', {
+              method: 'POST',
+              headers: { 
+                'Authorization': 'Bearer ' + adminToken,
+                'Content-Type': 'application/json'
+              },
+              body: jsonStr
+            });
           const data = await res.json();
           if (data.success) {
             alert('Base de datos restaurada correctamente');
             location.reload();
           } else {
-            alert('Error: ' + data.message);
+            alert('Error: ' + (data.error || data.message || 'Fallo desconocido'));
           }
         } catch (err) {
-          alert('Error de red al restaurar');
-        }
+            alert('Error de red al restaurar');
+          }
+        };
+        reader.readAsText(file);
       }
 
 
