@@ -371,20 +371,7 @@
         document.getElementById('courierAuthSection').classList.add('hidden');
         document.getElementById('courierDashboard').classList.remove('hidden');
 
-      // Initialize active state from database (defaults to true if undefined)
-      isCourierActive = (currentCourier.isActive !== false);
-      const btn = document.getElementById('btnToggleStatus');
-      if (btn) {
-        if (isCourierActive) {
-          btn.className = "w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2";
-          btn.innerHTML = "? ESTOY ACTIVO";
-        } else {
-          btn.className = "w-full py-3 rounded-2xl bg-slate-700 hover:bg-slate-600 text-slate-300 font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 border border-slate-500";
-          btn.innerHTML = "? EN PAUSA (Oculto)";
-        }
-      }
-
-        setupCourierDashboard();
+      setupCourierDashboard();
       } else {
         document.getElementById('courierDashboard').classList.add('hidden');
         document.getElementById('courierAuthSection').classList.remove('hidden');
@@ -570,7 +557,26 @@
 
       async function setupCourierDashboard() {
 
-      document.getElementById('txtCourierHeader').innerText = `🚚 ${currentCourier.driverName}`;
+      
+        isCourierActive = (currentCourier.isActive !== false);
+        const lbl = document.getElementById('lblToggleStatus');
+        const track = document.getElementById('trackToggleStatus');
+        const dot = document.getElementById('dotToggleStatus');
+        if (lbl && track && dot) {
+          if (isCourierActive) {
+            lbl.className = 'text-emerald-400 font-black text-xs';
+            lbl.innerHTML = '? ACTIVO';
+            track.className = 'block w-10 h-6 rounded-full bg-emerald-500 transition-colors';
+            dot.className = 'dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform translate-x-4';
+          } else {
+            lbl.className = 'text-slate-400 font-black text-xs';
+            lbl.innerHTML = '? INACTIVO';
+            track.className = 'block w-10 h-6 rounded-full bg-slate-600 transition-colors';
+            dot.className = 'dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform translate-x-0';
+          }
+        }
+
+        document.getElementById('txtCourierHeader').innerText = `🚚 ${currentCourier.driverName}`;
       document.getElementById('txtCourierCompanyBadge').innerText = currentCourier.companyName;
       document.getElementById('txtDriverVehicle').innerText = `${currentCourier.driverName} • ${currentCourier.vehicle || 'Furgón'}`;
       document.getElementById('courierDashboard').classList.remove('hidden');
