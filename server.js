@@ -623,6 +623,33 @@ const server = http.createServer(async (req, res) => {
     }));
   }
 
+  // ── RESOLVE EMERGENCY ──────────────────────────────────────────
+  if (reqPath === '/api/admin/emergency/resolve' && req.method === 'POST') {
+    const authHeader = req.headers['authorization'] || '';
+    if (authHeader !== 'Bearer admin_secure_token_12345') {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Acceso no autorizado al Panel de Administración' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const db = loadDb();
+      if (!db.emergencies) db.emergencies = [];
+      const em = db.emergencies.find(e => e.id === body.emergencyId);
+      if (em) {
+        em.resolved = true;
+        saveDb(db);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: true }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Emergencia no encontrada' }));
+      }
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error procesando solicitud' }));
+    }
+  }
+
   // ── 6b. GET FULL DATABASE (PROTECTED FOR ADMIN PANEL) ─────────────────
   if (reqPath === '/api/admin/database' && req.method === 'GET') {
     const authHeader = req.headers['authorization'] || '';

@@ -219,8 +219,46 @@
 
   <script>
     let dbState = null;
+    let adminToken = sessionStorage.getItem('adminToken');
 
-      let adminToken = sessionStorage.getItem('adminToken');
+    function filterTable(inputId, tbodyId) {
+      const input = document.getElementById(inputId);
+      const filter = input.value.toLowerCase();
+      const tbody = document.getElementById(tbodyId);
+      const trs = tbody.getElementsByTagName('tr');
+
+      for (let i = 0; i < trs.length; i++) {
+        let textContent = trs[i].textContent || trs[i].innerText;
+        if (textContent.toLowerCase().indexOf(filter) > -1) {
+          trs[i].style.display = '';
+        } else {
+          trs[i].style.display = 'none';
+        }
+      }
+    }
+
+    async function resolveEmergency(emergencyId) {
+      if (!confirm('¿Marcar emergencia como resuelta y eliminarla?')) return;
+      try {
+        const res = await fetch('/api/admin/emergency/resolve', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + adminToken
+          },
+          body: JSON.stringify({ emergencyId })
+        });
+        const data = await res.json();
+        if (data.success) {
+          fetchDatabaseData();
+        } else {
+          alert('Error: ' + data.message);
+        }
+      } catch (e) {
+        alert('Error de conexión');
+      }
+    }
+
 
       async function loginAdmin() {
         const user = document.getElementById('adminUser').value.trim();
@@ -348,8 +386,9 @@
                 <td class="font-bold text-white">${e.driverName}</td>
                 <td>${e.companyName}</td>
                 <td class="font-mono font-bold text-amber-300">${e.phone || 'N/A'}</td>
-                <td>
-                  <a href="tel:${e.phone}" class="bg-amber-500 text-slate-900 px-3 py-1 rounded font-bold text-xs">?? Llamar</a>
+                <td class="flex items-center gap-2">
+                  <a href="tel:${e.phone}" class="bg-amber-500 text-slate-900 px-3 py-1 rounded font-bold text-xs">📞 Llamar</a>
+                  <button onclick="resolveEmergency('${e.id}')" class="text-slate-400 hover:text-red-400 text-lg ml-2" title="Marcar como resuelta y eliminar">🗑️</button>
                 </td>
               </tr>
             `).join('');
