@@ -513,12 +513,12 @@
           
           if (isCourierActive) {
             lbl.className = "text-emerald-400 font-black text-xs";
-            lbl.innerHTML = "? ACTIVO";
+            lbl.innerHTML = "✅ ACTIVO";
             track.className = "block w-10 h-6 rounded-full bg-emerald-500 transition-colors";
             dot.className = "dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform translate-x-4";
           } else {
             lbl.className = "text-slate-400 font-black text-xs";
-            lbl.innerHTML = "? INACTIVO";
+            lbl.innerHTML = "⏸ INACTIVO";
             track.className = "block w-10 h-6 rounded-full bg-slate-600 transition-colors";
             dot.className = "dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform translate-x-0";
           }
@@ -528,18 +528,21 @@
           localStorage.setItem('vieira_courier_session', JSON.stringify(currentCourier));
           
           try {
-
-            await fetch(getApiUrl('/api/courier/status'), {
+            const r = await fetch(getApiUrl('/api/courier/status'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ courierId: currentCourier.id, isActive: isCourierActive })
               });
-          } catch(e) {}
+            const d = await r.json();
+            alert('🔍 DEBUG Estado:\nID: ' + currentCourier.id + '\nActivo: ' + isCourierActive + '\nServidor: ' + JSON.stringify(d));
+          } catch(e) {
+            alert('❌ Error de red en toggleStatus: ' + e.message);
+          }
         }
 
 
       async function triggerEmergency() {
-        if (!confirm('?? �Est�s seguro de que quieres enviar una alerta de EMERGENCIA al administrador? Le llegar� un aviso para redistribuir tus mochilas.')) return;
+        if (!confirm('🚨 ¿Estás seguro de que quieres enviar una alerta de EMERGENCIA al administrador? Le llegará un aviso para redistribuir tus mochilas.')) return;
         try {
           const res = await fetch(getApiUrl('/api/courier/emergency'), {
               method: 'POST',
@@ -547,11 +550,12 @@
               body: JSON.stringify({ courierId: currentCourier.id })
             });
           const data = await res.json();
+          alert('🔍 DEBUG Emergencia:\nID enviado: ' + currentCourier.id + '\nRespuesta servidor: ' + JSON.stringify(data));
           if(data.success) {
-            alert('?? Alerta enviada. El administrador se pondr� en contacto contigo a tu m�vil enseguida.');
+            alert('✅ Alerta enviada. El administrador se pondrá en contacto contigo a tu móvil enseguida.');
           }
         } catch(e) {
-          alert('Error al enviar la alerta.');
+          alert('Error al enviar la alerta: ' + e.message);
         }
       }
 
