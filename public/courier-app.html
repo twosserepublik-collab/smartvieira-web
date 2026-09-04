@@ -534,9 +534,11 @@
                 body: JSON.stringify({ courierId: currentCourier.id, isActive: isCourierActive })
               });
             const d = await r.json();
-            alert('🔍 DEBUG Estado:\nID: ' + currentCourier.id + '\nActivo: ' + isCourierActive + '\nServidor: ' + JSON.stringify(d));
+            if (!d.success) {
+              console.warn('Error actualizando estado:', d.message);
+            }
           } catch(e) {
-            alert('❌ Error de red en toggleStatus: ' + e.message);
+            console.error('Error de red en toggleStatus:', e.message);
           }
         }
 
@@ -550,9 +552,10 @@
               body: JSON.stringify({ courierId: currentCourier.id })
             });
           const data = await res.json();
-          alert('🔍 DEBUG Emergencia:\nID enviado: ' + currentCourier.id + '\nRespuesta servidor: ' + JSON.stringify(data));
           if(data.success) {
             alert('✅ Alerta enviada. El administrador se pondrá en contacto contigo a tu móvil enseguida.');
+          } else {
+            alert('❌ Error: ' + (data.message || 'No se pudo enviar la alerta'));
           }
         } catch(e) {
           alert('Error al enviar la alerta: ' + e.message);

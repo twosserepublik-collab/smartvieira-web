@@ -483,13 +483,15 @@ const server = http.createServer(async (req, res) => {
         message: '¡Registro de Empresa Repartidora autorizado con éxito!',
         token: token,
         courier: {
+          id: newCourier.id,
           companyName: newCourier.companyName,
           driverName: newCourier.driverName,
           vehicle: newCourier.vehicle,
           routes: newCourier.routes,
           routeStart: newCourier.routeStart,
           routeEnd: newCourier.routeEnd,
-          email: newCourier.email
+          email: newCourier.email,
+          isActive: newCourier.isActive
         }
       }));
     } catch (err) {
@@ -530,11 +532,13 @@ const server = http.createServer(async (req, res) => {
         message: '¡Bienvenido al Panel de Transporte!',
         token: token,
         courier: {
+          id: courier.id,
           companyName: courier.companyName,
           driverName: courier.driverName,
           vehicle: courier.vehicle,
           routes: courier.routes,
-          email: courier.email
+          email: courier.email,
+          isActive: courier.isActive
         }
       }));
     } catch (err) {
