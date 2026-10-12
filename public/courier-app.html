@@ -46,7 +46,7 @@ function switchTab(tabName) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Vieira Courier - App del Repartidor</title>
-  <meta name="version" content="v13.8.0">
+  <meta name="version" content="v13.8.2">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -95,7 +95,7 @@ function switchTab(tabName) {
         🔄
       </button>
       <div id="headerCourierStatus" onclick="currentCourier ? switchTab('Perfil') : toggleCourierAuthView()" class="px-3 py-1 rounded-full bg-blue-500/20 text-cyan-300 text-base font-black border border-cyan-500/30 cursor-pointer hover:border-cyan-400">
-        <span id="txtCourierHeader">🚚 Acceder (v13.8.0)</span>
+        <span id="txtCourierHeader">🚚 Acceder (v13.8.2)</span>
       </div>
     </div>
   </header>
@@ -266,17 +266,17 @@ function switchTab(tabName) {
       <div id="tabReparto" class="hidden space-y-5 courier-tab">
 
         <!-- GPS STATUS BANNER -->
-        <div id="courierGpsBadge" class="p-4 rounded-2xl bg-slate-900 border border-slate-700 shadow-xl space-y-2">
+        <div id="courierGpsBadge" class="p-3.5 rounded-2xl bg-slate-900 border border-slate-700 shadow-xl space-y-2">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2.5">
               <span id="gpsIndicatorDot" class="w-3 h-3 rounded-full bg-slate-500"></span>
-              <span id="gpsStatusText" class="text-xs font-black text-slate-300 uppercase tracking-wider">GPS: Inactivo (En espera de recogida)</span>
+              <span id="gpsStatusText" class="text-xs font-black text-slate-300 uppercase tracking-wider">GPS: Automático en espera</span>
             </div>
-            <span id="activeBackpacksBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">0 en ruta</span>
+            <span id="activeBackpacksBadge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400">0 en ruta</span>
           </div>
-          <div class="flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-800/80 pt-2 font-mono">
-            <span>Coordenadas en vivo:</span>
-            <span id="gpsCoordText" class="text-cyan-400 font-bold">Esperando señal GPS...</span>
+          <div class="flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-800/80 pt-1.5 font-mono">
+            <span>Ubicación GPS:</span>
+            <span id="gpsCoordText" class="text-cyan-400 font-bold">Se activa automáticamente al pulsar Recogida</span>
           </div>
         </div>
 
@@ -658,6 +658,13 @@ function switchTab(tabName) {
       document.getElementById('courierDashboard').classList.remove('hidden');
       switchTab('Mochilas');
 
+      // Silently pre-warm real GPS in background so coordinates are ready instantly on button press
+      acquireRealPosition().then(pos => {
+        lastKnownCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude, acc: pos.coords.accuracy || 15 };
+        const coord = document.getElementById('gpsCoordText');
+        if (coord) coord.innerText = `${lastKnownCoords.lat.toFixed(5)}, ${lastKnownCoords.lng.toFixed(5)}`;
+      }).catch(e => console.log('[GPS Pre-warm]', e.message));
+
       // First load
       await loadCourierReservationsFromDb();
 
@@ -691,78 +698,134 @@ function switchTab(tabName) {
 
     
     // ════════════════════════════════════════════════════════════════
-    // GPS REAL-TIME TRACKING ENGINE
+    // GPS REAL-TIME TRACKING ENGINE (REAL MOBILE & INDOORS FIX)
     // ════════════════════════════════════════════════════════════════
     let courierGpsWatchId = null;
     let courierGpsInterval = null;
     let lastKnownCoords = null;
 
+    // Multi-stage real position acquisition:
+    // Stage 1: Fast cellular/Wi-Fi fix (works instantly indoors in Narón / houses)
+    // Stage 2: Hardware satellite fix (refines accuracy if outdoors)
+    async function acquireRealPosition() {
+      if (!('geolocation' in navigator)) {
+        throw new Error('Tu navegador no soporta geolocalización');
+      }
+
+      let netPos = null;
+      try {
+        netPos = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            resolve,
+            reject,
+            { enableHighAccuracy: false, timeout: 8000, maximumAge: 10000 }
+          );
+        });
+      } catch (errNet) {
+        console.warn('[GPS] Network position error, trying high accuracy:', errNet);
+      }
+
+      try {
+        const satPos = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            resolve,
+            reject,
+            { enableHighAccuracy: true, timeout: 8000, maximumAge: 5000 }
+          );
+        });
+        return satPos;
+      } catch (errSat) {
+        if (netPos) return netPos; // Return real network fix if satellite timed out indoors
+        throw errSat;
+      }
+    }
+
+    function showGpsErrorInUI(err) {
+      console.warn('[GPS Error]', err);
+      const dot = document.getElementById('gpsIndicatorDot');
+      const txt = document.getElementById('gpsStatusText');
+      const coord = document.getElementById('gpsCoordText');
+      if (dot) dot.className = 'w-3 h-3 rounded-full bg-amber-500 animate-pulse';
+
+      let msg = '⚠️ Error obteniendo GPS';
+      if (err.code === 1) {
+        msg = '⚠️ Permiso de ubicación denegado en el navegador';
+        if (coord) coord.innerText = 'Permite la ubicación en los ajustes del navegador';
+      } else if (err.code === 2) {
+        msg = '⚠️ Ubicación no disponible (activa el GPS del móvil)';
+      } else if (err.code === 3) {
+        msg = '⚠️ Esperando señal GPS... Reintentando';
+      }
+      if (txt) txt.innerText = msg;
+    }
+
+    const updateGpsUI = (lat, lng, acc) => {
+      lastKnownCoords = { lat, lng, acc };
+      const dot = document.getElementById('gpsIndicatorDot');
+      const txt = document.getElementById('gpsStatusText');
+      const coord = document.getElementById('gpsCoordText');
+      if (dot) dot.className = 'w-3 h-3 rounded-full bg-emerald-400 animate-ping';
+      if (txt) txt.innerText = 'GPS: Transmitiendo ubicación real';
+      if (coord) coord.innerText = `${lat.toFixed(5)}, ${lng.toFixed(5)} (±${Math.round(acc)}m)`;
+    };
+
+    const sendLocationToServer = async (lat, lng, acc) => {
+      if (!currentCourier) return;
+      updateGpsUI(lat, lng, acc);
+      try {
+        const res = await fetch(getApiUrl('/api/courier/location'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            courierId: currentCourier.id,
+            lat: lat,
+            lng: lng,
+            accuracy: acc
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          const badge = document.getElementById('activeBackpacksBadge');
+          if (badge) badge.innerText = `${data.activeBackpacks || 0} en ruta`;
+        }
+      } catch (err) {
+        console.warn('[GPS] Error enviando posición al servidor:', err);
+      }
+    };
+
     function startCourierGpsTracking() {
       if (courierGpsWatchId) return; // already active
 
-      const updateGpsUI = (lat, lng, acc) => {
-        lastKnownCoords = { lat, lng, acc };
-        const dot = document.getElementById('gpsIndicatorDot');
-        const txt = document.getElementById('gpsStatusText');
-        const coord = document.getElementById('gpsCoordText');
-        if (dot) dot.className = 'w-3 h-3 rounded-full bg-emerald-400 animate-ping';
-        if (txt) txt.innerText = 'GPS: Transmitiendo ubicación en tiempo real';
-        if (coord) coord.innerText = `${lat.toFixed(5)}, ${lng.toFixed(5)} (±${Math.round(acc)}m)`;
-      };
+      // 1. Immediate position acquisition
+      acquireRealPosition().then(pos => {
+        sendLocationToServer(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 15);
+      }).catch(err => {
+        showGpsErrorInUI(err);
+      });
 
-      const sendLocationToServer = async (lat, lng, acc) => {
-        if (!currentCourier) return;
-        updateGpsUI(lat, lng, acc);
-        try {
-          const res = await fetch(getApiUrl('/api/courier/location'), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              courierId: currentCourier.id,
-              lat: lat,
-              lng: lng,
-              accuracy: acc
-            })
-          });
-          const data = await res.json();
-          if (data.success) {
-            const badge = document.getElementById('activeBackpacksBadge');
-            if (badge) badge.innerText = `${data.activeBackpacks || 0} en ruta`;
-          }
-        } catch (err) {
-          console.warn('[GPS] Error enviando posición:', err);
-        }
-      };
-
+      // 2. Continuous watch with standard accuracy to avoid timeouts indoors
       if ('geolocation' in navigator) {
         courierGpsWatchId = navigator.geolocation.watchPosition(
           (pos) => {
-            sendLocationToServer(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 10);
+            sendLocationToServer(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 15);
           },
           (err) => {
-            console.warn('[GPS Geolocation Error]', err);
-            // Fallback simulated movement around Camino if GPS denied/unavailable in dev
-            const lat = 42.8805 + (Math.random() - 0.5) * 0.005;
-            const lng = -8.5456 + (Math.random() - 0.5) * 0.005;
-            sendLocationToServer(lat, lng, 15);
+            showGpsErrorInUI(err);
           },
-          { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
+          { enableHighAccuracy: false, maximumAge: 5000, timeout: 20000 }
         );
 
-        // Heartbeat interval every 15s to guarantee fresh coordinates
-        courierGpsInterval = setInterval(() => {
-          navigator.geolocation.getCurrentPosition(
-            (pos) => sendLocationToServer(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 10),
-            () => {
-              if (lastKnownCoords) {
-                // Jitter slightly to show live movement
-                lastKnownCoords.lat += (Math.random() - 0.5) * 0.0003;
-                lastKnownCoords.lng += (Math.random() - 0.5) * 0.0003;
-                sendLocationToServer(lastKnownCoords.lat, lastKnownCoords.lng, lastKnownCoords.acc);
-              }
-            },
-            { enableHighAccuracy: true, timeout: 10000 }
-          );
+        // 3. Periodic high-accuracy heartbeat
+        courierGpsInterval = setInterval(async () => {
+          try {
+            const pos = await acquireRealPosition();
+            sendLocationToServer(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 15);
+          } catch(e) {
+            // keep last known real coords if temporarily lost
+            if (lastKnownCoords) {
+              sendLocationToServer(lastKnownCoords.lat, lastKnownCoords.lng, lastKnownCoords.acc);
+            }
+          }
         }, 15000);
       }
     }
@@ -783,20 +846,20 @@ function switchTab(tabName) {
       if (dot) dot.className = 'w-3 h-3 rounded-full bg-slate-500';
       if (txt) txt.innerText = 'GPS: Inactivo (Todas las mochilas entregadas)';
       if (badge) badge.innerText = '0 en ruta';
-      if (coord && lastKnownCoords) coord.innerText = `Última: ${lastKnownCoords.lat.toFixed(4)}, ${lastKnownCoords.lng.toFixed(4)}`;
+      if (coord && lastKnownCoords) coord.innerText = `Última: ${lastKnownCoords.lat.toFixed(5)}, ${lastKnownCoords.lng.toFixed(5)}`;
     }
 
     async function getCurrentCoordsFast() {
-      return new Promise((resolve) => {
-        if (!('geolocation' in navigator)) {
-          return resolve(lastKnownCoords || { lat: 42.8805, lng: -8.5456 });
+      try {
+        const pos = await acquireRealPosition();
+        return { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      } catch (err) {
+        if (lastKnownCoords) {
+          return { lat: lastKnownCoords.lat, lng: lastKnownCoords.lng };
         }
-        navigator.geolocation.getCurrentPosition(
-          (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-          () => resolve(lastKnownCoords || { lat: 42.8805, lng: -8.5456 }),
-          { enableHighAccuracy: true, timeout: 6000 }
-        );
-      });
+        alert('⚠️ No se ha podido obtener la ubicación GPS real de tu teléfono.\nActiva el GPS en tu móvil para registrar las coordenadas de entrega.');
+        throw err;
+      }
     }
 
     // ── LOAD RESERVATIONS FROM SERVER ─────────────────────────────
@@ -1124,7 +1187,7 @@ function switchTab(tabName) {
           // 3. Immediately start real-time GPS tracking!
           startCourierGpsTracking();
           await loadCourierReservationsFromDb();
-          alert(`🚚 ¡Recogida iniciada!\nSe han marcado ${idsToMark.length} mochila(s) en camino.\nTu GPS se está compartiendo en vivo con los peregrinos.`);
+          pickupStatusEl.innerHTML = `<div class="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold text-center">🚚 Recogida iniciada (${idsToMark.length} mochilas). GPS activo transmitiendo en vivo.</div>`;
         }
       } catch (err) {
         console.error('Error registrando recogida en servidor:', err);
@@ -1180,7 +1243,7 @@ function switchTab(tabName) {
           }
 
           await loadCourierReservationsFromDb();
-          alert(`🏁 ¡Entrega confirmada!\nSe han entregado ${resData.deliveredCount} mochila(s) en ${selectedHostel}.\nCoordenadas guardadas: ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}.\nSe ha notificado a los peregrinos.`);
+          dropStatusEl.innerHTML = `<div class="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold text-center">🏁 ¡Entrega confirmada! ${resData.deliveredCount} mochila(s) entregadas en ${selectedHostel}. Ubicación fijada: ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}.</div>`;
         }
       } catch (err) {
         console.error('Error confirmando entrega:', err);

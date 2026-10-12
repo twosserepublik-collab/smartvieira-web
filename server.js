@@ -733,9 +733,11 @@ const server = http.createServer(async (req, res) => {
 
       const targetHostel = (destinationAlbergue || '').trim().toLowerCase();
       const nowIso = new Date().toISOString();
+      const parsedLat = parseFloat(lat);
+      const parsedLng = parseFloat(lng);
       const deliveryLoc = {
-        lat: parseFloat(lat) || (courier.currentLocation ? courier.currentLocation.lat : 42.8805),
-        lng: parseFloat(lng) || (courier.currentLocation ? courier.currentLocation.lng : -8.5456),
+        lat: (!isNaN(parsedLat) && parsedLat !== 0) ? parsedLat : (courier.currentLocation ? courier.currentLocation.lat : null),
+        lng: (!isNaN(parsedLng) && parsedLng !== 0) ? parsedLng : (courier.currentLocation ? courier.currentLocation.lng : null),
         hostelName: destinationAlbergue,
         timestamp: nowIso
       };
