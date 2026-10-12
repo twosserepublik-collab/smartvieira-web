@@ -103,7 +103,7 @@ function verifyToken(token) {
 function loadDb() {
   try {
     if (!fs.existsSync(DB_FILE)) {
-      const initialDb = { pilgrims: [], couriers: [], reservations: [], emergencies: [] };
+      const initialDb = { pilgrims: [], couriers: [], reservations: [], emergencies: [], notifications: [] };
       fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), 'utf8');
       return initialDb;
     }
@@ -621,6 +621,234 @@ const server = http.createServer(async (req, res) => {
       success: true,
       reservations: db.reservations
     }));
+  }
+
+
+  // ── COURIER PICKUP (MARK BACKPACKS EN_CAMINO & NOTIFY PILGRIM) ──
+  if (reqPath === '/api/courier/pickup' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const { courierId, smartVieiraIds } = body;
+      const db = loadDb();
+      const courier = db.couriers.find(c => c.id === courierId);
+      if (!courier) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Repartidor no encontrado' }));
+      }
+
+      const idsToPickup = (smartVieiraIds || []).map(id => id.trim().toUpperCase());
+      db.notifications = db.notifications || [];
+      let updatedCount = 0;
+      const updatedReservations = [];
+
+      db.reservations.forEach(r => {
+        const rId = (r.smartVieiraId || '').trim().toUpperCase();
+        if (idsToPickup.includes(rId) && r.status !== 'ENTREGADA') {
+          r.status = 'EN_CAMINO';
+          r.pickedUpAt = new Date().toISOString();
+          r.courierId = courier.id;
+          r.driverName = courier.driverName;
+          r.courierCompanyName = courier.companyName;
+          updatedCount++;
+          updatedReservations.push(r.id);
+
+          // Create Notification 1 for Pilgrim
+          db.notifications.push({
+            id: 'notif_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+            pilgrimEmail: (r.pilgrimEmail || '').toLowerCase(),
+            reservationId: r.id,
+            smartVieiraId: r.smartVieiraId,
+            type: 'PICKUP',
+            title: '🎒 ¡Tu mochila está en camino!',
+            body: 'El transportista (' + courier.driverName + ' - ' + courier.companyName + ') ha recogido tu SmartVieira (' + r.smartVieiraId + ') en ' + r.originAlbergue + ' y va en ruta hacia ' + r.destinationAlbergue + '.',
+            timestamp: new Date().toISOString(),
+            read: false
+          });
+        }
+      });
+
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({
+        success: true,
+        message: 'Se han marcado ' + updatedCount + ' mochilas en camino.',
+        updatedCount,
+        updatedReservations
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: e.message }));
+    }
+  }
+
+  // ── COURIER LIVE LOCATION UPDATE ────────────────────────────────
+  if (reqPath === '/api/courier/location' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const { courierId, lat, lng, accuracy } = body;
+      const db = loadDb();
+      const courier = db.couriers.find(c => c.id === courierId);
+      if (!courier) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Repartidor no encontrado' }));
+      }
+
+      const locObj = {
+        lat: parseFloat(lat),
+        lng: parseFloat(lng),
+        accuracy: parseFloat(accuracy) || 0,
+        updatedAt: new Date().toISOString()
+      };
+
+      courier.currentLocation = locObj;
+
+      let activeBackpacks = 0;
+      db.reservations.forEach(r => {
+        if (r.courierId === courierId && r.status === 'EN_CAMINO') {
+          r.currentLocation = locObj;
+          activeBackpacks++;
+        }
+      });
+
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, activeBackpacks, location: locObj }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: e.message }));
+    }
+  }
+
+  // ── COURIER DROPOFF / DELIVERY CONFIRMATION ─────────────────────
+  if (reqPath === '/api/courier/delivery' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const { courierId, destinationAlbergue, lat, lng } = body;
+      const db = loadDb();
+      const courier = db.couriers.find(c => c.id === courierId);
+      if (!courier) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Repartidor no encontrado' }));
+      }
+
+      const targetHostel = (destinationAlbergue || '').trim().toLowerCase();
+      const nowIso = new Date().toISOString();
+      const deliveryLoc = {
+        lat: parseFloat(lat) || (courier.currentLocation ? courier.currentLocation.lat : 42.8805),
+        lng: parseFloat(lng) || (courier.currentLocation ? courier.currentLocation.lng : -8.5456),
+        hostelName: destinationAlbergue,
+        timestamp: nowIso
+      };
+
+      db.notifications = db.notifications || [];
+      let deliveredCount = 0;
+      const deliveredReservations = [];
+
+      db.reservations.forEach(r => {
+        const rDest = (r.destinationAlbergue || '').trim().toLowerCase();
+        const isCourierMatch = (r.courierId === courierId) ||
+          (!r.courierId && r.companyName && r.companyName.toLowerCase() === courier.companyName.toLowerCase());
+
+        if (rDest === targetHostel && r.status === 'EN_CAMINO' && isCourierMatch) {
+          r.status = 'ENTREGADA';
+          r.deliveredAt = nowIso;
+          r.deliveredLocation = deliveryLoc;
+          delete r.currentLocation;
+          deliveredCount++;
+          deliveredReservations.push(r.id);
+
+          // Create Notification 2 for Pilgrim
+          db.notifications.push({
+            id: 'notif_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+            pilgrimEmail: (r.pilgrimEmail || '').toLowerCase(),
+            reservationId: r.id,
+            smartVieiraId: r.smartVieiraId,
+            type: 'DELIVERY',
+            title: '🏁 ¡Tu mochila ha sido entregada!',
+            body: 'Tu SmartVieira (' + r.smartVieiraId + ') ha sido entregada con éxito en ' + destinationAlbergue + '. Puedes ver el punto de entrega en el mapa.',
+            timestamp: nowIso,
+            read: false
+          });
+        }
+      });
+
+      const remainingEnCamino = db.reservations.filter(r => r.courierId === courierId && r.status === 'EN_CAMINO').length;
+
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({
+        success: true,
+        message: 'Se han entregado ' + deliveredCount + ' mochilas en ' + destinationAlbergue + '.',
+        deliveredCount,
+        deliveredReservations,
+        remainingEnCamino,
+        deliveryLoc
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: e.message }));
+    }
+  }
+
+  // ── PILGRIM TRACKING DETAIL ─────────────────────────────────────
+  if (reqPath === '/api/pilgrim/tracking' && req.method === 'GET') {
+    const reservationId = queryParams.reservationId;
+    const db = loadDb();
+    const resv = db.reservations.find(r => r.id === reservationId);
+    if (!resv) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Reserva no encontrada' }));
+    }
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({
+      success: true,
+      reservation: {
+        id: resv.id,
+        smartVieiraId: resv.smartVieiraId,
+        status: resv.status || 'PAID',
+        originAlbergue: resv.originAlbergue,
+        destinationAlbergue: resv.destinationAlbergue,
+        companyName: resv.companyName,
+        driverName: resv.driverName,
+        pickedUpAt: resv.pickedUpAt,
+        deliveredAt: resv.deliveredAt,
+        currentLocation: resv.currentLocation,
+        deliveredLocation: resv.deliveredLocation
+      }
+    }));
+  }
+
+  // ── PILGRIM NOTIFICATIONS ───────────────────────────────────────
+  if (reqPath === '/api/pilgrim/notifications' && req.method === 'GET') {
+    const email = (queryParams.email || '').toLowerCase();
+    const db = loadDb();
+    const notifs = (db.notifications || []).filter(n => n.pilgrimEmail === email);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ success: true, notifications: notifs }));
+  }
+
+  // ── PILGRIM MARK NOTIFICATIONS READ ─────────────────────────────
+  if (reqPath === '/api/pilgrim/notifications/read' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const email = (body.email || '').toLowerCase();
+      const notifIds = body.notificationIds || [];
+      const db = loadDb();
+      if (db.notifications) {
+        db.notifications.forEach(n => {
+          if (n.pilgrimEmail === email && (notifIds.length === 0 || notifIds.includes(n.id))) {
+            n.read = true;
+          }
+        });
+        saveDb(db);
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true }));
+    } catch(e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false }));
+    }
   }
 
   // ── RESOLVE EMERGENCY ──────────────────────────────────────────
