@@ -24,7 +24,7 @@
     <div class="glass-card rounded-3xl p-8 max-w-sm w-full space-y-6 border border-cyan-500/30 shadow-2xl">
       <div class="text-center">
         <h2 class="text-2xl font-black text-white mb-1">Acceso Seguro</h2>
-        <p class="text-xs text-slate-400">Panel de Administraci�n SmartVieira</p>
+        <p class="text-xs text-slate-400">Panel de Administración SmartVieira</p>
       </div>
       <div class="space-y-4">
         <div>
@@ -32,8 +32,8 @@
           <input type="text" id="adminUser" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none" placeholder="Ej: admin">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">Contrase�a</label>
-          <input type="password" id="adminPass" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none" placeholder="��������">
+          <label class="block text-xs font-bold text-slate-300 mb-1">Contraseña</label>
+          <input type="password" id="adminPass" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none" placeholder="••••••••">
         </div>
         <button onclick="loginAdmin()" class="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm shadow-lg transition-all">Entrar al Panel</button>
         <p id="loginError" class="text-red-400 text-xs text-center hidden font-bold mt-2"></p>
@@ -69,14 +69,17 @@
     
       <div class="flex flex-wrap gap-3 mb-6">
         <button onclick="downloadBackup()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">
-          ?? Descargar Copia de Seguridad
+          💾 Descargar Copia de Seguridad
         </button>
         <div class="relative">
           <input type="file" id="restoreFile" class="hidden" accept=".json" onchange="restoreBackup(event)">
           <button onclick="document.getElementById('restoreFile').click()" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">
-            ?? Restaurar Copia
+            📂 Restaurar Copia (.json)
           </button>
         </div>
+        <button onclick="loadDemoDatabase()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">
+          🧪 Cargar BD de Prueba (Rutas + Peregrinos)
+        </button>
       </div>
 
       <!-- STATS COUNTERS -->
@@ -133,7 +136,7 @@
             </tr>
           </thead>
           <tbody id="tbodyPilgrims">
-            <tr><td colspan="7" class="text-center py-6 text-slate-500">Cargando datos...</td></tr>
+            <tr><td colspan="8" class="text-center py-6 text-slate-500">Cargando datos...</td></tr>
           </tbody>
         </table>
       </div>
@@ -149,19 +152,20 @@
               
               <th>ID Empresa</th>
               <th>Empresa</th>
-              <th>Repartidor / Conductor</th><th>Tel�fono</th><th>Estado</th>
-              <th>Veh�culo</th>
+              <th>Repartidor / Conductor</th><th>Teléfono</th><th>Estado</th>
+              <th>Vehículo</th>
               <th>CIF / NIF</th>
-              <th>Tarifa (�)</th>
+              <th>Tarifa (€)</th>
               <th>Camino</th>
               <th>Ruta (Tramos)</th>
               <th>Correo</th>
-              <th>C�digo Privado Usado</th>
+              <th>Contraseña</th>
+              <th>Código Privado Usado</th>
 
             </tr>
           </thead>
           <tbody id="tbodyCouriers">
-            <tr><td colspan="7" class="text-center py-6 text-slate-500">Cargando datos...</td></tr>
+            <tr><td colspan="13" class="text-center py-6 text-slate-500">Cargando datos...</td></tr>
           </tbody>
         </table>
       </div>
@@ -195,7 +199,7 @@
     
       <!-- TABLE 4: EMERGENCIES -->
       <div id="tabEmergencies" class="hidden glass-card rounded-3xl p-6 border border-red-500/50 space-y-4 shadow-xl">
-        <h2 class="text-lg font-black text-white flex items-center gap-2">?? Panel de Emergencias Activas</h2>
+        <h2 class="text-lg font-black text-white flex items-center gap-2">🚨 Panel de Emergencias Activas</h2>
         <div class="table-container rounded-2xl border border-red-900">
           <table>
             <thead>
@@ -203,8 +207,8 @@
                 <th>Fecha/Hora</th>
                 <th>Repartidor</th>
                 <th>Empresa</th>
-                <th>Tel�fono</th>
-                <th>Acci�n</th>
+                <th>Teléfono</th>
+                <th>Acción</th>
               </tr>
             </thead>
             <tbody id="tbodyEmergencies">
@@ -370,6 +374,26 @@
         }
       }
 
+      async function loadDemoDatabase() {
+        if (!adminToken) return;
+        if (!confirm('¿Cargar la Base de Datos de Prueba con 24 empresas repartidoras (todas las rutas), 14 peregrinos y reservas de ejemplo? (Tu configuración de correo SMTP se mantendrá intacta).')) return;
+        try {
+          const res = await fetch('/api/admin/load-demo-db', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + adminToken, 'Content-Type': 'application/json' }
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert('✅ Base de datos de prueba cargada con éxito (' + data.couriersCount + ' repartidores y ' + data.pilgrimsCount + ' peregrinos).');
+            fetchDatabaseData();
+          } else {
+            alert('Error: ' + (data.message || 'No se pudo cargar la BD de prueba'));
+          }
+        } catch (e) {
+          alert('Error de red al cargar BD de prueba');
+        }
+      }
+
       function downloadBackup() {
         if (!adminToken) return;
         window.location.href = '/api/admin/backup-secure?token=' + adminToken;
@@ -527,7 +551,7 @@
       // Table Couriers
       const tbodyC = document.getElementById('tbodyCouriers');
       if (couriers.length === 0) {
-        tbodyC.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-slate-500">Sin empresas repartidoras registradas</td></tr>';
+        tbodyC.innerHTML = '<tr><td colspan="13" class="text-center py-6 text-slate-500">Sin empresas repartidoras registradas</td></tr>';
       } else {
         tbodyC.innerHTML = couriers.map(c => `
             <tr class="${c.isActive === false ? 'opacity-50 grayscale' : ''}">
@@ -541,7 +565,7 @@
                   : '<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 border border-emerald-500/40 rounded text-[10px] font-bold">ACTIVO</span>'
                 }
               </td>
-              <td>${c.vehicle || '-'}</td><td class="font-mono text-amber-300 text-[11px]">${c.cif || '-'}</td><td class="font-bold text-emerald-400">${c.pricePerBag ? c.pricePerBag + ' �' : '6.50 �'}</td>
+              <td>${c.vehicle || '-'}</td><td class="font-mono text-amber-300 text-[11px]">${c.cif || '-'}</td><td class="font-bold text-emerald-400">${c.pricePerBag ? c.pricePerBag + ' €' : '6.50 €'}</td>
               <td>${c.routes || '-'}</td>
               <td>${c.routeStart || 'Toda'} &rarr; ${c.routeEnd || 'Toda'}</td>
               <td class="font-mono text-slate-300">${c.email}</td>

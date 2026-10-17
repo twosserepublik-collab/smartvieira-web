@@ -441,6 +441,31 @@ const server = http.createServer(async (req, res) => {
     return res.end(dbData);
   }
 
+  if (reqPath === '/api/admin/load-demo-db' && req.method === 'POST') {
+    if (!isAdminValid(req, queryParams)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const demoPath = path.join(PUBLIC_DIR, 'demo-database.json');
+      const demoData = JSON.parse(fs.readFileSync(demoPath, 'utf8'));
+      const currentDb = loadDb();
+      if (currentDb.smtpConfig) {
+        demoData.smtpConfig = currentDb.smtpConfig;
+      }
+      saveDb(demoData);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({
+        success: true,
+        couriersCount: (demoData.couriers || []).length,
+        pilgrimsCount: (demoData.pilgrims || []).length
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: e.message }));
+    }
+  }
+
   if (reqPath === '/api/admin/restore-secure' && req.method === 'POST') {
     if (!isAdminValid(req, queryParams)) {
       res.writeHead(401, { 'Content-Type': 'application/json' });
@@ -452,6 +477,8 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'Formato de backup inv�lido' }));
       }
+      const curDb = loadDb();
+      if (!backupData.smtpConfig && curDb.smtpConfig) backupData.smtpConfig = curDb.smtpConfig;
       fs.writeFileSync(DB_FILE, JSON.stringify(backupData, null, 2), 'utf8');
       res.writeHead(200, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: true, message: 'Base de datos restaurada' }));

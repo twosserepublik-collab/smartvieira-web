@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <script>
@@ -201,15 +201,7 @@
     <!-- ========================================================================= -->
     <section id="viewAuth" class="hidden glass-card rounded-3xl p-6 space-y-5 shadow-2xl border border-amber-500/30">
       
-      <!-- Auth Mode Toggle (Login vs Register) -->
-      <div class="flex p-1 rounded-2xl bg-slate-900/90 border border-slate-700/80 text-xs font-black">
-        <button onclick="setAuthTab('login')" id="btnAuthTabLogin" class="w-1/2 py-2.5 rounded-xl bg-amber-500 text-slate-950 transition-all">
-          🔑 Iniciar Sesión
-        </button>
-        <button onclick="setAuthTab('register')" id="btnAuthTabRegister" class="w-1/2 py-2.5 rounded-xl text-slate-400 hover:text-white transition-all">
-          📝 Registrarse
-        </button>
-      </div>
+      <!-- Auth Mode Toggle Removed: Registration requires scanning QR or entering SmartVieira ID first -->
 
       <!-- Error Alert Box -->
       <div id="authErrorBox" class="hidden p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-xs font-bold text-red-300">
@@ -255,6 +247,9 @@
         <button type="submit" class="w-full py-4 rounded-2xl gold-gradient text-slate-950 font-black text-sm shadow-xl hover:scale-[1.01] transition-all">
           Verificar Credenciales e Iniciar Sesión →
         </button>
+        <button type="button" onclick="enterGuestMode()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-all">
+          ← Volver a Escanear QR / Vincular ID de Vieira
+        </button>
       </form>
 
       <!-- FORM B: NEW REGISTRATION -->
@@ -266,7 +261,7 @@
 
         <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
           <label class="block text-[10px] font-black text-amber-400 uppercase tracking-widest mb-1">Concha SmartVieira Escaneada/Vinculada *</label>
-          <input type="text" id="regDeviceId" value="VIEIRA-SMARTSHELL-S3-9982" required class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-amber-500/50 text-xs font-mono text-amber-300 font-bold focus:outline-none">
+          <input type="text" id="regDeviceId" value="VIEIRA-SMARTSHELL-S3-9982" required readonly class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-amber-500/50 text-xs font-mono text-amber-300 font-bold focus:outline-none opacity-90 cursor-not-allowed">
           <span class="text-[10px] text-slate-400 block pt-1">Este ID quedará asociado a tus credenciales en la base de datos central.</span>
         </div>
 
@@ -310,6 +305,9 @@
 
         <button type="submit" class="w-full py-4 rounded-2xl gold-gradient text-slate-950 font-black text-sm shadow-xl hover:scale-[1.01] transition-all mt-4">
           Completar Registro y Guardar en BD →
+        </button>
+        <button type="button" onclick="enterGuestMode()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-all">
+          ← Volver a Escanear otro QR / ID
         </button>
       </form>
     </section>
@@ -657,7 +655,7 @@
       </button>
 
       <button id="profileLoginBtn" onclick="goToAuthScreen()" class="hidden w-full py-4 rounded-2xl gold-gradient text-slate-950 text-xs font-black hover:scale-[1.01] transition-all">
-        🔑 Iniciar Sesión / Registrarse
+        🔑 Iniciar Sesión
       </button>
     </div>
 
@@ -1694,13 +1692,9 @@
       if (tab === 'login') {
         document.getElementById('formLogin').classList.remove('hidden');
         document.getElementById('formRegister').classList.add('hidden');
-        document.getElementById('btnAuthTabLogin').className = "w-1/2 py-2.5 rounded-xl bg-amber-500 text-slate-950 transition-all";
-        document.getElementById('btnAuthTabRegister').className = "w-1/2 py-2.5 rounded-xl text-slate-400 hover:text-white transition-all";
       } else {
         document.getElementById('formRegister').classList.remove('hidden');
         document.getElementById('formLogin').classList.add('hidden');
-        document.getElementById('btnAuthTabRegister').className = "w-1/2 py-2.5 rounded-xl bg-amber-500 text-slate-950 transition-all";
-        document.getElementById('btnAuthTabLogin').className = "w-1/2 py-2.5 rounded-xl text-slate-400 hover:text-white transition-all";
       }
     }
 
@@ -2222,7 +2216,9 @@
             categoryMatch = true;
           } else if (chosenRouteId === 'camino-frances' && (rLower.includes('francés') || rLower.includes('frances'))) {
             categoryMatch = true;
-          } else if (chosenRouteId.includes('portugues') && (rLower.includes('portugués') || rLower.includes('portugues'))) {
+          } else if (chosenRouteId === 'camino-portugues-costa' && (rLower.includes('costa') || rLower === 'camino-portugues')) {
+            categoryMatch = true;
+          } else if (chosenRouteId === 'camino-portugues-interior' && (rLower.includes('portugues-interior') || rLower === 'camino-portugues' || (rLower.includes('portugu') && !rLower.includes('costa')))) {
             categoryMatch = true;
           } else if (chosenRouteId === 'camino-del-norte' && (rLower.includes('norte'))) {
             categoryMatch = true;
@@ -2253,33 +2249,33 @@
 
           const routeTowns = TOWNS_ORDER[chosenRouteId] || [];
           
-          if (c.routeStart && c.routeStart.trim().length > 0 && c.routeStart !== 'toda' && c.routeStart !== 'inicio') {
-              const cStart = c.routeStart.toLowerCase();
-              const cStartIndex = routeTowns.findIndex(t => cStart === t.toLowerCase());
-              
-              const dbHostels = HOSTELS_DATABASE[chosenRouteId] || [];
-              const pickHostelObj = dbHostels.find(h => h.name.toLowerCase() === pickLower);
-              const pTown = pickHostelObj ? pickHostelObj.town.toLowerCase() : '';
-              const pPickIndex = routeTowns.findIndex(t => t.toLowerCase() === pTown);
-              
-              if (cStartIndex > -1 && pPickIndex > -1 && pPickIndex < cStartIndex) {
-                return false;
-              }
-            }
+          const dbHostels = HOSTELS_DATABASE[chosenRouteId] || [];
+          const pickHostelObj = dbHostels.find(h => h.name.toLowerCase() === pickLower);
+          const dropHostelObj = dbHostels.find(h => h.name.toLowerCase() === dropLower);
+          const pTown = pickHostelObj ? pickHostelObj.town.toLowerCase() : '';
+          const dTown = dropHostelObj ? dropHostelObj.town.toLowerCase() : '';
+          const pPickIndex = routeTowns.findIndex(t => t.toLowerCase() === pTown);
+          const pDropIndex = routeTowns.findIndex(t => t.toLowerCase() === dTown);
 
-            if (c.routeEnd && c.routeEnd.trim().length > 0 && c.routeEnd !== 'toda' && c.routeEnd !== 'final') {
-              const cEnd = c.routeEnd.toLowerCase();
-              const cEndIndex = routeTowns.findIndex(t => cEnd === t.toLowerCase());
-              
-              const dbHostels = HOSTELS_DATABASE[chosenRouteId] || [];
-              const dropHostelObj = dbHostels.find(h => h.name.toLowerCase() === dropLower);
-              const dTown = dropHostelObj ? dropHostelObj.town.toLowerCase() : '';
-              const pDropIndex = routeTowns.findIndex(t => t.toLowerCase() === dTown);
-              
-              if (cEndIndex > -1 && pDropIndex > -1 && pDropIndex > cEndIndex) {
+          if (c.routeStart && c.routeStart.trim().length > 0 && c.routeStart !== 'toda' && c.routeStart !== 'inicio') {
+            const cStart = c.routeStart.toLowerCase();
+            const cStartIndex = routeTowns.findIndex(t => cStart === t.toLowerCase());
+            if (cStartIndex > -1) {
+              if ((pPickIndex > -1 && pPickIndex < cStartIndex) || (pDropIndex > -1 && pDropIndex < cStartIndex)) {
                 return false;
               }
             }
+          }
+
+          if (c.routeEnd && c.routeEnd.trim().length > 0 && c.routeEnd !== 'toda' && c.routeEnd !== 'final') {
+            const cEnd = c.routeEnd.toLowerCase();
+            const cEndIndex = routeTowns.findIndex(t => cEnd === t.toLowerCase());
+            if (cEndIndex > -1) {
+              if ((pPickIndex > -1 && pPickIndex > cEndIndex) || (pDropIndex > -1 && pDropIndex > cEndIndex)) {
+                return false;
+              }
+            }
+          }
 
           return true;
         });
@@ -2308,7 +2304,7 @@
                   <strong class="text-sm text-white block">${c.companyName}</strong>
                   <span class="text-[10px] text-amber-300 font-extrabold">Conductor: ${c.driverName} (${c.vehicle || 'Furgón'})</span>
                 </div>
-                <span class="text-amber-400 font-black text-sm">${calculateFinalPrice(c.pricePerBag)} �</span>
+                <span class="text-amber-400 font-black text-sm">${calculateFinalPrice(c.pricePerBag)} €</span>
               </div>
               <div class="flex justify-between text-[11px] text-slate-400 border-t border-slate-800/80 pt-1.5">
                 <span>Tramo: ${c.routeStart ? (c.routeStart + ' → ' + c.routeEnd) : c.routes}</span>
