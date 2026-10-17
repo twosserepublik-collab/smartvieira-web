@@ -237,6 +237,21 @@
           <label for="rememberLogin" class="text-xs text-slate-300 font-medium">Recordar este dispositivo (Manejo Seguro de Token)</label>
         </div>
 
+        <div class="flex justify-end">
+          <button type="button" onclick="togglePilgrimRecoverBox()" class="text-xs font-bold text-amber-400 hover:underline">
+            🔑 ¿Has olvidado tu contraseña? Recupérala aquí
+          </button>
+        </div>
+
+        <div id="pilgrimRecoverBox" class="hidden p-3.5 rounded-2xl bg-slate-900 border border-amber-500/40 space-y-2.5">
+          <p class="text-[11px] text-slate-300 font-bold">📧 Introduce tu correo y te enviaremos tu contraseña:</p>
+          <input type="email" id="pilgrimRecoverEmail" placeholder="tuemail@ejemplo.com" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+          <button type="button" onclick="handlePilgrimPasswordRecovery()" id="btnPilgrimRecoverSubmit" class="w-full py-2.5 rounded-xl bg-amber-500 text-slate-950 font-black text-xs hover:bg-amber-400 transition-all">
+            ✉️ Enviar Contraseña a mi Correo
+          </button>
+          <p id="pilgrimRecoverMsg" class="text-[11px] font-bold hidden"></p>
+        </div>
+
         <button type="submit" class="w-full py-4 rounded-2xl gold-gradient text-slate-950 font-black text-sm shadow-xl hover:scale-[1.01] transition-all">
           Verificar Credenciales e Iniciar Sesión →
         </button>
@@ -1697,6 +1712,54 @@
 
     function hideAuthError() {
       document.getElementById('authErrorBox').classList.add('hidden');
+    }
+
+    function togglePilgrimRecoverBox() {
+      const box = document.getElementById('pilgrimRecoverBox');
+      if (!box) return;
+      box.classList.toggle('hidden');
+      const loginEmail = document.getElementById('loginEmail');
+      const recEmail = document.getElementById('pilgrimRecoverEmail');
+      if (loginEmail && recEmail && loginEmail.value && !recEmail.value) {
+        recEmail.value = loginEmail.value;
+      }
+    }
+
+    async function handlePilgrimPasswordRecovery() {
+      const emailEl = document.getElementById('pilgrimRecoverEmail');
+      const msgEl = document.getElementById('pilgrimRecoverMsg');
+      const btn = document.getElementById('btnPilgrimRecoverSubmit');
+      const email = emailEl ? emailEl.value.trim() : '';
+      if (!email) {
+        alert('Introduce tu correo electrónico para recuperar la contraseña.');
+        return;
+      }
+      btn.disabled = true;
+      btn.innerText = '⏳ Procesando recuperación...';
+      msgEl.classList.add('hidden');
+      try {
+        const res = await fetch(getApiUrl('/api/recover-password'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, role: 'pilgrim' })
+        });
+        const data = await res.json();
+        msgEl.classList.remove('hidden');
+        if (data.success) {
+          msgEl.className = 'text-[11px] font-bold text-emerald-400';
+          msgEl.innerText = data.message;
+        } else {
+          msgEl.className = 'text-[11px] font-bold text-red-400';
+          msgEl.innerText = '⚠️ ' + (data.message || 'No se pudo recuperar la contraseña.');
+        }
+      } catch (err) {
+        msgEl.classList.remove('hidden');
+        msgEl.className = 'text-[11px] font-bold text-red-400';
+        msgEl.innerText = '⚠️ Error de conexión con el servidor.';
+      } finally {
+        btn.disabled = false;
+        btn.innerText = '✉️ Enviar Contraseña a mi Correo';
+      }
     }
 
     async function handleStrictLogin(e) {

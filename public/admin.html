@@ -126,6 +126,7 @@
               <th>Nombre</th>
               <th>Apellidos</th>
               <th>Correo Electrónico</th>
+              <th>Contraseña</th>
               <th>SmartVieira ID</th>
               <th>Idioma</th>
               <th>Fecha Registro</th>
@@ -243,6 +244,25 @@
       </div>
 
       <div id="adminFleetMap" style="height: 480px; width: 100%;" class="rounded-2xl border border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
+    </div>
+
+        <!-- CONFIGURACIÓN DE CORREO PARA RECUPERACIÓN DE CONTRASEÑAS -->
+    <div class="glass-card rounded-2xl p-5 border border-cyan-500/30 text-xs space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <strong class="text-cyan-400 font-bold block text-sm">✉️ Correo Automático para Recuperación de Contraseñas (SMTP / Gmail)</strong>
+          <p class="text-slate-400 text-[11px]">Configura el correo desde el que se enviarán automáticamente las contraseñas olvidadas a peregrinos y repartidores.</p>
+        </div>
+        <span id="smtpSavedBadge" class="px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px] font-bold">Sin configurar</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 pt-1">
+        <input type="text" id="smtpHostInput" value="smtp.gmail.com" placeholder="Servidor SMTP (smtp.gmail.com)" class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
+        <input type="email" id="smtpUserInput" placeholder="Tu correo (ej. soporte@gmail.com)" class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
+        <input type="password" id="smtpPassInput" placeholder="Contraseña o Clave de Aplicación" class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
+        <button onclick="saveSmtpConfig()" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs transition-all">
+          💾 Guardar Correo de Envío
+        </button>
+      </div>
     </div>
 
     <!-- DIRECT FILE LINK & API HELP -->
@@ -396,6 +416,35 @@
       }
     };
 
+      async function saveSmtpConfig() {
+        const host = document.getElementById('smtpHostInput').value.trim() || 'smtp.gmail.com';
+        const user = document.getElementById('smtpUserInput').value.trim();
+        const pass = document.getElementById('smtpPassInput').value.trim();
+        if (!user || !pass) {
+          alert('Introduce el correo y la contraseña (o Contraseña de Aplicación de Google).');
+          return;
+        }
+        try {
+          const res = await fetch('/api/admin/smtp-config', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + adminToken,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ host, user, pass })
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert('✅ Correo de envío guardado correctamente.');
+            fetchDatabaseData();
+          } else {
+            alert('Error: ' + (data.message || 'No se pudo guardar'));
+          }
+        } catch (e) {
+          alert('Error de conexión guardando correo');
+        }
+      }
+
       function renderTables() {
         if (!dbState) return;
 
@@ -434,6 +483,18 @@
 
       if (!dbState) return;
 
+      if (dbState.smtpConfig && dbState.smtpConfig.user) {
+        const uEl = document.getElementById('smtpUserInput');
+        const hEl = document.getElementById('smtpHostInput');
+        const bEl = document.getElementById('smtpSavedBadge');
+        if (uEl && !uEl.value) uEl.value = dbState.smtpConfig.user;
+        if (hEl && dbState.smtpConfig.host) hEl.value = dbState.smtpConfig.host;
+        if (bEl) {
+          bEl.className = 'px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold';
+          bEl.innerText = '✅ Activo: ' + dbState.smtpConfig.user;
+        }
+      }
+
       const pilgrims = dbState.pilgrims || [];
       const couriers = dbState.couriers || [];
       const reservations = dbState.reservations || [];
@@ -453,6 +514,7 @@
             <td class="font-bold text-white">${p.name}</td>
             <td>${p.surname || '-'}</td>
             <td class="font-mono text-slate-300">${p.email}</td>
+            <td class="font-mono font-bold text-emerald-400">${p.passwordPlain || '<span class="text-slate-500 text-[10px]">Pendiente login/recup.</span>'}</td>
             <td class="font-mono font-bold text-amber-300">${p.smartVieiraId}</td>
             <td class="uppercase">${p.language || 'es'}</td>
             <td class="text-[11px] text-slate-400">${new Date(p.createdAt).toLocaleString()}</td>
@@ -481,6 +543,7 @@
               <td>${c.routes || '-'}</td>
               <td>${c.routeStart || 'Toda'} &rarr; ${c.routeEnd || 'Toda'}</td>
               <td class="font-mono text-slate-300">${c.email}</td>
+              <td class="font-mono font-bold text-emerald-400">${c.passwordPlain || '<span class="text-slate-500 text-[10px]">Pendiente login/recup.</span>'}</td>
             <td class="font-mono text-emerald-400 font-bold">${c.accessCode}</td>
           </tr>
         `).join('');

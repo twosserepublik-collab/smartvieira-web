@@ -46,7 +46,7 @@ function switchTab(tabName) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Vieira Courier - App del Repartidor</title>
-  <meta name="version" content="v13.8.4">
+  <meta name="version" content="v13.8.5">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -95,7 +95,7 @@ function switchTab(tabName) {
         🔄
       </button>
       <div id="headerCourierStatus" onclick="currentCourier ? switchTab('Perfil') : toggleCourierAuthView()" class="px-3 py-1 rounded-full bg-blue-500/20 text-cyan-300 text-base font-black border border-cyan-500/30 cursor-pointer hover:border-cyan-400">
-        <span id="txtCourierHeader">🚚 Acceder (v13.8.4)</span>
+        <span id="txtCourierHeader">🚚 Acceder (v13.8.5)</span>
       </div>
     </div>
   </header>
@@ -141,6 +141,21 @@ function switchTab(tabName) {
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">Contraseña *</label>
           <input type="password" id="courierLoginPass" required class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none">
+        </div>
+
+        <div class="flex justify-end">
+          <button type="button" onclick="toggleCourierRecoverBox()" class="text-xs font-bold text-cyan-400 hover:underline">
+            🔑 ¿Has olvidado tu contraseña? Recupérala aquí
+          </button>
+        </div>
+
+        <div id="courierRecoverBox" class="hidden p-3.5 rounded-2xl bg-slate-900 border border-cyan-500/40 space-y-2.5">
+          <p class="text-[11px] text-slate-300 font-bold">📧 Introduce tu correo de empresa y te enviaremos tu contraseña:</p>
+          <input type="email" id="courierRecoverEmail" placeholder="repartidor@empresa.com" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
+          <button type="button" onclick="handleCourierPasswordRecovery()" id="btnCourierRecoverSubmit" class="w-full py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs hover:bg-cyan-400 transition-all">
+            ✉️ Enviar Contraseña a mi Correo
+          </button>
+          <p id="courierRecoverMsg" class="text-[11px] font-bold hidden"></p>
         </div>
 
         <button type="submit" class="w-full py-4 rounded-2xl blue-gradient text-white font-black text-sm shadow-xl hover:scale-[1.01] transition-all">
@@ -247,7 +262,8 @@ function switchTab(tabName) {
             <span class="text-[10px] font-black text-cyan-400 uppercase tracking-widest" id="txtCourierCompanyBadge">Empresa</span>
             <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-md font-bold" id="txtLuggageCountBadge">Cargando...</span>
           </div>
-          <h2 class="text-lg font-black text-white" id="txtDriverVehicle">�</h2>
+          <h2 class="text-2xl font-black text-white" id="txtCourierWelcome">¡Buen Reparto!</h2>
+          <p class="text-xs text-slate-300 leading-relaxed" id="txtDriverVehicle">Cargando vehículo...</p>
           <div class="flex items-center space-x-1.5 text-[10px] text-slate-400">
             <span id="autoRefreshDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block"></span>
             <span id="lastRefreshLabel">Actualizando reservas autom�ticamente...</span>
@@ -630,9 +646,65 @@ function switchTab(tabName) {
         }
       }
 
-      async function setupCourierDashboard() {
+      function toggleCourierRecoverBox() {
+        const box = document.getElementById('courierRecoverBox');
+        if (!box) return;
+        box.classList.toggle('hidden');
+        const loginEmail = document.getElementById('courierLoginEmail');
+        const recEmail = document.getElementById('courierRecoverEmail');
+        if (loginEmail && recEmail && loginEmail.value && !recEmail.value) {
+          recEmail.value = loginEmail.value;
+        }
+      }
 
-      
+      async function handleCourierPasswordRecovery() {
+        const emailEl = document.getElementById('courierRecoverEmail');
+        const msgEl = document.getElementById('courierRecoverMsg');
+        const btn = document.getElementById('btnCourierRecoverSubmit');
+        const email = emailEl ? emailEl.value.trim() : '';
+        if (!email) {
+          alert('Introduce tu correo electrónico para recuperar la contraseña.');
+          return;
+        }
+        btn.disabled = true;
+        btn.innerText = '⏳ Procesando recuperación...';
+        msgEl.classList.add('hidden');
+        try {
+          const res = await fetch(getApiUrl('/api/recover-password'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, role: 'courier' })
+          });
+          const data = await res.json();
+          msgEl.classList.remove('hidden');
+          if (data.success) {
+            msgEl.className = 'text-[11px] font-bold text-emerald-400';
+            msgEl.innerText = data.message;
+          } else {
+            msgEl.className = 'text-[11px] font-bold text-red-400';
+            msgEl.innerText = '⚠️ ' + (data.message || 'No se pudo recuperar la contraseña.');
+          }
+        } catch (err) {
+          msgEl.classList.remove('hidden');
+          msgEl.className = 'text-[11px] font-bold text-red-400';
+          msgEl.innerText = '⚠️ Error de conexión con el servidor.';
+        } finally {
+          btn.disabled = false;
+          btn.innerText = '✉️ Enviar Contraseña a mi Correo';
+        }
+      }
+
+      async function setupCourierDashboard() {
+        if (!currentCourier) return;
+
+        // 1. Immediately hide auth section and show dashboard so screen is NEVER blank
+        const authSec = document.getElementById('courierAuthSection');
+        const dashSec = document.getElementById('courierDashboard');
+        if (authSec) authSec.classList.add('hidden');
+        if (dashSec) dashSec.classList.remove('hidden');
+        switchTab('Mochilas');
+
+        // 2. Safely update status toggle
         isCourierActive = (currentCourier.isActive !== false);
         const lbl = document.getElementById('lblToggleStatus');
         const track = document.getElementById('trackToggleStatus');
@@ -651,12 +723,18 @@ function switchTab(tabName) {
           }
         }
 
-        document.getElementById('txtCourierHeader').innerText = `🚚 ${currentCourier.driverName}`;
-      document.getElementById('txtCourierCompanyBadge').innerText = currentCourier.companyName;
-      document.getElementById('txtCourierWelcome').innerText = `¡Buen Reparto, ${currentCourier.driverName.split(' ')[0]}!`;
-      document.getElementById('txtDriverVehicle').innerText = `Vehículo: ${currentCourier.vehicle || 'Furgón'}`;
-      document.getElementById('courierDashboard').classList.remove('hidden');
-      switchTab('Mochilas');
+        // 3. Safely populate header & welcome texts
+        const dName = currentCourier.driverName || 'Conductor';
+        const cName = currentCourier.companyName || 'Empresa';
+        const hdrEl = document.getElementById('txtCourierHeader');
+        const badgeEl = document.getElementById('txtCourierCompanyBadge');
+        const welEl = document.getElementById('txtCourierWelcome');
+        const vehEl = document.getElementById('txtDriverVehicle');
+
+        if (hdrEl) hdrEl.innerText = `🚚 ${dName}`;
+        if (badgeEl) badgeEl.innerText = cName;
+        if (welEl) welEl.innerText = `¡Buen Reparto, ${dName.split(' ')[0]}!`;
+        if (vehEl) vehEl.innerText = `Vehículo: ${currentCourier.vehicle || 'Furgón'}`;
 
       // Silently pre-warm real GPS in background so coordinates are ready instantly on button press
       acquireRealPosition().then(pos => {

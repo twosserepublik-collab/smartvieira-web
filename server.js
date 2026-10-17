@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
 const crypto = require('crypto');
+const tls = require('tls');
 
 // =========================================================================
 // ENVIRONMENT CONFIGURATION & CONSTANTS
@@ -189,6 +190,94 @@ function callStripeApi(endpoint, postData) {
 // =========================================================================
 // SAFE PAYLOAD PARSER WITH SIZE LIMIT (MAX 100 KB)
 // =========================================================================
+// =========================================================================
+// NATIVE TLS SMTP EMAIL SENDER (ZERO EXTERNAL DEPENDENCIES)
+// =========================================================================
+function sendSmtpEmail({ host, port = 465, user, pass, to, subject, bodyText }) {
+  return new Promise((resolve, reject) => {
+    if (!user || !pass) {
+      return reject(new Error('SMTP_NOT_CONFIGURED'));
+    }
+    const smtpHost = host || 'smtp.gmail.com';
+    const socket = tls.connect(port, smtpHost, { rejectUnauthorized: false });
+    let step = 0;
+    let buffer = '';
+
+    const timeout = setTimeout(() => {
+      socket.destroy();
+      reject(new Error('SMTP timeout'));
+    }, 12000);
+
+    const sendLine = (line) => {
+      socket.write(line + '\r\n');
+    };
+
+    socket.on('data', (chunk) => {
+      buffer += chunk.toString('utf8');
+      if (!buffer.endsWith('\r\n')) return;
+      const lines = buffer.trim().split('\r\n');
+      const lastLine = lines[lines.length - 1];
+      if (lastLine.length >= 4 && lastLine[3] === '-') return; // wait for multi-line end
+      const code = parseInt(lastLine.substring(0, 3), 10);
+      buffer = '';
+
+      if (code >= 400) {
+        clearTimeout(timeout);
+        socket.end();
+        return reject(new Error('SMTP error: ' + lastLine));
+      }
+
+      if (step === 0 && code === 220) {
+        step = 1;
+        sendLine('EHLO smartvieira.com');
+      } else if (step === 1 && code === 250) {
+        step = 2;
+        sendLine('AUTH LOGIN');
+      } else if (step === 2 && code === 334) {
+        step = 3;
+        sendLine(Buffer.from(user).toString('base64'));
+      } else if (step === 3 && code === 334) {
+        step = 4;
+        sendLine(Buffer.from(pass.replace(/\s+/g, '')).toString('base64'));
+      } else if (step === 4 && code === 235) {
+        step = 5;
+        sendLine('MAIL FROM:<' + user + '>');
+      } else if (step === 5 && code === 250) {
+        step = 6;
+        sendLine('RCPT TO:<' + to + '>');
+      } else if (step === 6 && code === 250) {
+        step = 7;
+        sendLine('DATA');
+      } else if (step === 7 && code === 354) {
+        step = 8;
+        const msg = [
+          'From: "SmartVieira Soporte" <' + user + '>',
+          'To: <' + to + '>',
+          'Subject: =?UTF-8?B?' + Buffer.from(subject).toString('base64') + '?=',
+          'MIME-Version: 1.0',
+          'Content-Type: text/plain; charset=UTF-8',
+          'Content-Transfer-Encoding: 8bit',
+          '',
+          bodyText,
+          '.'
+        ].join('\r\n');
+        sendLine(msg);
+      } else if (step === 8 && code === 250) {
+        step = 9;
+        sendLine('QUIT');
+        clearTimeout(timeout);
+        socket.end();
+        resolve(true);
+      }
+    });
+
+    socket.on('error', (err) => {
+      clearTimeout(timeout);
+      reject(err);
+    });
+  });
+}
+
 function parseRequestBody(req, maxBytes = 102400) {
   return new Promise((resolve, reject) => {
     let body = '';
@@ -351,6 +440,7 @@ const server = http.createServer(async (req, res) => {
         surname: (surname || '').trim(),
         language: language || 'es',
         email: email.toLowerCase().trim(),
+        passwordPlain: password,
         passwordHash: hash,
         salt: salt,
         smartVieiraId: (smartVieiraId || 'VIEIRA-SMARTSHELL-S3-9982').trim(),
@@ -404,6 +494,11 @@ const server = http.createServer(async (req, res) => {
       if (!valid) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ success: false, message: 'Correo o contraseña incorrectos' }));
+      }
+
+      if (pilgrim.passwordPlain !== password) {
+        pilgrim.passwordPlain = password;
+        saveDb(db);
       }
 
       const token = generateToken({ role: 'pilgrim', email: pilgrim.email, id: pilgrim.id });
@@ -461,6 +556,7 @@ const server = http.createServer(async (req, res) => {
         routeStart: (routeStart || '').trim(),
         routeEnd: (routeEnd || '').trim(),
         email: email.toLowerCase().trim(),
+        passwordPlain: password,
         passwordHash: hash,
         salt: salt,
         accessCode: accessCode.trim(),
@@ -523,6 +619,11 @@ const server = http.createServer(async (req, res) => {
         return res.end(JSON.stringify({ success: false, message: 'Correo o contraseña de repartidor incorrectos' }));
       }
 
+      if (courier.passwordPlain !== password) {
+        courier.passwordPlain = password;
+        saveDb(db);
+      }
+
       const token = generateToken({ role: 'courier', email: courier.email, companyName: courier.companyName });
       console.log(`[DB] Secure Courier Login: ${email}`);
 
@@ -544,6 +645,140 @@ const server = http.createServer(async (req, res) => {
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: false, message: 'Error procesando login de repartidor' }));
+    }
+  }
+
+  // ── PASSWORD RECOVERY (PILGRIM & COURIER) + EMAIL SENDING ───────────
+  if (reqPath === '/api/recover-password' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const email = (body.email || '').toLowerCase().trim();
+      const role = body.role || 'any';
+
+      if (!email) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Introduce tu correo electrónico.' }));
+      }
+
+      const db = loadDb();
+      let targetUser = null;
+      let userTypeLabel = 'Peregrino';
+
+      if (role === 'courier') {
+        targetUser = (db.couriers || []).find(c => (c.email || '').toLowerCase().trim() === email);
+        userTypeLabel = 'Empresa Repartidora';
+      } else if (role === 'pilgrim') {
+        targetUser = (db.pilgrims || []).find(p => (p.email || '').toLowerCase().trim() === email);
+        userTypeLabel = 'Peregrino';
+      } else {
+        targetUser = (db.pilgrims || []).find(p => (p.email || '').toLowerCase().trim() === email);
+        if (!targetUser) {
+          targetUser = (db.couriers || []).find(c => (c.email || '').toLowerCase().trim() === email);
+          userTypeLabel = 'Empresa Repartidora';
+        }
+      }
+
+      if (!targetUser) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+          success: false,
+          message: 'No encontramos ninguna cuenta registrada con el correo ' + email
+        }));
+      }
+
+      // Ensure user has a readable passwordPlain in DB (generate one if legacy hash-only account)
+      if (!targetUser.passwordPlain) {
+        const generatedPass = 'Vieira' + Math.floor(1000 + Math.random() * 9000);
+        const { hash, salt } = hashPassword(generatedPass);
+        targetUser.passwordPlain = generatedPass;
+        targetUser.passwordHash = hash;
+        targetUser.salt = salt;
+      }
+
+      targetUser.lastPasswordRecoveryAt = new Date().toISOString();
+      saveDb(db);
+
+      const smtpCfg = db.smtpConfig || {};
+      const smtpUser = process.env.SMTP_USER || smtpCfg.user || '';
+      const smtpPass = process.env.SMTP_PASS || smtpCfg.pass || '';
+      const smtpHost = process.env.SMTP_HOST || smtpCfg.host || 'smtp.gmail.com';
+
+      const displayName = targetUser.name || targetUser.driverName || targetUser.companyName || 'Usuario';
+      const subject = 'Recuperación de Contraseña - SmartVieira (' + userTypeLabel + ')';
+      const bodyText = [
+        'Hola ' + displayName + ',',
+        '',
+        'Has solicitado recuperar tu contraseña de acceso a SmartVieira (' + userTypeLabel + ').',
+        '',
+        '📧 Correo: ' + targetUser.email,
+        '🔑 Tu Contraseña: ' + targetUser.passwordPlain,
+        '',
+        'Ya puedes volver a entrar en la aplicación con estas credenciales.',
+        '¡Buen Camino!',
+        'Equipo SmartVieira'
+      ].join('\r\n');
+
+      let emailSent = false;
+      let emailError = null;
+      if (smtpUser && smtpPass) {
+        try {
+          await sendSmtpEmail({
+            host: smtpHost,
+            port: 465,
+            user: smtpUser,
+            pass: smtpPass,
+            to: targetUser.email,
+            subject,
+            bodyText
+          });
+          emailSent = true;
+        } catch (errSmtp) {
+          console.error('[SMTP ERROR]', errSmtp.message);
+          emailError = errSmtp.message;
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      if (emailSent) {
+        return res.end(JSON.stringify({
+          success: true,
+          emailSent: true,
+          message: '✅ ¡Contraseña enviada con éxito a ' + targetUser.email + '! Revisa tu bandeja de entrada o la carpeta de Spam.'
+        }));
+      } else {
+        return res.end(JSON.stringify({
+          success: true,
+          emailSent: false,
+          recoveredPassword: targetUser.passwordPlain,
+          message: '✅ Solicitud registrada. Tu contraseña es: ' + targetUser.passwordPlain + (emailError ? ' (Aviso SMTP: ' + emailError + ')' : ' (También está disponible en el Panel de Administración).')
+        }));
+      }
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error procesando la recuperación de contraseña.' }));
+    }
+  }
+
+  // ── ADMIN SMTP CONFIGURATION ────────────────────────────────────────
+  if (reqPath === '/api/admin/smtp-config' && req.method === 'POST') {
+    if (!isAdminValid(req, queryParams)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const db = loadDb();
+      db.smtpConfig = {
+        host: (body.host || 'smtp.gmail.com').trim(),
+        user: (body.user || '').trim(),
+        pass: (body.pass || '').trim()
+      };
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, message: 'Configuración de correo guardada en BD.' }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: e.message }));
     }
   }
 
@@ -896,8 +1131,8 @@ const server = http.createServer(async (req, res) => {
     const db = loadDb();
     // Return sanitized database without plain salt/hash
     const sanitizedDb = {
-      pilgrims: (db.pilgrims || []).map(p => ({ ...p, passwordHash: '[PROTECTED]', salt: undefined })),
-      couriers: (db.couriers || []).map(c => ({ ...c, passwordHash: '[PROTECTED]', salt: undefined })),
+      pilgrims: (db.pilgrims || []).map(p => ({ ...p, passwordHash: '[PROTECTED]', passwordPlain: undefined, salt: undefined })),
+      couriers: (db.couriers || []).map(c => ({ ...c, passwordHash: '[PROTECTED]', passwordPlain: undefined, salt: undefined })),
       reservations: db.reservations || [],
       emergencies: db.emergencies || []
     };
