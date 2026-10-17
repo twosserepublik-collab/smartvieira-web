@@ -557,7 +557,9 @@ const server = http.createServer(async (req, res) => {
 
       let valid = false;
       if (pilgrim) {
-        if (pilgrim.salt) {
+        if (pilgrim.passwordPlain && pilgrim.passwordPlain === password) {
+          valid = true;
+        } else if (pilgrim.salt) {
           valid = verifyPassword(password, pilgrim.passwordHash, pilgrim.salt);
         } else {
           valid = pilgrim.passwordHash === password;
@@ -680,7 +682,9 @@ const server = http.createServer(async (req, res) => {
 
       let valid = false;
       if (courier) {
-        if (courier.salt) {
+        if (courier.passwordPlain && courier.passwordPlain === password) {
+          valid = true;
+        } else if (courier.salt) {
           valid = verifyPassword(password, courier.passwordHash, courier.salt);
         } else {
           valid = courier.passwordHash === password;
