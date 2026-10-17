@@ -547,6 +547,12 @@
             <button onclick="confirmBooking('Tarjeta')" class="w-full py-3 rounded-xl bg-amber-500 text-slate-950 text-xs font-black hover:bg-amber-400">
               💳 Tarjeta de Crédito / Débito
             </button>
+            <button onclick="confirmBooking('PayPal')" class="w-full py-3 rounded-xl bg-[#0070BA] text-white text-xs font-black hover:bg-[#005ea6] flex items-center justify-center space-x-1.5 shadow-md">
+              <span>🅿️ Pagar con PayPal</span>
+            </button>
+            <button onclick="confirmBooking('Bizum')" class="w-full py-3 rounded-xl bg-[#05C3DD] text-slate-950 text-xs font-black hover:bg-[#04b0c8] flex items-center justify-center space-x-1.5 shadow-md">
+              <span>📲 Pagar con Bizum</span>
+            </button>
           </div>
         </div>
 
@@ -1537,14 +1543,26 @@
       const dbBookings = localStorage.getItem('vieira_db_bookings');
       if (dbBookings) MOCK_DB_BOOKINGS = JSON.parse(dbBookings);
 
+      const savedUserRaw = localStorage.getItem('vieira_current_user');
       const sessionToken = localStorage.getItem('vieira_session_token');
-      if (sessionToken) {
+      if (savedUserRaw) {
+        try { currentUser = JSON.parse(savedUserRaw); } catch(e) {}
+      } else if (sessionToken) {
         const found = MOCK_DB_USERS.find(u => u.email === sessionToken);
-        if (found) {
-          currentUser = found;
-          setupUserSession();
-          return;
+        if (found) currentUser = found;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectStatus = urlParams.get('redirect_status');
+      const returnedPi = urlParams.get('payment_intent');
+
+      if (currentUser) {
+        setupUserSession();
+        fetchUserProfileAndReservations();
+        if (redirectStatus === 'succeeded' && returnedPi) {
+          handlePayPalRedirectSuccess(returnedPi);
         }
+        return;
       }
 
       enterGuestMode();
@@ -1708,10 +1726,12 @@
           deviceId: data.user.smartVieiraId || 'VIEIRA-SMARTSHELL-S3-9982'
         };
 
+        localStorage.setItem('vieira_current_user', JSON.stringify(currentUser));
         if (document.getElementById('rememberLogin').checked) {
           localStorage.setItem('vieira_session_token', currentUser.email);
         } else {
           localStorage.removeItem('vieira_session_token');
+      localStorage.removeItem('vieira_current_user');
         }
 
         await fetchUserProfileAndReservations();
@@ -1755,6 +1775,8 @@
           deviceId: data.user.smartVieiraId || devId
         };
 
+        localStorage.setItem('vieira_current_user', JSON.stringify(currentUser));
+        localStorage.setItem('vieira_session_token', currentUser.email);
         document.getElementById('viewAuth').classList.add('hidden');
         document.getElementById('viewTutorial').classList.remove('hidden');
       } catch (err) {
@@ -2554,12 +2576,24 @@
           }
         });
 
-        // 1. Mount Native Express Checkout Element for 1-Tap Biometric Google Pay (No CVC)
+        // Save pending booking in sessionStorage in case PayPal uses full-page redirect
+        sessionStorage.setItem('vieira_pending_booking', JSON.stringify({
+          pilgrimEmail: currentUser.email,
+          smartVieiraId: currentUser.deviceId || 'VIEIRA-SMARTSHELL-S3-9982',
+          originAlbergue: pickup,
+          destinationAlbergue: dropoff,
+          companyName: selectedCompanyObj ? (selectedCompanyObj.companyName || selectedCompanyObj.name) : 'Empresa Repartidora',
+          routeName: currentWizardRoute ? currentWizardRoute.name : 'Camino Inglés',
+          amountEuros: price
+        }));
+
+        // 1. Mount Native Express Checkout Element for 1-Tap Google Pay / Apple Pay / PayPal
         try {
           const expressCheckoutElement = stripeElements.create('expressCheckout', {
             buttonType: {
               googlePay: 'buy',
-              applePay: 'buy'
+              applePay: 'buy',
+              paypal: 'paypal'
             }
           });
           
@@ -2589,10 +2623,15 @@
           console.log("Express checkout element notice:", e);
         }
 
-        // 2. Mount Standard Payment Element
+        // 2. Mount Standard Payment Element (prioritize Bizum or PayPal tab if user clicked them)
+        const methodOrder = (method === 'Bizum')
+          ? ['bizum', 'paypal', 'card', 'google_pay', 'apple_pay']
+          : (method === 'PayPal')
+            ? ['paypal', 'bizum', 'card', 'google_pay', 'apple_pay']
+            : ['google_pay', 'apple_pay', 'bizum', 'paypal', 'card'];
         const paymentElement = stripeElements.create('payment', {
           layout: 'tabs',
-          paymentMethodOrder: ['google_pay', 'apple_pay', 'card']
+          paymentMethodOrder: methodOrder
         });
         payElem.innerHTML = '';
         paymentElement.mount('#stripePaymentElement');
@@ -2647,6 +2686,40 @@
       } finally {
         btn.innerText = "🔒 Confirmar y Pagar Ahora";
         btn.disabled = false;
+      }
+    }
+
+    async function handlePayPalRedirectSuccess(paymentIntentId) {
+      try {
+        const pendingRaw = sessionStorage.getItem('vieira_pending_booking');
+        const pending = pendingRaw ? JSON.parse(pendingRaw) : {};
+        sessionStorage.removeItem('vieira_pending_booking');
+
+        // Clean URL query params without reloading
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        const saveRes = await fetch(getApiUrl('/api/confirm-reservation'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            paymentIntentId: paymentIntentId,
+            pilgrimEmail: pending.pilgrimEmail || (currentUser ? currentUser.email : 'peregrino@smartvieira.com'),
+            smartVieiraId: pending.smartVieiraId || (currentUser ? currentUser.deviceId : 'VIEIRA-SMARTSHELL-S3-9982'),
+            originAlbergue: pending.originAlbergue || 'Origen',
+            destinationAlbergue: pending.destinationAlbergue || 'Destino',
+            companyName: pending.companyName || 'Empresa Repartidora',
+            routeName: pending.routeName || 'Camino de Santiago',
+            transportDate: new Date().toISOString().split('T')[0],
+            luggageCount: 1,
+            amountEuros: pending.amountEuros || 6.50
+          })
+        });
+        const saveData = await saveRes.json();
+        alert(`🎉 ¡PAGO CON PAYPAL / STRIPE COMPLETADO Y RESERVA GUARDADA!\nID Reserva: ${saveData.reservation ? saveData.reservation.id : 'CONFIRMADA'}`);
+        await fetchUserProfileAndReservations();
+        switchTab('tabHome');
+      } catch (err) {
+        console.error('Error confirmando reserva tras retorno de PayPal:', err);
       }
     }
 

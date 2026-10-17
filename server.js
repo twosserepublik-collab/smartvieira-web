@@ -921,7 +921,7 @@ const server = http.createServer(async (req, res) => {
         amount: amountCents,
         currency: currency.toLowerCase(),
         'automatic_payment_methods[enabled]': 'true',
-        'automatic_payment_methods[allow_redirects]': 'never',
+        'automatic_payment_methods[allow_redirects]': 'always',
         'description': `Transporte SmartVieira [${smartVieiraId || 'SMARTSHELL'}] - ${pilgrimEmail || 'Peregrino'}`
       };
 
@@ -954,6 +954,17 @@ const server = http.createServer(async (req, res) => {
       const { paymentIntentId, pilgrimEmail, smartVieiraId, originAlbergue, destinationAlbergue, transportDate, luggageCount, amountEuros, companyName, routeName } = body;
 
       const db = loadDb();
+      if (paymentIntentId) {
+        const existing = (db.reservations || []).find(r => r.paymentIntentId === paymentIntentId);
+        if (existing) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            success: true,
+            message: '¡Reserva ya confirmada y guardada en la Base de Datos!',
+            reservation: existing
+          }));
+        }
+      }
       const newRes = {
         id: 'RES-' + Math.floor(100000 + Math.random() * 900000),
         pilgrimEmail: pilgrimEmail || 'peregrino@smartvieira.com',
