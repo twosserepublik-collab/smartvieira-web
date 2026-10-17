@@ -191,22 +191,68 @@ function callStripeApi(endpoint, postData) {
 // SAFE PAYLOAD PARSER WITH SIZE LIMIT (MAX 100 KB)
 // =========================================================================
 // =========================================================================
-// NATIVE TLS SMTP EMAIL SENDER (ZERO EXTERNAL DEPENDENCIES)
+// NATIVE TLS SMTP + HTTPS PORT 443 EMAIL SENDER (ZERO EXTERNAL DEPENDENCIES)
 // =========================================================================
 function sendSmtpEmail({ host, port = 465, user, pass, to, subject, bodyText }) {
   return new Promise((resolve, reject) => {
+    const smtpHost = (host || 'smtp.gmail.com').trim();
+
+    // 1. HTTPS Port 443 Bridge Mode (Google Apps Script / Webhook - bypasses Render Free SMTP port block)
+    if (smtpHost.startsWith('https://')) {
+      try {
+        const parsedUrl = new URL(smtpHost);
+        const payload = JSON.stringify({ to, subject, body: bodyText, from: user || 'SmartVieira' });
+        const req = https.request({
+          hostname: parsedUrl.hostname,
+          port: 443,
+          path: parsedUrl.pathname + parsedUrl.search,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(payload)
+          }
+        }, (res) => {
+          let respBody = '';
+          res.on('data', c => respBody += c);
+          res.on('end', () => {
+            const loc = res.headers.location || '';
+            if (loc.includes('accounts.google.com')) {
+              return reject(new Error('En Google Apps Script debes elegir "Cualquier persona" en Quién tiene acceso'));
+            }
+            if (res.statusCode >= 200 && res.statusCode < 400) {
+              resolve(true);
+            } else {
+              reject(new Error('HTTPS Relay HTTP ' + res.statusCode));
+            }
+          });
+        });
+        req.on('error', (err) => reject(err));
+        req.write(payload);
+        req.end();
+      } catch (errUrl) {
+        reject(errUrl);
+      }
+      return;
+    }
+
+    // 2. Standard Direct TLS SMTP (Port 465, forced IPv4)
     if (!user || !pass) {
       return reject(new Error('SMTP_NOT_CONFIGURED'));
     }
-    const smtpHost = host || 'smtp.gmail.com';
-    const socket = tls.connect(port, smtpHost, { rejectUnauthorized: false });
+    const socket = tls.connect({
+      port,
+      host: smtpHost,
+      servername: smtpHost,
+      family: 4,
+      rejectUnauthorized: false
+    });
     let step = 0;
     let buffer = '';
 
     const timeout = setTimeout(() => {
       socket.destroy();
-      reject(new Error('SMTP timeout'));
-    }, 12000);
+      reject(new Error('SMTP puerto 465 bloqueado por el servidor cloud (Render Free)'));
+    }, 10000);
 
     const sendLine = (line) => {
       socket.write(line + '\r\n');
@@ -273,7 +319,7 @@ function sendSmtpEmail({ host, port = 465, user, pass, to, subject, bodyText }) 
 
     socket.on('error', (err) => {
       clearTimeout(timeout);
-      reject(err);
+      reject(new Error(err.message || err.code || 'Error de red SMTP'));
     });
   });
 }
@@ -720,7 +766,7 @@ const server = http.createServer(async (req, res) => {
 
       let emailSent = false;
       let emailError = null;
-      if (smtpUser && smtpPass) {
+      if ((smtpUser && smtpPass) || smtpHost.startsWith('https://')) {
         try {
           await sendSmtpEmail({
             host: smtpHost,
@@ -734,7 +780,7 @@ const server = http.createServer(async (req, res) => {
           emailSent = true;
         } catch (errSmtp) {
           console.error('[SMTP ERROR]', errSmtp.message);
-          emailError = errSmtp.message;
+          emailError = errSmtp.message || String(errSmtp);
         }
       }
 
@@ -768,10 +814,11 @@ const server = http.createServer(async (req, res) => {
     try {
       const body = await parseRequestBody(req);
       const db = loadDb();
+      const prev = db.smtpConfig || {};
       db.smtpConfig = {
-        host: (body.host || 'smtp.gmail.com').trim(),
-        user: (body.user || '').trim(),
-        pass: (body.pass || '').trim()
+        host: (body.host || prev.host || 'smtp.gmail.com').trim(),
+        user: (body.user || prev.user || '').trim(),
+        pass: (body.pass || prev.pass || '').trim()
       };
       saveDb(db);
       res.writeHead(200, { 'Content-Type': 'application/json' });
