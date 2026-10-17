@@ -4,169 +4,183 @@
       "id": "pilgrim-demo-201",
       "name": "Alejandro",
       "surname": "García Fernández",
+      "phone": "+34 651 11 22 33",
       "language": "ES",
       "email": "alejandro.garcia@gmail.com",
       "passwordPlain": "Camino123",
-      "passwordHash": "65d4f21e131770bccf10508447d250cbc9b2e999713e6719bfde3053c3f81191",
-      "salt": "da3ae97fc6146b5edfc02727309a0d7d",
+      "passwordHash": "ac0f2a0ca5ba2af8a6d785c463b03dc0cafdae14731e2bacabea970b4aa4865b",
+      "salt": "aa30074b0b7176252c3b330a419d082b",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1001",
-      "createdAt": "2026-10-17T13:59:43.945Z"
+      "createdAt": "2026-10-17T14:19:32.731Z"
     },
     {
       "id": "pilgrim-demo-202",
       "name": "Marta",
       "surname": "Sánchez López",
+      "phone": "+34 652 22 33 44",
       "language": "ES",
       "email": "marta.sanchez@hotmail.com",
       "passwordPlain": "Marta2026",
-      "passwordHash": "b19b379f3b03f31895324db44d9ccf40bb8108766713311a2b13838e9b9280d3",
-      "salt": "c51fc68df359a9fb9911612f6b1f4a41",
+      "passwordHash": "e281ddebf66f37ce52fdb9e05a92f0ab406b0913b191f8326f6a9923098645c6",
+      "salt": "c6e3316ab42fd0677ab7c7312790a860",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1002",
-      "createdAt": "2026-10-17T08:59:43.952Z"
+      "createdAt": "2026-10-17T09:19:32.738Z"
     },
     {
       "id": "pilgrim-demo-203",
       "name": "Thomas",
       "surname": "Müller",
+      "phone": "+49 151 2345 6789",
       "language": "DE",
       "email": "thomas.mueller@web.de",
       "passwordPlain": "Berlin2026",
-      "passwordHash": "2512a5149ae014104b9b9bf39fa13453ac5530255c8e4daf1cc732d678f4222b",
-      "salt": "9e5e9a94c3a3688ce959c07e6ac9423a",
+      "passwordHash": "a77919ee3ca23dddc3cef23cac08c88f6677c468604026a2ed3086bb2d6e2f08",
+      "salt": "59b93fe2d4938dea32f33cc66cb88bb4",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1003",
-      "createdAt": "2026-10-17T03:59:43.957Z"
+      "createdAt": "2026-10-17T04:19:32.745Z"
     },
     {
       "id": "pilgrim-demo-204",
       "name": "Claire",
       "surname": "Dubois",
+      "phone": "+33 6 12 34 56 78",
       "language": "FR",
       "email": "claire.dubois@orange.fr",
       "passwordPlain": "Paris2026",
-      "passwordHash": "ff95fff4856b90af3a58debe5cb05479bf0e0be56a55cf1b94fca869e78bc1e2",
-      "salt": "7a3441d82037222564e0d504b9cc13cb",
+      "passwordHash": "d8978912bf1557aa9db51512450b9f7b68ab991f3d413b8b02ea2ad98c77be82",
+      "salt": "9e01c0e262b5e3610eb51d5a104c522a",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1004",
-      "createdAt": "2026-10-16T22:59:43.963Z"
+      "createdAt": "2026-10-16T23:19:32.752Z"
     },
     {
       "id": "pilgrim-demo-205",
       "name": "Marco",
       "surname": "Rossi",
+      "phone": "+39 347 123 4567",
       "language": "IT",
       "email": "marco.rossi@libero.it",
       "passwordPlain": "Roma2026",
-      "passwordHash": "6ae08771cb0eb4c8c70bb3566c06048edf579a4c05b0d078de7274a1bb60a7f4",
-      "salt": "70bd55109e863488763ddc60d6d8b39a",
+      "passwordHash": "feafd941d53587b9db71828147ae633c258cc3d63ea88531bc1b91d47cc9c8c1",
+      "salt": "96554d01cc269fc22d32f9f742f290c8",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1005",
-      "createdAt": "2026-10-16T17:59:43.968Z"
+      "createdAt": "2026-10-16T18:19:32.759Z"
     },
     {
       "id": "pilgrim-demo-206",
       "name": "Emily",
       "surname": "Johnson",
+      "phone": "+44 7700 900123",
       "language": "EN",
       "email": "emily.johnson@outlook.com",
       "passwordPlain": "London2026",
-      "passwordHash": "4f80cae34ddadf2a581c89e2ebe3b8b6b9216c1f6f0e3600f7211b2d11747f2f",
-      "salt": "7d1d41686ddd079c8ea171eb2c4ffd2d",
+      "passwordHash": "46ee141445de11f3f085c5114848ae31188a49320442c621a4d5c119a92ec083",
+      "salt": "92a0dd60dade8035d545f909fe51ccac",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1006",
-      "createdAt": "2026-10-16T12:59:43.973Z"
+      "createdAt": "2026-10-16T13:19:32.765Z"
     },
     {
       "id": "pilgrim-demo-207",
       "name": "Diogo",
       "surname": "Almeida Costa",
+      "phone": "+351 914 567 890",
       "language": "PT",
       "email": "diogo.almeida@sapo.pt",
       "passwordPlain": "Porto2026",
-      "passwordHash": "28aaba697eed4bf63d3e07bb66ba059dc729dcac10a197091822004c9f069c5e",
-      "salt": "1f84508795c18c7789a303ba0757b9c2",
+      "passwordHash": "3f0e6a055277760752859731f9705a50161d2108a42477bf30e6885019dbb685",
+      "salt": "272761f82b0d82231d6c0b34a6e94b8d",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1007",
-      "createdAt": "2026-10-16T07:59:43.978Z"
+      "createdAt": "2026-10-16T08:19:32.771Z"
     },
     {
       "id": "pilgrim-demo-208",
       "name": "Laura",
       "surname": "Martínez Ruiz",
+      "phone": "+34 661 44 55 66",
       "language": "ES",
       "email": "laura.martinez@yahoo.es",
       "passwordPlain": "Laura2026",
-      "passwordHash": "3536abe134afc6835f88256dcff0a8e7320ee98f4f338195d027ccc8da47aa7f",
-      "salt": "f77cfe956968da764e9e01c70592ae5a",
+      "passwordHash": "404cc98ce9c97296d873bd02ccce609812ea92145669edfb9ce6e928cd620436",
+      "salt": "eadce47e656be7998e0ec562ffdcce46",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1008",
-      "createdAt": "2026-10-16T02:59:43.984Z"
+      "createdAt": "2026-10-16T03:19:32.776Z"
     },
     {
       "id": "pilgrim-demo-209",
       "name": "David",
       "surname": "Otero Domínguez",
+      "phone": "+34 678 99 00 11",
       "language": "ES",
       "email": "david.otero@gmail.com",
       "passwordPlain": "David2026",
-      "passwordHash": "1233d2b8e9a9759d1294f48b18e4d3a270ef786a241e0f4999dd2c159696e058",
-      "salt": "d76d655d43e6058d6a84370d4931e61f",
+      "passwordHash": "d32d716546f98d10f7be8af4d03fc1f4d2b7c1f3b3c28dd085e85a5716f7762b",
+      "salt": "9c2732616a6a7bef65083707c1498278",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1009",
-      "createdAt": "2026-10-15T21:59:43.989Z"
+      "createdAt": "2026-10-15T22:19:32.782Z"
     },
     {
       "id": "pilgrim-demo-210",
       "name": "Min-jun",
       "surname": "Kim",
+      "phone": "+82 10 3456 7890",
       "language": "KO",
       "email": "minjun.kim@naver.com",
       "passwordPlain": "Seoul2026",
-      "passwordHash": "c44f398efde7b63b1d5ba78e6002fcb76f8f27c3cf46b507bfc4cebab196f59c",
-      "salt": "df723c3f04ced01a996293fde40c1819",
+      "passwordHash": "c3d132e408fd2d3073a4372c3f1de63f48d7cc38ed7bd733a6d62895dd3dcdfd",
+      "salt": "0d4ecc0e3bce559727938db7e15f10ed",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1010",
-      "createdAt": "2026-10-15T16:59:43.995Z"
+      "createdAt": "2026-10-15T17:19:32.791Z"
     },
     {
       "id": "pilgrim-demo-211",
       "name": "Beatriz",
       "surname": "Navarro Gil",
+      "phone": "+34 619 88 77 66",
       "language": "ES",
       "email": "beatriz.navarro@gmail.com",
       "passwordPlain": "Beatriz2026",
-      "passwordHash": "9f46d2dcdca5132a84e11112e2b5cae46d62b7cde72b95f76a796077c5a29677",
-      "salt": "17658f538955090cb540b3bc8373111c",
+      "passwordHash": "649f76ebd5102e169ac80c87cd497ffcce8f0cce3670508c18c409c58ee26a96",
+      "salt": "fe726857b62a117d4ca4f8c66a19875b",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1011",
-      "createdAt": "2026-10-15T11:59:44.000Z"
+      "createdAt": "2026-10-15T12:19:32.796Z"
     },
     {
       "id": "pilgrim-demo-212",
       "name": "Álvaro",
       "surname": "Romero Castro",
+      "phone": "+34 690 12 34 56",
       "language": "ES",
       "email": "alvaro.romero@gmail.com",
       "passwordPlain": "Alvaro2026",
-      "passwordHash": "d06d3e977ec77455f29f0dee6bdee6047acdaa2c7e36cee7df3e73861f8ca8a3",
-      "salt": "ef63695033ca1dd325243a47bfb746dc",
+      "passwordHash": "9988c56dca6d26fc07cb906f80bf484af0d77ffd0faf7b7a73723c856ce7531c",
+      "salt": "01ebd6564e9bd9653b060662815641d9",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1012",
-      "createdAt": "2026-10-15T06:59:44.005Z"
+      "createdAt": "2026-10-15T07:19:32.803Z"
     },
     {
       "id": "pilgrim-demo-213",
       "name": "Sophie",
       "surname": "Lefèvre",
+      "phone": "+33 6 98 76 54 32",
       "language": "FR",
       "email": "sophie.lefevre@gmail.com",
       "passwordPlain": "Lyon2026",
-      "passwordHash": "b23986cbff9e7ffd93bf52b905ea43cf122c225a2f78e918a0830d47a6774463",
-      "salt": "8960da53ec442cc072b4f4b60949ca3d",
+      "passwordHash": "c4aa4fc16689e5095fd2d463b0b168802a65f240f21346ce061af2636e419de4",
+      "salt": "1559dc5cb0803c721eb65379dbb604da",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-1013",
-      "createdAt": "2026-10-15T01:59:44.011Z"
+      "createdAt": "2026-10-15T02:19:32.809Z"
     },
     {
       "id": "pilgrim-demo-214",
       "name": "Peregrino Prueba",
       "surname": "SmartVieira",
+      "phone": "+34 600 11 22 33",
       "language": "ES",
       "email": "twosserepublik@gmail.com",
       "passwordPlain": "1234",
-      "passwordHash": "22178a68e58c1caaab65385addaf2975fc476693bc14dab0d22d81ad7d4f6050",
-      "salt": "5df406065ac7582e58a1aa3aee86a8cd",
+      "passwordHash": "74492d10cc585302bdd93aa4d126e14f0be5829fe0376fb1628126bd767cf493",
+      "salt": "1d100fefd32b8863430002fb893a3847",
       "smartVieiraId": "VIEIRA-SMARTSHELL-S3-9982",
-      "createdAt": "2026-10-14T20:59:44.019Z"
+      "createdAt": "2026-10-14T21:19:32.816Z"
     }
   ],
   "couriers": [
@@ -183,11 +197,30 @@
       "routeEnd": "burgos",
       "email": "carlos@transpirineos.es",
       "passwordPlain": "Pirineos2026",
-      "passwordHash": "0545a736c9bb88ac5dece6fb06a372096a0f0b91edb4d05995ef8ceb79a57453",
-      "salt": "b8a81761ae2cbbce96e7523fedcebcbf",
+      "passwordHash": "a0e288c27919ec820546d6de65f2e0f225a982706367967df0fe72ef93163d65",
+      "salt": "64e180e876607e70c6909f30f2a6d6da",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-17T12:59:43.805Z"
+      "createdAt": "2026-10-17T15:19:32.551Z"
+    },
+    {
+      "id": "courier-demo-125",
+      "companyName": "TransPirineos Jacobeo S.L.",
+      "driverName": "Iñaki Zabaleta",
+      "phone": "+34 611 20 30 09",
+      "vehicle": "Mercedes Sprinter #02 (4425-LKM)",
+      "cif": "B31908412",
+      "pricePerBag": 5,
+      "routes": "camino-frances",
+      "routeStart": "roncesvalles",
+      "routeEnd": "logroño",
+      "email": "inaki@transpirineos.es",
+      "passwordPlain": "Pirineos2026",
+      "passwordHash": "b925eba85fcc1f34d845bad0207359a420d42653c5ff3dd463fc5a3fabb47006",
+      "salt": "3cb19b24747c0208786869d286ccbc18",
+      "accessCode": "VIEIRA-COURIER-2026",
+      "isActive": true,
+      "createdAt": "2026-10-13T15:19:32.560Z"
     },
     {
       "id": "courier-demo-102",
@@ -202,11 +235,11 @@
       "routeEnd": "león",
       "email": "elena@riojacastilla.es",
       "passwordPlain": "Rioja2026",
-      "passwordHash": "3de5c4619f67d7b7182431a21e5a4a910662ad839367668dec2c490d8e797df7",
-      "salt": "64dfd0fb893f18310b93842a5829f661",
+      "passwordHash": "7e2f3160e9699e0f159ad1c5698aea018d476159afd5aecaa9810ae359176449",
+      "salt": "e635f340ff202fd0156fb4ebb61e4829",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-17T06:59:43.812Z"
+      "createdAt": "2026-10-17T11:19:32.566Z"
     },
     {
       "id": "courier-demo-103",
@@ -221,11 +254,11 @@
       "routeEnd": "o cebreiro",
       "email": "javier@mesetabierzo.es",
       "passwordPlain": "Meseta2026",
-      "passwordHash": "110c0fc3ee3fd20a0d5c97186fdf4327e0824215bd6ad3505eb85d5ce7a49363",
-      "salt": "8ee3e5cf6245413fdc34daabf09cc65f",
+      "passwordHash": "3f959c65cc49718ac4faedb2c8082e8274746308fc6c73b80b575c413376830a",
+      "salt": "8e6c62af579621a51eb5ad6b378dee6b",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-17T00:59:43.818Z"
+      "createdAt": "2026-10-17T07:19:32.572Z"
     },
     {
       "id": "courier-demo-104",
@@ -240,17 +273,55 @@
       "routeEnd": "santiago de compostela",
       "email": "martin@galiciacamino.es",
       "passwordPlain": "Galicia2026",
-      "passwordHash": "f10dcea4ea523fbb4e0ecf2e0bd86e4bbb3ecd48f3499782619ce40ff803bbea",
-      "salt": "1f4bbb39c7ee4740b1fd61755da330dc",
+      "passwordHash": "f98b6fa488318b887eec1d48450b710948cffc2e739fc31762152a46cfc9bec9",
+      "salt": "ab483d65494296a85bd97fd89b7a292f",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-16T18:59:43.824Z",
+      "createdAt": "2026-10-17T03:19:32.577Z",
       "currentLocation": {
         "lat": 42.7801,
         "lng": -7.4144,
         "accuracy": 8,
-        "updatedAt": "2026-10-17T18:59:43.818Z"
+        "updatedAt": "2026-10-17T19:19:32.572Z"
       }
+    },
+    {
+      "id": "courier-demo-126",
+      "companyName": "Galicia Camiño Express S.L.",
+      "driverName": "Brais Mato",
+      "phone": "+34 611 20 30 07",
+      "vehicle": "Volkswagen Crafter #13 (7759-LZX)",
+      "cif": "B27889014",
+      "pricePerBag": 4.5,
+      "routes": "camino-frances",
+      "routeStart": "sarria",
+      "routeEnd": "santiago de compostela",
+      "email": "brais.mato@galiciacamino.es",
+      "passwordPlain": "Galicia2026",
+      "passwordHash": "70d3e305d62d9538c959fad0a97a766de3ef5ea96033c482f3f26623041be6f3",
+      "salt": "67630a90f1a3ae7c0a18fb5bed1f542c",
+      "accessCode": "VIEIRA-COURIER-2026",
+      "isActive": true,
+      "createdAt": "2026-10-13T11:19:32.583Z"
+    },
+    {
+      "id": "courier-demo-127",
+      "companyName": "Galicia Camiño Express S.L.",
+      "driverName": "Raquel Souto",
+      "phone": "+34 611 20 30 08",
+      "vehicle": "Mercedes Vito #14 (8102-MCB)",
+      "cif": "B27889014",
+      "pricePerBag": 4.5,
+      "routes": "camino-frances",
+      "routeStart": "palas de rei",
+      "routeEnd": "santiago de compostela",
+      "email": "raquel@galiciacamino.es",
+      "passwordPlain": "Galicia2026",
+      "passwordHash": "d97830b1439d33d483b39e8f282455778781755c628846743f87bebdc1d8ab76",
+      "salt": "6ff8490dcbc9c0d3b8c57b3e824a5f17",
+      "accessCode": "VIEIRA-COURIER-2026",
+      "isActive": true,
+      "createdAt": "2026-10-13T07:19:32.588Z"
     },
     {
       "id": "courier-demo-105",
@@ -265,16 +336,16 @@
       "routeEnd": "santiago de compostela",
       "email": "lucia@ultreiasarria.es",
       "passwordPlain": "Sarria2026",
-      "passwordHash": "41f0234cffbd7cf3ad2013f6ce5a67d3759f7d62d69d91a97a33faf6bd8946ed",
-      "salt": "3605445fd68c38b69c1286345ee03631",
+      "passwordHash": "51e7c7f470cebf04e10d8ea243f1e2a9f7aa9739ef2ba4457cd982d8d915c583",
+      "salt": "8c7a4d7da73d731d1d2ec3fccb6d0078",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-16T12:59:43.831Z",
+      "createdAt": "2026-10-16T23:19:32.593Z",
       "currentLocation": {
         "lat": 42.8782,
         "lng": -8.0145,
         "accuracy": 6,
-        "updatedAt": "2026-10-17T18:59:43.824Z"
+        "updatedAt": "2026-10-17T19:19:32.588Z"
       }
     },
     {
@@ -290,11 +361,11 @@
       "routeEnd": "santiago de compostela",
       "email": "roberto@jacobeo360.es",
       "passwordPlain": "Integral360",
-      "passwordHash": "5aa386d0a6313423ff70e47fcd804dad38dcf625125caae0625f18aa67a0aafc",
-      "salt": "f164ddd3eca54e134aa774f8ae608d05",
+      "passwordHash": "94d8391867a1b9a4f5ec9708febc933439b143bccc62b7fb39dc2139ad8367c6",
+      "salt": "79b2cc78ed241f3e80c4971051a48abc",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-16T06:59:43.837Z"
+      "createdAt": "2026-10-16T19:19:32.600Z"
     },
     {
       "id": "courier-demo-107",
@@ -309,17 +380,36 @@
       "routeEnd": "santiago",
       "email": "brais@artabromochilas.es",
       "passwordPlain": "Ferrol2026",
-      "passwordHash": "4613a8e9b06ee40e3bcbf3cb1f144f9ba9a28be86c714f440a21cb2eaeb52da4",
-      "salt": "390cd7d985e3f8e59808dfb1de4f1ab9",
+      "passwordHash": "81e0692dda56a3e4b0b0d9b73b4a9fa751b47d4ddde377456b91d9c802f431fd",
+      "salt": "7bae3b970b73dd2590118d93d0b5ca01",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-16T00:59:43.843Z",
+      "createdAt": "2026-10-16T15:19:32.606Z",
       "currentLocation": {
         "lat": 43.2804,
         "lng": -8.211,
         "accuracy": 7,
-        "updatedAt": "2026-10-17T18:59:43.837Z"
+        "updatedAt": "2026-10-17T19:19:32.600Z"
       }
+    },
+    {
+      "id": "courier-demo-128",
+      "companyName": "Ártabro Mochilas Express",
+      "driverName": "Roi Varela",
+      "phone": "+34 622 40 50 04",
+      "vehicle": "Citroën Jumper #05 (5590-LWN)",
+      "cif": "B15882310",
+      "pricePerBag": 4.5,
+      "routes": "camino-ingles",
+      "routeStart": "pontedeume",
+      "routeEnd": "santiago",
+      "email": "roi@artabromochilas.es",
+      "passwordPlain": "Ferrol2026",
+      "passwordHash": "08cdc8bf3ae3f32bb4bc9de0409a1d1692d0331f47448c8c8b1c1141c20f4216",
+      "salt": "74137925c55efeaaa05d1aa6a413e471",
+      "accessCode": "VIEIRA-COURIER-2026",
+      "isActive": true,
+      "createdAt": "2026-10-13T03:19:32.611Z"
     },
     {
       "id": "courier-demo-108",
@@ -334,11 +424,11 @@
       "routeEnd": "hospital de bruma",
       "email": "sonia@riasaltastrans.es",
       "passwordPlain": "Bruma2026",
-      "passwordHash": "b5ec972478195bb619dc432bff9eb8c2c8b692416893add0c12cc76e92c2dd66",
-      "salt": "b5f3a3201bd7481b716bce97e0d64bd0",
+      "passwordHash": "bb2822a33050e4fbd5111acbcb8f73edd14d28498effdc4ec29a40587f848e0d",
+      "salt": "2482f75e2d73f46edb9f2d631c13939d",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-15T18:59:43.852Z"
+      "createdAt": "2026-10-16T11:19:32.616Z"
     },
     {
       "id": "courier-demo-109",
@@ -353,11 +443,11 @@
       "routeEnd": "santiago",
       "email": "iago@compostelanorte.es",
       "passwordPlain": "Betanzos2026",
-      "passwordHash": "fcf9d3ec528811ad32b4c3a0bdb9574eec6a0ae2682d811b45718d9e7cdb81c4",
-      "salt": "c7d66393b8622569bb151eb46b099750",
+      "passwordHash": "0d83ed058b36b97dacd65899638a45d939bce8bdf1b8a46fe8c4120170f5f05c",
+      "salt": "01a8730722255a685c5bf04fd5924a37",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-15T12:59:43.857Z"
+      "createdAt": "2026-10-16T07:19:32.622Z"
     },
     {
       "id": "courier-demo-110",
@@ -372,11 +462,11 @@
       "routeEnd": "valença",
       "email": "joao@lusitaniabags.pt",
       "passwordPlain": "Lisboa2026",
-      "passwordHash": "5e364baf50c4aa7c55aced6b157d93e2fe888350004d829e76061f828c3cc290",
-      "salt": "f78d4490dfc27d73242971100bd88e43",
+      "passwordHash": "3455cedda7f8b51a4e7699d4c687f6961e19161c10b689576ecbd9fe10b79b80",
+      "salt": "c5e53107dee7a74a9b0009e82da9e35e",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-15T06:59:43.863Z"
+      "createdAt": "2026-10-16T03:19:32.627Z"
     },
     {
       "id": "courier-demo-111",
@@ -391,11 +481,11 @@
       "routeEnd": "santiago",
       "email": "nuno@minhogaliza.pt",
       "passwordPlain": "Porto2026",
-      "passwordHash": "de6e602c98c6c049fd21ed159b0f1c4989cbdcec41c59e6a87c3d5df1f8c6617",
-      "salt": "0114840c546ef9aeea0690ca01e8fa63",
+      "passwordHash": "7d14b35f37be47875863f3d0b2edc00efe30cbbb30c8b3681e349e70db20e005",
+      "salt": "748fbf539cfde0726dce41c7e1748b25",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-15T00:59:43.869Z"
+      "createdAt": "2026-10-15T23:19:32.634Z"
     },
     {
       "id": "courier-demo-112",
@@ -410,17 +500,36 @@
       "routeEnd": "santiago",
       "email": "uxia@tuicompostela.es",
       "passwordPlain": "Tui2026",
-      "passwordHash": "93197b4880cab54edba50dd912590b6fdee2d95a039fb60fe4ad898c9afb8db2",
-      "salt": "dbed238b77dbbf57063c5784611b8964",
+      "passwordHash": "2848399a4015bc7e88c95f5fe149006b08b94808941c055157fe7c069043fc48",
+      "salt": "8c0279dc612b5bad40d24cfcff91e504",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-14T18:59:43.873Z",
+      "createdAt": "2026-10-15T19:19:32.641Z",
       "currentLocation": {
         "lat": 42.431,
         "lng": -8.6444,
         "accuracy": 9,
-        "updatedAt": "2026-10-17T18:59:43.869Z"
+        "updatedAt": "2026-10-17T19:19:32.635Z"
       }
+    },
+    {
+      "id": "courier-demo-129",
+      "companyName": "Tui-Compostela Mochilas S.L.",
+      "driverName": "Xabier Camba",
+      "phone": "+34 633 70 80 02",
+      "vehicle": "Ford Transit #16 (4918-LHT)",
+      "cif": "B36881920",
+      "pricePerBag": 4.3,
+      "routes": "camino-portugues-interior",
+      "routeStart": "pontevedra",
+      "routeEnd": "santiago",
+      "email": "xabier@tuicompostela.es",
+      "passwordPlain": "Tui2026",
+      "passwordHash": "594308f0ba04940dbcb1db1155323913d3b98264ecfd156fa01b2c07dfccbe1f",
+      "salt": "e26ded8a9a3b19a7b2e93d151a2a9392",
+      "accessCode": "VIEIRA-COURIER-2026",
+      "isActive": true,
+      "createdAt": "2026-10-12T23:19:32.646Z"
     },
     {
       "id": "courier-demo-113",
@@ -435,11 +544,11 @@
       "routeEnd": "santiago",
       "email": "tiago@atlanticocosta.pt",
       "passwordPlain": "Costa2026",
-      "passwordHash": "0e76b9feca14a1afe1ea70317846b8fb60e09014a9f5e23ccf5b056eb1f613e0",
-      "salt": "2f0fdefc8d8b99f7d1a5c0ed22fbb93c",
+      "passwordHash": "73bd38b15ea65b628d260a6c737dcbec624aa45c81ba464cf45ce4f20b458100",
+      "salt": "0a9a810b25c521c89a81db6f1b9cd792",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-14T12:59:43.879Z"
+      "createdAt": "2026-10-15T15:19:32.655Z"
     },
     {
       "id": "courier-demo-114",
@@ -454,11 +563,11 @@
       "routeEnd": "santiago",
       "email": "anton@riasbaixasbags.es",
       "passwordPlain": "Baiona2026",
-      "passwordHash": "b5b4688f334bfdc7a6f1c1ba82e0adc7e117b514d2d451a11f494fcf59c98dd4",
-      "salt": "ffef63b235a0e67b51560e46ff9d8712",
+      "passwordHash": "4f2bfd741a83a8579d77ce3f7c33fc38f077c5050a0485a798b80c61577e1dcc",
+      "salt": "6fb9e73c4df85fdbf304857fb039484d",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-14T06:59:43.886Z"
+      "createdAt": "2026-10-15T11:19:32.662Z"
     },
     {
       "id": "courier-demo-115",
@@ -473,11 +582,11 @@
       "routeEnd": "santander",
       "email": "aitor@cantabricobagajes.es",
       "passwordPlain": "Euskadi2026",
-      "passwordHash": "bbaad8de38b1de72346af9c9de5e7a05872b2a668ca459ea0cc5afe21a7ee30c",
-      "salt": "01e763ad6cef754ac0103b8f22483184",
+      "passwordHash": "8e0b3320f6d79c3d202c616e26f405f9ede399d073f3c7d57e1adc89c2343a9a",
+      "salt": "7ad17da96525b6aa243544e5015519d0",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-14T00:59:43.891Z"
+      "createdAt": "2026-10-15T07:19:32.668Z"
     },
     {
       "id": "courier-demo-116",
@@ -492,11 +601,11 @@
       "routeEnd": "ribadeo",
       "email": "pelayo@asturcantabria.es",
       "passwordPlain": "Asturias2026",
-      "passwordHash": "ac5f98bf3d7e92f8e7314c34426c47abaae1a927a85081988c39c0a1bc5252b8",
-      "salt": "c7ba5647dd5ad2b05cfb1ce7d1da84a1",
+      "passwordHash": "9d9edce19e361f120a2cf676b6b833fffa95475753c5a0591037983be777195d",
+      "salt": "399ef60a80e6d96cd5afee1d9c99415c",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-13T18:59:43.897Z"
+      "createdAt": "2026-10-15T03:19:32.673Z"
     },
     {
       "id": "courier-demo-117",
@@ -511,11 +620,11 @@
       "routeEnd": "santiago",
       "email": "xoan@marinalucense.es",
       "passwordPlain": "Ribadeo2026",
-      "passwordHash": "9382ea1be4d9ed1d95c8e093b732c950a17cd44a5e6516cd23f86f71ec7987fc",
-      "salt": "61f54ef7542dccfb598ef76640340099",
+      "passwordHash": "0dc64bae04a0839d89af8ce2147ce8a2c0a40cc0a93e20310c674eea60bae14d",
+      "salt": "cb25d8d75dc1b45d2263071c01fe59b6",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-13T12:59:43.902Z"
+      "createdAt": "2026-10-14T23:19:32.678Z"
     },
     {
       "id": "courier-demo-118",
@@ -530,11 +639,11 @@
       "routeEnd": "santiago",
       "email": "nacho@primitivomontana.es",
       "passwordPlain": "Oviedo2026",
-      "passwordHash": "b8fd3fdf5942bc3dc69a455ad3323a62484e5d562c56a65c8f3fa0c1e374bc9f",
-      "salt": "b57f803b74c6f8ac809ba34bd4170fb2",
+      "passwordHash": "e882868c2391537c3aff7943f85d376ba5aced90ffd31f48797586eb28776172",
+      "salt": "7a035a62d8bf77588f29526531f64b9e",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-13T06:59:43.907Z"
+      "createdAt": "2026-10-14T19:19:32.683Z"
     },
     {
       "id": "courier-demo-119",
@@ -549,11 +658,11 @@
       "routeEnd": "santiago",
       "email": "carmen@murallalugo.es",
       "passwordPlain": "Lugo2026",
-      "passwordHash": "b30d9c8ca2b3935689e876d7e5aa03403c61492e453e21ae987fb00a42a93f20",
-      "salt": "29be4a2fccc03c5db36921f58dcc749f",
+      "passwordHash": "c28244cebc7f6a48829ae022a9da0265361b1a657aec1db7397fc3a4852399eb",
+      "salt": "55dd4bcd741897c57092d0759a8700cb",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-13T00:59:43.913Z"
+      "createdAt": "2026-10-14T15:19:32.689Z"
     },
     {
       "id": "courier-demo-120",
@@ -568,11 +677,11 @@
       "routeEnd": "ourense",
       "email": "manuel@viadelaplata.es",
       "passwordPlain": "Sevilla2026",
-      "passwordHash": "9fdb8dfe07c60fff225265506e120949799a92bf17606d7726a0d2b9555c5840",
-      "salt": "733dd923997ab2f7030f037491df06d6",
+      "passwordHash": "0ed58dbf1c22430f657396575532547809ba3817fa90c1fdd55745d87fbbd755",
+      "salt": "0424df983253739a47cbde7b357c3f9e",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-12T18:59:43.918Z"
+      "createdAt": "2026-10-14T11:19:32.694Z"
     },
     {
       "id": "courier-demo-121",
@@ -587,11 +696,11 @@
       "routeEnd": "santiago",
       "email": "breogan@sanabrestrans.es",
       "passwordPlain": "Ourense2026",
-      "passwordHash": "3c4691f70d84f23fd795870926e50c85ec27f5182f7c0d770ca3c6e831e868bf",
-      "salt": "b5224705986144b912843fe82f7f6a49",
+      "passwordHash": "75fe302c5b8f5b98601bf8311348f89da1bb50e90db224cfc3282aed92e73a09",
+      "salt": "dfece50b4028f9df2537973d591b0c6e",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-12T12:59:43.923Z"
+      "createdAt": "2026-10-14T07:19:32.703Z"
     },
     {
       "id": "courier-demo-122",
@@ -606,11 +715,11 @@
       "routeEnd": "santiago",
       "email": "roman@ribeirasacratrans.es",
       "passwordPlain": "Invierno2026",
-      "passwordHash": "64d189ca26174b6362ff12858d46b9cdbe23d8c9b16f7a0dea9e31aa2dab6284",
-      "salt": "e339c801ba3abcaa1828e11be1f8b321",
+      "passwordHash": "7834ab82869ebb3bd1dc393fb6b27b5e24502e7056f54a8a4341c1236739f90c",
+      "salt": "9d9cca4c35e844546341b7c56254f89e",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-12T06:59:43.929Z"
+      "createdAt": "2026-10-14T03:19:32.711Z"
     },
     {
       "id": "courier-demo-123",
@@ -625,11 +734,11 @@
       "routeEnd": "muxía",
       "email": "noelia@costadamorte.es",
       "passwordPlain": "Muxia2026",
-      "passwordHash": "1d08c1786958d50936d29fce443fbe418678f524cca829ba8a211cca08114ca6",
-      "salt": "ea4ff15f3f3703d50512c3ba3fb1e4ca",
+      "passwordHash": "1a973592c0f266fd2cfa162922e5aee55ca17eb19f92e6478258831ec7ad1520",
+      "salt": "42df9ebece627df615b39abea91c6d67",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-12T00:59:43.935Z"
+      "createdAt": "2026-10-13T23:19:32.718Z"
     },
     {
       "id": "courier-demo-124",
@@ -644,11 +753,11 @@
       "routeEnd": "fisterra",
       "email": "damian@fisterrasolpor.es",
       "passwordPlain": "Fisterra2026",
-      "passwordHash": "d063e95c27aead6bb00d8fdb420306aff0e62bc7fa380a45dba0f1d8c19e1f2c",
-      "salt": "0cd1358eef8f14b21e4322a287c20920",
+      "passwordHash": "f6fa5bf66518b9a1f9ecd8cc5a367c241127bcd3cc428cabb70b40c546ea68e7",
+      "salt": "6c7f82f8f61d49dfb30ef4849cbf9b2c",
       "accessCode": "VIEIRA-COURIER-2026",
       "isActive": true,
-      "createdAt": "2026-10-11T18:59:43.939Z"
+      "createdAt": "2026-10-13T19:19:32.725Z"
     }
   ],
   "reservations": [

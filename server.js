@@ -511,6 +511,7 @@ const server = http.createServer(async (req, res) => {
         id: 'pilgrim-' + Date.now(),
         name: name.trim(),
         surname: (surname || '').trim(),
+        phone: (body.phone || '').trim(),
         language: language || 'es',
         email: email.toLowerCase().trim(),
         passwordPlain: password,

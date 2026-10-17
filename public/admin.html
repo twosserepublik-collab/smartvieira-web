@@ -118,9 +118,38 @@
         </button>
 </div>
 
-    <!-- TABLE 1: PILGRIMS -->
+        <!-- TABLE 1: PILGRIMS -->
     <div id="tabPilgrims" class="glass-card rounded-3xl p-6 border border-amber-500/30 space-y-4 shadow-xl">
-      <h2 class="text-lg font-black text-white">👤 Registros de Peregrinos</h2>
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <h2 class="text-lg font-black text-white">👤 Registros de Peregrinos</h2>
+        <span id="pilgrimsFilterCount" class="text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full">0 peregrinos</span>
+      </div>
+
+      <!-- PILGRIMS FILTER & SORT BAR -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 bg-slate-900/70 p-3.5 rounded-2xl border border-slate-800">
+        <input type="text" id="searchPilgrimsInput" oninput="renderTables()" placeholder="🔍 Buscar nombre, correo, teléfono, SmartVieira ID..." class="md:col-span-2 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+        <select id="filterPilgrimsLang" onchange="renderTables()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+          <option value="">🌐 Todos los idiomas</option>
+          <option value="ES">🇪🇸 Español (ES)</option>
+          <option value="EN">🇬🇧 English (EN)</option>
+          <option value="FR">🇫🇷 Français (FR)</option>
+          <option value="DE">🇩🇪 Deutsch (DE)</option>
+          <option value="IT">🇮🇹 Italiano (IT)</option>
+          <option value="PT">🇵🇹 Português (PT)</option>
+          <option value="KO">🇰🇷 한국어 (KO)</option>
+        </select>
+        <div class="flex gap-2">
+          <select id="sortPilgrimsSelect" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+            <option value="date_desc">📅 Más recientes primero</option>
+            <option value="date_asc">📅 Más antiguos primero</option>
+            <option value="name_asc">🔤 Nombre (A → Z)</option>
+            <option value="name_desc">🔤 Nombre (Z → A)</option>
+            <option value="vieira_asc">🐚 SmartVieira ID (A → Z)</option>
+          </select>
+          <button onclick="resetPilgrimsFilters()" title="Limpiar filtros" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕</button>
+        </div>
+      </div>
+
       <div class="table-container rounded-2xl border border-slate-800">
         <table>
           <thead>
@@ -128,6 +157,7 @@
               <th>ID User</th>
               <th>Nombre</th>
               <th>Apellidos</th>
+              <th>Teléfono</th>
               <th>Correo Electrónico</th>
               <th>Contraseña</th>
               <th>SmartVieira ID</th>
@@ -136,7 +166,7 @@
             </tr>
           </thead>
           <tbody id="tbodyPilgrims">
-            <tr><td colspan="8" class="text-center py-6 text-slate-500">Cargando datos...</td></tr>
+            <tr><td colspan="9" class="text-center py-6 text-slate-500">Cargando datos...</td></tr>
           </tbody>
         </table>
       </div>
@@ -144,15 +174,53 @@
 
     <!-- TABLE 2: COURIERS -->
     <div id="tabCouriers" class="hidden glass-card rounded-3xl p-6 border border-cyan-500/30 space-y-4 shadow-xl">
-      <h2 class="text-lg font-black text-white">🚚 Empresas Repartidoras Autorizadas</h2>
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 class="text-lg font-black text-white">🚚 Empresas Repartidoras y Conductores Autorizados</h2>
+          <p class="text-[11px] text-slate-400">Filtra por empresa (varios repartidores por empresa), ruta/camino, estado o tramo, y ordena por tarifa/precio.</p>
+        </div>
+        <span id="couriersFilterCount" class="text-xs font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full">0 repartidores</span>
+      </div>
+
+      <!-- COURIERS FILTER & SORT BAR -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-2.5 bg-slate-900/70 p-3.5 rounded-2xl border border-slate-800">
+        <input type="text" id="searchCouriersInput" oninput="renderTables()" placeholder="🔍 Buscar empresa, conductor, teléfono, matrícula, CIF, tramo..." class="md:col-span-2 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
+        <select id="filterCouriersCompany" onchange="renderTables()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
+          <option value="">🏢 Todas las Empresas</option>
+        </select>
+        <select id="filterCouriersRoute" onchange="renderTables()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
+          <option value="">🛤️ Todos los Caminos / Rutas</option>
+          <option value="camino-frances">Camino Francés</option>
+          <option value="camino-ingles">Camino Inglés</option>
+          <option value="camino-portugues-interior">Camino Portugués Interior</option>
+          <option value="camino-portugues-costa">Camino Portugués Costa</option>
+          <option value="camino-del-norte">Camino del Norte</option>
+          <option value="camino-primitivo">Camino Primitivo</option>
+          <option value="camino-sanabres">Camino Sanabrés / Vía Plata</option>
+          <option value="camino-invierno">Camino de Invierno</option>
+          <option value="camino-fisterra-muxia">Camino a Fisterra y Muxía</option>
+        </select>
+        <div class="flex gap-2">
+          <select id="sortCouriersSelect" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-cyan-500/50 text-xs text-cyan-300 font-bold focus:border-cyan-400 focus:outline-none">
+            <option value="price_asc">💶 Precio: Menor a Mayor ↑</option>
+            <option value="price_desc">💶 Precio: Mayor a Menor ↓</option>
+            <option value="company_asc">🏢 Empresa (A → Z)</option>
+            <option value="driver_asc">👤 Repartidor (A → Z)</option>
+            <option value="route_asc">🛤️ Ruta / Camino (A → Z)</option>
+          </select>
+          <button onclick="resetCouriersFilters()" title="Limpiar filtros" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕</button>
+        </div>
+      </div>
+
       <div class="table-container rounded-2xl border border-slate-800">
         <table>
           <thead>
             <tr>
-              
               <th>ID Empresa</th>
               <th>Empresa</th>
-              <th>Repartidor / Conductor</th><th>Teléfono</th><th>Estado</th>
+              <th>Repartidor / Conductor</th>
+              <th>Teléfono</th>
+              <th>Estado</th>
               <th>Vehículo</th>
               <th>CIF / NIF</th>
               <th>Tarifa (€)</th>
@@ -161,7 +229,6 @@
               <th>Correo</th>
               <th>Contraseña</th>
               <th>Código Privado Usado</th>
-
             </tr>
           </thead>
           <tbody id="tbodyCouriers">
@@ -173,7 +240,30 @@
 
     <!-- TABLE 3: RESERVATIONS -->
     <div id="tabReservations" class="hidden glass-card rounded-3xl p-6 border border-emerald-500/30 space-y-4 shadow-xl">
-      <h2 class="text-lg font-black text-white">💳 Historial de Reservas y Cobros de Stripe</h2>
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <h2 class="text-lg font-black text-white">💳 Historial de Reservas y Cobros de Stripe</h2>
+        <span id="reservationsFilterCount" class="text-xs font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">0 reservas</span>
+      </div>
+
+      <!-- RESERVATIONS FILTER & SORT BAR -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 bg-slate-900/70 p-3.5 rounded-2xl border border-slate-800">
+        <input type="text" id="searchReservationsInput" oninput="renderTables()" placeholder="🔍 Buscar ID reserva, peregrino, SmartVieira ID, albergue, empresa..." class="md:col-span-2 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none">
+        <select id="filterReservationsStatus" onchange="renderTables()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none">
+          <option value="">📦 Todos los estados</option>
+          <option value="PAID">🟡 Pendiente de Recogida</option>
+          <option value="EN_CAMINO">🚚 En Camino (GPS Activo)</option>
+          <option value="ENTREGADA">✅ Entregada en Albergue</option>
+        </select>
+        <div class="flex gap-2">
+          <select id="sortReservationsSelect" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none">
+            <option value="date_desc">📅 Más recientes primero</option>
+            <option value="price_asc">💶 Importe: Menor a Mayor ↑</option>
+            <option value="price_desc">💶 Importe: Mayor a Menor ↓</option>
+          </select>
+          <button onclick="resetReservationsFilters()" title="Limpiar filtros" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕</button>
+        </div>
+      </div>
+
       <div class="table-container rounded-2xl border border-slate-800">
         <table>
           <thead>
@@ -183,6 +273,7 @@
               <th>SmartVieira ID</th>
               <th>Origen</th>
               <th>Destino</th>
+              <th>Empresa / Repartidor</th>
               <th>Importe (€)</th>
               <th>Estado</th>
               <th>PaymentIntent Stripe</th>
@@ -190,7 +281,7 @@
             </tr>
           </thead>
           <tbody id="tbodyReservations">
-            <tr><td colspan="9" class="text-center py-6 text-slate-500">Cargando datos...</td></tr>
+            <tr><td colspan="10" class="text-center py-6 text-slate-500">Cargando datos...</td></tr>
           </tbody>
         </table>
       </div>
@@ -376,7 +467,7 @@
 
       async function loadDemoDatabase() {
         if (!adminToken) return;
-        if (!confirm('¿Cargar la Base de Datos de Prueba con 24 empresas repartidoras (todas las rutas), 14 peregrinos y reservas de ejemplo? (Tu configuración de correo SMTP se mantendrá intacta).')) return;
+        if (!confirm('¿Cargar la Base de Datos de Prueba con 29 repartidores (incluyendo varios conductores de una misma empresa), 14 peregrinos con teléfono y reservas de ejemplo? (Tu configuración de correo SMTP se mantendrá intacta).')) return;
         try {
           const res = await fetch('/api/admin/load-demo-db', {
             method: 'POST',
@@ -469,6 +560,38 @@
         }
       }
 
+            function resetPilgrimsFilters() {
+        const s = document.getElementById('searchPilgrimsInput');
+        const l = document.getElementById('filterPilgrimsLang');
+        const o = document.getElementById('sortPilgrimsSelect');
+        if (s) s.value = '';
+        if (l) l.value = '';
+        if (o) o.value = 'date_desc';
+        renderTables();
+      }
+
+      function resetCouriersFilters() {
+        const s = document.getElementById('searchCouriersInput');
+        const c = document.getElementById('filterCouriersCompany');
+        const r = document.getElementById('filterCouriersRoute');
+        const o = document.getElementById('sortCouriersSelect');
+        if (s) s.value = '';
+        if (c) c.value = '';
+        if (r) r.value = '';
+        if (o) o.value = 'price_asc';
+        renderTables();
+      }
+
+      function resetReservationsFilters() {
+        const s = document.getElementById('searchReservationsInput');
+        const st = document.getElementById('filterReservationsStatus');
+        const o = document.getElementById('sortReservationsSelect');
+        if (s) s.value = '';
+        if (st) st.value = '';
+        if (o) o.value = 'date_desc';
+        renderTables();
+      }
+
       function renderTables() {
         if (!dbState) return;
 
@@ -505,59 +628,122 @@
           }
         }
 
-      if (!dbState) return;
-
-      if (dbState.smtpConfig && (dbState.smtpConfig.user || (dbState.smtpConfig.host && dbState.smtpConfig.host.startsWith('https://')))) {
-        const uEl = document.getElementById('smtpUserInput');
-        const hEl = document.getElementById('smtpHostInput');
-        const bEl = document.getElementById('smtpSavedBadge');
-        if (uEl && !uEl.value && dbState.smtpConfig.user) uEl.value = dbState.smtpConfig.user;
-        if (hEl && dbState.smtpConfig.host) hEl.value = dbState.smtpConfig.host;
-        if (bEl) {
-          bEl.className = 'px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold';
-          bEl.innerText = (dbState.smtpConfig.host || '').startsWith('https://')
-            ? '✅ Activo por HTTPS (Puerto 443)'
-            : ('✅ Activo: ' + dbState.smtpConfig.user);
+        if (dbState.smtpConfig && (dbState.smtpConfig.user || (dbState.smtpConfig.host && dbState.smtpConfig.host.startsWith('https://')))) {
+          const uEl = document.getElementById('smtpUserInput');
+          const hEl = document.getElementById('smtpHostInput');
+          const bEl = document.getElementById('smtpSavedBadge');
+          if (uEl && !uEl.value && dbState.smtpConfig.user) uEl.value = dbState.smtpConfig.user;
+          if (hEl && dbState.smtpConfig.host) hEl.value = dbState.smtpConfig.host;
+          if (bEl) {
+            bEl.className = 'px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold';
+            bEl.innerText = (dbState.smtpConfig.host || '').startsWith('https://')
+              ? '✅ Activo por HTTPS (Puerto 443)'
+              : ('✅ Activo: ' + dbState.smtpConfig.user);
+          }
         }
-      }
 
-      const pilgrims = dbState.pilgrims || [];
-      const couriers = dbState.couriers || [];
-      const reservations = dbState.reservations || [];
+        const pilgrims = dbState.pilgrims || [];
+        const couriers = dbState.couriers || [];
+        const reservations = dbState.reservations || [];
 
-      document.getElementById('statPilgrimsCount').innerText = pilgrims.length;
-      document.getElementById('statCouriersCount').innerText = couriers.length;
-      document.getElementById('statReservationsCount').innerText = reservations.length;
+        document.getElementById('statPilgrimsCount').innerText = pilgrims.length;
+        document.getElementById('statCouriersCount').innerText = couriers.length;
+        document.getElementById('statReservationsCount').innerText = reservations.length;
 
-      // Table Pilgrims
-      const tbodyP = document.getElementById('tbodyPilgrims');
-      if (pilgrims.length === 0) {
-        tbodyP.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-slate-500">Sin peregrinos registrados</td></tr>';
-      } else {
-        tbodyP.innerHTML = pilgrims.map(p => `
-          <tr>
-            <td class="font-mono text-[11px] text-amber-400">${p.id}</td>
-            <td class="font-bold text-white">${p.name}</td>
-            <td>${p.surname || '-'}</td>
-            <td class="font-mono text-slate-300">${p.email}</td>
-            <td class="font-mono font-bold text-emerald-400">${p.passwordPlain || '<span class="text-slate-500 text-[10px]">Pendiente login/recup.</span>'}</td>
-            <td class="font-mono font-bold text-amber-300">${p.smartVieiraId}</td>
-            <td class="uppercase">${p.language || 'es'}</td>
-            <td class="text-[11px] text-slate-400">${new Date(p.createdAt).toLocaleString()}</td>
-          </tr>
-        `).join('');
-      }
+        // Populate Company Dropdown in Couriers Filter (preserving selection)
+        const compSelect = document.getElementById('filterCouriersCompany');
+        if (compSelect) {
+          const prevVal = compSelect.value;
+          const compCounts = {};
+          couriers.forEach(c => {
+            const name = c.companyName || 'Sin Empresa';
+            compCounts[name] = (compCounts[name] || 0) + 1;
+          });
+          const sortedCompanies = Object.keys(compCounts).sort((a, b) => a.localeCompare(b));
+          compSelect.innerHTML = '<option value="">🏢 Todas las Empresas (' + sortedCompanies.length + ')</option>' +
+            sortedCompanies.map(name => `<option value="${name}">${name} (${compCounts[name]} ${compCounts[name] > 1 ? 'repartidores' : 'repartidor'})</option>`).join('');
+          compSelect.value = prevVal;
+        }
 
-      // Table Couriers
-      const tbodyC = document.getElementById('tbodyCouriers');
-      if (couriers.length === 0) {
-        tbodyC.innerHTML = '<tr><td colspan="13" class="text-center py-6 text-slate-500">Sin empresas repartidoras registradas</td></tr>';
-      } else {
-        tbodyC.innerHTML = couriers.map(c => `
+        // ── 1. FILTER & SORT PILGRIMS ────────────────────────────────────
+        const pQuery = (document.getElementById('searchPilgrimsInput')?.value || '').toLowerCase().trim();
+        const pLang = (document.getElementById('filterPilgrimsLang')?.value || '').toUpperCase().trim();
+        const pSort = document.getElementById('sortPilgrimsSelect')?.value || 'date_desc';
+
+        let filteredPilgrims = pilgrims.filter(p => {
+          if (pLang && (p.language || 'ES').toUpperCase() !== pLang) return false;
+          if (!pQuery) return true;
+          const haystack = [p.id, p.name, p.surname, p.phone, p.email, p.smartVieiraId, p.language].join(' ').toLowerCase();
+          return haystack.includes(pQuery);
+        });
+
+        filteredPilgrims.sort((a, b) => {
+          if (pSort === 'name_asc') return (a.name || '').localeCompare(b.name || '');
+          if (pSort === 'name_desc') return (b.name || '').localeCompare(a.name || '');
+          if (pSort === 'vieira_asc') return (a.smartVieiraId || '').localeCompare(b.smartVieiraId || '');
+          if (pSort === 'date_asc') return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+        });
+
+        const pCountBadge = document.getElementById('pilgrimsFilterCount');
+        if (pCountBadge) pCountBadge.innerText = `Mostrando ${filteredPilgrims.length} de ${pilgrims.length} peregrinos`;
+
+        const tbodyP = document.getElementById('tbodyPilgrims');
+        if (filteredPilgrims.length === 0) {
+          tbodyP.innerHTML = '<tr><td colspan="9" class="text-center py-6 text-slate-500">No se encontraron peregrinos con esos filtros</td></tr>';
+        } else {
+          tbodyP.innerHTML = filteredPilgrims.map(p => `
+            <tr>
+              <td class="font-mono text-[11px] text-amber-400">${p.id}</td>
+              <td class="font-bold text-white">${p.name}</td>
+              <td>${p.surname || '-'}</td>
+              <td class="font-mono text-amber-300 text-xs">${p.phone || '-'}</td>
+              <td class="font-mono text-slate-300">${p.email}</td>
+              <td class="font-mono font-bold text-emerald-400">${p.passwordPlain || '<span class="text-slate-500 text-[10px]">Pendiente login/recup.</span>'}</td>
+              <td class="font-mono font-bold text-amber-300">${p.smartVieiraId}</td>
+              <td class="uppercase font-bold">${p.language || 'ES'}</td>
+              <td class="text-[11px] text-slate-400">${new Date(p.createdAt).toLocaleString()}</td>
+            </tr>
+          `).join('');
+        }
+
+        // ── 2. FILTER & SORT COURIERS ────────────────────────────────────
+        const cQuery = (document.getElementById('searchCouriersInput')?.value || '').toLowerCase().trim();
+        const cComp = document.getElementById('filterCouriersCompany')?.value || '';
+        const cRoute = document.getElementById('filterCouriersRoute')?.value || '';
+        const cSort = document.getElementById('sortCouriersSelect')?.value || 'price_asc';
+
+        let filteredCouriers = couriers.filter(c => {
+          if (cComp && c.companyName !== cComp) return false;
+          if (cRoute && (c.routes || '').toLowerCase() !== cRoute.toLowerCase()) return false;
+          if (!cQuery) return true;
+          const haystack = [c.id, c.companyName, c.driverName, c.phone, c.vehicle, c.cif, c.routes, c.routeStart, c.routeEnd, c.email, c.pricePerBag].join(' ').toLowerCase();
+          return haystack.includes(cQuery);
+        });
+
+        filteredCouriers.sort((a, b) => {
+          const priceA = parseFloat(a.pricePerBag || 6.50);
+          const priceB = parseFloat(b.pricePerBag || 6.50);
+          if (cSort === 'price_asc') return priceA - priceB;
+          if (cSort === 'price_desc') return priceB - priceA;
+          if (cSort === 'company_asc') return (a.companyName || '').localeCompare(b.companyName || '') || (a.driverName || '').localeCompare(b.driverName || '');
+          if (cSort === 'driver_asc') return (a.driverName || '').localeCompare(b.driverName || '');
+          if (cSort === 'route_asc') return (a.routes || '').localeCompare(b.routes || '') || (priceA - priceB);
+          return 0;
+        });
+
+        const cCountBadge = document.getElementById('couriersFilterCount');
+        if (cCountBadge) cCountBadge.innerText = `Mostrando ${filteredCouriers.length} de ${couriers.length} repartidores`;
+
+        const tbodyC = document.getElementById('tbodyCouriers');
+        if (filteredCouriers.length === 0) {
+          tbodyC.innerHTML = '<tr><td colspan="13" class="text-center py-6 text-slate-500">No se encontraron repartidores con esos filtros</td></tr>';
+        } else {
+          tbodyC.innerHTML = filteredCouriers.map(c => `
             <tr class="${c.isActive === false ? 'opacity-50 grayscale' : ''}">
               <td class="font-mono text-[11px] text-cyan-400">${c.id}</td>
               <td class="font-bold text-white">${c.companyName}</td>
-              <td>${c.driverName}</td>
+              <td class="font-semibold text-cyan-200">${c.driverName}</td>
               <td class="font-mono text-amber-300 font-bold">${c.phone || 'N/A'}</td>
               <td>
                 ${c.isActive === false 
@@ -565,47 +751,71 @@
                   : '<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 border border-emerald-500/40 rounded text-[10px] font-bold">ACTIVO</span>'
                 }
               </td>
-              <td>${c.vehicle || '-'}</td><td class="font-mono text-amber-300 text-[11px]">${c.cif || '-'}</td><td class="font-bold text-emerald-400">${c.pricePerBag ? c.pricePerBag + ' €' : '6.50 €'}</td>
+              <td>${c.vehicle || '-'}</td>
+              <td class="font-mono text-amber-300 text-[11px]">${c.cif || '-'}</td>
+              <td class="font-bold text-emerald-400">${c.pricePerBag ? Number(c.pricePerBag).toFixed(2) + ' €' : '6.50 €'}</td>
               <td>${c.routes || '-'}</td>
               <td>${c.routeStart || 'Toda'} &rarr; ${c.routeEnd || 'Toda'}</td>
               <td class="font-mono text-slate-300">${c.email}</td>
               <td class="font-mono font-bold text-emerald-400">${c.passwordPlain || '<span class="text-slate-500 text-[10px]">Pendiente login/recup.</span>'}</td>
-            <td class="font-mono text-emerald-400 font-bold">${c.accessCode}</td>
-          </tr>
-        `).join('');
+              <td class="font-mono text-emerald-400 font-bold">${c.accessCode}</td>
+            </tr>
+          `).join('');
+        }
+
+        // ── 3. FILTER & SORT RESERVATIONS ────────────────────────────────
+        const rQuery = (document.getElementById('searchReservationsInput')?.value || '').toLowerCase().trim();
+        const rStatus = document.getElementById('filterReservationsStatus')?.value || '';
+        const rSort = document.getElementById('sortReservationsSelect')?.value || 'date_desc';
+
+        let filteredReservations = reservations.filter(r => {
+          if (rStatus && (r.status || 'PAID') !== rStatus) return false;
+          if (!rQuery) return true;
+          const haystack = [r.id, r.pilgrimEmail, r.smartVieiraId, r.originAlbergue, r.destinationAlbergue, r.companyName, r.driverName, r.paymentIntentId].join(' ').toLowerCase();
+          return haystack.includes(rQuery);
+        });
+
+        filteredReservations.sort((a, b) => {
+          if (rSort === 'price_asc') return parseFloat(a.amountEuros || 0) - parseFloat(b.amountEuros || 0);
+          if (rSort === 'price_desc') return parseFloat(b.amountEuros || 0) - parseFloat(a.amountEuros || 0);
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+        });
+
+        const rCountBadge = document.getElementById('reservationsFilterCount');
+        if (rCountBadge) rCountBadge.innerText = `Mostrando ${filteredReservations.length} de ${reservations.length} reservas`;
+
+        const tbodyR = document.getElementById('tbodyReservations');
+        if (filteredReservations.length === 0) {
+          tbodyR.innerHTML = '<tr><td colspan="10" class="text-center py-6 text-slate-500">No se encontraron reservas con esos filtros</td></tr>';
+        } else {
+          tbodyR.innerHTML = filteredReservations.map(r => `
+            <tr>
+              <td class="font-mono font-bold text-amber-400">${r.id}</td>
+              <td class="font-mono text-slate-300">${r.pilgrimEmail}</td>
+              <td class="font-mono font-bold text-amber-300">${r.smartVieiraId}</td>
+              <td class="text-white">${r.originAlbergue}</td>
+              <td class="text-white">${r.destinationAlbergue}</td>
+              <td class="text-cyan-300 font-semibold">${r.companyName || '-'}${r.driverName ? ' <span class="text-slate-400 text-[10px]">(' + r.driverName + ')</span>' : ''}</td>
+              <td class="font-bold text-emerald-400">${Number(r.amountEuros || 0).toFixed(2)} €</td>
+              <td>
+                ${r.status === 'EN_CAMINO'
+                  ? '<span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-black border border-cyan-500/40 animate-pulse">🚚 EN CAMINO</span>'
+                  : r.status === 'ENTREGADA'
+                    ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/40">✅ ENTREGADA</span>'
+                    : '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">🟡 PENDIENTE</span>'
+                }
+                ${r.deliveredLocation
+                  ? `<button onclick="focusReservationOnMap('${r.id}')" class="text-[9px] text-cyan-400 underline block mt-0.5">📍 Coords entrega</button>`
+                  : (r.currentLocation ? `<button onclick="focusReservationOnMap('${r.id}')" class="text-[9px] text-amber-400 underline block mt-0.5">📡 GPS en vivo</button>` : '')
+                }
+              </td>
+              <td class="font-mono text-[10px] text-slate-400">${r.paymentIntentId}</td>
+              <td class="text-[11px] text-slate-400">${new Date(r.createdAt).toLocaleString()}</td>
+            </tr>
+          `).join('');
+        }
       }
 
-      // Table Reservations
-      const tbodyR = document.getElementById('tbodyReservations');
-      if (reservations.length === 0) {
-        tbodyR.innerHTML = '<tr><td colspan="9" class="text-center py-6 text-slate-500">Sin reservas guardadas</td></tr>';
-      } else {
-        tbodyR.innerHTML = reservations.map(r => `
-          <tr>
-            <td class="font-mono font-bold text-amber-400">${r.id}</td>
-            <td class="font-mono text-slate-300">${r.pilgrimEmail}</td>
-            <td class="font-mono font-bold text-amber-300">${r.smartVieiraId}</td>
-            <td class="text-white">${r.originAlbergue}</td>
-            <td class="text-white">${r.destinationAlbergue}</td>
-            <td class="font-bold text-emerald-400">${r.amountEuros.toFixed(2)} €</td>
-            <td>
-              ${r.status === 'EN_CAMINO'
-                ? '<span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-black border border-cyan-500/40 animate-pulse">🚚 EN CAMINO</span>'
-                : r.status === 'ENTREGADA'
-                  ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/40">✅ ENTREGADA</span>'
-                  : '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">🟡 PENDIENTE</span>'
-              }
-              ${r.deliveredLocation
-                ? `<button onclick="focusReservationOnMap('${r.id}')" class="text-[9px] text-cyan-400 underline block mt-0.5">📍 Coords entrega</button>`
-                : (r.currentLocation ? `<button onclick="focusReservationOnMap('${r.id}')" class="text-[9px] text-amber-400 underline block mt-0.5">📡 GPS en vivo</button>` : '')
-              }
-            </td>
-            <td class="font-mono text-[10px] text-slate-400">${r.paymentIntentId}</td>
-            <td class="text-[11px] text-slate-400">${new Date(r.createdAt).toLocaleString()}</td>
-          </tr>
-        `).join('');
-      }
-    }
 
     function showDbTab(tabId) {
       document.getElementById('tabPilgrims').classList.add('hidden');
