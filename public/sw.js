@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vieira-app-FINAL-v13.8.8';
+const CACHE_NAME = 'vieira-app-FINAL-v13.9.0';
 const urlsToCache = [
   '/',
   '/pilgrim-app.html',
