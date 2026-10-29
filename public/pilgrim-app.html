@@ -1290,6 +1290,10 @@
 
     // Domain-agnostic API resolver (works on any domain, localhost, or HTTPS server)
     function getApiUrl(path) {
+      // If running on local dev server with port (e.g. localhost:3000), use local server
+      if ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port) {
+        return path;
+      }
       if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === 'app.local' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'app.smartvieira.com') {
         return 'https://www.smartvieira.com' + path;
       }
