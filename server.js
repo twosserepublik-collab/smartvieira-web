@@ -937,6 +937,99 @@ const server = http.createServer(async (req, res) => {
     }));
   }
 
+  // ── COURIER PUSH SUBSCRIPTION REGISTRATION ────────────────────────
+  if (reqPath === '/api/courier/push-subscription' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const { courierId, companyName, subscription, permission } = body;
+      const db = loadDb();
+      db.courierPushSubscriptions = db.courierPushSubscriptions || [];
+
+      // Remove existing for this courierId
+      db.courierPushSubscriptions = db.courierPushSubscriptions.filter(s =>
+        s.courierId !== courierId
+      );
+
+      db.courierPushSubscriptions.push({
+        courierId: courierId || 'anonymous',
+        companyName: (companyName || '').trim(),
+        subscription: subscription || null,
+        permission: permission || 'granted',
+        updatedAt: new Date().toISOString()
+      });
+
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, message: 'Suscripción de avisos guardada con éxito' }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error procesando suscripción' }));
+    }
+  }
+
+  // ── GET COURIER PENDING NOTIFICATIONS & MORNING DIGEST (08:00 AM) ──
+  if (reqPath === '/api/courier/pending-notifications' && req.method === 'GET') {
+    try {
+      const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+      const companyName = (urlObj.searchParams.get('companyName') || '').trim();
+      const db = loadDb();
+      db.courierNotifications = db.courierNotifications || [];
+
+      // 1. Morning Digest Generator (Active between 07:00 and 12:00)
+      const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+      const morningDigestKey = `MORNING_${todayStr}_${companyName.toLowerCase()}`;
+
+      if (companyName && now.getHours() >= 7 && now.getHours() <= 12) {
+        db.morningDigestsDelivered = db.morningDigestsDelivered || [];
+        if (!db.morningDigestsDelivered.includes(morningDigestKey)) {
+          const todayBookings = (db.reservations || []).filter(r => {
+            if (!r) return false;
+            const rComp = r.companyName ? String(r.companyName).trim().toLowerCase() : '';
+            const myComp = companyName.toLowerCase();
+            return (rComp === myComp || rComp === 'empresa repartidora') && r.status !== 'ENTREGADA';
+          });
+
+          if (todayBookings.length > 0) {
+            db.courierNotifications.push({
+              id: 'DIGEST-' + Date.now(),
+              targetCompany: companyName,
+              title: '☀️ SmartVieira • Resumen Matutino (08:00 AM)',
+              body: `¡Buenos días! Tienes ${todayBookings.length} mochila(s) contratadas para hoy en tu ruta.`,
+              type: 'MORNING_DIGEST',
+              createdAt: new Date().toISOString(),
+              delivered: false
+            });
+            db.morningDigestsDelivered.push(morningDigestKey);
+          }
+        }
+      }
+
+      // 2. Filter pending notifications for this courier company
+      const pending = db.courierNotifications.filter(n => {
+        if (n.delivered) return false;
+        if (!companyName) return true;
+        const target = (n.targetCompany || '').trim().toLowerCase();
+        return target === companyName.toLowerCase() || target === 'empresa repartidora' || !target;
+      });
+
+      // Mark as delivered and save
+      if (pending.length > 0) {
+        pending.forEach(n => { n.delivered = true; });
+        saveDb(db);
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({
+        success: true,
+        notifications: pending
+      }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error obteniendo notificaciones' }));
+    }
+  }
+
 
   // ── COURIER PICKUP (MARK BACKPACKS EN_CAMINO & NOTIFY PILGRIM) ──
   if (reqPath === '/api/courier/pickup' && req.method === 'POST') {
@@ -1296,9 +1389,27 @@ const server = http.createServer(async (req, res) => {
       };
 
       db.reservations.push(newRes);
+
+      // Queue System-level Notification for the assigned courier
+      db.courierNotifications = db.courierNotifications || [];
+      db.courierNotifications.push({
+        id: 'NOTIF-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+        targetCompany: newRes.companyName,
+        title: '🔔 ¡Nueva Contratación de Servicio!',
+        body: `Mochila asignada: ${newRes.originAlbergue} → ${newRes.destinationAlbergue} (${newRes.amountEuros ? newRes.amountEuros.toFixed(2) : '6.50'}€)`,
+        type: 'NEW_BOOKING',
+        reservationId: newRes.id,
+        price: newRes.amountEuros,
+        originAlbergue: newRes.originAlbergue,
+        destinationAlbergue: newRes.destinationAlbergue,
+        smartVieiraId: newRes.smartVieiraId,
+        createdAt: new Date().toISOString(),
+        delivered: false
+      });
+
       saveDb(db);
 
-      console.log(`[DB] New Reservation Confirmed & Saved: ${newRes.id} for ${newRes.pilgrimEmail}`);
+      console.log(`[DB] New Reservation Confirmed & Saved: ${newRes.id} for ${newRes.pilgrimEmail} (Queued Courier Notification)`);
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({

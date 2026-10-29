@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vieira-app-FINAL-v13.9.6';
+const CACHE_NAME = 'vieira-app-FINAL-v13.9.8';
 const urlsToCache = [
   '/',
   '/pilgrim-app.html',
@@ -50,18 +50,58 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Listener preparado para Notificaciones Push en segundo plano (Opción B)
+// =========================================================================
+// SYSTEM PUSH NOTIFICATIONS & LOCK SCREEN CLICK HANDLER
+// =========================================================================
 self.addEventListener('push', event => {
-  let data = { title: '🎒 SmartVieira', body: 'Novedades sobre tu mochila en ruta' };
+  let data = {
+    title: '🎒 SmartVieira Repartidor',
+    body: 'Tienes nuevas contrataciones de mochilas en tu ruta',
+    url: '/courier-app.html',
+    tag: 'smartvieira-push'
+  };
+
   if (event.data) {
-    try { data = event.data.json(); } catch(e) { data.body = event.data.text(); }
+    try {
+      data = Object.assign(data, event.data.json());
+    } catch (e) {
+      data.body = event.data.text();
+    }
   }
+
+  const options = {
+    body: data.body,
+    icon: '/icon-courier.png',
+    badge: '/icon.png',
+    vibrate: [250, 100, 250, 100, 250],
+    tag: data.tag || ('smartvieira-' + Date.now()),
+    renotify: true,
+    requireInteraction: true,
+    data: {
+      url: data.url || '/courier-app.html',
+      time: Date.now()
+    }
+  };
+
   event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: '/icon-pilgrim.png',
-      badge: '/icon-pilgrim.png',
-      vibrate: [200, 100, 200]
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) || '/courier-app.html';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+      for (let client of windowClients) {
+        if (client.url.includes('courier-app') && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(targetUrl);
+      }
     })
   );
 });
