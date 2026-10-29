@@ -831,11 +831,22 @@
           <select id="pickupHostelSelect" onchange="checkCustomHostel('pickup')" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-amber-400 focus:outline-none">
           </select>
           
-          <div id="customPickupDiv" class="hidden mt-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2">
-            <span class="text-[10px] font-bold text-amber-400 uppercase">Añadir Nuevo Alojamiento de Origen:</span>
-            <input type="text" id="customPickupName" placeholder="Nombre del hotel/albergue..." class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white">
-            <input type="text" id="customPickupAddress" placeholder="Dirección exacta..." class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white">
-            <button type="button" onclick="saveNewHostel('pickup')" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-black text-xs">Guardar Alojamiento para la Comunidad</button>
+          <div id="customPickupDiv" class="hidden mt-2 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider">Añadir Nuevo Alojamiento de Origen:</span>
+              <span class="text-[9px] text-amber-300/90 bg-amber-500/20 px-2 py-0.5 rounded-full font-bold">Personalizado</span>
+            </div>
+            <input type="text" id="customPickupName" placeholder="Nombre del hotel/albergue (ej. Pensión Rosa)... *" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+            <input type="text" id="customPickupAddress" placeholder="Dirección exacta (ej. Rúa Real 14)... *" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+            <div>
+              <label class="block text-[10px] font-bold text-amber-300 mb-1">📍 Población / Parada del Camino en tu Ruta: *</label>
+              <select id="customPickupTown" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-amber-500/50 text-xs text-white focus:border-amber-400 focus:outline-none">
+                <option value="">-- Selecciona Localidad / Parada del Camino * --</option>
+              </select>
+            </div>
+            <button type="button" onclick="saveNewHostel('pickup')" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+              <span>Guardar Alojamiento para la Comunidad</span>
+            </button>
           </div>
         </div>
 
@@ -844,11 +855,22 @@
           <select id="dropoffHostelSelect" onchange="checkCustomHostel('dropoff')" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-amber-400 focus:outline-none">
           </select>
 
-          <div id="customDropoffDiv" class="hidden mt-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2">
-            <span class="text-[10px] font-bold text-amber-400 uppercase">Añadir Nuevo Alojamiento de Destino:</span>
-            <input type="text" id="customDropoffName" placeholder="Nombre del hotel/albergue..." class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white">
-            <input type="text" id="customDropoffAddress" placeholder="Dirección exacta..." class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white">
-            <button type="button" onclick="saveNewHostel('dropoff')" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-black text-xs">Guardar Alojamiento para la Comunidad</button>
+          <div id="customDropoffDiv" class="hidden mt-2 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider">Añadir Nuevo Alojamiento de Destino:</span>
+              <span class="text-[9px] text-amber-300/90 bg-amber-500/20 px-2 py-0.5 rounded-full font-bold">Personalizado</span>
+            </div>
+            <input type="text" id="customDropoffName" placeholder="Nombre del hotel/albergue (ej. Hotel Santiago)... *" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+            <input type="text" id="customDropoffAddress" placeholder="Dirección exacta (ej. Praza do Obradoiro 1)... *" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+            <div>
+              <label class="block text-[10px] font-bold text-amber-300 mb-1">📍 Población / Parada del Camino en tu Ruta: *</label>
+              <select id="customDropoffTown" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-amber-500/50 text-xs text-white focus:border-amber-400 focus:outline-none">
+                <option value="">-- Selecciona Localidad / Parada del Camino * --</option>
+              </select>
+            </div>
+            <button type="button" onclick="saveNewHostel('dropoff')" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+              <span>Guardar Alojamiento para la Comunidad</span>
+            </button>
           </div>
         </div>
 
@@ -3322,6 +3344,8 @@
       currentWizardRoute = { id: routeId, name: routeName };
       document.getElementById('selectedRouteBadge').innerText = routeName;
 
+      populateCustomTowns(routeId);
+
       const list = HOSTELS_DATABASE[routeId] || HOSTELS_DATABASE['camino-ingles'];
       const pickupSelect = document.getElementById('pickupHostelSelect');
       const dropoffSelect = document.getElementById('dropoffHostelSelect');
@@ -3331,6 +3355,66 @@
 
       document.getElementById('bookStepA').classList.add('hidden');
       document.getElementById('bookStepB').classList.remove('hidden');
+
+      loadCustomHostelsForRoute(routeId);
+    }
+
+    function populateCustomTowns(routeId) {
+      const list = HOSTELS_DATABASE[routeId] || HOSTELS_DATABASE['camino-ingles'] || [];
+      const townSet = new Set();
+      list.forEach(h => {
+        if (h.town && h.town.trim() && !h.name.includes('OTROS')) {
+          townSet.add(h.town.trim());
+        }
+      });
+
+      const sortedTowns = Array.from(townSet);
+      let options = '<option value="">-- Selecciona Localidad / Parada del Camino * --</option>';
+      sortedTowns.forEach(t => {
+        options += `<option value="${t}">${t}</option>`;
+      });
+
+      const pickTown = document.getElementById('customPickupTown');
+      const dropTown = document.getElementById('customDropoffTown');
+      if (pickTown) pickTown.innerHTML = options;
+      if (dropTown) dropTown.innerHTML = options;
+    }
+
+    async function loadCustomHostelsForRoute(routeId) {
+      try {
+        const res = await fetch(getApiUrl('/api/pilgrim/custom-hostels?routeId=' + encodeURIComponent(routeId)));
+        const data = await res.json();
+        if (data.success && Array.isArray(data.hostels) && data.hostels.length > 0) {
+          if (!HOSTELS_DATABASE[routeId]) HOSTELS_DATABASE[routeId] = [];
+          data.hostels.forEach(ch => {
+            const hName = ch.formattedName || (ch.name + ' (' + ch.town + ')');
+            if (!HOSTELS_DATABASE[routeId].some(x => x.name.toLowerCase() === hName.toLowerCase())) {
+              HOSTELS_DATABASE[routeId].unshift({
+                name: hName,
+                rawName: ch.name,
+                address: ch.address,
+                town: ch.town,
+                routeId: routeId,
+                isCustom: true
+              });
+            }
+          });
+
+          const pickupSelect = document.getElementById('pickupHostelSelect');
+          const dropoffSelect = document.getElementById('dropoffHostelSelect');
+          if (pickupSelect && dropoffSelect && currentWizardRoute && currentWizardRoute.id === routeId) {
+            const curPick = pickupSelect.value;
+            const curDrop = dropoffSelect.value;
+            const updatedList = HOSTELS_DATABASE[routeId];
+            pickupSelect.innerHTML = updatedList.map(h => `<option value="${h.name}">${h.name}</option>`).join('');
+            dropoffSelect.innerHTML = updatedList.map(h => `<option value="${h.name}">${h.name}</option>`).join('');
+            if (curPick) pickupSelect.value = curPick;
+            if (curDrop) dropoffSelect.value = curDrop;
+          }
+        }
+      } catch (e) {
+        console.warn('No se pudieron cargar alojamientos personalizados:', e);
+      }
     }
 
     function checkCustomHostel(type) {
@@ -3343,23 +3427,65 @@
       }
     }
 
-    function saveNewHostel(type) {
+    async function saveNewHostel(type) {
       const nameIn = document.getElementById(type === 'pickup' ? 'customPickupName' : 'customDropoffName');
       const addrIn = document.getElementById(type === 'pickup' ? 'customPickupAddress' : 'customDropoffAddress');
-      
-      if (!nameIn.value) return alert('Escribe el nombre del alojamiento');
+      const townSel = document.getElementById(type === 'pickup' ? 'customPickupTown' : 'customDropoffTown');
 
-      const newObj = { name: nameIn.value, address: addrIn.value || 'Personalizado' };
+      const rawName = (nameIn ? nameIn.value : '').trim();
+      const address = (addrIn ? addrIn.value : '').trim();
+      const town = (townSel ? townSel.value : '').trim();
+
+      if (!rawName) return alert('Por favor, escribe el nombre del alojamiento u hotel.');
+      if (!town) return alert('Por favor, selecciona en el desplegable a qué localidad o parada de tu ruta pertenece.');
+
       const routeKey = currentWizardRoute ? currentWizardRoute.id : 'camino-ingles';
-      
+      const routeName = currentWizardRoute ? currentWizardRoute.name : 'Camino Inglés';
+      const formattedName = rawName + ' (' + town + ')';
+
+      const newObj = {
+        name: formattedName,
+        rawName: rawName,
+        address: address || 'Personalizado',
+        town: town,
+        routeId: routeKey,
+        isCustom: true
+      };
+
+      if (!HOSTELS_DATABASE[routeKey]) HOSTELS_DATABASE[routeKey] = [];
       HOSTELS_DATABASE[routeKey].unshift(newObj);
 
-      const select = document.getElementById(type === 'pickup' ? 'pickupHostelSelect' : 'dropoffHostelSelect');
-      select.innerHTML = HOSTELS_DATABASE[routeKey].map(h => `<option value="${h.name}">${h.name}</option>`).join('');
-      select.value = newObj.name;
+      const pickupSelect = document.getElementById('pickupHostelSelect');
+      const dropoffSelect = document.getElementById('dropoffHostelSelect');
+      const targetSelect = type === 'pickup' ? pickupSelect : dropoffSelect;
 
+      pickupSelect.innerHTML = HOSTELS_DATABASE[routeKey].map(h => `<option value="${h.name}">${h.name}</option>`).join('');
+      dropoffSelect.innerHTML = HOSTELS_DATABASE[routeKey].map(h => `<option value="${h.name}">${h.name}</option>`).join('');
+
+      targetSelect.value = formattedName;
       document.getElementById(type === 'pickup' ? 'customPickupDiv' : 'customDropoffDiv').classList.add('hidden');
-      alert(`Alojamiento "${newObj.name}" guardado con éxito en BD.`);
+
+      // Persist to Central Server DB
+      try {
+        const userEmail = currentPilgrim ? currentPilgrim.email : 'peregrino-comunidad';
+        await fetch(getApiUrl('/api/pilgrim/custom-hostel'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: rawName,
+            formattedName: formattedName,
+            address: address,
+            town: town,
+            routeId: routeKey,
+            routeName: routeName,
+            addedBy: userEmail
+          })
+        });
+      } catch (err) {
+        console.warn('Aviso: guardado localmente, sincronización pendiente:', err);
+      }
+
+      alert('✓ Alojamiento "' + formattedName + '" guardado con éxito. Se ha asignado a la parada de ' + town + ' para el cálculo de tu transportista.');
     }
 
     let availableCouriersFromDb = [];

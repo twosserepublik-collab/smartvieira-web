@@ -1260,6 +1260,155 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // ── PILGRIM CUSTOM HOSTELS (PUBLIC API) ─────────────────────────
+  if (reqPath === '/api/pilgrim/custom-hostel' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const { name, formattedName, address, town, routeId, routeName, addedBy } = body;
+      if (!name || !town) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'El nombre y la localidad son obligatorios' }));
+      }
+      const db = loadDb();
+      db.customHostels = db.customHostels || [];
+
+      const cleanName = String(name).trim();
+      const cleanTown = String(town).trim();
+      const cleanAddr = String(address || 'Personalizado').trim();
+      const finalFormatted = String(formattedName || (cleanName + ' (' + cleanTown + ')')).trim();
+
+      let existing = db.customHostels.find(h =>
+        h.formattedName && h.formattedName.toLowerCase() === finalFormatted.toLowerCase() ||
+        (h.name && h.name.toLowerCase() === cleanName.toLowerCase() && h.town && h.town.toLowerCase() === cleanTown.toLowerCase())
+      );
+
+      if (existing) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: true, hostel: existing, message: 'Alojamiento ya existente' }));
+      }
+
+      const newHostel = {
+        id: 'HOSTEL-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+        name: cleanName,
+        formattedName: finalFormatted,
+        address: cleanAddr,
+        town: cleanTown,
+        routeId: routeId || 'camino-ingles',
+        routeName: routeName || 'Camino Inglés',
+        addedBy: addedBy || 'peregrino',
+        createdAt: new Date().toISOString(),
+        verified: false
+      };
+
+      db.customHostels.push(newHostel);
+      saveDb(db);
+
+      console.log('[DB] Nuevo alojamiento añadido por peregrino:', newHostel.formattedName, 'en', newHostel.town);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, hostel: newHostel }));
+    } catch(e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error procesando nuevo alojamiento' }));
+    }
+  }
+
+  if (reqPath === '/api/pilgrim/custom-hostels' && req.method === 'GET') {
+    try {
+      const urlObj = new URL(req.url, 'http://' + (req.headers.host || 'localhost'));
+      const routeId = urlObj.searchParams.get('routeId');
+      const db = loadDb();
+      let list = db.customHostels || [];
+      if (routeId) {
+        list = list.filter(h => h.routeId === routeId);
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, hostels: list }));
+    } catch(e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error obteniendo alojamientos' }));
+    }
+  }
+
+  // ── ADMIN CUSTOM HOSTELS (EDIT, APPROVE, DELETE) ────────────────
+  if (reqPath === '/api/admin/custom-hostel/update' && req.method === 'POST') {
+    const authHeader = req.headers['authorization'] || '';
+    if (authHeader !== 'Bearer admin_secure_token_12345') {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const { hostelId, name, town, address } = body;
+      const db = loadDb();
+      db.customHostels = db.customHostels || [];
+      const h = db.customHostels.find(x => x.id === hostelId);
+      if (!h) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Alojamiento no encontrado' }));
+      }
+      if (name) h.name = String(name).trim();
+      if (town) h.town = String(town).trim();
+      if (address !== undefined) h.address = String(address).trim();
+      h.formattedName = h.name + ' (' + h.town + ')';
+      h.updatedAt = new Date().toISOString();
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, hostel: h }));
+    } catch(e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error actualizando alojamiento' }));
+    }
+  }
+
+  if (reqPath === '/api/admin/custom-hostel/approve' && req.method === 'POST') {
+    const authHeader = req.headers['authorization'] || '';
+    if (authHeader !== 'Bearer admin_secure_token_12345') {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const { hostelId } = body;
+      const db = loadDb();
+      db.customHostels = db.customHostels || [];
+      const h = db.customHostels.find(x => x.id === hostelId);
+      if (!h) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Alojamiento no encontrado' }));
+      }
+      h.verified = true;
+      h.verifiedAt = new Date().toISOString();
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, hostel: h }));
+    } catch(e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error aprobando alojamiento' }));
+    }
+  }
+
+  if (reqPath === '/api/admin/custom-hostel/delete' && req.method === 'POST') {
+    const authHeader = req.headers['authorization'] || '';
+    if (authHeader !== 'Bearer admin_secure_token_12345') {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const { hostelId } = body;
+      const db = loadDb();
+      db.customHostels = db.customHostels || [];
+      const prevLen = db.customHostels.length;
+      db.customHostels = db.customHostels.filter(x => x.id !== hostelId);
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, deleted: db.customHostels.length < prevLen }));
+    } catch(e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error eliminando alojamiento' }));
+    }
+  }
+
   // ── RESOLVE EMERGENCY ──────────────────────────────────────────
   if (reqPath === '/api/admin/emergency/resolve' && req.method === 'POST') {
     const authHeader = req.headers['authorization'] || '';
