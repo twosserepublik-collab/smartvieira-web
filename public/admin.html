@@ -1008,7 +1008,10 @@
       if (tabId === 'tabCouriers') document.getElementById('btnTabCouriers').className = "px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs";
       if (tabId === 'tabReservations') document.getElementById('btnTabReservations').className = "px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs";
       if (tabId === 'tabEmergencies') document.getElementById('btnTabEmergencies').className = "px-4 py-2 rounded-xl bg-red-500 text-white font-black text-xs flex items-center gap-1";
-      if (tabId === 'tabCustomPlaces') document.getElementById('btnTabCustomPlaces').className = "px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black text-xs flex items-center gap-1.5";
+      if (tabId === 'tabCustomPlaces') {
+        document.getElementById('btnTabCustomPlaces').className = "px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black text-xs flex items-center gap-1.5";
+        renderCustomPlacesTable();
+      }
       if (tabId === 'tabTracking') {
         document.getElementById('btnTabTracking').className = "px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs flex items-center gap-1.5";
         setTimeout(refreshAdminMap, 200);

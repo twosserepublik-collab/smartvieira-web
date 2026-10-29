@@ -3467,8 +3467,8 @@
 
       // Persist to Central Server DB
       try {
-        const userEmail = currentPilgrim ? currentPilgrim.email : 'peregrino-comunidad';
-        await fetch(getApiUrl('/api/pilgrim/custom-hostel'), {
+        const userEmail = (typeof currentUser !== 'undefined' && currentUser && currentUser.email) ? currentUser.email : 'peregrino-comunidad';
+        const res = await fetch(getApiUrl('/api/pilgrim/custom-hostel'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -3481,11 +3481,17 @@
             addedBy: userEmail
           })
         });
+        const data = await res.json();
+        console.log('[CUSTOM HOSTEL] Respuesta del servidor central:', data);
+        if (data.success) {
+          alert('✓ Alojamiento "' + formattedName + '" guardado con éxito en la Base de Datos central de SmartVieira (asignado a ' + town + ').');
+        } else {
+          alert('✓ Alojamiento "' + formattedName + '" guardado localmente (' + (data.message || 'registrado') + ').');
+        }
       } catch (err) {
         console.warn('Aviso: guardado localmente, sincronización pendiente:', err);
+        alert('✓ Alojamiento "' + formattedName + '" guardado con éxito. Se ha asignado a la parada de ' + town + ' para el cálculo de tu transportista.');
       }
-
-      alert('✓ Alojamiento "' + formattedName + '" guardado con éxito. Se ha asignado a la parada de ' + town + ' para el cálculo de tu transportista.');
     }
 
     let availableCouriersFromDb = [];

@@ -130,6 +130,7 @@ function loadDb() {
       }
     });
 
+    db.customHostels = db.customHostels || [];
     if (migrated) saveDb(db);
     return db;
   } catch (err) {
