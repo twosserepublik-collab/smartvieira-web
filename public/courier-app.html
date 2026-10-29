@@ -100,11 +100,11 @@ function switchTab(tabName) {
         <option value="KO">🇰🇷 KO</option>
       </select>
       <!-- REFRESH BUTTON -->
-      <button id="refreshBtn" onclick="manualRefresh()" title="Recargar mochilas" class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 text-base font-black hover:bg-slate-200 transition-all shadow-sm">
-        🔄
+      <button id="refreshBtn" onclick="manualRefresh()" title="Recargar mochilas" class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition-all shadow-sm">
+        <svg class="w-4 h-4 stroke-current fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
       </button>
       <div id="headerCourierStatus" onclick="currentCourier ? switchTab('Perfil') : toggleCourierAuthView()" class="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-extrabold border border-slate-300 cursor-pointer hover:border-slate-400 shadow-sm">
-        <span id="txtCourierHeader">🚚 Acceder (v13.9.3)</span>
+        <span id="txtCourierHeader" class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 17h4"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M2 5h12v12H2Z"/><path d="M14 8h4l3 3v6h-2"/></svg> <span>Acceder (v13.9.4)</span></span>
       </div>
     </div>
   </header>
@@ -116,10 +116,10 @@ function switchTab(tabName) {
     <div id="courierAuthSection" class="glass-card rounded-3xl p-6 border border-slate-200 space-y-5 shadow-sm">
       <div class="flex p-1 rounded-2xl bg-slate-100 border border-slate-200 text-xs font-black">
         <button onclick="setCourierAuthTab('login')" id="btnCourierTabLogin" class="w-1/2 py-2.5 rounded-xl bg-slate-900 text-white shadow-sm transition-all">
-          🔑 Iniciar Sesión
+          <span class="flex items-center justify-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg> <span>Iniciar Sesión</span></span>
         </button>
         <button onclick="setCourierAuthTab('register')" id="btnCourierTabRegister" class="w-1/2 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition-all">
-          🏢 Alta de Empresa
+          <span class="flex items-center justify-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/></svg> <span>Alta de Empresa</span></span>
         </button>
       </div>
 
@@ -144,15 +144,15 @@ function switchTab(tabName) {
 
         <div class="flex justify-end">
           <button type="button" onclick="toggleCourierRecoverBox()" class="text-xs font-bold text-amber-600 hover:underline">
-            🔑 ¿Has olvidado tu contraseña? Recupérala aquí
+            <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg> <span>¿Has olvidado tu contraseña? Recupérala aquí</span></span>
           </button>
         </div>
 
         <div id="courierRecoverBox" class="hidden p-3.5 rounded-2xl bg-slate-50 border border-amber-300 space-y-2.5 shadow-sm">
-          <p class="text-[11px] text-slate-700 font-bold">📧 Introduce tu correo de empresa y te enviaremos tu contraseña:</p>
+          <p class="text-[11px] text-slate-700 font-bold"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> <span>Introduce tu correo de empresa y te enviaremos tu contraseña:</span></span></p>
           <input type="email" id="courierRecoverEmail" placeholder="repartidor@empresa.com" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 focus:border-amber-500 focus:outline-none shadow-sm">
           <button type="button" onclick="handleCourierPasswordRecovery()" id="btnCourierRecoverSubmit" class="w-full py-2.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs hover:bg-amber-300 transition-all shadow-sm">
-            ✉️ Enviar Contraseña a mi Correo
+            <span class="flex items-center justify-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> <span>Enviar Contraseña a mi Correo</span></span>
           </button>
           <p id="courierRecoverMsg" class="text-[11px] font-bold hidden"></p>
         </div>
@@ -170,7 +170,7 @@ function switchTab(tabName) {
         </div>
 
         <div class="p-3 rounded-xl bg-amber-50 border border-amber-200">
-          <label class="block text-[10px] font-black text-amber-800 uppercase tracking-widest mb-1">🔑 Código Privado de Empresa (Admin) *</label>
+          <label class="block text-[10px] font-black text-amber-800 uppercase tracking-widest mb-1">Código Privado de Empresa (Admin) *</label>
           <input type="text" id="courierAccessCode" required placeholder="Ej. VIEIRA-COURIER-2026" value="VIEIRA-COURIER-2026" class="w-full px-3 py-2 rounded-lg bg-white border border-amber-400 text-xs font-mono text-amber-900 font-bold focus:outline-none shadow-sm">
           <p class="text-[9px] text-slate-500 mt-1">Código privado proporcionado por la dirección de SmartVieira.</p>
         </div>
@@ -208,12 +208,12 @@ function switchTab(tabName) {
 
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-[10px] font-bold text-slate-700 mb-1">📍 Inicio de Tramo</label>
+            <label class="block text-[10px] font-bold text-slate-700 mb-1"><span class="inline-flex items-center gap-1 text-slate-700"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> <span>Inicio de Tramo</span></span></label>
             <select id="courierRouteStart" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 font-medium focus:bg-white focus:border-amber-500 shadow-sm">
             </select>
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-slate-700 mb-1">🏁 Fin de Tramo</label>
+            <label class="block text-[10px] font-bold text-slate-700 mb-1"><span class="inline-flex items-center gap-1 text-slate-700"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg> <span>Fin de Tramo</span></span></label>
             <select id="courierRouteEnd" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 font-medium focus:bg-white focus:border-amber-500 shadow-sm">
             </select>
           </div>
@@ -269,7 +269,7 @@ function switchTab(tabName) {
         </div>
 
         <div class="glass-card rounded-3xl p-5 border border-slate-200 space-y-3 shadow-sm">
-          <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">🎒 Mochilas Contratadas</h3>
+          <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-1.5"><svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/><path d="M8 10h8"/></svg> <span>Mochilas Contratadas</span></h3>
           <div id="courierChecklistContainer" class="space-y-2 text-xs">
             <p class="text-xs text-slate-500 text-center py-3">Cargando hoja de ruta...</p>
           </div>
@@ -301,11 +301,11 @@ function switchTab(tabName) {
               <span class="text-[10px] font-black text-amber-600 uppercase tracking-widest block">Paso 1 • En Albergue de Origen</span>
               <span class="text-[10px] bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-bold">BLUETOOTH + GPS</span>
             </div>
-            <h3 class="text-sm font-black text-slate-900 mt-1">🚚 RECOGIDA DE MOCHILAS</h3>
+            <h3 class="text-sm font-black text-slate-900 mt-1 flex items-center gap-1.5"><svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 17h4"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M2 5h12v12H2Z"/><path d="M14 8h4l3 3v6h-2"/></svg> <span>RECOGIDA DE MOCHILAS</span></h3>
             <p class="text-[10px] text-slate-600 mt-0.5 leading-snug">Al pulsar, la app conecta por Bluetooth solo con las SmartVieiras que están en este albergue, las hace parpadear en ámbar y <strong>empieza a enviar tu GPS en tiempo real</strong> al peregrino.</p>
           </div>
-          <button onclick="triggerBulkPickupBlink()" id="btnPickup" class="w-full py-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-base shadow-md flex items-center justify-center space-x-3 active:scale-95 transition-all">
-            <span class="text-xl">⚡</span>
+          <button onclick="triggerBulkPickupBlink()" id="btnPickup" class="w-full py-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm shadow-md flex items-center justify-center space-x-2.5 active:scale-95 transition-all">
+            <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
             <span>RECOGIDA • Conectar BLE y Activar GPS</span>
           </button>
           <div id="pickupStatus" class="text-xs text-center text-slate-600 hidden"></div>
@@ -318,14 +318,14 @@ function switchTab(tabName) {
               <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Paso 2 • En Albergue de Destino</span>
               <span class="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md font-bold">ENTREGA FINAL</span>
             </div>
-            <h3 class="text-sm font-black text-slate-900 mt-1">🏁 ENTREGA EN ALBERGUE</h3>
+            <h3 class="text-sm font-black text-slate-900 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg> <span>ENTREGA EN ALBERGUE</span></h3>
             <p class="text-[10px] text-slate-600 mt-0.5 leading-snug">Selecciona el albergue de llegada. Parpadearán las vieiras a dejar allí, se guardará tu <strong>coordenada GPS exacta de entrega</strong> y se notificará al peregrino.</p>
           </div>
           <select id="courierDropoffHostelSelect" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 font-bold focus:border-emerald-500 focus:bg-white shadow-sm">
             <option value="">Cargando albergues de destino...</option>
           </select>
-          <button onclick="triggerHostelDropoffBlink()" id="btnDropoff" class="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-base shadow-md flex items-center justify-center space-x-3 active:scale-95 transition-all">
-            <span class="text-xl">📍</span>
+          <button onclick="triggerHostelDropoffBlink()" id="btnDropoff" class="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm shadow-md flex items-center justify-center space-x-2.5 active:scale-95 transition-all">
+            <svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
             <span>ENTREGA • Parpadear y Confirmar</span>
           </button>
           <div id="dropoffStatus" class="text-xs text-center text-slate-600 hidden"></div>
@@ -336,14 +336,15 @@ function switchTab(tabName) {
       <div id="tabActividad" class="hidden space-y-5 courier-tab pt-5">
         <div class="grid grid-cols-1 gap-4">
           <div class="w-full py-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between px-5 cursor-pointer" onclick="toggleStatus()">
-            <span id="lblToggleStatus" class="text-emerald-700 font-black text-base">🟢 ACTIVO</span>
+            <span id="lblToggleStatus" class="flex items-center gap-2 text-emerald-700 font-black text-base"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span><span>ACTIVO</span></span>
             <div class="relative">
               <div id="trackToggleStatus" class="block w-14 h-8 rounded-full bg-emerald-500 transition-colors"></div>
               <div id="dotToggleStatus" class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform translate-x-6 shadow-sm"></div>
             </div>
           </div>
-          <button onclick="triggerEmergency()" class="w-full py-4 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black text-base shadow-md transition-all flex items-center justify-center gap-2 mt-4">
-            🚨 EMERGENCIA
+          <button onclick="triggerEmergency()" class="w-full py-4 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black text-sm shadow-md transition-all flex items-center justify-center gap-2 mt-4">
+            <svg class="w-5 h-5 stroke-current fill-none shrink-0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>EMERGENCIA • Notificar Incidencia</span>
           </button>
         </div>
       </div>
@@ -359,8 +360,9 @@ function switchTab(tabName) {
             <p><span class="font-bold text-slate-500">Ruta:</span> <span id="perfilRuta" class="font-black text-slate-900"></span></p>
             <p><span class="font-bold text-slate-500">Correo:</span> <span id="perfilCorreo" class="font-black text-slate-900"></span></p>
           </div>
-          <button onclick="logoutCourier()" class="w-full py-3.5 rounded-2xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 font-extrabold text-xs mt-4 shadow-sm">
-            🚪 Cerrar Sesión
+          <button onclick="logoutCourier()" class="w-full py-3.5 rounded-2xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 font-extrabold text-xs mt-4 shadow-sm flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Cerrar Sesión</span>
           </button>
         </div>
       </div>
@@ -368,19 +370,19 @@ function switchTab(tabName) {
       <!-- BOTTOM NAV BAR -->
       <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2 flex items-center justify-around max-w-md mx-auto shadow-lg">
         <button onclick="switchTab('Mochilas')" id="navBtnMochilas" class="nav-btn flex flex-col items-center justify-center w-16 py-2 text-slate-950 font-black transition-all">
-          <span class="text-lg">🎒</span>
+          <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/><path d="M8 10h8"/></svg>
           <span class="text-[10px] font-extrabold tracking-widest uppercase">Mochilas</span>
         </button>
         <button onclick="switchTab('Reparto')" id="navBtnReparto" class="nav-btn flex flex-col items-center justify-center w-16 py-2 text-slate-400 hover:text-slate-600 transition-all">
-          <span class="text-lg">🚚</span>
+          <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 17h4"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M2 5h12v12H2Z"/><path d="M14 8h4l3 3v6h-2"/></svg>
           <span class="text-[10px] font-extrabold tracking-widest uppercase">Reparto</span>
         </button>
         <button onclick="switchTab('Actividad')" id="navBtnActividad" class="nav-btn flex flex-col items-center justify-center w-16 py-2 text-slate-400 hover:text-slate-600 transition-all">
-          <span class="text-lg">📊</span>
+          <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
           <span class="text-[10px] font-extrabold tracking-widest uppercase">Actividad</span>
         </button>
         <button onclick="switchTab('Perfil')" id="navBtnPerfil" class="nav-btn flex flex-col items-center justify-center w-16 py-2 text-slate-400 hover:text-slate-600 transition-all">
-          <span class="text-lg">👤</span>
+          <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <span class="text-[10px] font-extrabold tracking-widest uppercase">Perfil</span>
         </button>
       </nav>
@@ -546,7 +548,7 @@ function switchTab(tabName) {
       const courierHdrEl = document.getElementById('txtCourierHeader');
       if (courierHdrEl) {
         if (typeof currentCourier !== 'undefined' && currentCourier && currentCourier.driverName) {
-          courierHdrEl.innerText = '🚚 ' + currentCourier.driverName;
+          courierHdrEl.innerHTML = '<span class="flex items-center gap-1.5">' + '<svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 17h4"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M2 5h12v12H2Z"/><path d="M14 8h4l3 3v6h-2"/></svg>' + ' <span>' + currentCourier.driverName + '</span></span>';
         } else {
           courierHdrEl.innerText = currentAppLang === 'ES' ? '🚚 Acceder (v13.8.5)' : (VIEIRA_I18N[currentAppLang]?.['🚚 Acceder (v13.8.5)'] || '🚚 Acceder');
         }
@@ -743,7 +745,7 @@ function switchTab(tabName) {
           
           if (isCourierActive) {
             lbl.className = "text-emerald-700 font-black text-base";
-            lbl.innerHTML = "✅ ACTIVO";
+            lbl.innerHTML = '<span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span><span>ACTIVO</span></span>';
             track.className = "block w-14 h-8 rounded-full bg-emerald-500 transition-colors";
             dot.className = "dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform translate-x-6 shadow-sm";
           } else {
@@ -858,7 +860,7 @@ function switchTab(tabName) {
         if (lbl && track && dot) {
           if (isCourierActive) {
             lbl.className = 'text-emerald-400 font-black text-base';
-            lbl.innerHTML = '✅ ACTIVO';
+            lbl.innerHTML = '<span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span><span>ACTIVO</span></span>';
             track.className = 'block w-14 h-8 rounded-full bg-emerald-500 transition-colors';
             dot.className = 'dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform translate-x-6';
           } else {
@@ -877,7 +879,7 @@ function switchTab(tabName) {
         const welEl = document.getElementById('txtCourierWelcome');
         const vehEl = document.getElementById('txtDriverVehicle');
 
-        if (hdrEl) hdrEl.innerText = `🚚 ${dName}`;
+        if (hdrEl) hdrEl.innerHTML = '<span class="flex items-center gap-1.5">' + '<svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 17h4"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M2 5h12v12H2Z"/><path d="M14 8h4l3 3v6h-2"/></svg>' + ' <span>' + dName + '</span></span>';
         if (badgeEl) badgeEl.innerText = cName;
         if (welEl) welEl.innerText = `¡Buen Reparto, ${dName.split(' ')[0]}!`;
         if (vehEl) vehEl.innerText = `Vehículo: ${currentCourier.vehicle || 'Furgón'}`;
@@ -906,7 +908,7 @@ function switchTab(tabName) {
       currentCourier = null;
       myHiredSmartVieiraIds = [];
       myHiredReservationsObjects = [];
-      document.getElementById('txtCourierHeader').innerText = '🚚 Acceder / Registro Empresa';
+      document.getElementById('txtCourierHeader').innerHTML = '<span class="flex items-center gap-1.5">' + '<svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 17h4"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M2 5h12v12H2Z"/><path d="M14 8h4l3 3v6h-2"/></svg>' + ' <span>Acceder (v13.9.4)</span></span>';
       document.getElementById('courierDashboard').classList.add('hidden');
       document.getElementById('courierAuthSection').classList.remove('hidden');
       setCourierAuthTab('login');

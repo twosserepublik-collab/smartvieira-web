@@ -243,6 +243,16 @@
       color: #1E6B4B !important;
       border-color: #A3D4BE !important;
     }
+  
+    @keyframes scanLaser {
+      0% { top: 15%; opacity: 0.8; }
+      50% { top: 85%; opacity: 1; }
+      100% { top: 15%; opacity: 0.8; }
+    }
+    .laser-line {
+      position: absolute;
+      animation: scanLaser 2.2s ease-in-out infinite;
+    }
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -302,18 +312,18 @@
     <!-- ========================================================================= -->
     <!-- VIEW GUEST: REAL CAMERA QR SCANNER & MANUAL ID INPUT -->
     <!-- ========================================================================= -->
-    <section id="viewGuestLanding" class="space-y-6">
+        <section id="viewGuestLanding" class="space-y-6">
       
-      <!-- Welcome Guest Card -->
-      <div class="glass-card rounded-3xl p-6 text-center space-y-5 shadow-2xl border border-amber-500/30">
-        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 flex items-center justify-center mx-auto border border-amber-500/30">
-          <svg class="w-10 h-10"><use href="#icon-vieira-shell"></use></svg>
+      <!-- Welcome Guest Card (Camino Editorial Hospitality Design) -->
+      <div class="glass-card rounded-3xl p-6 text-center space-y-5 shadow-2xl border border-[#E5DEC9]">
+        <div class="w-16 h-16 rounded-2xl bg-[#EFE9DC] flex items-center justify-center mx-auto border border-[#DDD4C0] shadow-sm">
+          <svg class="w-10 h-10 text-[#8C5D35]"><use href="#icon-vieira-shell"></use></svg>
         </div>
 
-        <div class="space-y-2">
-          <span class="text-[10px] font-extrabold text-amber-400 uppercase tracking-widest block">Bienvenido a tu Camino</span>
-          <h2 class="text-2xl font-bold text-white serif-title">Vincula tu Concha Vieira</h2>
-          <p class="text-xs text-slate-300 font-medium leading-relaxed max-w-xs mx-auto">
+        <div class="space-y-1">
+          <span class="text-[10px] font-extrabold text-[#8C5D35] uppercase tracking-widest block">Bienvenido a tu Camino</span>
+          <h2 class="text-2xl font-bold text-[#1E4D3B] serif-title">Vincula tu Concha Vieira</h2>
+          <p class="text-xs text-slate-600 font-medium leading-relaxed max-w-xs mx-auto">
             Escanea el código QR grabado en la parte trasera de tu Vieira física o introduce su ID a mano.
           </p>
         </div>
@@ -322,74 +332,137 @@
         <div class="grid grid-cols-3 gap-2 pt-1 text-left">
           <div class="p-2.5 rounded-2xl bg-[#FAF7F0] border border-[#E5DEC9] flex flex-col items-center text-center space-y-1">
             <span class="w-6 h-6 rounded-full bg-[#1E4D3B] text-white text-[11px] font-bold flex items-center justify-center" style="color:#fff !important;">1</span>
-            <span class="text-[10px] font-bold text-slate-300 leading-tight">Escanea tu Vieira</span>
+            <span class="text-[10px] font-bold text-slate-700 leading-tight">Escanea tu Vieira</span>
           </div>
           <div class="p-2.5 rounded-2xl bg-[#FAF7F0] border border-[#E5DEC9] flex flex-col items-center text-center space-y-1">
-            <span class="w-6 h-6 rounded-full bg-[#EFE9DC] text-slate-400 text-[11px] font-bold flex items-center justify-center">2</span>
-            <span class="text-[10px] font-bold text-slate-300 leading-tight">Elige tus Albergues</span>
+            <span class="w-6 h-6 rounded-full bg-[#EFE9DC] text-slate-500 text-[11px] font-bold flex items-center justify-center">2</span>
+            <span class="text-[10px] font-bold text-slate-700 leading-tight">Elige tus Albergues</span>
           </div>
           <div class="p-2.5 rounded-2xl bg-[#FAF7F0] border border-[#E5DEC9] flex flex-col items-center text-center space-y-1">
-            <span class="w-6 h-6 rounded-full bg-[#EFE9DC] text-slate-400 text-[11px] font-bold flex items-center justify-center">3</span>
-            <span class="text-[10px] font-bold text-slate-300 leading-tight">Viaja sin Peso</span>
+            <span class="w-6 h-6 rounded-full bg-[#EFE9DC] text-slate-500 text-[11px] font-bold flex items-center justify-center">3</span>
+            <span class="text-[10px] font-bold text-slate-700 leading-tight">Viaja sin Peso</span>
           </div>
         </div>
 
-        <!-- INTUITIVE MODERN QR SCANNER TRIGGER -->
-        <div class="p-4 rounded-2xl bg-slate-900/90 border border-amber-500/30 space-y-3 text-left">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-amber-300">🔲 Escáner QR de Vieira</span>
-            <span id="cameraContextBadge" class="text-[10px] text-amber-400 font-bold">Cámara Trasera</span>
+        <!-- PROPUESTA A: CLEAN QR SCANNER CARD (NO BLACK VOID) -->
+        <div class="bg-white rounded-2xl p-5 border border-[#E5DEC9] shadow-sm text-center space-y-4">
+          <!-- Friendly Illustrated QR Graphic -->
+          <div class="w-20 h-20 mx-auto rounded-2xl bg-[#F7F4EB] border-2 border-dashed border-[#1E4D3B]/40 flex items-center justify-center relative p-3">
+            <svg class="w-12 h-12 text-[#1E4D3B]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="5" height="5" x="3" y="3" rx="1"/>
+              <rect width="5" height="5" x="16" y="3" rx="1"/>
+              <rect width="5" height="5" x="3" y="16" rx="1"/>
+              <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
+              <path d="M21 21v.01"/>
+              <path d="M12 7v3a2 2 0 0 1-2 2H7"/>
+              <path d="M12 12v3a2 2 0 0 0 2 2h3"/>
+              <path d="M12 3v1"/>
+              <path d="M12 20v1"/>
+            </svg>
           </div>
 
-          <!-- Video Stream element for real camera scanning -->
-          <div id="cameraScannerBox" class="relative rounded-2xl overflow-hidden bg-slate-950 border-2 border-amber-400 h-56 flex flex-col items-center justify-center text-center p-4">
-            <video id="webcamVideo" class="absolute inset-0 w-full h-full object-cover hidden" playsinline></video>
-            <canvas id="qrCanvas" class="hidden"></canvas>
-            
-            <div id="cameraPlaceholder" class="space-y-3">
-              <!-- Custom Visual QR Frame Icon -->
-              <div class="w-16 h-16 mx-auto relative border-2 border-dashed border-amber-400 rounded-xl flex items-center justify-center bg-amber-500/10 animate-pulse">
-                <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m0 14v1m8-8h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-              </div>
+          <div class="space-y-1">
+            <h4 class="text-xs font-extrabold text-slate-900">Escaneo Rápido con Cámara</h4>
+            <p class="text-[11px] text-slate-500">Apunta con la cámara de tu móvil al código QR de la concha.</p>
+          </div>
 
-              <p class="text-xs text-slate-300 font-bold">Pulsa para abrir el visor de cámara y enfocar el QR</p>
-              
-              <button onclick="startRealCameraScanner()" class="w-full py-3 rounded-xl gold-gradient text-slate-950 font-black text-xs shadow-lg flex items-center justify-center space-x-2">
-                <span>🔲 Abrir Escáner QR de Vieira</span>
+          <!-- Big Action Button -->
+          <button type="button" onclick="openQrScannerModal()" class="w-full py-3.5 rounded-xl bg-[#1E4D3B] hover:bg-[#16382B] text-white font-extrabold text-xs shadow-md flex items-center justify-center gap-2 transition-all active:scale-95">
+            <svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            <span>Abrir Cámara para Escanear</span>
+          </button>
+
+          <!-- Toggle manual input link -->
+          <div class="pt-1">
+            <button type="button" onclick="toggleManualIdSection()" class="text-xs font-bold text-[#8C5D35] hover:underline flex items-center justify-center gap-1.5 mx-auto">
+              <svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="6" x2="6.01" y1="10" y2="10"/><line x1="10" x2="10.01" y1="10" y2="10"/><line x1="14" x2="14.01" y1="10" y2="10"/><line x1="18" x2="18.01" y1="10" y2="10"/><line x1="8" x2="16" y1="15" y2="15"/></svg>
+              <span>¿No puedes escanear? Introducir ID a mano →</span>
+            </button>
+          </div>
+
+          <!-- Collapsible Manual ID Input Section -->
+          <div id="manualIdSection" class="hidden pt-3 border-t border-[#E5DEC9] space-y-2 text-left">
+            <label class="block text-xs font-bold text-slate-700">Introduce el ID grabado en la concha:</label>
+            <div class="flex space-x-2">
+              <input type="text" id="manualDeviceId" placeholder="Ej. VIEIRA-SMARTSHELL-S3-9982" class="w-full px-3 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs font-mono text-slate-900 focus:border-[#1E4D3B] focus:outline-none">
+              <button type="button" onclick="handleManualDeviceSubmit()" class="px-4 py-2.5 rounded-xl bg-[#1E4D3B] hover:bg-[#16382B] text-white font-black text-xs whitespace-nowrap shadow-sm">
+                Vincular ID
               </button>
             </div>
+          </div>
 
-            <!-- Fallback simulation button -->
-            <button onclick="simulateQrDetection('VIEIRA-SMARTSHELL-S3-9982')" class="absolute bottom-2 right-2 bg-slate-900/90 text-amber-300 border border-amber-500/40 text-[9px] px-2.5 py-1 rounded-md font-mono">
+          <!-- Fallback demo link -->
+          <div class="pt-1">
+            <button type="button" onclick="simulateQrDetection('VIEIRA-SMARTSHELL-S3-9982')" class="text-[10px] text-slate-400 hover:text-[#8C5D35] font-mono underline">
               [Vincular QR Demo: VIEIRA-SMARTSHELL-S3-9982]
             </button>
           </div>
-
-          <p class="text-[10px] text-slate-400 text-center">Al enfocar el QR grabado en tu concha, el ID se leerá en vivo y pasarás al registro.</p>
         </div>
 
-        <!-- Manual ID Input Option -->
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/60 text-left space-y-2">
-          <label class="block text-xs font-bold text-slate-300">¿Problemas con la lectura del QR? Introduce el ID a mano:</label>
-          <div class="flex space-x-2">
-            <input type="text" id="manualDeviceId" placeholder="Ej. VIEIRA-SMARTSHELL-S3-9982" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs font-mono text-amber-300 focus:border-amber-400 focus:outline-none">
-            <button onclick="handleManualDeviceSubmit()" class="px-4 py-2.5 rounded-xl gold-gradient text-slate-950 font-black text-xs whitespace-nowrap">
-              Vincular ID
-            </button>
-          </div>
-        </div>
-
-        <div class="pt-2 border-t border-slate-800">
-          <button onclick="goToAuthScreen(); setAuthTab('login');" class="w-full py-3.5 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-black hover:bg-amber-500/20">
-            🔑 ¿Ya estás registrado? Inicia Sesión →
+        <div class="pt-2 border-t border-[#E5DEC9]">
+          <button onclick="goToAuthScreen(); setAuthTab('login');" class="w-full py-3.5 rounded-2xl bg-[#EFE9DC] text-[#1E4D3B] border border-[#DDD4C0] text-xs font-black hover:bg-[#E5DEC9] flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
+            <span>¿Ya estás registrado? Inicia Sesión →</span>
           </button>
         </div>
 
       </div>
 
     </section>
+
+    <!-- FULLSCREEN MODAL VIEWFINDER (PROPUESTA A) -->
+    <div id="qrScannerModal" class="hidden fixed inset-0 z-50 bg-black/95 flex flex-col justify-between p-4 md:p-8">
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between text-white pt-2 px-2 z-20">
+        <button type="button" onclick="closeQrScannerModal()" title="Cerrar cámara" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center transition-all text-white">
+          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <div class="text-center">
+          <span class="text-xs font-black uppercase tracking-wider text-amber-400 block">SmartVieira QR</span>
+          <h3 class="text-sm font-bold text-white">Apunta al código de tu Vieira</h3>
+        </div>
+        <button type="button" id="btnToggleTorch" onclick="toggleTorch()" title="Encender linterna" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center transition-all text-white">
+          <svg class="w-5 h-5 stroke-current fill-none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6c0 2-2 4-2 6v6a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-6c0-2-2-4-2-6V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2Z"/><line x1="6" y1="10" x2="18" y2="10"/></svg>
+        </button>
+      </div>
+
+      <!-- Center Viewfinder -->
+      <div class="relative flex-1 flex flex-col items-center justify-center my-4 overflow-hidden rounded-3xl">
+        <!-- Live Video & Canvas -->
+        <video id="webcamVideo" class="absolute inset-0 w-full h-full object-cover" playsinline></video>
+        <canvas id="qrCanvas" class="hidden"></canvas>
+
+        <!-- Viewfinder Framing with 4 Amber Corners -->
+        <div class="relative w-64 h-64 z-10 flex flex-col justify-between p-2 pointer-events-none">
+          <div class="flex justify-between">
+            <div class="w-8 h-8 border-t-4 border-l-4 border-amber-400 rounded-tl-xl shadow-lg"></div>
+            <div class="w-8 h-8 border-t-4 border-r-4 border-amber-400 rounded-tr-xl shadow-lg"></div>
+          </div>
+
+          <!-- Animated Laser Line -->
+          <div class="w-full h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent laser-line relative shadow-lg shadow-amber-400/50"></div>
+
+          <div class="flex justify-between">
+            <div class="w-8 h-8 border-b-4 border-l-4 border-amber-400 rounded-bl-xl shadow-lg"></div>
+            <div class="w-8 h-8 border-b-4 border-r-4 border-amber-400 rounded-br-xl shadow-lg"></div>
+          </div>
+        </div>
+
+        <!-- Guidance Floating Pill -->
+        <div class="absolute bottom-6 z-10 bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg pointer-events-none flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+          <span>Mantén centrado el código QR</span>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="text-center space-y-3 pb-2 z-20">
+        <button type="button" onclick="closeQrScannerModal(); toggleManualIdSection(true);" class="w-full max-w-xs mx-auto py-3 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold text-xs border border-white/20 flex items-center justify-center gap-2">
+          <svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="6" x2="6.01" y1="10" y2="10"/><line x1="10" x2="10.01" y1="10" y2="10"/><line x1="14" x2="14.01" y1="10" y2="10"/><line x1="18" x2="18.01" y1="10" y2="10"/><line x1="8" x2="16" y1="15" y2="15"/></svg>
+          <span>Introducir ID a mano</span>
+        </button>
+      </div>
+    </div>
 
     <!-- ========================================================================= -->
     <!-- VIEW AUTH: DUAL AUTHENTICATION WITH STRICT DB VALIDATION -->
@@ -426,15 +499,15 @@
 
         <div class="flex justify-end">
           <button type="button" onclick="togglePilgrimRecoverBox()" class="text-xs font-bold text-amber-400 hover:underline">
-            🔑 ¿Has olvidado tu contraseña? Recupérala aquí
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg> <span>¿Has olvidado tu contraseña? Recupérala aquí</span></span>
           </button>
         </div>
 
         <div id="pilgrimRecoverBox" class="hidden p-3.5 rounded-2xl bg-slate-900 border border-amber-500/40 space-y-2.5">
-          <p class="text-[11px] text-slate-300 font-bold">📧 Introduce tu correo y te enviaremos tu contraseña:</p>
+          <p class="text-[11px] text-slate-300 font-bold"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> <span>Introduce tu correo y te enviaremos tu contraseña:</span></span></p>
           <input type="email" id="pilgrimRecoverEmail" placeholder="tuemail@ejemplo.com" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
           <button type="button" onclick="handlePilgrimPasswordRecovery()" id="btnPilgrimRecoverSubmit" class="w-full py-2.5 rounded-xl bg-amber-500 text-slate-950 font-black text-xs hover:bg-amber-400 transition-all">
-            ✉️ Enviar Contraseña a mi Correo
+            <span class="flex items-center justify-center gap-1.5"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> <span>Enviar Contraseña a mi Correo</span></span>
           </button>
           <p id="pilgrimRecoverMsg" class="text-[11px] font-bold hidden"></p>
         </div>
@@ -520,7 +593,7 @@
       <div id="tutorialStep1Card" class="glass-card rounded-3xl p-6 space-y-5 shadow-2xl border border-amber-500/40 text-center">
         <div class="flex items-center justify-between">
           <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
-            <span>📖 Registro Completado con Éxito</span>
+            <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg><span>Registro Completado con Éxito</span></span>
           </div>
           <span class="text-[11px] font-extrabold text-amber-400 uppercase tracking-wider">Paso 1 de 2</span>
         </div>
@@ -550,7 +623,7 @@
       <div id="tutorialStep2Card" class="hidden glass-card rounded-3xl p-6 space-y-5 shadow-2xl border border-amber-500/40 text-center">
         <div class="flex items-center justify-between">
           <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
-            <span>📖 Registro Completado con Éxito</span>
+            <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg><span>Registro Completado con Éxito</span></span>
           </div>
           <span class="text-[11px] font-extrabold text-amber-400 uppercase tracking-wider">Paso 2 de 2</span>
         </div>
@@ -562,7 +635,7 @@
           <div class="space-y-1.5">
             <h3 class="text-sm font-extrabold text-white">Conexión Bluetooth BLE Exclusiva</h3>
             <p class="text-xs text-slate-300 leading-relaxed">Solo podrás conectar tu teléfono por Bluetooth a la concha física que coincide con tu ID registrado.</p>
-            <p class="text-[11px] text-emerald-400 font-bold pt-1">🔄 Auto-Conexión: Conéctala ahora por primera vez y la app se reconectará sola cuando vuelvas a entrar. También podrás reconectarla siempre que quieras desde la pestaña «Vieira».</p>
+            <p class="text-[11px] text-emerald-400 font-bold pt-1">Auto-Conexión: Conéctala ahora por primera vez y la app se reconectará sola cuando vuelvas a entrar. También podrás reconectarla siempre que quieras desde la pestaña «Vieira».</p>
           </div>
         </div>
 
@@ -578,7 +651,7 @@
 
         <div class="space-y-2.5">
           <button type="button" id="btnTutorialConnectBle" onclick="connectBleFromTutorial()" class="w-full py-4 rounded-2xl gold-gradient text-slate-950 font-black text-sm shadow-xl hover:scale-[1.01] transition-all flex items-center justify-center space-x-2">
-            <span>🔍 Conectar mi SmartVieira por Bluetooth BLE</span>
+            <span class="flex items-center justify-center gap-2"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m7 7 10 10-5 5V2l5 5L7 17"/></svg><span>Conectar mi SmartVieira por Bluetooth BLE</span></span>
           </button>
           <button type="button" onclick="finishTutorialAndGoHome()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-all">
             Vincular más tarde e ir a Inicio →
@@ -811,13 +884,13 @@
               G Pay • Pagar con Google Pay
             </button>
             <button onclick="confirmBooking('Tarjeta')" class="w-full py-3 rounded-xl bg-amber-500 text-slate-950 text-xs font-black hover:bg-amber-400">
-              💳 Tarjeta de Crédito / Débito
+              <span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg><span>Tarjeta de Crédito / Débito</span></span>
             </button>
             <button onclick="confirmBooking('PayPal')" class="w-full py-3 rounded-xl bg-[#0070BA] text-white text-xs font-black hover:bg-[#005ea6] flex items-center justify-center space-x-1.5 shadow-md">
               <span>🅿️ Pagar con PayPal</span>
             </button>
             <button onclick="confirmBooking('Bizum')" class="w-full py-3 rounded-xl bg-[#05C3DD] text-slate-950 text-xs font-black hover:bg-[#04b0c8] flex items-center justify-center space-x-1.5 shadow-md">
-              <span>📲 Pagar con Bizum</span>
+              <span>Pagar con Bizum</span>
             </button>
           </div>
         </div>
@@ -866,7 +939,7 @@
 
         <!-- Real BLE Connect / Reconnect Button -->
         <button onclick="connectRealBLEHardware()" id="btnConnectRealBle" class="w-full py-3 rounded-xl bg-amber-500 text-slate-950 font-black text-xs shadow-md hover:bg-amber-400 flex items-center justify-center space-x-2">
-          <span>🔍 Conectar mi SmartVieira por Bluetooth BLE</span>
+          <span class="flex items-center justify-center gap-2"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m7 7 10 10-5 5V2l5 5L7 17"/></svg><span>Conectar mi SmartVieira por Bluetooth BLE</span></span>
         </button>
       </div>
 
@@ -887,7 +960,7 @@
         <!-- SINGLE HORIZONTAL COLOR BAR SLIDER -->
         <div class="space-y-4">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-extrabold text-amber-300">🎨 Seleccionar Color de Luz:</label>
+            <label class="text-xs font-extrabold text-amber-300"><span class="inline-flex items-center gap-1.5 text-amber-900"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg><span>Seleccionar Color de Luz</span></span>:</label>
             <div class="flex items-center space-x-2">
               <span id="colorPreviewDot" class="w-4 h-4 rounded-full border border-white/40 bg-red-500 shadow-md"></span>
               <span id="selectedColorName" class="text-xs font-bold text-white">Rojo</span>
@@ -909,7 +982,7 @@
 
         <div class="pt-2 border-t border-slate-800">
           <button onclick="turnOffLedManual()" class="w-full py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-extrabold border border-slate-700 flex items-center justify-center space-x-2">
-            <span>🔌 Apagar Luz Ahora (Standby)</span>
+            <span class="inline-flex items-center justify-center gap-1.5"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg><span>Apagar Luz Ahora (Standby)</span></span>
           </button>
         </div>
 
@@ -937,11 +1010,11 @@
       </div>
 
       <button id="profileLogoutBtn" onclick="handleLogout()" class="w-full py-4 rounded-2xl bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-extrabold hover:bg-red-500/30 transition-all">
-        🚪 Cerrar Sesión en esta App
+        <span class="flex items-center justify-center gap-1.5"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Cerrar Sesión en esta App</span></span>
       </button>
 
       <button id="profileLoginBtn" onclick="goToAuthScreen()" class="hidden w-full py-4 rounded-2xl gold-gradient text-slate-950 text-xs font-black hover:scale-[1.01] transition-all">
-        🔑 Iniciar Sesión
+        <span class="flex items-center justify-center gap-1.5"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg><span>Iniciar Sesión</span></span>
       </button>
     </div>
 
@@ -1027,7 +1100,7 @@
         <div class="flex space-x-2 pt-2">
           <button onclick="closeStripeModal()" class="w-1/3 py-3 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">Cancelar</button>
           <button id="btnSubmitStripePayment" onclick="processStripePaymentSubmit()" class="w-2/3 py-3.5 rounded-xl gold-gradient text-slate-950 font-black text-xs shadow-lg flex items-center justify-center space-x-1">
-            <span>🔒 Confirmar y Pagar Ahora</span>
+            <span class="flex items-center justify-center gap-2"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Confirmar y Pagar Ahora</span></span>
           </button>
         </div>
       </div>
@@ -1036,24 +1109,24 @@
   </main>
 
   <!-- Bottom Navigation Bar (ONLY SHOWN TO LOGGED IN USERS) -->
-  <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-amber-500/20 px-4 py-2 flex items-center justify-around max-w-md mx-auto">
-    <button onclick="switchTab('tabHome')" class="nav-btn flex flex-col items-center space-y-0.5 text-amber-400" id="navBtnHome">
-      <span class="text-lg">🏠</span>
+  <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-[#E5DEC9] px-4 py-2 flex items-center justify-around max-w-md mx-auto">
+    <button onclick="switchTab('tabHome')" class="nav-btn flex flex-col items-center space-y-0.5 text-amber-500" id="navBtnHome">
+      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span class="text-[10px] font-extrabold">Inicio</span>
     </button>
     
-    <button onclick="switchTab('tabBook')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-300" id="navBtnBook">
-      <span class="text-lg">🎒</span>
+    <button onclick="switchTab('tabBook')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnBook">
+      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/><path d="M8 10h8"/></svg>
       <span class="text-[10px] font-extrabold">Reservar</span>
     </button>
 
-    <button onclick="switchTab('tabShell')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-300" id="navBtnShell">
+    <button onclick="switchTab('tabShell')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnShell">
       <svg class="w-5 h-5"><use href="#icon-vieira-shell"></use></svg>
       <span class="text-[10px] font-extrabold">Vieira</span>
     </button>
 
-    <button onclick="switchTab('tabProfile')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-300" id="navBtnProfile">
-      <span class="text-lg">👤</span>
+    <button onclick="switchTab('tabProfile')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnProfile">
+      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span class="text-[10px] font-extrabold">Perfil</span>
     </button>
   </nav>
@@ -2030,27 +2103,79 @@
       if (typeof applyGlobalTranslations === "function") applyGlobalTranslations(currentAppLang);
     }
 
-    // SAFE CAMERA SCANNER WITH DEFENSIVE CHECKS
-    async function startRealCameraScanner() {
+    // SAFE CAMERA SCANNER WITH MODAL (PROPUESTA A)
+    let isTorchActive = false;
 
-      const placeholder = document.getElementById('cameraPlaceholder');
+    async function openQrScannerModal() {
+      const modal = document.getElementById('qrScannerModal');
+      if (modal) modal.classList.remove('hidden');
+      await startRealCameraScanner();
+    }
+
+    function closeQrScannerModal() {
+      stopCameraScanner();
+      const modal = document.getElementById('qrScannerModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function toggleManualIdSection(forceOpen) {
+      const sec = document.getElementById('manualIdSection');
+      if (!sec) return;
+      if (forceOpen === true) {
+        sec.classList.remove('hidden');
+        const inp = document.getElementById('manualDeviceId');
+        if (inp) inp.focus();
+      } else {
+        sec.classList.toggle('hidden');
+        if (!sec.classList.contains('hidden')) {
+          const inp = document.getElementById('manualDeviceId');
+          if (inp) inp.focus();
+        }
+      }
+    }
+
+    async function toggleTorch() {
+      if (!cameraScanStream) return;
+      const track = cameraScanStream.getVideoTracks()[0];
+      if (!track) return;
+      const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+      if (capabilities.torch) {
+        isTorchActive = !isTorchActive;
+        try {
+          await track.applyConstraints({ advanced: [{ torch: isTorchActive }] });
+          const btn = document.getElementById('btnToggleTorch');
+          if (btn) {
+            btn.className = isTorchActive
+              ? 'w-10 h-10 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center transition-all shadow-md'
+              : 'w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center transition-all text-white';
+          }
+        } catch (e) {
+          console.warn('Torch constraint error', e);
+        }
+      } else {
+        alert('Linterna no soportada en la cámara de este dispositivo.');
+      }
+    }
+
+    async function startRealCameraScanner() {
       const video = document.getElementById('webcamVideo');
       const canvas = document.getElementById('qrCanvas');
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas ? canvas.getContext('2d') : null;
 
       try {
         cameraScanStream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: "environment" }
         });
         
-        video.srcObject = cameraScanStream;
-        video.setAttribute("playsinline", true);
-        video.classList.remove('hidden');
-        placeholder.classList.add('hidden');
-        await video.play();
+        if (video) {
+          video.srcObject = cameraScanStream;
+          video.setAttribute("playsinline", true);
+          video.classList.remove('hidden');
+          await video.play();
+        }
 
         function tick() {
-          if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          if (video && video.readyState === video.HAVE_ENOUGH_DATA && canvas && ctx) {
             canvas.height = video.videoHeight;
             canvas.width = video.videoWidth;
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -2061,7 +2186,7 @@
             });
 
             if (code && code.data) {
-              stopCameraScanner();
+              closeQrScannerModal();
               
               let extractedId = code.data;
               if (extractedId.includes('shell=')) {
@@ -2077,7 +2202,9 @@
 
         scanAnimationId = requestAnimationFrame(tick);
       } catch (err) {
-        alert("⚠️ Error al acceder a la cámara: " + err.message + "\nPuedes introducir el ID a mano abajo o usar el botón demo.");
+        alert("⚠️ Error al acceder a la cámara: " + err.message + "\nPuedes introducir el ID a mano o usar el botón demo.");
+        closeQrScannerModal();
+        toggleManualIdSection(true);
       }
     }
 
@@ -2085,13 +2212,15 @@
       if (scanAnimationId) cancelAnimationFrame(scanAnimationId);
       if (cameraScanStream) {
         cameraScanStream.getTracks().forEach(track => track.stop());
+        cameraScanStream = null;
       }
-      document.getElementById('webcamVideo').classList.add('hidden');
-      document.getElementById('cameraPlaceholder').classList.remove('hidden');
+      isTorchActive = false;
+      const video = document.getElementById('webcamVideo');
+      if (video) video.classList.add('hidden');
     }
 
     function simulateQrDetection(deviceId) {
-      stopCameraScanner();
+      closeQrScannerModal();
       document.getElementById('regDeviceId').value = deviceId;
       alert(`📷 ¡CÓDIGO QR DETECTADO!\nID Concha: "${deviceId}"\nProcede a registrarte para asociar este dispositivo en BD.`);
       goToAuthScreen();
