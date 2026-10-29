@@ -253,6 +253,14 @@
       position: absolute;
       animation: scanLaser 2.2s ease-in-out infinite;
     }
+  
+    @keyframes slideUpModal {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-up {
+      animation: slideUpModal 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -994,7 +1002,53 @@
     <!-- ========================================================================= -->
     <div id="tabProfile" class="tab-content hidden space-y-5">
       
-      <div id="profileUserContent" class="glass-card rounded-3xl p-5 border border-amber-500/30 space-y-3">
+      <div id="profileUserContent" class="glass-card rounded-3xl p-5 border border-[#E5DEC9] space-y-3 bg-white shadow-sm">
+        <div class="w-16 h-16 rounded-2xl bg-[#EFE9DC] border border-[#DDD4C0] text-[#8C5D35] flex items-center justify-center mx-auto shadow-sm">
+          <svg class="w-10 h-10"><use href="#icon-vieira-shell"></use></svg>
+        </div>
+        <div class="text-center">
+          <h2 id="profFullName" class="text-lg font-black text-[#1E4D3B] serif-title">Santiago Peregrino</h2>
+          <p id="profEmail" class="text-xs text-slate-500 font-mono">santiago@camino.app</p>
+        </div>
+
+        <div class="pt-3 border-t border-[#E5DEC9] space-y-2 text-xs">
+          <div class="flex justify-between text-slate-600"><span>Idioma Configurado:</span><strong id="profLang" class="text-slate-900 font-bold">Español 🇪🇸</strong></div>
+          <div class="flex justify-between text-slate-600"><span>Dispositivo Vinculado BD:</span><strong id="profDeviceId" class="text-[#8C5D35] font-mono font-bold">VIEIRA-SMARTSHELL-S3-9982</strong></div>
+        </div>
+      </div>
+
+      <!-- HOSPITALERO DIGITAL ACCESS CARD (100% OFFLINE) -->
+      <div class="glass-card rounded-3xl p-5 border border-[#E5DEC9] space-y-3.5 shadow-md bg-gradient-to-br from-white via-[#FAF7F0] to-[#EFE9DC]/70">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 rounded-2xl bg-[#1E4D3B] text-amber-300 flex items-center justify-center shadow-md shrink-0">
+              <svg class="w-7 h-7"><use href="#icon-vieira-shell"></use></svg>
+            </div>
+            <div>
+              <span class="text-[10px] font-extrabold text-[#8C5D35] uppercase tracking-wider block">Soporte Inteligente</span>
+              <h3 class="text-base font-bold text-[#1E4D3B] serif-title">Hospitalero Digital</h3>
+            </div>
+          </div>
+          <span class="text-[10px] bg-emerald-100 text-emerald-800 font-extrabold px-2.5 py-1 rounded-full border border-emerald-200">100% Offline</span>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Consulta al instante el estado en vivo de tu mochila, qué hacer si llegas tarde o cambias de albergue, el funcionamiento de tu concha o la historia y secretos de tu ruta.
+        </p>
+
+        <!-- Quick highlights badges -->
+        <div class="flex flex-wrap gap-1.5 pt-0.5">
+          <span class="text-[10px] font-bold bg-white text-slate-700 px-2.5 py-1 rounded-lg border border-[#E5DEC9] shadow-2xs">🎒 Estado Mochila</span>
+          <span class="text-[10px] font-bold bg-white text-slate-700 px-2.5 py-1 rounded-lg border border-[#E5DEC9] shadow-2xs">🏨 Cambios de Albergue</span>
+          <span class="text-[10px] font-bold bg-white text-slate-700 px-2.5 py-1 rounded-lg border border-[#E5DEC9] shadow-2xs">💡 Luces en el albergue</span>
+          <span class="text-[10px] font-bold bg-white text-slate-700 px-2.5 py-1 rounded-lg border border-[#E5DEC9] shadow-2xs">🏛️ Historia del Camino</span>
+        </div>
+
+        <button type="button" onclick="openPilgrimChatbotModal()" class="w-full py-3.5 rounded-xl bg-[#1E4D3B] hover:bg-[#16382B] text-white font-extrabold text-xs shadow-md flex items-center justify-center gap-2 transition-all active:scale-95">
+          <svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Abrir Chat con el Hospitalero →</span>
+        </button>
+      </div>
         <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 font-black text-2xl flex items-center justify-center mx-auto shadow-xl">
           <svg class="w-10 h-10"><use href="#icon-vieira-shell"></use></svg>
         </div>
@@ -1103,6 +1157,93 @@
             <span class="flex items-center justify-center gap-2"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Confirmar y Pagar Ahora</span></span>
           </button>
         </div>
+      </div>
+    </div>
+
+  
+    <!-- ========================================================================= -->
+    <!-- MODAL CHATBOT HOSPITALERO DIGITAL (100% OFFLINE) -->
+    <!-- ========================================================================= -->
+    <div id="pilgrimChatbotModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex flex-col justify-end md:justify-center items-center p-0 md:p-4">
+      
+      <!-- Chat Window Dialog -->
+      <div class="w-full max-w-lg h-[92vh] md:h-[650px] bg-[#FAF7F0] rounded-t-3xl md:rounded-3xl border border-[#E5DEC9] shadow-2xl flex flex-col overflow-hidden animate-slide-up">
+        
+        <!-- Chat Header -->
+        <div class="px-5 py-4 bg-[#1E4D3B] text-white flex items-center justify-between shadow-md shrink-0">
+          <div class="flex items-center space-x-3">
+            <div class="relative">
+              <div class="w-10 h-10 rounded-full bg-[#EFE9DC] flex items-center justify-center border-2 border-amber-400 text-[#8C5D35] shadow-sm">
+                <svg class="w-6 h-6"><use href="#icon-vieira-shell"></use></svg>
+              </div>
+              <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#1E4D3B]"></span>
+            </div>
+            <div>
+              <h3 class="text-sm font-black tracking-wide flex items-center gap-1.5">
+                <span>Hospitalero Digital</span>
+                <span class="text-[9px] bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/30 font-bold uppercase">Offline</span>
+              </h3>
+              <p class="text-[11px] text-emerald-200 font-medium">Asistente SmartVieira • Sin consumo de datos</p>
+            </div>
+          </div>
+
+          <button type="button" onclick="closePilgrimChatbotModal()" title="Cerrar chat" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all">
+            <svg class="w-5 h-5 stroke-current fill-none" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+
+        <!-- Quick Topics Chips (Horizontal Carousel) -->
+        <div class="px-4 py-2.5 bg-[#EFE9DC] border-b border-[#E5DEC9] flex items-center gap-2 overflow-x-auto shrink-0 no-scrollbar">
+          <button type="button" onclick="handleQuickChipClick('¿Dónde está mi mochila ahora?')" class="text-[11px] font-bold bg-white hover:bg-amber-50 text-slate-800 px-3 py-1.5 rounded-full border border-[#DDD4C0] whitespace-nowrap shadow-2xs transition-all active:scale-95">
+            🎒 Estado de mi mochila
+          </button>
+          <button type="button" onclick="handleQuickChipClick('¿Qué pasa si llego tarde al albergue?')" class="text-[11px] font-bold bg-white hover:bg-amber-50 text-slate-800 px-3 py-1.5 rounded-full border border-[#DDD4C0] whitespace-nowrap shadow-2xs transition-all active:scale-95">
+            ⏰ Si llego tarde
+          </button>
+          <button type="button" onclick="handleQuickChipClick('¿Qué hago si tengo que cambiar de albergue?')" class="text-[11px] font-bold bg-white hover:bg-amber-50 text-slate-800 px-3 py-1.5 rounded-full border border-[#DDD4C0] whitespace-nowrap shadow-2xs transition-all active:scale-95">
+            🏨 Cambio de albergue
+          </button>
+          <button type="button" onclick="handleQuickChipClick('¿Para qué sirve y cómo uso las luces de mi concha?')" class="text-[11px] font-bold bg-white hover:bg-amber-50 text-slate-800 px-3 py-1.5 rounded-full border border-[#DDD4C0] whitespace-nowrap shadow-2xs transition-all active:scale-95">
+            💡 Luces de la concha
+          </button>
+          <button type="button" onclick="handleQuickChipClick('¿Cuál es la historia de la concha vieira?')" class="text-[11px] font-bold bg-white hover:bg-amber-50 text-slate-800 px-3 py-1.5 rounded-full border border-[#DDD4C0] whitespace-nowrap shadow-2xs transition-all active:scale-95">
+            🐚 Historia de la Vieira
+          </button>
+          <button type="button" onclick="handleQuickChipClick('¿Cuáles son los teléfonos de emergencia?')" class="text-[11px] font-bold bg-white hover:bg-amber-50 text-slate-800 px-3 py-1.5 rounded-full border border-[#DDD4C0] whitespace-nowrap shadow-2xs transition-all active:scale-95">
+            🚨 Emergencias 112
+          </button>
+        </div>
+
+        <!-- Chat Thread Message Area -->
+        <div id="chatMessagesThread" class="flex-1 p-4 overflow-y-auto space-y-4 text-xs">
+          <!-- Initial Welcome Message from Bot -->
+          <div class="flex items-start gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-[#1E4D3B] text-amber-300 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+              <svg class="w-5 h-5"><use href="#icon-vieira-shell"></use></svg>
+            </div>
+            <div class="bg-white border border-[#E5DEC9] p-3.5 rounded-2xl rounded-tl-sm text-slate-800 shadow-sm space-y-1.5 max-w-[85%] leading-relaxed">
+              <span class="text-[10px] font-black text-[#1E4D3B] uppercase tracking-wider block">Hospitalero Digital</span>
+              <p>¡Buen Camino, peregrino! 👋 Soy tu hospitalero digital en SmartVieira.</p>
+              <p>Puedo informarte del <strong>estado en vivo de tu mochila</strong>, resolver <strong>imprevistos o cambios de albergue</strong>, explicarte cómo usar las luces de tu concha o contarte la <strong>historia y monumentos</strong> de esta ruta.</p>
+              <p class="text-[11px] text-slate-500 pt-1">Pulsa una sugerencia rápida arriba o escríbeme abajo tu consulta.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Bar -->
+        <div class="p-3 bg-white border-t border-[#E5DEC9] shrink-0">
+          <form onsubmit="handleChatSubmit(event)" class="flex items-center gap-2">
+            <input type="text" id="chatInputText" autocomplete="off" placeholder="Escribe tu consulta (ej. 'cambio de albergue')..." class="flex-1 px-4 py-3 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#1E4D3B] focus:bg-white transition-all shadow-inner">
+            <button type="submit" class="w-11 h-11 rounded-xl bg-[#1E4D3B] hover:bg-[#16382B] text-white flex items-center justify-center transition-all shrink-0 shadow-md active:scale-95">
+              <svg class="w-5 h-5 stroke-current fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </form>
+          <div class="flex justify-between items-center text-[10px] text-slate-400 px-1 pt-1.5">
+            <span>⚡ Modo 100% offline • Sin consumo de datos</span>
+            <span>SmartVieira IA</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -2765,6 +2906,392 @@
         `;
         }).join('');
       }
+    }
+
+    
+    // =========================================================================
+    // HOSPITALERO DIGITAL (100% OFFLINE INTELLIGENT CHATBOT)
+    // =========================================================================
+
+    function openPilgrimChatbotModal() {
+      const modal = document.getElementById('pilgrimChatbotModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          const inp = document.getElementById('chatInputText');
+          if (inp) inp.focus();
+          scrollChatToBottom();
+        }, 100);
+      }
+    }
+
+    function closePilgrimChatbotModal() {
+      const modal = document.getElementById('pilgrimChatbotModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function scrollChatToBottom() {
+      const thread = document.getElementById('chatMessagesThread');
+      if (thread) {
+        thread.scrollTop = thread.scrollHeight;
+      }
+    }
+
+    function handleQuickChipClick(chipText) {
+      const inp = document.getElementById('chatInputText');
+      if (inp) inp.value = chipText;
+      processUserChat(chipText);
+    }
+
+    function handleChatSubmit(e) {
+      if (e) e.preventDefault();
+      const inp = document.getElementById('chatInputText');
+      if (!inp) return;
+      const text = inp.value.trim();
+      if (!text) return;
+      inp.value = '';
+      processUserChat(text);
+    }
+
+    function appendUserMessage(text) {
+      const thread = document.getElementById('chatMessagesThread');
+      if (!thread) return;
+
+      const userBubble = document.createElement('div');
+      userBubble.className = 'flex justify-end';
+      userBubble.innerHTML = `
+        <div class="bg-[#1E4D3B] text-white p-3.5 rounded-2xl rounded-tr-sm max-w-[85%] shadow-sm leading-relaxed text-xs">
+          ${escapeChatHtml(text)}
+        </div>
+      `;
+      thread.appendChild(userBubble);
+      scrollChatToBottom();
+    }
+
+    function appendHospitaleroMessage(text) {
+      const thread = document.getElementById('chatMessagesThread');
+      if (!thread) return;
+
+      const botBubble = document.createElement('div');
+      botBubble.className = 'flex items-start gap-2.5 animate-fade-in';
+      botBubble.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-[#1E4D3B] text-amber-300 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+          <svg class="w-5 h-5"><use href="#icon-vieira-shell"></use></svg>
+        </div>
+        <div class="bg-white border border-[#E5DEC9] p-3.5 rounded-2xl rounded-tl-sm text-slate-800 shadow-sm space-y-1.5 max-w-[85%] leading-relaxed">
+          <span class="text-[10px] font-black text-[#1E4D3B] uppercase tracking-wider block">Hospitalero Digital</span>
+          <div class="chat-response-content">${formatChatMarkdown(text)}</div>
+        </div>
+      `;
+      thread.appendChild(botBubble);
+      scrollChatToBottom();
+    }
+
+    function escapeChatHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function formatChatMarkdown(text) {
+      let html = escapeChatHtml(text);
+      // Bold
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      // Italic
+      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      // Bullet lists
+      html = html.replace(/^• (.*?)$/gm, '<li class="ml-4 list-disc">$1</li>');
+      // Numbered lists
+      html = html.replace(/^(\d+)\. (.*?)$/gm, '<li class="ml-4 list-decimal">$2</li>');
+      // Paragraphs
+      html = html.replace(/\n\n/g, '</p><p class="mt-2">');
+      html = html.replace(/\n/g, '<br>');
+      return '<p>' + html + '</p>';
+    }
+
+    function normalizeChatQuery(text) {
+      return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[¿?¡!.,:;]/g, " ")
+        .trim();
+    }
+
+    function processUserChat(userQuery) {
+      appendUserMessage(userQuery);
+
+      // Typing indicator delay simulation (300ms) for natural feel
+      setTimeout(() => {
+        const reply = getOfflineHospitaleroResponse(userQuery);
+        appendHospitaleroMessage(reply);
+      }, 300);
+    }
+
+    function getOfflineHospitaleroResponse(query) {
+      const q = normalizeChatQuery(query);
+
+      // Determine active booking in app state
+      const bookings = typeof getUserBookings === 'function' ? getUserBookings() : [];
+      const activeRes = bookings.length > 0 ? bookings[bookings.length - 1] : null;
+
+      // 1. Mochila / Estado / Dónde está / Seguimiento / Recogida / Entrega
+      if (
+        q.includes("mochila") ||
+        q.includes("donde esta") ||
+        q.includes("estado") ||
+        q.includes("seguimiento") ||
+        q.includes("mi bulto") ||
+        q.includes("mi equipaje") ||
+        q.includes("cuando llega") ||
+        q.includes("ha llegado") ||
+        q.includes("mi maleta")
+      ) {
+        if (!activeRes) {
+          return (
+            "Actualmente no tienes ninguna reserva de transporte activa en tu cuenta. 🎒\n\n" +
+            "Puedes contratar el traslado para hoy o tu próxima etapa entrando en la pestaña **«Reservar»**."
+          );
+        }
+
+        if (activeRes.status === 'EN_CAMINO') {
+          return (
+            `🚚 **¡Tu mochila está en camino en este momento!**\n\n` +
+            `• **Transportista:** ${activeRes.companyName || 'Tu repartidor oficial'}\n` +
+            `• **Origen:** ${activeRes.origin}\n` +
+            `• **Destino:** ${activeRes.destination}\n` +
+            `• **Ruta:** ${activeRes.routeName || 'Camino de Santiago'}\n\n` +
+            `El vehículo está transmitiendo su posición GPS en vivo. Puedes ir a la pestaña **«Inicio»** y pulsar en **«Ver Ubicación en Tiempo Real»** para ver su avance por la carretera en el mapa.`
+          );
+        } else if (activeRes.status === 'ENTREGADA') {
+          return (
+            `✅ **¡Tu mochila ya ha sido entregada!**\n\n` +
+            `Ha sido depositada y custodiada con éxito en la recepción de **${activeRes.destination}**.\n\n` +
+            `💡 **Consejo:** Al llegar al albergue, entra en la pestaña **«Vieira»** y pulsa «Hacer Parpadear» para hacer brillar tu concha y encontrarla de un vistazo entre los demás bultos.`
+          );
+        } else {
+          return (
+            `🟡 **Mochila en Albergue de Origen:**\n\n` +
+            `Tu mochila está actualmente en **${activeRes.origin}**, esperando a que el transportista (**${activeRes.companyName || 'Servicio de Ruta'}**) pase a recogerla.\n\n` +
+            `La recogida habitual se efectúa por la mañana entre las 08:30 y las 10:30 h. En cuanto comience el trayecto hacia **${activeRes.destination}**, la app te mostrará el GPS en vivo.`
+          );
+        }
+      }
+
+      // 2. Llegar tarde / retraso / horario
+      if (
+        q.includes("tarde") ||
+        q.includes("retraso") ||
+        q.includes("cierre") ||
+        q.includes("hora") ||
+        q.includes("no llego a tiempo") ||
+        q.includes("horario")
+      ) {
+        return (
+          "⏰ **¿Qué pasa si llegas tarde al albergue?**\n\n" +
+          "¡No te preocupes! El transporte de tu mochila es completamente independiente de tu ritmo al caminar:\n\n" +
+          "1. **Custodia garantizada:** El transportista entrega las mochilas en el albergue de destino durante la mañana/mediodía. El hospitalero ya la habrá guardado en recepción o en la consigna habilitada.\n" +
+          "2. **Llegadas tardías:** Aunque tú llegues a las 18:00, 20:00 o más tarde, tu equipaje ya estará esperándote a buen recaudo.\n" +
+          "3. **Recomendación:** Si vas a llegar después de las 20:00 h, te sugerimos llamar al albergue de destino para que te guarden la cama y te indiquen el código de la puerta si la recepción cierra."
+        );
+      }
+
+      // 3. Cambio de albergue / Modificar albergue / Equivocación
+      if (
+        q.includes("cambio de albergue") ||
+        q.includes("cambiar albergue") ||
+        q.includes("otro albergue") ||
+        q.includes("me he equivocado") ||
+        q.includes("modificar destino") ||
+        q.includes("cambiar destino")
+      ) {
+        const dest = activeRes ? activeRes.destination : 'el contratado';
+        const company = activeRes ? activeRes.companyName : 'tu transportista';
+        return (
+          "🏨 **Protocolo ante Cambio de Albergue:**\n\n" +
+          "Si necesitas cambiar el albergue de entrega previsto:\n\n" +
+          "• **Antes de las 09:00 h:** Contacta de inmediato con tu transportista asignado (" + company + ") para avisarle del nuevo albergue de la misma localidad.\n" +
+          "• **Si el repartidor ya está en ruta:** Por seguridad y organización logística, la mochila se depositará en el albergue original (" + dest + "). Podrás pasar a recogerla en mano o coordinar con ellos.\n" +
+          "• **¿No puedes continuar la etapa por lesión?** Toma un taxi o autobús directo al albergue de destino; tu mochila llegará puntual allí."
+        );
+      }
+
+      // 4. Para qué sirve la concha / Luces / Parpadeo
+      if (
+        q.includes("luz") ||
+        q.includes("parpad") ||
+        q.includes("para que sirve") ||
+        q.includes("como funciona la concha") ||
+        q.includes("como funciona la vieira") ||
+        q.includes("como se usa") ||
+        q.includes("bluetooth") ||
+        q.includes("ble")
+      ) {
+        return (
+          "🐚 **¿Para qué te sirve tu concha SmartVieira?**\n\n" +
+          "Está pensada para hacerte la estancia en el albergue mucho más cómoda, sin complicaciones:\n\n" +
+          "1. **Encontrar tu mochila al instante:** Cuando llegas cansado de caminar y ves decenas de mochilas amontonadas en una habitación oscura, abres esta app, vas a la pestaña «Vieira» y pulsas «Hacer Parpadear». Tu concha empezará a brillar en el color que hayas elegido para que la localices de un solo vistazo sin tener que buscar bulto por bulto.\n\n" +
+          "2. **Luz para moverte de noche:** Si te levantas al baño de madrugada, pulsa el botón de luz suave en la app. Te dará 30 segundos de luz para calzarte y caminar sin tropezar, evitando tener que encender la luz del techo del dormitorio para no despertar a los demás peregrinos."
+        );
+      }
+
+      // 5. Batería / Cargar / Cuánto dura
+      if (
+        q.includes("bateria") ||
+        q.includes("pila") ||
+        q.includes("carga") ||
+        q.includes("cuanto dura") ||
+        q.includes("cargar") ||
+        q.includes("autonomia")
+      ) {
+        return (
+          "🔋 **No te preocupes por la batería ni por cargadores:**\n\n" +
+          "Tu concha ya viene lista y configurada para aguantar **todo tu Camino de Santiago** de principio a fin sin que tengas que preocuparte de cargarla, ni llevar cables extra ni adaptadores encima.\n\nTú solo céntrate en caminar y disfrutar de tus etapas."
+        );
+      }
+
+      // 6. Pérdida o rotura de concha
+      if (
+        q.includes("perdi") ||
+        q.includes("perdido") ||
+        q.includes("rota") ||
+        q.includes("se me ha caido") ||
+        q.includes("extraviado") ||
+        q.includes("desvincular")
+      ) {
+        return (
+          "🛡️ **¿Has extraviado tu SmartVieira?**\n\n" +
+          "No te preocupes, el servicio de transporte sigue funcionando:\n\n" +
+          "1. Tu mochila sigue identificada con tu nombre y teléfono en la etiqueta física del transportista.\n" +
+          "2. Puedes adquirir una nueva concha en los albergues asociados o puntos SmartVieira del Camino y vincularla a tu cuenta en segundos escaneando su QR desde la pestaña Perfil."
+        );
+      }
+
+      // 7. Reservas / Precios / Pago
+      if (
+        q.includes("precio") ||
+        q.includes("tarifa") ||
+        q.includes("cuanto cuesta") ||
+        q.includes("pago") ||
+        q.includes("pagar") ||
+        q.includes("como reservar") ||
+        q.includes("tarjeta") ||
+        q.includes("bizum")
+      ) {
+        return (
+          "💳 **Reservas y Precios:**\n\n" +
+          "• **Tarifa Oficial:** Desde **6.50 €** por mochila y etapa.\n" +
+          "• **Cómo reservar:** Entra en la pestaña **«Reservar»**, selecciona tu albergue de salida y el de llegada, elige tu transportista preferido y confirma con tu método de pago.\n" +
+          "• **Métodos seguros:** Tarjeta bancaria, Bizum, Apple Pay y Google Pay con confirmación instantánea en la app."
+        );
+      }
+
+      // 8. Historia de la concha vieira y el Camino
+      if (
+        q.includes("historia") ||
+        q.includes("origen") ||
+        q.includes("concha") ||
+        q.includes("vieira") ||
+        q.includes("apostol") ||
+        q.includes("fisterra") ||
+        q.includes("finisterre") ||
+        q.includes("simbolo")
+      ) {
+        return (
+          "🏛️ **Historia y Simbolismo de la Vieira:**\n\n" +
+          "• **El Testimonio Medieval:** En los siglos XI y XII, los peregrinos no tenían diplomas. Caminaban hasta el cabo de Fisterra («el fin del mundo conocido») para recoger una concha marina en la orilla del océano Atlántico y coserla a su sombrero como prueba irrebatible de su hazaña.\n" +
+          "• **Las Estrías del Camino:** Los rayos o hendiduras de la concha representan los distintos caminos de Europa (el Francés, el Portugués, el del Norte, el Primitivo, el Inglés...) que convergen todos en un único vértice sagrado: la tumba de Santiago el Mayor en Compostela.\n" +
+          "• **Protección:** Para el caminante, la concha era también un vaso humilde para beber de las fuentes de agua pura en el monte."
+        );
+      }
+
+      // 9. Qué ver / Etapas / Monumentos
+      if (
+        q.includes("que ver") ||
+        q.includes("monumento") ||
+        q.includes("etapa") ||
+        q.includes("sarria") ||
+        q.includes("portomarin") ||
+        q.includes("palas") ||
+        q.includes("melide") ||
+        q.includes("arzua") ||
+        q.includes("santiago") ||
+        q.includes("catedral") ||
+        q.includes("botafumeiro")
+      ) {
+        return (
+          "✨ **Secretos y Monumentos de la Ruta:**\n\n" +
+          "• **Portomarín:** Visita la sobrecogedora iglesia-fortaleza románica de San Nicolás. Cuando en 1962 se construyó el embalse de Belesar que inundó el pueblo viejo, ¡los vecinos trasladaron la iglesia piedra a piedra numerada hasta la colina actual!\n" +
+          "• **Melide:** Es el cruce histórico donde se unen el Camino Francés y el Primitivo. Obligatorio probar el *pulpo á feira* con pimentón y admirar el cruceiro de Melide, considerado el más antiguo de Galicia (siglo XIV).\n" +
+          "• **Monte do Gozo:** La colina donde los peregrinos divisaban por primera vez a lo lejos las torres de la Catedral y lloraban de emoción gritando «¡Monjoie!».\n" +
+          "• **Santiago:** Entra a la Plaza del Obradoiro, da el tradicional abrazo a la figura de piedra del Apóstol y contempla el vuelo del imponente incensario Botafumeiro en la Catedral."
+        );
+      }
+
+      // 10. Albergues / Normas / Horarios
+      if (
+        q.includes("albergue") ||
+        q.includes("publico") ||
+        q.includes("privado") ||
+        q.includes("credencial") ||
+        q.includes("sello") ||
+        q.includes("norma")
+      ) {
+        return (
+          "🏡 **Guía Práctica de Albergues:**\n\n" +
+          "• **Albergues Públicos (Xunta):** Precio fijo (~10€). No admiten reserva previa y las plazas se asignan por riguroso orden de llegada física a pie con tu Credencial sellada.\n" +
+          "• **Albergues Privados:** Admiten reserva por teléfono o web con antelación, ofrecen sábanas y opciones de habitaciones reducidas.\n" +
+          "• **Normas de Convivencia:** Respeto al descanso ajeno: luces apagadas y silencio absoluto a partir de las 22:00 h. Las mochilas suelen prepararse la noche anterior para salir en silencio antes de las 08:00 h."
+        );
+      }
+
+      // 11. Emergencias / Policía / 112 / Médico
+      if (
+        q.includes("emergencia") ||
+        q.includes("urgencia") ||
+        q.includes("policia") ||
+        q.includes("guardia civil") ||
+        q.includes("medico") ||
+        q.includes("112") ||
+        q.includes("ambulancia") ||
+        q.includes("dolor") ||
+        q.includes("lesion") ||
+        q.includes("accidente")
+      ) {
+        return (
+          "🚨 **Teléfonos de Asistencia Inmediata:**\n\n" +
+          "• **112 (Emergencias Generales):** Gratuito, operativo 24h incluso sin cobertura de tu compañía móvil. Para ambulancias, rescates o incidencias graves.\n" +
+          "• **062 (Guardia Civil):** Cuerpo especializado en la vigilancia y auxilio del peregrino en sendas y zonas rurales del Camino.\n" +
+          "• **App AlertCops:** Aplicación oficial del Ministerio del Interior con botón SOS y geolocalización especial para peregrinos.\n" +
+          "• **Seguridad vial:** En tramos de carretera, camina siempre por el arcén izquierdo de frente al tráfico vehicular."
+        );
+      }
+
+      // 12. Saludos
+      if (
+        q.includes("hola") ||
+        q.includes("buenos dias") ||
+        q.includes("buenas") ||
+        q.includes("gracias") ||
+        q.includes("adios") ||
+        q.includes("buen camino") ||
+        q.includes("que tal")
+      ) {
+        return (
+          "🌟 **¡Ultreia et Suseia! ¡Buen Camino!**\n\n" +
+          "Es un honor acompañarte en tu viaje a Santiago. Recuerda que no hay prisa: el Camino es el viaje en sí mismo, no solo la meta.\n\n" +
+          "¿Deseas consultar algo sobre tu mochila, tus albergues o tu concha Vieira?"
+        );
+      }
+
+      // Fallback
+      return (
+        "Como **Hospitalero Digital Offline** puedo ayudarte con:\n\n" +
+        "1. 🎒 **Tu Mochila:** Escribe «¿Dónde está mi mochila?» o «estado de entrega».\n" +
+        "2. 🏨 **Imprevistos:** «¿Qué hago si llego tarde?» o «cambio de albergue».\n" +
+        "3. 🐚 **Tu Concha:** «¿Cómo funciona la luz LED?» o «batería».\n" +
+        "4. 🏛️ **Cultura Jacobea:** «Historia de la concha» o «qué ver en esta etapa».\n" +
+        "5. 🚨 **Seguridad:** «Teléfonos de emergencia 112».\n\n" +
+        "Prueba a pulsar uno de los botones de arriba o escribe una de estas palabras clave."
+      );
     }
 
     function switchTab(tabId) {
