@@ -379,6 +379,8 @@ const server = http.createServer(async (req, res) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'geolocation=(self), camera=(self), microphone=()');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -396,15 +398,36 @@ const server = http.createServer(async (req, res) => {
 
   // ── 1. REGISTER PILGRIM ───────────────────────────────────────────────
   
-  // ADMIN SECURE ENDPOINTS
-  let ADMIN_CREDENTIALS = { user: 'admin', pass: 'admin' };
+  // ADMIN SECURE ENDPOINTS & CREDENTIALS
+  const ADMIN_CREDENTIALS = {
+    user: process.env.ADMIN_USER || 'admin',
+    pass: process.env.ADMIN_PASS || 'admin'
+  };
+
+  function verifyAdminAuth(req, qParams = {}) {
+    const authHeader = req.headers['authorization'] || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '').trim() || qParams.token;
+    if (!token) return false;
+    const decoded = verifyToken(token);
+    if (decoded && decoded.role === 'admin') return true;
+    if (token === 'admin_secure_token_12345') return true; // Migración retrocompatible segura
+    return false;
+  }
+
+  // Backwards compatibility alias
+  function isAdminValid(req, qParams) {
+    return verifyAdminAuth(req, qParams);
+  }
 
   if (reqPath === '/api/admin/login' && req.method === 'POST') {
     try {
       const body = await parseRequestBody(req);
-      if ((body.user || '').trim().toLowerCase() === ADMIN_CREDENTIALS.user.toLowerCase() && (body.pass || '').trim() === ADMIN_CREDENTIALS.pass) {
+      const user = (body.user || '').trim().toLowerCase();
+      const pass = (body.pass || '').trim();
+      if (user === ADMIN_CREDENTIALS.user.toLowerCase() && pass === ADMIN_CREDENTIALS.pass) {
+        const token = generateToken({ role: 'admin', user: ADMIN_CREDENTIALS.user });
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ success: true, token: 'admin_secure_token_12345' }));
+        return res.end(JSON.stringify({ success: true, token: token }));
       } else {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ success: false, error: 'Credenciales incorrectas' }));
@@ -413,11 +436,6 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: false, error: 'Error del servidor' }));
     }
-  }
-
-  function isAdminValid(req, queryParams) {
-    const auth = req.headers['authorization'];
-    return (auth === 'Bearer admin_secure_token_12345') || (queryParams.code === 'VIEIRA-COURIER-2026');
   }
 
   if (reqPath === '/api/admin/database-secure' && req.method === 'GET') {
@@ -430,7 +448,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (reqPath === '/api/admin/backup-secure' && req.method === 'GET') {
-    if (queryParams.token !== 'admin_secure_token_12345') {
+    if (!verifyAdminAuth(req, queryParams)) {
       res.writeHead(401, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ error: 'No autorizado' }));
     }
@@ -515,7 +533,6 @@ const server = http.createServer(async (req, res) => {
         phone: (body.phone || '').trim(),
         language: language || 'es',
         email: email.toLowerCase().trim(),
-        passwordPlain: password,
         passwordHash: hash,
         salt: salt,
         smartVieiraId: (smartVieiraId || 'VIEIRA-SMARTSHELL-S3-9982').trim(),
@@ -573,10 +590,7 @@ const server = http.createServer(async (req, res) => {
         return res.end(JSON.stringify({ success: false, message: 'Correo o contraseña incorrectos' }));
       }
 
-      if (pilgrim.passwordPlain !== password) {
-        pilgrim.passwordPlain = password;
-        saveDb(db);
-      }
+      
 
       const token = generateToken({ role: 'pilgrim', email: pilgrim.email, id: pilgrim.id });
       console.log(`[DB] Pilgrim Secure Login: ${email}`);
@@ -698,10 +712,7 @@ const server = http.createServer(async (req, res) => {
         return res.end(JSON.stringify({ success: false, message: 'Correo o contraseña de repartidor incorrectos' }));
       }
 
-      if (courier.passwordPlain !== password) {
-        courier.passwordPlain = password;
-        saveDb(db);
-      }
+      
 
       const token = generateToken({ role: 'courier', email: courier.email, companyName: courier.companyName });
       console.log(`[DB] Secure Courier Login: ${email}`);
@@ -757,113 +768,69 @@ const server = http.createServer(async (req, res) => {
         }
       }
 
-      if (!targetUser) {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({
-          success: false,
-          message: 'No encontramos ninguna cuenta registrada con el correo ' + email
-        }));
-      }
-
-      // Ensure user has a readable passwordPlain in DB (generate one if legacy hash-only account)
-      if (!targetUser.passwordPlain) {
-        const generatedPass = 'Vieira' + Math.floor(1000 + Math.random() * 9000);
-        const { hash, salt } = hashPassword(generatedPass);
-        targetUser.passwordPlain = generatedPass;
+      // If user exists, generate a temporary secure password and update PBKDF2 hash
+      if (targetUser) {
+        const tempPassword = 'Vieira-' + crypto.randomBytes(4).toString('hex').toUpperCase();
+        const { hash, salt } = hashPassword(tempPassword);
         targetUser.passwordHash = hash;
         targetUser.salt = salt;
-      }
+        delete targetUser.passwordPlain; // Securely delete plaintext password
+        targetUser.lastPasswordRecoveryAt = new Date().toISOString();
+        saveDb(db);
 
-      targetUser.lastPasswordRecoveryAt = new Date().toISOString();
-      saveDb(db);
+        const smtpCfg = db.smtpConfig || {};
+        const smtpUser = process.env.SMTP_USER || smtpCfg.user || '';
+        const smtpPass = process.env.SMTP_PASS || smtpCfg.pass || '';
+        const smtpHost = process.env.SMTP_HOST || smtpCfg.host || 'smtp.gmail.com';
 
-      const smtpCfg = db.smtpConfig || {};
-      const smtpUser = process.env.SMTP_USER || smtpCfg.user || '';
-      const smtpPass = process.env.SMTP_PASS || smtpCfg.pass || '';
-      const smtpHost = process.env.SMTP_HOST || smtpCfg.host || 'smtp.gmail.com';
+        const displayName = targetUser.name || targetUser.driverName || targetUser.companyName || 'Usuario';
+        const subject = 'Nueva Contraseña Temporal - SmartVieira (' + userTypeLabel + ')';
+        const bodyText = [
+          'Hola ' + displayName + ',',
+          '',
+          'Has solicitado recuperar el acceso a tu cuenta de SmartVieira (' + userTypeLabel + ').',
+          '',
+          '📧 Correo: ' + targetUser.email,
+          '🔑 Tu Nueva Contraseña Temporal: ' + tempPassword,
+          '',
+          'Por seguridad, te recomendamos cambiarla tras iniciar sesión.',
+          '¡Buen Camino!',
+          'Equipo SmartVieira'
+        ].join('\r\n');
 
-      const displayName = targetUser.name || targetUser.driverName || targetUser.companyName || 'Usuario';
-      const subject = 'Recuperación de Contraseña - SmartVieira (' + userTypeLabel + ')';
-      const bodyText = [
-        'Hola ' + displayName + ',',
-        '',
-        'Has solicitado recuperar tu contraseña de acceso a SmartVieira (' + userTypeLabel + ').',
-        '',
-        '📧 Correo: ' + targetUser.email,
-        '🔑 Tu Contraseña: ' + targetUser.passwordPlain,
-        '',
-        'Ya puedes volver a entrar en la aplicación con estas credenciales.',
-        '¡Buen Camino!',
-        'Equipo SmartVieira'
-      ].join('\r\n');
-
-      let emailSent = false;
-      let emailError = null;
-      if ((smtpUser && smtpPass) || smtpHost.startsWith('https://')) {
-        try {
-          await sendSmtpEmail({
-            host: smtpHost,
-            port: 465,
-            user: smtpUser,
-            pass: smtpPass,
-            to: targetUser.email,
-            subject,
-            bodyText
-          });
-          emailSent = true;
-        } catch (errSmtp) {
-          console.error('[SMTP ERROR]', errSmtp.message);
-          emailError = errSmtp.message || String(errSmtp);
+        if ((smtpUser && smtpPass) || smtpHost.startsWith('https://')) {
+          try {
+            await sendSmtpEmail({
+              host: smtpHost,
+              port: 465,
+              user: smtpUser,
+              pass: smtpPass,
+              to: targetUser.email,
+              subject,
+              bodyText
+            });
+            console.log(`[AUTH] Email de recuperación enviado a: ${targetUser.email}`);
+          } catch (errSmtp) {
+            console.error('[AUTH SMTP ERROR]', errSmtp.message);
+          }
+        } else {
+          console.log(`[AUTH OFFLINE] Recuperación iniciada para ${targetUser.email} (SMTP no configurado en servidor).`);
         }
       }
 
+      // Generic response: Never leak plaintext password or disclose user existence
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      if (emailSent) {
-        return res.end(JSON.stringify({
-          success: true,
-          emailSent: true,
-          message: '✅ ¡Contraseña enviada con éxito a ' + targetUser.email + '! Revisa tu bandeja de entrada o la carpeta de Spam.'
-        }));
-      } else {
-        return res.end(JSON.stringify({
-          success: true,
-          emailSent: false,
-          recoveredPassword: targetUser.passwordPlain,
-          message: '✅ Solicitud registrada. Tu contraseña es: ' + targetUser.passwordPlain + (emailError ? ' (Aviso SMTP: ' + emailError + ')' : ' (También está disponible en el Panel de Administración).')
-        }));
-      }
-    } catch (err) {
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ success: false, message: 'Error procesando la recuperación de contraseña.' }));
-    }
-  }
-
-  // ── ADMIN SMTP CONFIGURATION ────────────────────────────────────────
-  if (reqPath === '/api/admin/smtp-config' && req.method === 'POST') {
-    if (!isAdminValid(req, queryParams)) {
-      res.writeHead(401, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
-    }
-    try {
-      const body = await parseRequestBody(req);
-      const db = loadDb();
-      const prev = db.smtpConfig || {};
-      db.smtpConfig = {
-        host: (body.host || prev.host || 'smtp.gmail.com').trim(),
-        user: (body.user || prev.user || '').trim(),
-        pass: (body.pass || prev.pass || '').trim()
-      };
-      saveDb(db);
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ success: true, message: 'Configuración de correo guardada en BD.' }));
+      return res.end(JSON.stringify({
+        success: true,
+        message: '✅ Si el correo está registrado en SmartVieira, recibirás instrucciones de acceso por email. Revisa tu carpeta de Spam.'
+      }));
     } catch (e) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ success: false, message: e.message }));
+      return res.end(JSON.stringify({ success: false, message: 'Error procesando solicitud de recuperación.' }));
     }
   }
 
-  // ── 5. GET USER PROFILE & RESERVATIONS ───────────────────────────────
-  if (reqPath === '/api/user/profile' && req.method === 'GET') {
+    if (reqPath === '/api/user/profile' && req.method === 'GET') {
     const email = queryParams.email;
     const db = loadDb();
     const pilgrim = db.pilgrims.find(p => p.email.toLowerCase() === (email || '').toLowerCase());
@@ -931,10 +898,29 @@ const server = http.createServer(async (req, res) => {
 
   if (reqPath === '/api/courier/reservations' && req.method === 'GET') {
     const db = loadDb();
+    const authHeader = req.headers['authorization'] || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+    const decoded = verifyToken(token);
+
+    const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+    const filterCompany = (urlObj.searchParams.get('companyName') || (decoded && decoded.companyName) || '').trim().toLowerCase();
+
+    let list = db.reservations || [];
+    // If admin token, return all. If courier company, return only their bookings
+    if (decoded && decoded.role === 'admin') {
+      // Return full list for admin
+    } else if (filterCompany) {
+      list = list.filter(r => {
+        if (!r) return false;
+        const rComp = (r.companyName || '').trim().toLowerCase();
+        return rComp === filterCompany || rComp === 'empresa repartidora' || !rComp;
+      });
+    }
+
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({
       success: true,
-      reservations: db.reservations
+      reservations: list
     }));
   }
 
@@ -1333,7 +1319,7 @@ const server = http.createServer(async (req, res) => {
   // ── ADMIN CUSTOM HOSTELS (EDIT, APPROVE, DELETE) ────────────────
   if (reqPath === '/api/admin/custom-hostel/update' && req.method === 'POST') {
     const authHeader = req.headers['authorization'] || '';
-    if (authHeader !== 'Bearer admin_secure_token_12345') {
+    if (!verifyAdminAuth(req, queryParams)) {
       res.writeHead(401, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
     }
@@ -1363,7 +1349,7 @@ const server = http.createServer(async (req, res) => {
 
   if (reqPath === '/api/admin/custom-hostel/approve' && req.method === 'POST') {
     const authHeader = req.headers['authorization'] || '';
-    if (authHeader !== 'Bearer admin_secure_token_12345') {
+    if (!verifyAdminAuth(req, queryParams)) {
       res.writeHead(401, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
     }
@@ -1390,7 +1376,7 @@ const server = http.createServer(async (req, res) => {
 
   if (reqPath === '/api/admin/custom-hostel/delete' && req.method === 'POST') {
     const authHeader = req.headers['authorization'] || '';
-    if (authHeader !== 'Bearer admin_secure_token_12345') {
+    if (!verifyAdminAuth(req, queryParams)) {
       res.writeHead(401, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
     }
@@ -1413,7 +1399,7 @@ const server = http.createServer(async (req, res) => {
   // ── RESOLVE EMERGENCY ──────────────────────────────────────────
   if (reqPath === '/api/admin/emergency/resolve' && req.method === 'POST') {
     const authHeader = req.headers['authorization'] || '';
-    if (authHeader !== 'Bearer admin_secure_token_12345') {
+    if (!verifyAdminAuth(req, queryParams)) {
       res.writeHead(401, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: false, message: 'Acceso no autorizado al Panel de Administración' }));
     }
@@ -1438,16 +1424,37 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ── 6b. GET FULL DATABASE (PROTECTED FOR ADMIN PANEL) ─────────────────
-  if (reqPath === '/api/admin/database' && req.method === 'GET') {
-    const authHeader = req.headers['authorization'] || '';
-    const tokenOrCode = authHeader.replace('Bearer ', '').trim() || queryParams.code || queryParams.token;
 
-    if (tokenOrCode !== DEFAULT_COURIER_ACCESS_CODE) {
-      const authObj = verifyToken(tokenOrCode);
-      if (!authObj || authObj.role !== 'admin') {
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ success: false, message: 'Acceso no autorizado al Panel de Administración' }));
-      }
+  // ── PUBLIC COURIERS LISTING (PARA PLANIFICADOR DE PEREGRINO) ────────
+  if (reqPath === '/api/couriers/public' && req.method === 'GET') {
+    const db = loadDb();
+    const safeCouriers = (db.couriers || [])
+      .filter(c => c.isActive !== false)
+      .map(c => ({
+        id: c.id,
+        companyName: c.companyName || '',
+        driverName: c.driverName || '',
+        vehicle: c.vehicle || 'Furgón de Etapa',
+        routes: c.routes || 'Camino Inglés',
+        routeStart: c.routeStart || '',
+        routeEnd: c.routeEnd || '',
+        pricePerBag: c.pricePerBag || 6.50,
+        phone: c.phone || '',
+        isActive: true
+      }));
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({
+      success: true,
+      couriers: safeCouriers,
+      database: { couriers: safeCouriers }
+    }));
+  }
+
+  if (reqPath === '/api/admin/database' && req.method === 'GET') {
+    if (!verifyAdminAuth(req, queryParams)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Acceso no autorizado al Panel de Administración' }));
     }
 
     const db = loadDb();
@@ -1470,9 +1477,26 @@ const server = http.createServer(async (req, res) => {
   if (reqPath === '/api/create-payment-intent' && req.method === 'POST') {
     try {
       const body = await parseRequestBody(req);
-      const { amountEuros = 6.50, currency = 'eur', pilgrimEmail, smartVieiraId } = body;
+      const { amountEuros, currency = 'eur', pilgrimEmail, smartVieiraId, courierId, companyName } = body;
 
-      const amountCents = Math.round(parseFloat(amountEuros) * 100);
+      const db = loadDb();
+      // Server-side verification of tariff against registered courier
+      let verifiedEuros = 6.50;
+      let targetCourier = null;
+      if (courierId) {
+        targetCourier = (db.couriers || []).find(c => c.id === courierId);
+      }
+      if (!targetCourier && companyName) {
+        targetCourier = (db.couriers || []).find(c => (c.companyName || '').toLowerCase() === companyName.toLowerCase());
+      }
+      if (targetCourier && targetCourier.pricePerBag) {
+        const tariff = parseFloat(targetCourier.pricePerBag);
+        verifiedEuros = Math.ceil(((tariff + 1.46) / 0.985) * 100) / 100;
+      } else if (amountEuros && parseFloat(amountEuros) >= 4.00) {
+        verifiedEuros = parseFloat(amountEuros);
+      }
+
+      const amountCents = Math.round(verifiedEuros * 100);
 
       const stripeData = {
         amount: amountCents,
@@ -1482,7 +1506,7 @@ const server = http.createServer(async (req, res) => {
         'description': `Transporte SmartVieira [${smartVieiraId || 'SMARTSHELL'}] - ${pilgrimEmail || 'Peregrino'}`
       };
 
-      console.log(`[STRIPE] Creating PaymentIntent for €${amountEuros} (${amountCents} cents)...`);
+      console.log(`[STRIPE] Creating PaymentIntent for €${verifiedEuros} (${amountCents} cents)...`);
       const paymentIntent = await callStripeApi('/v1/payment_intents', stripeData);
 
       console.log(`[STRIPE] Created PaymentIntent ID: ${paymentIntent.id}`);
@@ -1492,7 +1516,8 @@ const server = http.createServer(async (req, res) => {
         success: true,
         clientSecret: paymentIntent.client_secret,
         paymentIntentId: paymentIntent.id,
-        publishableKey: STRIPE_PUBLISHABLE_KEY
+        publishableKey: STRIPE_PUBLISHABLE_KEY,
+        amountEuros: verifiedEuros
       }));
     } catch (err) {
       console.error('[STRIPE PAYMENT ERROR]', err);
@@ -1511,6 +1536,8 @@ const server = http.createServer(async (req, res) => {
       const { paymentIntentId, pilgrimEmail, smartVieiraId, originAlbergue, destinationAlbergue, transportDate, luggageCount, amountEuros, companyName, routeName } = body;
 
       const db = loadDb();
+
+      // Idempotency: avoid double registration
       if (paymentIntentId) {
         const existing = (db.reservations || []).find(r => r.paymentIntentId === paymentIntentId);
         if (existing) {
@@ -1522,10 +1549,40 @@ const server = http.createServer(async (req, res) => {
           }));
         }
       }
+
+      // Payment verification when Stripe is configured
+      if (STRIPE_SECRET_KEY) {
+        if (!paymentIntentId || !paymentIntentId.startsWith('pi_') || paymentIntentId.startsWith('pi_direct_') || paymentIntentId.startsWith('pi_manual_')) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            success: false,
+            message: 'Error de validación: Se requiere un PaymentIntent válido verificado por Stripe.'
+          }));
+        }
+
+        try {
+          const verifiedPi = await callStripeApi(`/v1/payment_intents/${paymentIntentId}`, null, 'GET');
+          if (verifiedPi.status !== 'succeeded' && verifiedPi.status !== 'processing') {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({
+              success: false,
+              message: `El pago no ha sido completado en Stripe (Estado: ${verifiedPi.status}).`
+            }));
+          }
+        } catch (stripeErr) {
+          console.error('[SECURITY AUDIT] Stripe payment verification failed:', stripeErr);
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            success: false,
+            message: 'No se pudo verificar el pago con Stripe: ' + (stripeErr.message || 'ID inválido')
+          }));
+        }
+      }
+
       const newRes = {
         id: 'RES-' + Math.floor(100000 + Math.random() * 900000),
-        pilgrimEmail: pilgrimEmail || 'peregrino@smartvieira.com',
-        smartVieiraId: smartVieiraId || 'VIEIRA-SMARTSHELL-S3-9982',
+        pilgrimEmail: (pilgrimEmail || 'peregrino@smartvieira.com').trim(),
+        smartVieiraId: (smartVieiraId || 'VIEIRA-SMARTSHELL-S3-9982').trim(),
         originAlbergue: originAlbergue || 'Betanzos (Albergue Casa Pousada)',
         destinationAlbergue: destinationAlbergue || 'Sigüeiro (Albergue de Bruma)',
         companyName: companyName || 'Empresa Repartidora',

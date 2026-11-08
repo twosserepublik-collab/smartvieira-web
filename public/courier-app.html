@@ -1352,7 +1352,8 @@
     async function loadCourierReservationsFromDb() {
       if (!currentCourier) return;
       try {
-        const res  = await fetch(getApiUrl('/api/courier/reservations'));
+        const compParam = (currentCourier && currentCourier.companyName) ? '?companyName=' + encodeURIComponent(currentCourier.companyName) : '';
+        const res  = await fetch(getApiUrl('/api/courier/reservations' + compParam));
         const data = await res.json();
 
         if (data.success && data.reservations) {
