@@ -1316,14 +1316,101 @@
       renderGronzeCaminoDetail('camino-frances');
     }
 
+    const CAMINO_PHOTOS = {
+      'camino-frances': {
+        hero: { img: '/images/caminos/frances-hero.jpg', title: 'Catedral de Santiago de Compostela', place: 'Meta final en la Praza do Obradoiro' },
+        gallery: [
+          { img: '/images/caminos/frances-1.jpg', title: 'Puente románico sobre el Arga', place: 'Puente la Reina (Navarra)' },
+          { img: '/images/caminos/frances-2.jpg', title: 'Catedral de Santa María', place: 'Burgos (Castilla y León)' },
+          { img: '/images/caminos/frances-3.jpg', title: 'Pallozas y Santuario', place: 'O Cebreiro (Galicia)' }
+        ]
+      },
+      'camino-portugues-interior': {
+        hero: { img: '/images/caminos/portugues-hero.jpg', title: 'Puente medieval y romano', place: 'Ponte de Lima (Portugal)' },
+        gallery: [
+          { img: '/images/caminos/portugues-1.jpg', title: 'Convento de Cristo', place: 'Tomar (Portugal)' },
+          { img: '/images/caminos/portugues-2.jpg', title: 'Puente Dom Luís I y Ribeira', place: 'Oporto (Portugal)' },
+          { img: '/images/caminos/portugues-3.jpg', title: 'Catedral-fortaleza', place: 'Tui (Frontera del Miño)' }
+        ]
+      },
+      'camino-portugues-costa': {
+        hero: { img: '/images/caminos/costa-hero.jpg', title: 'Monasterio de Santa María de Oia', place: 'Frente al Océano Atlántico (Pontevedra)' },
+        gallery: [
+          { img: '/images/caminos/costa-1.jpg', title: 'Santuario de Santa Luzia', place: 'Viana do Castelo (Portugal)' },
+          { img: '/images/caminos/costa-2.jpg', title: 'Castro de Santa Trega', place: 'A Guarda (Desembocadura del Miño)' },
+          { img: '/images/caminos/costa-3.jpg', title: 'Fortaleza de Monterreal', place: 'Baiona (Rías Baixas)' }
+        ]
+      },
+      'camino-del-norte': {
+        hero: { img: '/images/caminos/norte-hero.jpg', title: 'Playa de As Catedrais', place: 'Ribadeo (Entrada a Galicia)' },
+        gallery: [
+          { img: '/images/caminos/norte-1.jpg', title: 'Bahía de La Concha', place: 'San Sebastián (País Vasco)' },
+          { img: '/images/caminos/norte-2.jpg', title: 'Colegiata de Santa Juliana', place: 'Santillana del Mar (Cantabria)' },
+          { img: '/images/caminos/norte-3.jpg', title: 'Monasterio de Sobrado', place: 'Sobrado dos Monxes (A Coruña)' }
+        ]
+      },
+      'camino-primitivo': {
+        hero: { img: '/images/caminos/primitivo-hero.jpg', title: 'Muralla Romana de Lugo', place: 'Patrimonio de la Humanidad (Galicia)' },
+        gallery: [
+          { img: '/images/caminos/primitivo-1.jpg', title: 'Catedral de San Salvador', place: 'Oviedo (Kilómetro cero)' },
+          { img: '/images/caminos/primitivo-2.jpg', title: 'Embalse de Grandas de Salime', place: 'Frontera Asturias – Galicia' },
+          { img: '/images/caminos/primitivo-3.jpg', title: 'Cumbres de Hospitales', place: 'Cordillera Cantábrica (Asturias)' }
+        ]
+      },
+      'camino-ingles': {
+        hero: { img: '/images/caminos/ingles-hero.jpg', title: 'Ría de Ferrol y Castillo de San Felipe', place: 'Inicio del Camino Inglés' },
+        gallery: [
+          { img: '/images/caminos/ingles-1.jpg', title: 'Torreón dos Andrade', place: 'Pontedeume (A Coruña)' },
+          { img: '/images/caminos/ingles-2.jpg', title: 'Casco histórico gótico', place: 'Betanzos (Galicia)' },
+          { img: '/images/caminos/ingles-3.jpg', title: 'Torre de Hércules', place: 'A Coruña (Ramal alternativo)' }
+        ]
+      },
+      'camino-sanabres': {
+        hero: { img: '/images/caminos/sanabres-hero.jpg', title: 'Conjunto fortificado de Sanabria', place: 'Puebla de Sanabria (Zamora)' },
+        gallery: [
+          { img: '/images/caminos/sanabres-1.jpg', title: 'Teatro Romano de Mérida', place: 'Vía de la Plata (Extremadura)' },
+          { img: '/images/caminos/sanabres-2.jpg', title: 'Plaza Mayor de Salamanca', place: 'Castilla y León' },
+          { img: '/images/caminos/sanabres-3.jpg', title: 'Ponte Vella sobre el Miño', place: 'Ourense (Últimos 100 km)' }
+        ]
+      },
+      'camino-invierno': {
+        hero: { img: '/images/caminos/invierno-hero.jpg', title: 'Las Médulas', place: 'Antiguas minas de oro romanas (El Bierzo)' },
+        gallery: [
+          { img: '/images/caminos/invierno-1.jpg', title: 'Castillo de los Templarios', place: 'Ponferrada (Inicio de ruta)' },
+          { img: '/images/caminos/invierno-2.jpg', title: 'Cañón del río Sil', place: 'Ribeira Sacra (Lugo / Ourense)' },
+          { img: '/images/caminos/invierno-3.jpg', title: 'San Vicente do Pino', place: 'Monforte de Lemos (Lugo)' }
+        ]
+      },
+      'camino-fisterra-muxia': {
+        hero: { img: '/images/caminos/fisterra-hero.jpg', title: 'Faro de Fisterra', place: 'El fin del mundo atlántico (Km 0)' },
+        gallery: [
+          { img: '/images/caminos/fisterra-1.jpg', title: 'Conjunto monumental de Ponte Maceira', place: 'Negreira (A Coruña)' },
+          { img: '/images/caminos/fisterra-2.jpg', title: 'Cascada do Ézaro', place: 'Dumbría / Cee (Costa da Morte)' },
+          { img: '/images/caminos/fisterra-3.jpg', title: 'Santuario da Virxe da Barca', place: 'Muxía (Costa da Morte)' }
+        ]
+      }
+    };
+
     function renderGronzeCaminoDetail(routeId) {
       const box = document.getElementById('caminoGronzeDetail');
       const r = CAMINO_ROUTES.find(x => x.id === routeId) || CAMINO_ROUTES[0];
       const g = CAMINO_GRONZE_DETAILS[r.id];
+      const ph = CAMINO_PHOTOS[r.id];
       if (!box || !g) return;
       const hostelCount = (typeof ALBERGUES_Y_HOTELES !== 'undefined' && ALBERGUES_Y_HOTELES[r.id]) ? ALBERGUES_Y_HOTELES[r.id].length : 0;
 
       box.innerHTML = `
+        ${ph ? `
+        <div class="relative rounded-2xl overflow-hidden h-52 sm:h-64 bg-[#EFE9DC] border border-[#E5DEC9]">
+          <img src="${ph.hero.img}" alt="${ph.hero.title}" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent flex flex-col justify-end p-5 text-white">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">📸 Lugar emblemático de esta ruta</span>
+            <div class="serif-title text-xl sm:text-2xl font-bold leading-tight">${ph.hero.title}</div>
+            <div class="text-xs text-white/85">📍 ${ph.hero.place}</div>
+          </div>
+        </div>
+        ` : ''}
+
         <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#E5DEC9] pb-4">
           <div class="space-y-1">
             <div class="flex items-center gap-2">
@@ -1387,6 +1474,25 @@
             </p>
           </div>
         </div>
+
+        ${ph ? `
+        <div class="space-y-2.5 pt-2 border-t border-[#E5DEC9]">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">📷 Lugares dignos de ver en el ${r.name}</h3>
+          <div class="grid sm:grid-cols-3 gap-3">
+            ${ph.gallery.map(item => `
+              <figure class="rounded-2xl overflow-hidden bg-[#F7F3EB] border border-[#E5DEC9]">
+                <div class="h-36 w-full overflow-hidden bg-[#EFE9DC]">
+                  <img src="${item.img}" alt="${item.title}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                </div>
+                <figcaption class="p-3">
+                  <div class="text-xs font-bold text-[#1C2826] leading-snug">${item.title}</div>
+                  <div class="text-[11px] text-[#D48B28] font-semibold mt-0.5">📍 ${item.place}</div>
+                </figcaption>
+              </figure>
+            `).join('')}
+          </div>
+        </div>
+        ` : ''}
       `;
     }
 
@@ -1498,18 +1604,21 @@
           return;
         }
         grid.innerHTML = items.map(n => `
-          <article class="glass-card rounded-3xl p-5 space-y-2.5 flex flex-col justify-between">
-            <div class="space-y-2">
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <span class="px-2.5 py-0.5 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[10px] font-bold border border-[#1E4D3B]/15">${n.route} • ${n.badge}</span>
-                <time class="text-[11px] font-semibold text-[#5F6C65]">${n.date}</time>
+          <article class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between">
+            ${n.image ? `<div class="h-48 w-full overflow-hidden bg-[#EFE9DC]"><img src="${n.image}" alt="${n.title}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"></div>` : ''}
+            <div class="p-5 space-y-2.5 flex-1 flex flex-col justify-between">
+              <div class="space-y-2">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[10px] font-bold border border-[#1E4D3B]/15">${n.route} • ${n.badge}</span>
+                  <time class="text-[11px] font-semibold text-[#5F6C65]">${n.date}</time>
+                </div>
+                <h3 class="serif-title text-base font-bold text-[#1C2826] leading-snug">${n.title}</h3>
+                <p class="text-xs text-[#5F6C65] leading-relaxed">${n.summary}</p>
               </div>
-              <h3 class="serif-title text-base font-bold text-[#1C2826] leading-snug">${n.title}</h3>
-              <p class="text-xs text-[#5F6C65] leading-relaxed">${n.summary}</p>
-            </div>
-            <div class="pt-2.5 border-t border-[#E5DEC9] space-y-1">
-              <p class="text-[11px] text-[#1E4D3B] font-semibold">${n.tip}</p>
-              <div class="text-[10px] text-[#5F6C65]">Fuente: ${n.source}</div>
+              <div class="pt-2.5 border-t border-[#E5DEC9] space-y-1">
+                <p class="text-[11px] text-[#1E4D3B] font-semibold">${n.tip}</p>
+                <div class="text-[10px] text-[#5F6C65]">Fuente: ${n.source}</div>
+              </div>
             </div>
           </article>
         `).join('');
