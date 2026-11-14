@@ -399,13 +399,6 @@
               </button>
             </div>
           </div>
-
-          <!-- Fallback demo link -->
-          <div class="pt-1">
-            <button type="button" onclick="simulateQrDetection('VIEIRA-SMARTSHELL-S3-9982')" class="text-[10px] text-slate-400 hover:text-[#8C5D35] font-mono underline">
-              [Vincular QR Demo: VIEIRA-SMARTSHELL-S3-9982]
-            </button>
-          </div>
         </div>
 
         <div class="pt-2 border-t border-[#E5DEC9]">
@@ -4418,7 +4411,7 @@
 
         scanAnimationId = requestAnimationFrame(tick);
       } catch (err) {
-        alert("⚠️ Error al acceder a la cámara: " + err.message + "\nPuedes introducir el ID a mano o usar el botón demo.");
+        alert("⚠️ Error al acceder a la cámara: " + err.message + "\nPuedes introducir el ID de tu SmartVieira a mano.");
         closeQrScannerModal();
         toggleManualIdSection(true);
       }

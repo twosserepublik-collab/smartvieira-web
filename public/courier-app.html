@@ -619,7 +619,7 @@
           </button>
         </div>
 
-        <button onclick="logoutCourier()" class="w-full py-3.5 rounded-2xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 font-extrabold text-xs mt-4 shadow-sm flex items-center justify-center gap-2">
+        <button type="button" onclick="logoutCourier()" class="w-full py-3.5 rounded-2xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 font-extrabold text-xs mt-4 shadow-sm flex items-center justify-center gap-2 cursor-pointer relative z-10">
             <svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             <span>Cerrar Sesión</span>
           </button>
@@ -1321,18 +1321,31 @@
 
     // ── LOGOUT ────────────────────────────────────────────────────
     function logoutCourier() {
-      if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+      try {
+        if (typeof autoRefreshInterval !== 'undefined' && autoRefreshInterval) {
+          clearInterval(autoRefreshInterval);
+          autoRefreshInterval = null;
+        }
+        if (typeof stopCourierGpsTracking === 'function') stopCourierGpsTracking();
+      } catch (_) {}
       localStorage.removeItem('vieira_courier_session');
       localStorage.removeItem('vieira_courier_token');
       currentCourier = null;
       myHiredSmartVieiraIds = [];
       myHiredReservationsObjects = [];
-      document.getElementById('txtCourierHeader').innerHTML = '<span class="flex items-center gap-1.5">' + '<svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 17h4"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M2 5h12v12H2Z"/><path d="M14 8h4l3 3v6h-2"/></svg>' + ' <span>Acceder (v13.9.8)</span></span>';
-      document.getElementById('courierDashboard').classList.add('hidden');
-      document.getElementById('courierAuthSection').classList.remove('hidden');
-      setCourierAuthTab('login');
-      if (typeof applyGlobalTranslations === "function") applyGlobalTranslations(currentAppLang);
+      const hdr = document.getElementById('txtCourierHeader');
+      if (hdr) {
+        hdr.innerHTML = '<span class="flex items-center gap-1.5">' + '<svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 17h4"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M2 5h12v12H2Z"/><path d="M14 8h4l3 3v6h-2"/></svg>' + ' <span>Acceder</span></span>';
+      }
+      const dash = document.getElementById('courierDashboard');
+      const auth = document.getElementById('courierAuthSection');
+      if (dash) dash.classList.add('hidden');
+      if (auth) auth.classList.remove('hidden');
+      if (typeof setCourierAuthTab === 'function') setCourierAuthTab('login');
+      if (typeof applyGlobalTranslations === 'function') applyGlobalTranslations(currentAppLang);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    window.logoutCourier = logoutCourier;
 
     // ── MANUAL REFRESH BUTTON ─────────────────────────────────────
     async function manualRefresh() {
