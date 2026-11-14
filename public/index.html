@@ -2059,6 +2059,26 @@
     });
 
     let currentWebLang = 'ES';
+    window.DATA_I18N_MAPS = {};
+    async function loadDataLangBundle(lang) {
+      if (!lang || lang === 'ES') return {};
+      if (window.DATA_I18N_MAPS[lang]) return window.DATA_I18N_MAPS[lang];
+      try {
+        const res = await fetch('/i18n/' + lang.toLowerCase() + '.json');
+        if (!res.ok) return {};
+        const json = await res.json();
+        window.DATA_I18N_MAPS[lang] = json;
+        return json;
+      } catch (_) {
+        return {};
+      }
+    }
+    function tData(str) {
+      if (!str || typeof str !== 'string' || currentWebLang === 'ES') return str;
+      const m = window.DATA_I18N_MAPS[currentWebLang];
+      const trimmed = str.trim();
+      return (m && m[trimmed]) ? m[trimmed] : str;
+    }
     let activeTab = 'caminos';
     let activeMapCaminoId = '';
     let currentRouteStep = 1;
@@ -2094,7 +2114,7 @@
             <div class="flex items-center gap-2.5 min-w-0">
               <span class="w-3 h-3 rounded-full shrink-0" style="background:${g.color || '#1E4D3B'}"></span>
               <div class="min-w-0">
-                <div class="text-xs font-bold text-[#1C2826] truncate">${r.name}</div>
+                <div class="text-xs font-bold text-[#1C2826] truncate">${tData(r.name)}</div>
                 <div class="text-[10px] text-[#5F6C65] truncate">${r.km} • ${r.stages} ${etapasWord}</div>
               </div>
             </div>
@@ -2219,11 +2239,11 @@
       box.innerHTML = `
         ${ph ? `
         <div class="relative rounded-2xl overflow-hidden h-52 sm:h-64 bg-[#EFE9DC] border border-[#E5DEC9]">
-          <img src="${ph.hero.img}" alt="${ph.hero.title}" class="w-full h-full object-cover">
+          <img src="${ph.hero.img}" alt="${tData(ph.hero.title)}" class="w-full h-full object-cover">
           <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent flex flex-col justify-end p-5 text-white">
             <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">${dict.gr_hero_badge || '📸 Lugar emblemático de esta ruta'}</span>
-            <div class="serif-title text-xl sm:text-2xl font-bold leading-tight">${ph.hero.title}</div>
-            <div class="text-xs text-white/85">📍 ${ph.hero.place}</div>
+            <div class="serif-title text-xl sm:text-2xl font-bold leading-tight">${tData(ph.hero.title)}</div>
+            <div class="text-xs text-white/85">📍 ${tData(ph.hero.place)}</div>
           </div>
         </div>
         ` : ''}
@@ -2232,9 +2252,9 @@
           <div class="space-y-1">
             <div class="flex items-center gap-2">
               <span class="w-3.5 h-3.5 rounded-full" style="background:${g.color}"></span>
-              <h2 class="serif-title text-2xl font-bold text-[#1C2826]">${r.name}</h2>
+              <h2 class="serif-title text-2xl font-bold text-[#1C2826]">${tData(r.name)}</h2>
             </div>
-            <p class="text-xs text-[#5F6C65] max-w-2xl">${r.desc}</p>
+            <p class="text-xs text-[#5F6C65] max-w-2xl">${tData(r.desc)}</p>
           </div>
           <button onclick="openCaminoFromMapInPlanner('${r.id}')" class="px-4 py-2.5 rounded-xl bg-[#1E4D3B] text-white text-xs font-bold hover:opacity-95 transition-all shrink-0">
             ${(dict.gr_view_btn || '🏠 Ver puntos y {n} albergues →').replace('{n}', hostelCount)}
@@ -2248,15 +2268,15 @@
           </div>
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
             <div class="text-[10px] font-bold uppercase text-[#5F6C65]">${dict.gr_diff || 'Dificultad'}</div>
-            <div class="font-bold text-[#1C2826] mt-0.5">${r.diff}</div>
+            <div class="font-bold text-[#1C2826] mt-0.5">${tData(r.diff)}</div>
           </div>
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
             <div class="text-[10px] font-bold uppercase text-[#5F6C65]">${dict.gr_season || 'Mejor época'}</div>
-            <div class="font-bold text-[#1C2826] mt-0.5">${g.season}</div>
+            <div class="font-bold text-[#1C2826] mt-0.5">${tData(g.season)}</div>
           </div>
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
             <div class="text-[10px] font-bold uppercase text-[#5F6C65]">${dict.gr_bike || 'En bicicleta'}</div>
-            <div class="font-bold text-[#1C2826] mt-0.5">${g.bike}</div>
+            <div class="font-bold text-[#1C2826] mt-0.5">${tData(g.bike)}</div>
           </div>
         </div>
 
@@ -2267,10 +2287,10 @@
               ${g.variants.map(v => `
                 <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
                   <div class="flex items-center justify-between gap-2">
-                    <span class="text-xs font-bold text-[#1C2826]">${v.title}</span>
-                    <span class="text-[10px] font-bold text-[#D48B28] shrink-0">${v.meta}</span>
+                    <span class="text-xs font-bold text-[#1C2826]">${tData(v.title)}</span>
+                    <span class="text-[10px] font-bold text-[#D48B28] shrink-0">${tData(v.meta)}</span>
                   </div>
-                  <p class="text-[11px] text-[#5F6C65] mt-1">${v.note}</p>
+                  <p class="text-[11px] text-[#5F6C65] mt-1">${tData(v.note)}</p>
                 </div>
               `).join('')}
             </div>
@@ -2281,13 +2301,13 @@
             <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] divide-y divide-[#E5DEC9]">
               ${g.stagesSample.map(st => `
                 <div class="px-3.5 py-2 flex items-center justify-between gap-2 text-xs">
-                  <span class="font-semibold text-[#1C2826]">${st[0]}</span>
-                  <span class="font-bold text-[#1E4D3B] shrink-0">${st[1]}</span>
+                  <span class="font-semibold text-[#1C2826]">${tData(st[0])}</span>
+                  <span class="font-bold text-[#1E4D3B] shrink-0">${tData(st[1])}</span>
                 </div>
               `).join('')}
             </div>
             <p class="text-[11px] text-[#5F6C65] bg-[#EBF3EE]/70 border border-[#1E4D3B]/15 rounded-xl p-3">
-              <strong class="text-[#1E4D3B]">${dict.gr_best || '✨ Lo mejor y red de albergues:'}</strong> ${g.highlights} (${g.infra}).
+              <strong class="text-[#1E4D3B]">${dict.gr_best || '✨ Lo mejor y red de albergues:'}</strong> ${tData(g.highlights)} (${tData(g.infra)}).
             </p>
           </div>
         </div>
@@ -2296,18 +2316,18 @@
         <div class="grid md:grid-cols-2 gap-3 text-xs">
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3.5 space-y-1">
             <div class="font-bold text-[#1E4D3B]">${dict.gr_monuments || '🏛️ Monumentos e hitos imprescindibles'}</div>
-            <p class="text-[11px] text-[#5F6C65] leading-relaxed">${CAMINO_EXTRA_CULTURA[r.id].see}</p>
+            <p class="text-[11px] text-[#5F6C65] leading-relaxed">${tData(CAMINO_EXTRA_CULTURA[r.id].see)}</p>
           </div>
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3.5 space-y-1">
             <div class="font-bold text-[#D48B28]">${dict.gr_food || '🍽️ Gastronomía típica en ruta'}</div>
-            <p class="text-[11px] text-[#5F6C65] leading-relaxed">${CAMINO_EXTRA_CULTURA[r.id].food}</p>
+            <p class="text-[11px] text-[#5F6C65] leading-relaxed">${tData(CAMINO_EXTRA_CULTURA[r.id].food)}</p>
           </div>
         </div>
         ` : ''}
 
         ${(typeof CAMINO_ALERTAS_TRAMOS !== 'undefined' && CAMINO_ALERTAS_TRAMOS[r.id]) ? `
         <div class="rounded-2xl bg-amber-50 border border-amber-300/70 p-3.5 text-xs text-amber-950 leading-relaxed">
-          ${CAMINO_ALERTAS_TRAMOS[r.id]}
+          ${tData(CAMINO_ALERTAS_TRAMOS[r.id])}
         </div>
         ` : ''}
 
@@ -2347,8 +2367,8 @@
                       <polyline points="${pts}" fill="none" stroke="#1E4D3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
                     </svg>
                   </div>
-                  <p class="text-[11px] text-[#5F6C65] leading-snug">${st.desc}</p>
-                  ${svcs.length ? `<div class="flex flex-wrap gap-1 pt-0.5">${svcs.map(s => `<span class="text-[10px] font-semibold bg-white border border-[#E5DEC9] text-[#1C2826] px-2 py-0.5 rounded-full">${s}</span>`).join('')}</div>` : ''}
+                  <p class="text-[11px] text-[#5F6C65] leading-snug">${tData(st.desc)}</p>
+                  ${svcs.length ? `<div class="flex flex-wrap gap-1 pt-0.5">${svcs.map(s => `<span class="text-[10px] font-semibold bg-white border border-[#E5DEC9] text-[#1C2826] px-2 py-0.5 rounded-full">${tData(s)}</span>`).join('')}</div>` : ''}
                 </div>
               `;
             }).join('')}
@@ -2358,16 +2378,16 @@
 
         ${ph ? `
         <div class="space-y-2.5 pt-2 border-t border-[#E5DEC9]">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">${dict.gr_places_see || '📷 Lugares dignos de ver en el'} ${r.name}</h3>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">${dict.gr_places_see || '📷 Lugares dignos de ver en el'} ${tData(r.name)}</h3>
           <div class="grid sm:grid-cols-3 gap-3">
             ${ph.gallery.map(item => `
               <figure class="rounded-2xl overflow-hidden bg-[#F7F3EB] border border-[#E5DEC9]">
                 <div class="h-36 w-full overflow-hidden bg-[#EFE9DC]">
-                  <img src="${item.img}" alt="${item.title}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                  <img src="${item.img}" alt="${tData(item.title)}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                 </div>
                 <figcaption class="p-3">
-                  <div class="text-xs font-bold text-[#1C2826] leading-snug">${item.title}</div>
-                  <div class="text-[11px] text-[#D48B28] font-semibold mt-0.5">📍 ${item.place}</div>
+                  <div class="text-xs font-bold text-[#1C2826] leading-snug">${tData(item.title)}</div>
+                  <div class="text-[11px] text-[#D48B28] font-semibold mt-0.5">📍 ${tData(item.place)}</div>
                 </figcaption>
               </figure>
             `).join('')}
@@ -2377,7 +2397,7 @@
 
         <div class="rounded-2xl bg-gradient-to-r from-[#1E4D3B] to-[#2A6B53] text-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
           <div class="space-y-0.5">
-            <div class="text-[10px] font-bold uppercase tracking-wider text-amber-300">${dict.gr_sv_service || '🐚 Servicio SmartVieira en el'} ${r.name}</div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-amber-300">${dict.gr_sv_service || '🐚 Servicio SmartVieira en el'} ${tData(r.name)}</div>
             <div class="text-sm font-bold">${dict.gr_sv_q || '¿Prefieres disfrutar las etapas sin cargar 8–10 kg en la espalda?'}</div>
           </div>
           <button type="button" onclick="switchWebTab('ligero')" class="px-4 py-2 rounded-xl bg-[#D48B28] text-white text-xs font-bold hover:opacity-95 transition-all shrink-0">
@@ -2393,7 +2413,21 @@
       switchWebTab('rutas');
     }
 
-    function setWebLang(lang) {
+    function renderAllTranslatedViews() {
+      renderMapCaminoList();
+      renderGronzeCaminoDetail(activeMapCaminoId || 'camino-frances');
+      updatePilgrimBudget();
+      renderWeeklyNews();
+      if (currentRouteStep >= 2) renderDurationCompare();
+      if (currentRouteStep >= 3 && selectedRouteId) {
+        renderActiveRouteSummary();
+        renderExplorerTowns();
+        if (selectedExplorerTown) renderExplorerHostels();
+      }
+      updateOrderTotals();
+    }
+
+    async function setWebLang(lang) {
       currentWebLang = WEB_I18N[lang] ? lang : 'ES';
       localStorage.setItem('vieira_lang', currentWebLang);
       document.documentElement.lang = currentWebLang.toLowerCase();
@@ -2408,16 +2442,11 @@
         const key = el.getAttribute('data-i18n-html');
         if (dict[key]) el.innerHTML = dict[key];
       });
-      renderMapCaminoList();
-      renderGronzeCaminoDetail(activeMapCaminoId || 'camino-frances');
-      updatePilgrimBudget();
-      if (currentRouteStep >= 2) renderDurationCompare();
-      if (currentRouteStep >= 3 && selectedRouteId) {
-        renderActiveRouteSummary();
-        renderExplorerTowns();
-        if (selectedExplorerTown) renderExplorerHostels();
+      renderAllTranslatedViews();
+      if (currentWebLang !== 'ES' && !window.DATA_I18N_MAPS[currentWebLang]) {
+        await loadDataLangBundle(currentWebLang);
+        renderAllTranslatedViews();
       }
-      updateOrderTotals();
     }
 
     function goToRouteStep(step) {
@@ -2477,52 +2506,60 @@
           <button onclick="selectRoute('${r.id}')" class="text-left p-4 rounded-2xl border transition-all flex flex-col justify-between gap-2 ${r.id === selectedRouteId ? 'bg-[#EBF3EE] border-[#1E4D3B]' : 'bg-[#F7F3EB] border-[#E5DEC9] hover:border-[#1E4D3B]'}">
             <div>
               <div class="flex items-center justify-between gap-2 text-[10px] font-bold">
-                <span class="text-[#1E4D3B]">${isTop ? '⭐ Muy recomendado' : r.diff}</span>
+                <span class="text-[#1E4D3B]">${isTop ? '⭐' : tData(r.diff)}</span>
                 <span class="text-[#5F6C65]">${r.km}</span>
               </div>
-              <div class="font-bold text-base text-[#1C2826] mt-1">${r.name}</div>
-              <div class="text-[11px] font-semibold text-[#D48B28] mt-1">📍 ${startHint}</div>
-              <p class="text-[11px] text-[#5F6C65] mt-1.5 leading-relaxed">${r.desc}</p>
+              <div class="font-bold text-base text-[#1C2826] mt-1">${tData(r.name)}</div>
+              <div class="text-[11px] font-semibold text-[#D48B28] mt-1">📍 ${tData(startHint)}</div>
+              <p class="text-[11px] text-[#5F6C65] mt-1.5 leading-relaxed">${tData(r.desc)}</p>
             </div>
-            <div class="text-[11px] font-bold text-[#1E4D3B] pt-1">Ver puntos y albergues →</div>
+            <div class="text-[11px] font-bold text-[#1E4D3B] pt-1">${(WEB_I18N[currentWebLang] || WEB_I18N.ES).gr_view_btn ? (WEB_I18N[currentWebLang] || WEB_I18N.ES).gr_view_btn.replace('{n}', '') : '→'}</div>
           </button>
         `;
       }).join('');
     }
 
-    async function loadWeeklyNews() {
+    let cachedWeeklyNewsData = null;
+    function renderWeeklyNews() {
       const grid = document.getElementById('newsGrid');
       const badge = document.getElementById('newsWeekBadge');
+      if (!grid || !cachedWeeklyNewsData) return;
+      const data = cachedWeeklyNewsData;
+      if (badge && data.weekLabel) badge.textContent = tData(data.weekLabel);
+      const items = (data.news || []).slice(0, 2);
+      if (items.length === 0) {
+        grid.innerHTML = '<div class="glass-card rounded-3xl p-5 text-xs text-[#5F6C65]">—</div>';
+        return;
+      }
+      grid.innerHTML = items.map(n => `
+        <article class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between">
+          ${n.image ? `<div class="h-48 w-full overflow-hidden bg-[#EFE9DC]"><img src="${n.image}" alt="${tData(n.title)}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"></div>` : ''}
+          <div class="p-5 space-y-2.5 flex-1 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[10px] font-bold border border-[#1E4D3B]/15">${tData(n.route)} • ${tData(n.badge)}</span>
+                <time class="text-[11px] font-semibold text-[#5F6C65]">${tData(n.date)}</time>
+              </div>
+              <h3 class="serif-title text-base font-bold text-[#1C2826] leading-snug">${tData(n.title)}</h3>
+              <p class="text-xs text-[#5F6C65] leading-relaxed">${tData(n.summary)}</p>
+            </div>
+            <div class="pt-2.5 border-t border-[#E5DEC9] space-y-1">
+              <p class="text-[11px] text-[#1E4D3B] font-semibold">${tData(n.tip)}</p>
+              <div class="text-[10px] text-[#5F6C65]">${tData(n.source)}</div>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    async function loadWeeklyNews() {
+      const grid = document.getElementById('newsGrid');
       try {
         const res = await fetch('/noticias-camino.json?t=' + Date.now());
-        const data = await res.json();
-        if (badge && data.weekLabel) badge.textContent = data.weekLabel;
-        const items = (data.news || []).slice(0, 2);
-        if (items.length === 0) {
-          grid.innerHTML = '<div class="glass-card rounded-3xl p-5 text-xs text-[#5F6C65]">Sin noticias esta semana.</div>';
-          return;
-        }
-        grid.innerHTML = items.map(n => `
-          <article class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between">
-            ${n.image ? `<div class="h-48 w-full overflow-hidden bg-[#EFE9DC]"><img src="${n.image}" alt="${n.title}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"></div>` : ''}
-            <div class="p-5 space-y-2.5 flex-1 flex flex-col justify-between">
-              <div class="space-y-2">
-                <div class="flex flex-wrap items-center justify-between gap-2">
-                  <span class="px-2.5 py-0.5 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[10px] font-bold border border-[#1E4D3B]/15">${n.route} • ${n.badge}</span>
-                  <time class="text-[11px] font-semibold text-[#5F6C65]">${n.date}</time>
-                </div>
-                <h3 class="serif-title text-base font-bold text-[#1C2826] leading-snug">${n.title}</h3>
-                <p class="text-xs text-[#5F6C65] leading-relaxed">${n.summary}</p>
-              </div>
-              <div class="pt-2.5 border-t border-[#E5DEC9] space-y-1">
-                <p class="text-[11px] text-[#1E4D3B] font-semibold">${n.tip}</p>
-                <div class="text-[10px] text-[#5F6C65]">Fuente: ${n.source}</div>
-              </div>
-            </div>
-          </article>
-        `).join('');
+        cachedWeeklyNewsData = await res.json();
+        renderWeeklyNews();
       } catch (err) {
-        grid.innerHTML = '<div class="glass-card rounded-3xl p-5 text-xs text-[#5F6C65]">No se pudieron cargar las noticias.</div>';
+        if (grid) grid.innerHTML = '<div class="glass-card rounded-3xl p-5 text-xs text-[#5F6C65]">—</div>';
       }
     }
 
@@ -2545,12 +2582,12 @@
       const startHint = (r.tipByDur && r.tipByDur[activeDurFilter]) ? r.tipByDur[activeDurFilter] : r.start;
       box.innerHTML = `
         <div class="flex flex-wrap items-center gap-2">
-          <h3 class="serif-title text-xl font-bold text-[#1C2826]">${r.name}</h3>
+          <h3 class="serif-title text-xl font-bold text-[#1C2826]">${tData(r.name)}</h3>
           <span class="px-2 py-0.5 rounded-full bg-[#F7F3EB] border border-[#E5DEC9] text-[10px] font-bold text-[#1E4D3B]">${r.km}</span>
-          <span class="px-2 py-0.5 rounded-full bg-[#F7F3EB] border border-[#E5DEC9] text-[10px] font-bold text-[#5F6C65]">${r.stages} ${dict.stages_word} • ${r.diff}</span>
+          <span class="px-2 py-0.5 rounded-full bg-[#F7F3EB] border border-[#E5DEC9] text-[10px] font-bold text-[#5F6C65]">${r.stages} ${dict.stages_word} • ${tData(r.diff)}</span>
         </div>
-        <p class="text-xs text-[#5F6C65]">📍 <strong>${startHint}</strong> — ${r.desc}</p>
-        <p class="text-xs text-[#1E4D3B] bg-[#F7F3EB] rounded-xl px-3 py-2 border border-[#E5DEC9]">🥾 <strong>Últimos 100 km habituales:</strong> ${r.last100}</p>
+        <p class="text-xs text-[#5F6C65]">📍 <strong>${tData(startHint)}</strong> — ${tData(r.desc)}</p>
+        <p class="text-xs text-[#1E4D3B] bg-[#F7F3EB] rounded-xl px-3 py-2 border border-[#E5DEC9]">🥾 <strong>100 km:</strong> ${tData(r.last100)}</p>
       `;
     }
 
@@ -2655,7 +2692,7 @@
 
       const townServices = (typeof SERVICIOS_PUEBLO !== 'undefined' && SERVICIOS_PUEBLO[selectedExplorerTown.toLowerCase()]) ? SERVICIOS_PUEBLO[selectedExplorerTown.toLowerCase()] : [];
       const svcBanner = townServices.length
-        ? `<div class="col-span-full rounded-2xl bg-[#EBF3EE]/70 border border-[#1E4D3B]/15 p-3 flex flex-wrap items-center gap-1.5"><span class="text-[11px] font-bold text-[#1E4D3B] mr-1">Servicios en ${selectedExplorerTown}:</span>${townServices.map(s => `<span class="text-[10px] font-semibold bg-white border border-[#E5DEC9] text-[#1C2826] px-2 py-0.5 rounded-full">${s}</span>`).join('')}</div>`
+        ? `<div class="col-span-full rounded-2xl bg-[#EBF3EE]/70 border border-[#1E4D3B]/15 p-3 flex flex-wrap items-center gap-1.5"><span class="text-[11px] font-bold text-[#1E4D3B] mr-1">${selectedExplorerTown}:</span>${townServices.map(s => `<span class="text-[10px] font-semibold bg-white border border-[#E5DEC9] text-[#1C2826] px-2 py-0.5 rounded-full">${tData(s)}</span>`).join('')}</div>`
         : '';
 
       const filterPills = `
@@ -2740,13 +2777,13 @@
         <div><strong>📆 Apertura:</strong> ${detailEntry.open}</div>
         <div><strong>📅 Reservas:</strong> ${detailEntry.reserve}</div>
         <div><strong>✨ Equipamiento:</strong> ${detailEntry.services}</div>
-        ${townSvcs.length ? `<div><strong>🏙️ Servicios en ${town}:</strong> ${townSvcs.join(' · ')}</div>` : ''}
+        ${townSvcs.length ? `<div><strong>🏙️ ${town}:</strong> ${townSvcs.map(tData).join(' · ')}</div>` : ''}
       ` : `
-        <div><strong>💶 Precio orientativo:</strong> ${priceText}</div>
-        <div><strong>📅 Reservas:</strong> ${reserveText}</div>
-        <div><strong>🕒 Horarios:</strong> ${hoursText}</div>
-        <div><strong>✨ Servicios:</strong> ${servicesText}</div>
-        ${townSvcs.length ? `<div><strong>🏙️ Servicios en ${town}:</strong> ${townSvcs.join(' · ')}</div>` : ''}
+        <div><strong>💶</strong> ${priceText}</div>
+        <div><strong>📅</strong> ${reserveText}</div>
+        <div><strong>🕒</strong> ${hoursText}</div>
+        <div><strong>✨</strong> ${servicesText}</div>
+        ${townSvcs.length ? `<div><strong>🏙️ ${town}:</strong> ${townSvcs.map(tData).join(' · ')}</div>` : ''}
       `;
 
       const queryMaps = encodeURIComponent(`${name} ${town} Camino de Santiago`);
