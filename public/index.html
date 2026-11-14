@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>Camino de Santiago 2026: Rutas, Etapas, Albergues y Guía del Peregrino | SmartVieira</title>
-  <meta name="description" content="Guía clara e indexada del Camino de Santiago: las 8 rutas jacobeas, etapas, albergues, noticias semanales y consejos prácticos para caminar ligero hasta Santiago.">
-  <meta name="keywords" content="Camino de Santiago, rutas Camino de Santiago, albergues Camino de Santiago, etapas Camino Francés, Camino Inglés, Camino Portugués, transporte de mochilas Camino de Santiago, Credencial, Compostela, SmartVieira">
+  <title>Camino de Santiago 2026: Rutas, Etapas, Albergues, Credencial y Guía | SmartVieira</title>
+  <meta name="description" content="Guía práctica del Camino de Santiago: noticias semanales, comparativa de las 8 rutas jacobeas, últimos 100 km, albergues, checklist de mochila, salud del peregrino, Credencial y Compostela.">
+  <meta name="keywords" content="Camino de Santiago, rutas Camino de Santiago, albergues Camino de Santiago, últimos 100 km Sarria Tui Ferrol, Credencial del Peregrino, Compostela, qué llevar en la mochila Camino, ampollas Camino de Santiago, SmartVieira">
   <link rel="canonical" href="https://www.smartvieira.com/">
   <meta name="theme-color" content="#F7F3EB">
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.smartvieira.com/">
-  <meta property="og:title" content="Camino de Santiago: Rutas, Etapas, Albergues y Guía del Peregrino | SmartVieira">
-  <meta property="og:description" content="Consulta rutas, etapas, albergues y actualidad semanal del Camino de Santiago. Descubre cómo caminar sin cargar peso.">
+  <meta property="og:title" content="Camino de Santiago: Rutas, Albergues y Guía Completa del Peregrino | SmartVieira">
+  <meta property="og:description" content="Todo lo que necesitas para preparar tu Camino de Santiago: actualidad semanal, rutas, albergues, checklist, salud y consejos para caminar ligero.">
   <meta property="og:image" content="https://www.smartvieira.com/images/smartvieira-product.jpg">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -49,7 +49,7 @@
             "name": "¿Cuántos kilómetros hay que hacer para conseguir la Compostela?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Al menos los últimos 100 km a pie (o 200 km en bicicleta) hasta Santiago de Compostela, con 2 sellos diarios en la Credencial durante esos últimos 100 km."
+              "text": "Al menos los últimos 100 km a pie (o a caballo) o los últimos 200 km en bicicleta hasta Santiago de Compostela, con un mínimo de 2 sellos diarios en la Credencial durante esos últimos 100 km."
             }
           },
           {
@@ -62,10 +62,10 @@
           },
           {
             "@type": "Question",
-            "name": "¿Cómo caminar el Camino de Santiago sin cargar peso?",
+            "name": "¿Qué peso máximo debe llevar la mochila del peregrino?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Puedes utilizar el servicio diario de traslado de mochilas entre albergues con tu concha SmartVieira, dejando tu equipaje antes de las 8:00 y siguiéndolo por GPS."
+              "text": "No debe superar el 10% del peso corporal. Para evitar tendinitis y sobrecargas, muchos peregrinos optan por caminar con una mochila ligera de día y trasladar su equipaje entre albergues."
             }
           }
         ]
@@ -110,7 +110,7 @@
       box-shadow: 0 10px 28px -12px rgba(28, 40, 38, 0.08);
     }
     .glass-nav {
-      background: rgba(247, 243, 235, 0.94);
+      background: rgba(247, 243, 235, 0.95);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--camino-border);
     }
@@ -120,7 +120,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- HEADER + TAB NAVIGATION -->
+  <!-- HEADER + 5 TABS (SIN ENLACES A APPS WEB) -->
   <header class="glass-nav sticky top-0 z-40">
     <div class="max-w-5xl mx-auto px-4 pt-3 pb-2 space-y-2.5">
       <div class="flex items-center justify-between gap-3">
@@ -132,27 +132,21 @@
           </div>
         </button>
 
-        <div class="flex items-center gap-2">
-          <select id="webLangSelect" onchange="setWebLang(this.value)" aria-label="Language" class="bg-white text-[#1C2826] border border-[#E5DEC9] rounded-xl px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-[#1E4D3B] cursor-pointer">
-            <option value="ES">🇪🇸 ES</option>
-            <option value="EN">🇬🇧 EN</option>
-            <option value="FR">🇫🇷 FR</option>
-            <option value="DE">🇩🇪 DE</option>
-            <option value="IT">🇮🇹 IT</option>
-            <option value="PT">🇵🇹 PT</option>
-            <option value="KO">🇰🇷 KO</option>
-            <option value="ZH">🇨🇳 中文</option>
-          </select>
-          <a href="/pilgrim-app.html" class="px-3.5 py-1.5 rounded-xl bg-[#1E4D3B] hover:bg-[#2A6B53] text-white font-bold text-xs shadow-sm transition-all whitespace-nowrap" data-i18n="nav_app">
-            App Peregrino →
-          </a>
-        </div>
+        <select id="webLangSelect" onchange="setWebLang(this.value)" aria-label="Language" class="bg-white text-[#1C2826] border border-[#E5DEC9] rounded-xl px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-[#1E4D3B] cursor-pointer shadow-sm">
+          <option value="ES">🇪🇸 ES</option>
+          <option value="EN">🇬🇧 EN</option>
+          <option value="FR">🇫🇷 FR</option>
+          <option value="DE">🇩🇪 DE</option>
+          <option value="IT">🇮🇹 IT</option>
+          <option value="PT">🇵🇹 PT</option>
+          <option value="KO">🇰🇷 KO</option>
+          <option value="ZH">🇨🇳 中文</option>
+        </select>
       </div>
 
-      <!-- INDEXED TABS -->
       <nav class="flex items-center gap-1.5 overflow-x-auto pb-1" aria-label="Secciones de la guía">
         <button id="tabBtn-inicio" onclick="switchWebTab('inicio')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-[#1E4D3B] text-white" data-i18n="tab_home">
-          📰 Actualidad e Inicio
+          📰 Actualidad
         </button>
         <button id="tabBtn-rutas" onclick="switchWebTab('rutas')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-white text-[#5F6C65] border border-[#E5DEC9] hover:border-[#1E4D3B]" data-i18n="tab_routes">
           🗺️ Rutas y Albergues
@@ -163,6 +157,9 @@
         <button id="tabBtn-ligero" onclick="switchWebTab('ligero')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-white text-[#5F6C65] border border-[#E5DEC9] hover:border-[#1E4D3B]" data-i18n="tab_light">
           🐚 Caminar sin Peso
         </button>
+        <button id="tabBtn-descargas" onclick="switchWebTab('descargas')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-white text-[#5F6C65] border border-[#E5DEC9] hover:border-[#1E4D3B]" data-i18n="tab_downloads">
+          📲 Descargas
+        </button>
       </nav>
     </div>
   </header>
@@ -170,14 +167,13 @@
   <main class="max-w-5xl w-full mx-auto px-4 py-6 md:py-8 flex-grow">
 
     <!-- ===================================================================== -->
-    <!-- TAB 1: INICIO Y NOTICIAS SEMANALES                                    -->
+    <!-- TAB 1: ACTUALIDAD (SOLO CABECERA LIMPIA + 2 NOTICIAS SEMANALES)       -->
     <!-- ===================================================================== -->
     <section id="tabPanel-inicio" class="space-y-6">
-      <!-- Compact Editorial Hero -->
-      <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4">
+      <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <span class="px-3 py-1 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold uppercase tracking-wider border border-[#1E4D3B]/15" data-i18n="hero_badge">
-            🥾 Portal Independiente del Peregrino
+            🥾 Actualidad e Información del Camino
           </span>
           <span id="newsWeekBadge" class="px-3 py-1 rounded-full bg-[#EFE9DC] text-[#5F6C65] text-[11px] font-bold border border-[#E5DEC9]">
             Actualización Semanal
@@ -185,33 +181,16 @@
         </div>
 
         <h1 class="text-2xl sm:text-4xl font-bold text-[#1C2826] leading-tight" data-i18n="hero_title">
-          Guía del Camino de Santiago: rutas, albergues y actualidad para tu etapa
+          Noticias y guía práctica del Camino de Santiago
         </h1>
-
         <p class="text-sm text-[#5F6C65] leading-relaxed max-w-3xl" data-i18n="hero_desc">
-          Consulta distancias, localidades y albergues de las 8 grandes rutas jacobeas, resuelve tus dudas sobre la Credencial y mantente al día con las noticias más relevantes del Camino.
+          Información actualizada cada semana sobre albergues, aperturas, tramos y vida en los pueblos del Camino. Usa las pestañas superiores para consultar rutas, preparar tu mochila o descubrir cómo caminar sin peso.
         </p>
-
-        <!-- Quick Index Cards -->
-        <div class="grid sm:grid-cols-3 gap-3 pt-2">
-          <button onclick="switchWebTab('rutas')" class="text-left p-4 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] transition-all space-y-1">
-            <div class="text-sm font-bold text-[#1C2826]" data-i18n="idx_routes_t">🗺️ 8 Rutas y Albergues</div>
-            <div class="text-xs text-[#5F6C65]" data-i18n="idx_routes_d">Explora etapas y alojamientos por pueblo →</div>
-          </button>
-          <button onclick="switchWebTab('guia')" class="text-left p-4 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] transition-all space-y-1">
-            <div class="text-sm font-bold text-[#1C2826]" data-i18n="idx_guide_t">📖 Consejos y Compostela</div>
-            <div class="text-xs text-[#5F6C65]" data-i18n="idx_guide_d">Requisitos, precios, calzado y presupuesto →</div>
-          </button>
-          <button onclick="switchWebTab('ligero')" class="text-left p-4 rounded-2xl bg-[#EBF3EE] border border-[#1E4D3B]/20 hover:border-[#1E4D3B] transition-all space-y-1">
-            <div class="text-sm font-bold text-[#1E4D3B]" data-i18n="idx_light_t">🪶 El secreto de caminar ligero</div>
-            <div class="text-xs text-[#5F6C65]" data-i18n="idx_light_d">Disfruta la etapa sin cargar la mochila →</div>
-          </button>
-        </div>
       </div>
 
       <!-- Weekly News (Max 2) -->
       <div class="space-y-3">
-        <h2 class="text-xl font-bold text-[#1C2826]" data-i18n="news_title">📰 Noticias de la Semana en el Camino</h2>
+        <h2 class="text-xl font-bold text-[#1C2826]" data-i18n="news_title">📰 Lo más relevante esta semana en el Camino</h2>
         <div id="newsGrid" class="grid md:grid-cols-2 gap-4">
           <div class="glass-card rounded-3xl p-5 text-xs text-[#5F6C65]">Cargando noticias...</div>
         </div>
@@ -219,27 +198,41 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 2: RUTAS, ETAPAS Y ALBERGUES (GRONZE-STYLE INDEXED)               -->
+    <!-- TAB 2: RUTAS, COMPARATIVA, ÚLTIMOS 100 KM Y ALBERGUES                 -->
     <!-- ===================================================================== -->
     <section id="tabPanel-rutas" class="hidden space-y-6">
+      <!-- ¿Qué Camino elegir? Comparativa rápida -->
+      <div class="glass-card rounded-3xl p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+          <div>
+            <h2 class="text-xl font-bold text-[#1C2826]" data-i18n="choose_title">🧭 ¿Qué Camino elegir según tus días?</h2>
+            <p class="text-xs text-[#5F6C65] mt-0.5" data-i18n="choose_sub">Filtra por duración para ver qué ruta y punto de inicio te conviene más.</p>
+          </div>
+          <div class="flex gap-1.5 flex-wrap">
+            <button onclick="filterDuration('all')" id="durBtn-all" class="dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#1E4D3B] text-white" data-i18n="dur_all">Todas</button>
+            <button onclick="filterDuration('week')" id="durBtn-week" class="dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9]" data-i18n="dur_week">5–7 días (100 km)</button>
+            <button onclick="filterDuration('fortnight')" id="durBtn-fortnight" class="dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9]" data-i18n="dur_fortnight">10–15 días</button>
+            <button onclick="filterDuration('month')" id="durBtn-month" class="dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9]" data-i18n="dur_month">~1 mes completo</button>
+          </div>
+        </div>
+        <div id="durationCompareGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+      </div>
+
+      <!-- Explorador por ruta, localidades y albergues -->
       <div class="glass-card rounded-3xl p-6 space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-[#E5DEC9] pb-4">
           <div>
-            <h2 class="text-2xl font-bold text-[#1C2826]" data-i18n="routes_title">Las 8 Rutas Principales del Camino</h2>
-            <p class="text-xs text-[#5F6C65] mt-1" data-i18n="routes_subtitle">Pulsa una ruta para desplegar sus localidades y albergues paso a paso.</p>
+            <h2 class="text-2xl font-bold text-[#1C2826]" data-i18n="routes_title">Localidades, Etapas y Albergues</h2>
+            <p class="text-xs text-[#5F6C65] mt-1" data-i18n="routes_subtitle">Pulsa una ruta para consultar sus etapas habituales de los últimos 100 km y su listado de albergues.</p>
           </div>
           <button onclick="switchWebTab('ligero')" class="text-xs font-bold text-[#1E4D3B] hover:text-[#D48B28] transition-colors text-left sm:text-right" data-i18n="subtle_hook_routes">
-            🪶 ¿Prefieres hacer estas etapas sin peso? Ver cómo →
+            🪶 ¿Prefieres hacer estas etapas sin peso? →
           </button>
         </div>
 
-        <!-- Route Selector Pills (Compact, no giant grid) -->
         <div id="routePillsBar" class="flex flex-wrap gap-2"></div>
+        <div id="activeRouteSummary" class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4 space-y-2"></div>
 
-        <!-- Active Route Summary Card -->
-        <div id="activeRouteSummary" class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"></div>
-
-        <!-- Search + Towns + Hostels -->
         <div class="space-y-4">
           <input type="text" id="expSearchInput" oninput="renderExplorerHostels()" placeholder="Buscar localidad o nombre de albergue..." class="w-full px-4 py-2.5 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] text-sm text-[#1C2826] placeholder-[#5F6C65]/60 focus:border-[#1E4D3B] focus:outline-none">
 
@@ -251,74 +244,87 @@
             <div id="expTownsContainer" class="flex flex-wrap gap-1.5 pt-3"></div>
           </details>
 
-          <div id="expHostelsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[420px] overflow-y-auto pr-1"></div>
+          <div id="expHostelsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[380px] overflow-y-auto pr-1"></div>
         </div>
       </div>
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 3: GUÍA DEL PEREGRINO (ACCORDION / DESPLEGABLES)                  -->
+    <!-- TAB 3: GUÍA DEL PEREGRINO (LO MÁS CONSULTADO EN GRONZE / EROSKI)      -->
     <!-- ===================================================================== -->
     <section id="tabPanel-guia" class="hidden space-y-5">
       <div class="glass-card rounded-3xl p-6 space-y-4">
         <div>
-          <h2 class="text-2xl font-bold text-[#1C2826]" data-i18n="guide_title">Guía Práctica y Preguntas Frecuentes</h2>
-          <p class="text-xs text-[#5F6C65] mt-1" data-i18n="guide_sub">Pulsa en cada apartado para desplegar la información esencial antes de empezar tu Camino.</p>
+          <h2 class="text-2xl font-bold text-[#1C2826]" data-i18n="guide_title">Guía Práctica del Peregrino</h2>
+          <p class="text-xs text-[#5F6C65] mt-1" data-i18n="guide_sub">Despliega cada apartado para resolver las dudas más habituales antes y durante el Camino.</p>
         </div>
 
         <div class="space-y-2.5">
+          <!-- 1. Credencial, Compostela y Misa -->
           <details open class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span data-i18n="tip1_title">📜 La Credencial del Peregrino y La Compostela</span>
+              <span data-i18n="tip1_title">📜 Credencial, La Compostela, Certificado de Distancia y Misa</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
-            <p class="text-xs text-[#5F6C65] leading-relaxed pt-2.5" data-i18n="tip1_desc">
-              Para obtener La Compostela en la Oficina del Peregrino de Santiago debes recorrer al menos los últimos 100 km a pie (o 200 km en bicicleta) y conseguir un mínimo de 2 sellos diarios en esos últimos 100 km (albergues, parroquias, ayuntamientos o bares).
-            </p>
+            <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-1.5">
+              <p data-i18n="tip1_desc">Para obtener La Compostela en la Oficina del Peregrino (Rúa Carretas, 33, Santiago) debes recorrer al menos los últimos 100 km a pie o a caballo (200 km en bicicleta) y sellar tu Credencial al menos 2 veces al día en esos últimos 100 km.</p>
+              <p data-i18n="tip1_extra">También puedes solicitar el Certificado de Distancia (acredita los km totales recorridos) y asistir a la Misa del Peregrino en la Catedral (habitualmente 12:00 y 19:30).</p>
+            </div>
           </details>
 
+          <!-- 2. Albergues y Presupuesto -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span data-i18n="tip2_title">🛏️ Tipos de Albergues, Reservas y Precios</span>
+              <span data-i18n="tip2_title">🛏️ Tipos de Albergues, Reservas y Presupuesto Diario</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
-            <p class="text-xs text-[#5F6C65] leading-relaxed pt-2.5" data-i18n="tip2_desc">
-              Los albergues públicos o municipales rondan los 10 € y funcionan por orden de llegada (sin reserva). Los albergues privados oscilan entre 15 € y 27 € y permiten reservar plaza con antelación. Los de donativo se sostienen con la aportación responsable del peregrino.
-            </p>
+            <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-1.5">
+              <p data-i18n="tip2_desc">Albergues públicos/Xunta (~10 €): no admiten reserva, se asignan por orden de llegada. Privados (15 €–27 €): permiten reservar cama o habitación. Donativos: aportación voluntaria responsable.</p>
+              <p data-i18n="tip2_extra">Presupuesto diario recomendado: entre 30 € y 50 €/día contando cama, menú del peregrino (12–16 €), desayuno y agua. Lleva efectivo para pueblos pequeños.</p>
+            </div>
           </details>
 
+          <!-- 3. Salud: Ampollas, Tendinitis e Hidratación -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span data-i18n="tip3_title">🎒 Peso de la Mochila y Cuidado de la Espalda</span>
+              <span data-i18n="tip3_title">🩹 Salud en el Camino: Ampollas, Tendinitis y Peso</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
             <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
-              <p data-i18n="tip3_desc">
-                La regla de oro es no superar nunca el 10% de tu peso corporal. Muchos peregrinos descubren en la segunda o tercera jornada que cargar 9-12 kg durante 25 km diarios pasa factura en rodillas y lumbares.
-              </p>
+              <p data-i18n="tip3_desc">Nunca estrenes calzado. Usa zapatillas domadas (medio número más), calcetines sin costuras y vaselina antes de salir. Hidrátate cada 45 min y estira gemelos y rodillas al llegar.</p>
+              <p data-i18n="tip3_weight">La principal causa de tendinitis y sobrecarga lumbar es cargar más del 10% de tu peso corporal durante jornadas de 20–30 km.</p>
               <button onclick="switchWebTab('ligero')" class="text-[#1E4D3B] font-bold underline" data-i18n="tip3_link">
-                Descubre cómo enviar tu mochila entre albergues y caminar solo con lo imprescindible →
+                Cómo evitar cargar peso y disfrutar cada etapa →
               </button>
             </div>
           </details>
 
+          <!-- 4. Checklist interactiva de Mochila -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span data-i18n="tip4_title">👟 Calzado, Calcetines y Prevención de Ampollas</span>
+              <span data-i18n="tip4_title">🎒 Checklist: Qué llevar en la mochila (marca lo que tengas listo)</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
-            <p class="text-xs text-[#5F6C65] leading-relaxed pt-2.5" data-i18n="tip4_desc">
-              Nunca estrenes botas en el Camino. Elige calzado de trekking ya domado y medio número más grande para cuando el pie se dilate, calcetines técnicos sin costuras y aplica vaselina antes de cada etapa.
-            </p>
+            <div class="pt-3 grid sm:grid-cols-2 gap-2 text-xs text-[#1C2826]" id="checklistBox">
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-[#E5DEC9] cursor-pointer"><input type="checkbox" class="accent-[#1E4D3B]"> <span data-i18n="chk1">Credencial del Peregrino + DNI/Pasaporte</span></label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-[#E5DEC9] cursor-pointer"><input type="checkbox" class="accent-[#1E4D3B]"> <span data-i18n="chk2">Calzado trekking domado + chanclas ducha</span></label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-[#E5DEC9] cursor-pointer"><input type="checkbox" class="accent-[#1E4D3B]"> <span data-i18n="chk3">3 pares de calcetines técnicos sin costuras</span></label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-[#E5DEC9] cursor-pointer"><input type="checkbox" class="accent-[#1E4D3B]"> <span data-i18n="chk4">Saco sábana ligero + tapones para los oídos</span></label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-[#E5DEC9] cursor-pointer"><input type="checkbox" class="accent-[#1E4D3B]"> <span data-i18n="chk5">Chubasquero o poncho impermeable transpirable</span></label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-[#E5DEC9] cursor-pointer"><input type="checkbox" class="accent-[#1E4D3B]"> <span data-i18n="chk6">Botiquín: vaselina, compeed, aguja e ibuprofeno</span></label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-[#E5DEC9] cursor-pointer"><input type="checkbox" class="accent-[#1E4D3B]"> <span data-i18n="chk7">Cantimplora (1L), gorra y protector solar</span></label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-[#E5DEC9] cursor-pointer"><input type="checkbox" class="accent-[#1E4D3B]"> <span data-i18n="chk8">Cargador, batería externa y frontal pequeño</span></label>
+            </div>
           </details>
 
+          <!-- 5. Cómo llegar y volver -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span data-i18n="tip5_title">🌤️ Mejor Época y Presupuesto Diario</span>
+              <span data-i18n="tip5_title">🚆 Cómo llegar al inicio de etapa y volver desde Santiago</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
             <p class="text-xs text-[#5F6C65] leading-relaxed pt-2.5" data-i18n="tip5_desc">
-              Primavera (abril-junio) y otoño (septiembre-octubre) ofrecen temperaturas agradables y menos masificación. Calcula un presupuesto medio de 30 € a 50 € al día entre albergue, menú del peregrino (12-16 €) y avituallamiento.
+              Para los últimos 100 km, Sarria, Tui, Ferrol y Ourense cuentan con conexiones diarias en tren (Renfe) o autobús (Alsa/Monbus). Para el regreso, Santiago de Compostela dispone de estación intermodal de tren/bus y aeropuerto internacional (SCQ) a 20 min del centro.
             </p>
           </details>
         </div>
@@ -326,23 +332,21 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 4: CAMINAR SIN PESO (DISCREET, DEEP-HITTING SMARTVIEIRA TAB)      -->
+    <!-- TAB 4: CAMINAR SIN PESO (GANCHO SUTIL + TIENDA SMARTVIEIRA)           -->
     <!-- ===================================================================== -->
     <section id="tabPanel-ligero" class="hidden space-y-6">
       <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6">
-        <!-- Emotional, non-pushy editorial intro -->
         <div class="max-w-3xl space-y-3">
           <span class="text-xs font-bold uppercase tracking-widest text-[#D48B28]" data-i18n="light_kicker">La diferencia entre sufrir la etapa o vivirla</span>
           <h2 class="text-2xl sm:text-3xl font-bold text-[#1C2826]" data-i18n="light_title">
             El Camino se camina con el corazón, no con diez kilos a la espalda
           </h2>
           <p class="text-sm text-[#5F6C65] leading-relaxed" data-i18n="light_desc">
-            Quien ha hecho el Camino lo sabe: los paisajes, las conversaciones y la llegada a Santiago se disfrutan el doble cuando tus rodillas y tu espalda descansan. Por eso nació SmartVieira, una concha del peregrino pensada para que enviar tu mochila de albergue en albergue sea tan natural como colgarla en tu mochila.
+            Quien ha hecho el Camino lo sabe: las charlas, los amaneceres y la entrada al Obradoiro se viven de otra manera cuando tus rodillas y tu espalda no sufren. Por eso creamos SmartVieira: una concha pensada para que mover tu mochila entre albergues sea tan sencillo como colgarla en tu equipaje.
           </p>
         </div>
 
         <div class="grid lg:grid-cols-12 gap-8 items-start pt-2">
-          <!-- Left: Subtle features + Photo -->
           <div class="lg:col-span-6 space-y-4">
             <div class="rounded-2xl overflow-hidden border border-[#E5DEC9] bg-[#EFE9DC] aspect-[16/10]">
               <img src="/images/smartvieira-product.jpg" alt="Concha SmartVieira" class="w-full h-full object-cover">
@@ -350,21 +354,20 @@
 
             <div class="space-y-2.5 text-xs sm:text-sm text-[#1C2826]">
               <div class="p-3.5 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9]">
-                <strong class="text-[#1E4D3B]" data-i18n="lf1_t">1. Olvídate de sobres, dinero suelto y llamadas</strong>
-                <p class="text-xs text-[#5F6C65] mt-0.5" data-i18n="lf1_d">Escanea el QR de tu concha, elige albergue de origen y destino, y paga la etapa en 1 clic con Apple Pay, Google Pay, Bizum, PayPal o tarjeta.</p>
+                <strong class="text-[#1E4D3B]" data-i18n="lf1_t">1. Sin sobres, efectivo ni llamadas</strong>
+                <p class="text-xs text-[#5F6C65] mt-0.5" data-i18n="lf1_d">Escaneas el QR desde tu móvil, eliges albergue de origen y destino, y pagas en 1 clic con Apple Pay, Google Pay, Bizum, PayPal o tarjeta.</p>
               </div>
               <div class="p-3.5 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9]">
-                <strong class="text-[#1E4D3B]" data-i18n="lf2_t">2. Tu mochila siempre localizada e identificada</strong>
-                <p class="text-xs text-[#5F6C65] mt-0.5" data-i18n="lf2_d">Su baliza Bluetooth BLE parpadea cuando el transportista llega a recogerla o entregarla, y tú ves su posición GPS en directo desde la app.</p>
+                <strong class="text-[#1E4D3B]" data-i18n="lf2_t">2. Tu mochila identificada y localizada en todo momento</strong>
+                <p class="text-xs text-[#5F6C65] mt-0.5" data-i18n="lf2_d">Su baliza Bluetooth BLE parpadea al llegar el transportista al albergue para evitar confusiones, y sigues su ruta por GPS en vivo.</p>
               </div>
               <div class="p-3.5 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9]">
-                <strong class="text-[#1E4D3B]" data-i18n="lf3_t">3. Un recuerdo útil para todo tu Camino</strong>
-                <p class="text-xs text-[#5F6C65] mt-0.5" data-i18n="lf3_d">Ligera, resistente al agua y con pila CR2450 incluida. Te acompaña desde el primer kilómetro hasta la Plaza del Obradoiro.</p>
+                <strong class="text-[#1E4D3B]" data-i18n="lf3_t">3. Resistente al agua y lista para todo el Camino</strong>
+                <p class="text-xs text-[#5F6C65] mt-0.5" data-i18n="lf3_d">Ligera, impermeable y con pila CR2450 de larga duración incluida.</p>
               </div>
             </div>
           </div>
 
-          <!-- Right: Clean Order Form (15€ + 2€) -->
           <div class="lg:col-span-6 bg-[#F7F3EB] rounded-3xl p-6 border border-[#E5DEC9] space-y-4">
             <div class="flex items-center justify-between border-b border-[#E5DEC9] pb-3">
               <div>
@@ -444,18 +447,58 @@
       </div>
     </section>
 
+    <!-- ===================================================================== -->
+    <!-- TAB 5: DESCARGAS (CENTRO DE DESCARGAS APK -> FUTURO PLAY / APP STORE) -->
+    <!-- ===================================================================== -->
+    <section id="tabPanel-descargas" class="hidden space-y-6">
+      <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 max-w-3xl mx-auto">
+        <div class="space-y-2 text-center">
+          <span class="inline-block px-3 py-1 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold uppercase tracking-wider border border-[#1E4D3B]/15" data-i18n="dl_badge">
+            Aplicaciones Móviles SmartVieira
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-[#1C2826]" data-i18n="dl_title">📲 Descarga la App en tu Teléfono</h2>
+          <p class="text-xs sm:text-sm text-[#5F6C65] leading-relaxed" data-i18n="dl_desc">
+            Las aplicaciones de SmartVieira (Peregrino y Repartidor) se instalan directamente en tu smartphone para vincular tu concha por Bluetooth y seguir tus etapas.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-5 space-y-2">
+            <div class="text-2xl">🐚</div>
+            <h3 class="font-bold text-base text-[#1C2826]" data-i18n="dl_p_t">App del Peregrino</h3>
+            <p class="text-xs text-[#5F6C65]" data-i18n="dl_p_d">Escanea tu SmartVieira, reserva etapas y consulta la ubicación GPS de tu mochila en tiempo real.</p>
+          </div>
+          <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-5 space-y-2">
+            <div class="text-2xl">🚚</div>
+            <h3 class="font-bold text-base text-[#1C2826]" data-i18n="dl_c_t">App del Repartidor</h3>
+            <p class="text-xs text-[#5F6C65]" data-i18n="dl_c_d">Gestión de recogidas en albergues, parpadeo BLE para localizar mochilas y entrega confirmada.</p>
+          </div>
+        </div>
+
+        <div class="text-center space-y-3 pt-2">
+          <a href="/descargar.html" class="inline-block px-7 py-3.5 rounded-2xl bg-[#1E4D3B] hover:bg-[#2A6B53] text-white font-bold text-sm shadow-md transition-all" data-i18n="dl_cta">
+            Ir al Centro de Descargas APK →
+          </a>
+          <div class="flex flex-wrap items-center justify-center gap-3 text-[11px] font-bold text-[#5F6C65]">
+            <span class="px-3 py-1.5 rounded-xl bg-[#EFE9DC] border border-[#E5DEC9]" data-i18n="dl_play">▶ Google Play Store (Próximamente)</span>
+            <span class="px-3 py-1.5 rounded-xl bg-[#EFE9DC] border border-[#E5DEC9]" data-i18n="dl_apple"> Apple App Store (Próximamente)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <!-- FOOTER -->
+  <!-- FOOTER DISCRETO (SIN ENLACES A APPS WEB NI A ADMIN) -->
   <footer class="border-t border-[#E5DEC9] bg-[#EFE9DC]/60 py-6 px-4">
     <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#5F6C65]">
       <div>
         <strong class="text-[#1C2826]">SmartVieira</strong> • Santiago de Compostela • <span data-i18n="footer_rights">Todos los derechos reservados</span>
       </div>
       <div class="flex items-center gap-5">
-        <a href="/pilgrim-app.html" class="hover:text-[#1E4D3B] font-semibold transition-colors" data-i18n="footer_pilgrim_app">App Peregrino</a>
-        <a href="/courier-app.html" class="hover:text-[#1E4D3B] font-semibold transition-colors" data-i18n="footer_courier_app">App Repartidor</a>
-        <a href="/descargar.html" class="text-[#5F6C65]/80 hover:text-[#1C2826] transition-colors" data-i18n="footer_apk">Descargas APK</a>
+        <button onclick="switchWebTab('rutas')" class="hover:text-[#1E4D3B] transition-colors" data-i18n="tab_routes">🗺️ Rutas y Albergues</button>
+        <button onclick="switchWebTab('guia')" class="hover:text-[#1E4D3B] transition-colors" data-i18n="tab_guide">📖 Guía del Peregrino</button>
+        <a href="/descargar.html" class="text-[#5F6C65]/80 hover:text-[#1C2826] transition-colors" data-i18n="footer_apk">Centro de Descargas</a>
       </div>
     </div>
   </footer>
@@ -495,246 +538,309 @@
   <script>
     const WEB_I18N = {
       ES: {
-        nav_app: 'App Peregrino →',
-        tab_home: '📰 Actualidad e Inicio', tab_routes: '🗺️ Rutas y Albergues', tab_guide: '📖 Guía del Peregrino', tab_light: '🐚 Caminar sin Peso',
-        hero_badge: '🥾 Portal Independiente del Peregrino',
-        hero_title: 'Guía del Camino de Santiago: rutas, albergues y actualidad para tu etapa',
-        hero_desc: 'Consulta distancias, localidades y albergues de las 8 grandes rutas jacobeas, resuelve tus dudas sobre la Credencial y mantente al día con las noticias más relevantes del Camino.',
-        idx_routes_t: '🗺️ 8 Rutas y Albergues', idx_routes_d: 'Explora etapas y alojamientos por pueblo →',
-        idx_guide_t: '📖 Consejos y Compostela', idx_guide_d: 'Requisitos, precios, calzado y presupuesto →',
-        idx_light_t: '🪶 El secreto de caminar ligero', idx_light_d: 'Disfruta la etapa sin cargar la mochila →',
-        news_title: '📰 Noticias de la Semana en el Camino',
-        routes_title: 'Las 8 Rutas Principales del Camino', routes_subtitle: 'Pulsa una ruta para desplegar sus localidades y albergues paso a paso.',
-        subtle_hook_routes: '🪶 ¿Prefieres hacer estas etapas sin peso? Ver cómo →',
+        tab_home: '📰 Actualidad', tab_routes: '🗺️ Rutas y Albergues', tab_guide: '📖 Guía del Peregrino', tab_light: '🐚 Caminar sin Peso', tab_downloads: '📲 Descargas',
+        hero_badge: '🥾 Actualidad e Información del Camino',
+        hero_title: 'Noticias y guía práctica del Camino de Santiago',
+        hero_desc: 'Información actualizada cada semana sobre albergues, aperturas, tramos y vida en los pueblos del Camino. Usa las pestañas superiores para consultar rutas, preparar tu mochila o descubrir cómo caminar sin peso.',
+        news_title: '📰 Lo más relevante esta semana en el Camino',
+        choose_title: '🧭 ¿Qué Camino elegir según tus días?', choose_sub: 'Filtra por duración para ver qué ruta y punto de inicio te conviene más.',
+        dur_all: 'Todas', dur_week: '5–7 días (100 km)', dur_fortnight: '10–15 días', dur_month: '~1 mes completo',
+        routes_title: 'Localidades, Etapas y Albergues', routes_subtitle: 'Pulsa una ruta para consultar sus etapas habituales de los últimos 100 km y su listado de albergues.',
+        subtle_hook_routes: '🪶 ¿Prefieres hacer estas etapas sin peso? →',
         exp_towns_label: '📍 Localidades de paso en orden de etapa (pulsa para filtrar)',
-        guide_title: 'Guía Práctica y Preguntas Frecuentes', guide_sub: 'Pulsa en cada apartado para desplegar la información esencial antes de empezar tu Camino.',
-        tip1_title: '📜 La Credencial del Peregrino y La Compostela', tip1_desc: 'Para obtener La Compostela en la Oficina del Peregrino de Santiago debes recorrer al menos los últimos 100 km a pie (o 200 km en bicicleta) y conseguir un mínimo de 2 sellos diarios en esos últimos 100 km.',
-        tip2_title: '🛏️ Tipos de Albergues, Reservas y Precios', tip2_desc: 'Los albergues públicos rondan los 10 € (sin reserva previa, por orden de llegada). Los privados oscilan entre 15 € y 27 € y permiten reservar. Los de donativo funcionan mediante aportación responsable.',
-        tip3_title: '🎒 Peso de la Mochila y Cuidado de la Espalda', tip3_desc: 'La regla de oro es no superar el 10% de tu peso corporal. Muchos peregrinos descubren en la segunda o tercera jornada que cargar 9-12 kg durante 25 km diarios pasa factura en rodillas y lumbares.',
-        tip3_link: 'Descubre cómo enviar tu mochila entre albergues y caminar solo con lo imprescindible →',
-        tip4_title: '👟 Calzado, Calcetines y Prevención de Ampollas', tip4_desc: 'Nunca estrenes botas en el Camino. Elige calzado ya domado, calcetines técnicos sin costuras y aplica vaselina antes de cada etapa.',
-        tip5_title: '🌤️ Mejor Época y Presupuesto Diario', tip5_desc: 'Primavera y otoño ofrecen el mejor clima y menos masificación. Calcula entre 30 € y 50 € al día sumando albergue, menú del peregrino (12-16 €) y avituallamiento.',
+        guide_title: 'Guía Práctica del Peregrino', guide_sub: 'Despliega cada apartado para resolver las dudas más habituales antes y durante el Camino.',
+        tip1_title: '📜 Credencial, La Compostela, Certificado de Distancia y Misa',
+        tip1_desc: 'Para obtener La Compostela en la Oficina del Peregrino (Rúa Carretas, 33, Santiago) debes recorrer al menos los últimos 100 km a pie o a caballo (200 km en bicicleta) y sellar tu Credencial al menos 2 veces al día en esos últimos 100 km.',
+        tip1_extra: 'También puedes solicitar el Certificado de Distancia (acredita los km totales recorridos) y asistir a la Misa del Peregrino en la Catedral (habitualmente 12:00 y 19:30).',
+        tip2_title: '🛏️ Tipos de Albergues, Reservas y Presupuesto Diario',
+        tip2_desc: 'Albergues públicos/Xunta (~10 €): no admiten reserva, se asignan por orden de llegada. Privados (15 €–27 €): permiten reservar cama o habitación. Donativos: aportación voluntaria responsable.',
+        tip2_extra: 'Presupuesto diario recomendado: entre 30 € y 50 €/día contando cama, menú del peregrino (12–16 €), desayuno y agua. Lleva efectivo para pueblos pequeños.',
+        tip3_title: '🩹 Salud en el Camino: Ampollas, Tendinitis y Peso',
+        tip3_desc: 'Nunca estrenes calzado. Usa zapatillas domadas (medio número más), calcetines sin costuras y vaselina antes de salir. Hidrátate cada 45 min y estira gemelos y rodillas al llegar.',
+        tip3_weight: 'La principal causa de tendinitis y sobrecarga lumbar es cargar más del 10% de tu peso corporal durante jornadas de 20–30 km.',
+        tip3_link: 'Cómo evitar cargar peso y disfrutar cada etapa →',
+        tip4_title: '🎒 Checklist: Qué llevar en la mochila (marca lo que tengas listo)',
+        chk1: 'Credencial del Peregrino + DNI/Pasaporte', chk2: 'Calzado trekking domado + chanclas ducha',
+        chk3: '3 pares de calcetines técnicos sin costuras', chk4: 'Saco sábana ligero + tapones para los oídos',
+        chk5: 'Chubasquero o poncho impermeable transpirable', chk6: 'Botiquín: vaselina, compeed, aguja e ibuprofeno',
+        chk7: 'Cantimplora (1L), gorra y protector solar', chk8: 'Cargador, batería externa y frontal pequeño',
+        tip5_title: '🚆 Cómo llegar al inicio de etapa y volver desde Santiago',
+        tip5_desc: 'Para los últimos 100 km, Sarria, Tui, Ferrol y Ourense cuentan con conexiones diarias en tren (Renfe) o autobús (Alsa/Monbus). Para el regreso, Santiago dispone de estación intermodal y aeropuerto internacional (SCQ).',
         light_kicker: 'La diferencia entre sufrir la etapa o vivirla',
         light_title: 'El Camino se camina con el corazón, no con diez kilos a la espalda',
-        light_desc: 'Quien ha hecho el Camino lo sabe: los paisajes, las conversaciones y la llegada a Santiago se disfrutan el doble cuando tus rodillas y tu espalda descansan. Por eso nació SmartVieira, una concha pensada para que enviar tu mochila entre albergues sea tan natural como colgarla.',
-        lf1_t: '1. Olvídate de sobres, dinero suelto y llamadas', lf1_d: 'Escanea el QR de tu concha, elige albergue de origen y destino, y paga la etapa en 1 clic con Apple Pay, Google Pay, Bizum, PayPal o tarjeta.',
-        lf2_t: '2. Tu mochila siempre localizada e identificada', lf2_d: 'Su baliza Bluetooth BLE parpadea cuando el transportista llega a recogerla o entregarla, y tú ves su posición GPS en directo desde la app.',
-        lf3_t: '3. Un recuerdo útil para todo tu Camino', lf3_d: 'Ligera, resistente al agua y con pila CR2450 incluida. Te acompaña desde el primer kilómetro hasta la Plaza del Obradoiro.',
+        light_desc: 'Quien ha hecho el Camino lo sabe: las charlas, los amaneceres y la entrada al Obradoiro se viven de otra manera cuando tus rodillas y tu espalda no sufren. Por eso creamos SmartVieira: una concha pensada para que mover tu mochila entre albergues sea tan sencillo como colgarla en tu equipaje.',
+        lf1_t: '1. Sin sobres, efectivo ni llamadas', lf1_d: 'Escaneas el QR desde tu móvil, eliges albergue de origen y destino, y pagas en 1 clic con Apple Pay, Google Pay, Bizum, PayPal o tarjeta.',
+        lf2_t: '2. Tu mochila identificada y localizada en todo momento', lf2_d: 'Su baliza Bluetooth BLE parpadea al llegar el transportista al albergue para evitar confusiones, y sigues su ruta por GPS en vivo.',
+        lf3_t: '3. Resistente al agua y lista para todo el Camino', lf3_d: 'Ligera, impermeable y con pila CR2450 de larga duración incluida.',
         order_price_label: 'Concha SmartVieira', order_ship_inline: '+ 2,00 € envío', in_stock: 'Disponible',
         order_qty: 'Cantidad', order_total_label: 'Total:',
         ord_name: 'Nombre completo *', ord_email: 'Correo electrónico *', ord_phone: 'Teléfono *', ord_country: 'País *',
         ord_address: 'Dirección de envío *', ord_cp: 'Código Postal *', ord_city: 'Ciudad *',
         ord_submit: 'Solicitar mi SmartVieira →', ord_methods_hint: 'Pago seguro con Stripe: Apple Pay • Google Pay • Bizum • PayPal • Tarjeta',
         ord_success_title: '¡Pedido Confirmado!',
-        footer_rights: 'Todos los derechos reservados', footer_pilgrim_app: 'App Peregrino', footer_courier_app: 'App Repartidor', footer_apk: 'Descargas APK',
+        dl_badge: 'Aplicaciones Móviles SmartVieira', dl_title: '📲 Descarga la App en tu Teléfono',
+        dl_desc: 'Las aplicaciones de SmartVieira (Peregrino y Repartidor) se instalan directamente en tu smartphone para vincular tu concha por Bluetooth y seguir tus etapas.',
+        dl_p_t: 'App del Peregrino', dl_p_d: 'Escanea tu SmartVieira, reserva etapas y consulta la ubicación GPS de tu mochila en tiempo real.',
+        dl_c_t: 'App del Repartidor', dl_c_d: 'Gestión de recogidas en albergues, parpadeo BLE para localizar mochilas y entrega confirmada.',
+        dl_cta: 'Ir al Centro de Descargas APK →', dl_play: '▶ Google Play Store (Próximamente)', dl_apple: ' Apple App Store (Próximamente)',
+        footer_rights: 'Todos los derechos reservados', footer_apk: 'Centro de Descargas',
         modal_title: 'Pasarela Segura Stripe', modal_or: 'o paga con', modal_cancel: 'Cancelar', modal_pay_btn: '🔒 Pagar Ahora',
         all_towns: 'Todas las localidades', no_hostels: 'No se encontraron albergues para ese filtro.', stages_word: 'etapas'
       },
       EN: {
-        nav_app: 'Pilgrim App →',
-        tab_home: '📰 News & Home', tab_routes: '🗺️ Routes & Hostels', tab_guide: '📖 Pilgrim Guide', tab_light: '🐚 Walk Weight-Free',
-        hero_badge: '🥾 Independent Pilgrim Portal',
-        hero_title: 'Camino de Santiago Guide: routes, hostels & weekly updates',
-        hero_desc: 'Explore distances, stage towns and hostels across all 8 Camino routes, read practical tips for your Credencial, and stay updated with the latest Camino news.',
-        idx_routes_t: '🗺️ 8 Routes & Hostels', idx_routes_d: 'Browse stages and hostels by town →',
-        idx_guide_t: '📖 Tips & Compostela', idx_guide_d: 'Requirements, prices, footwear & budget →',
-        idx_light_t: '🪶 The secret of walking light', idx_light_d: 'Enjoy every stage without carrying weight →',
-        news_title: '📰 Weekly Camino News',
-        routes_title: 'The 8 Main Camino Routes', routes_subtitle: 'Select a route to expand its stage towns and hostels.',
-        subtle_hook_routes: '🪶 Prefer walking these stages weight-free? See how →',
+        tab_home: '📰 News', tab_routes: '🗺️ Routes & Hostels', tab_guide: '📖 Pilgrim Guide', tab_light: '🐚 Walk Weight-Free', tab_downloads: '📲 Downloads',
+        hero_badge: '🥾 Camino News & Pilgrim Information',
+        hero_title: 'Camino de Santiago News & Practical Guide',
+        hero_desc: 'Weekly updates on hostels, openings, route conditions and Camino towns. Use the tabs above to explore routes, pack your bag, or discover how to walk weight-free.',
+        news_title: '📰 Top Camino News This Week',
+        choose_title: '🧭 Which Camino suits your available days?', choose_sub: 'Filter by duration to pick the best route and starting point.',
+        dur_all: 'All', dur_week: '5–7 days (100 km)', dur_fortnight: '10–15 days', dur_month: '~1 full month',
+        routes_title: 'Towns, Stages & Hostels', routes_subtitle: 'Select a route to see typical final 100 km stages and available albergues.',
+        subtle_hook_routes: '🪶 Prefer walking these stages weight-free? →',
         exp_towns_label: '📍 Stage towns in route order (tap to filter)',
-        guide_title: 'Practical Guide & Frequently Asked Questions', guide_sub: 'Expand each section to read essential Camino preparation tips.',
-        tip1_title: '📜 The Credencial & Compostela Certificate', tip1_desc: 'Walk at least the final 100 km (200 km by bike) and collect 2 stamps per day over the last 100 km to receive your Compostela in Santiago.',
-        tip2_title: '🛏️ Hostel Types, Bookings & Prices', tip2_desc: 'Public albergues cost around €10 (first-come, first-served). Private hostels range from €15 to €27 and accept bookings.',
-        tip3_title: '🎒 Backpack Weight & Back Care', tip3_desc: 'Never carry more than 10% of your body weight. Many pilgrims realize by day 2 or 3 that carrying 9-12 kg takes a toll on knees and back.',
-        tip3_link: 'See how to send your backpack between hostels and walk light →',
-        tip4_title: '👟 Footwear, Socks & Blister Prevention', tip4_desc: 'Never wear brand-new boots. Choose broken-in trail shoes, seamless socks, and apply foot balm before walking.',
-        tip5_title: '🌤️ Best Season & Daily Budget', tip5_desc: 'Spring and Autumn offer the best weather. Budget €30–€50/day covering hostel, Pilgrim Menu (€12–€16), and supplies.',
+        guide_title: 'Practical Pilgrim Guide', guide_sub: 'Expand any section for essential tips before and during your Camino.',
+        tip1_title: '📜 Credencial, Compostela, Distance Certificate & Mass',
+        tip1_desc: 'Walk at least the final 100 km on foot (200 km by bike) and collect 2 stamps per day over the last 100 km to receive your Compostela at the Pilgrim Office (Rúa Carretas, 33, Santiago).',
+        tip1_extra: 'You can also request the Distance Certificate and attend the Pilgrim Mass at Santiago Cathedral (usually 12:00 & 19:30).',
+        tip2_title: '🛏️ Hostel Types, Bookings & Daily Budget',
+        tip2_desc: 'Public/municipal albergues (~€10): first-come, first-served. Private hostels (€15–€27): accept advance bookings. Donativos: responsible voluntary donation.',
+        tip2_extra: 'Estimated daily budget: €30–€50/day including bed, Pilgrim Menu (€12–€16), breakfast and water.',
+        tip3_title: '🩹 Camino Health: Blisters, Tendinitis & Weight',
+        tip3_desc: 'Never wear brand-new boots. Use broken-in trail shoes (half size up), seamless socks and foot balm. Hydrate every 45 mins and stretch daily.',
+        tip3_weight: 'Carrying over 10% of your body weight for 20–30 km/day is the #1 cause of knee pain and tendinitis.',
+        tip3_link: 'How to avoid carrying weight and enjoy every stage →',
+        tip4_title: '🎒 Packing Checklist (tick what you have ready)',
+        chk1: 'Pilgrim Credencial + ID / Passport', chk2: 'Broken-in trail shoes + shower flip-flops',
+        chk3: '3 pairs of seamless hiking socks', chk4: 'Light sleeping liner + earplugs',
+        chk5: 'Breathable rain jacket or poncho', chk6: 'First-aid: foot balm, Compeed, needle, ibuprofen',
+        chk7: '1L water bottle, hat & sunscreen', chk8: 'Phone charger, powerbank & small headlamp',
+        tip5_title: '🚆 Getting to your start point & returning from Santiago',
+        tip5_desc: 'For the final 100 km, Sarria, Tui, Ferrol and Ourense have daily train (Renfe) and bus links. Santiago has an intermodal train/bus station and an international airport (SCQ).',
         light_kicker: 'The difference between enduring a stage and living it',
         light_title: 'The Camino is walked with your heart, not with ten kilos on your back',
-        light_desc: 'Anyone who has walked the Camino knows: the landscapes, conversations, and arrival in Santiago feel twice as joyful when your knees and back are rested. SmartVieira was created so sending your bag ahead is effortless.',
-        lf1_t: '1. No envelopes, loose cash, or phone calls', lf1_d: 'Scan your shell QR, pick origin & destination hostels, and pay in 1 click via Apple Pay, Google Pay, Bizum, PayPal or Card.',
-        lf2_t: '2. Your bag always tracked & identified', lf2_d: 'Its Bluetooth BLE beacon blinks when the courier picks it up or delivers it, and you watch live GPS in the app.',
-        lf3_t: '3. A practical companion all the way to Santiago', lf3_d: 'Lightweight, water-resistant, with CR2450 battery included.',
+        light_desc: 'Anyone who has walked the Camino knows: sunrises, conversations, and arriving at Obradoiro feel twice as joyful when your knees and back are rested. SmartVieira makes hostel-to-hostel bag transfer effortless.',
+        lf1_t: '1. No envelopes, loose cash, or calls', lf1_d: 'Scan the QR on your phone, pick pickup & destination hostels, and pay in 1 click via Apple Pay, Google Pay, Bizum, PayPal or Card.',
+        lf2_t: '2. Your backpack always identified & tracked', lf2_d: 'Its Bluetooth BLE beacon blinks on courier arrival and you follow live GPS in the app.',
+        lf3_t: '3. Water-resistant & ready for the whole Camino', lf3_d: 'Lightweight, waterproof, with long-life CR2450 battery included.',
         order_price_label: 'SmartVieira Shell', order_ship_inline: '+ €2.00 shipping', in_stock: 'In Stock',
         order_qty: 'Quantity', order_total_label: 'Total:',
         ord_name: 'Full name *', ord_email: 'Email *', ord_phone: 'Phone *', ord_country: 'Country *',
         ord_address: 'Shipping address *', ord_cp: 'Postal Code *', ord_city: 'City *',
         ord_submit: 'Order my SmartVieira →', ord_methods_hint: 'Secure Stripe Checkout: Apple Pay • Google Pay • Bizum • PayPal • Card',
         ord_success_title: 'Order Confirmed!',
-        footer_rights: 'All rights reserved', footer_pilgrim_app: 'Pilgrim App', footer_courier_app: 'Courier App', footer_apk: 'APK Downloads',
+        dl_badge: 'SmartVieira Mobile Apps', dl_title: '📲 Download the App on Your Phone',
+        dl_desc: 'SmartVieira apps (Pilgrim & Courier) are installed directly on your smartphone to pair your shell via Bluetooth and track your stages.',
+        dl_p_t: 'Pilgrim App', dl_p_d: 'Scan your SmartVieira, book stages and check live GPS location of your bag.',
+        dl_c_t: 'Courier App', dl_c_d: 'Manage hostel pickups, blink BLE shells to locate bags, and confirm delivery.',
+        dl_cta: 'Go to APK Download Center →', dl_play: '▶ Google Play Store (Coming Soon)', dl_apple: ' Apple App Store (Coming Soon)',
+        footer_rights: 'All rights reserved', footer_apk: 'Download Center',
         modal_title: 'Stripe Secure Checkout', modal_or: 'or pay with', modal_cancel: 'Cancel', modal_pay_btn: '🔒 Pay Now',
         all_towns: 'All towns', no_hostels: 'No hostels found.', stages_word: 'stages'
       },
       FR: {
-        nav_app: 'App Pèlerin →',
-        tab_home: '📰 Actualités & Accueil', tab_routes: '🗺️ Chemins & Auberges', tab_guide: '📖 Guide du Pèlerin', tab_light: '🐚 Marcher Léger',
-        hero_badge: '🥾 Portail Indépendant du Pèlerin',
-        hero_title: 'Guide du Chemin de Compostelle : itinéraires, auberges et actualités',
-        hero_desc: 'Consultez les 8 grands chemins, leurs étapes, auberges et l’actualité hebdomadaire pour préparer votre départ.',
-        idx_routes_t: '🗺️ 8 Chemins & Auberges', idx_routes_d: 'Explorer étapes et hébergements →',
-        idx_guide_t: '📖 Conseils & Compostela', idx_guide_d: 'Règles, tarifs, chaussures et budget →',
-        idx_light_t: '🪶 Marcher sans poids', idx_light_d: 'Profiter de l’étape sans mal de dos →',
-        news_title: '📰 Actualités de la Semaine',
-        routes_title: 'Les 8 Chemins Principaux', routes_subtitle: 'Sélectionnez un chemin pour afficher ses villes étapes et auberges.',
-        subtle_hook_routes: '🪶 Envie de marcher léger sur ces étapes ? Voir comment →',
-        exp_towns_label: '📍 Villes étapes dans l’ordre (cliquez pour filtrer)',
-        guide_title: 'Guide Pratique & Questions Fréquentes', guide_sub: 'Dépliez chaque rubrique pour préparer votre Chemin.',
-        tip1_title: '📜 Credencial et Compostela', tip1_desc: '100 derniers km à pied (200 km à vélo) avec 2 tampons par jour.',
-        tip2_title: '🛏️ Auberges et Tarifs', tip2_desc: 'Municipales ~10 € (sans réservation) ; privées 15-27 € (avec réservation).',
-        tip3_title: '🎒 Poids du Sac à Dos', tip3_desc: 'Max 10% du poids du corps, ou envoyez votre sac d’auberge en auberge.',
-        tip3_link: 'Découvrir comment marcher sans porter votre sac →',
-        tip4_title: '👟 Chaussures & Ampoules', tip4_desc: 'Chaussures déjà rodées et chaussettes sans coutures.',
-        tip5_title: '🌤️ Saison & Budget', tip5_desc: 'Printemps et automne idéaux. Environ 30–50 €/jour.',
-        light_kicker: 'Vivre l’étape plutôt que la subir',
-        light_title: 'Le Chemin se marche avec le cœur, pas avec dix kilos sur le dos',
-        light_desc: 'SmartVieira permet d’envoyer votre sac entre auberges en 1 clic, avec balise BLE et suivi GPS.',
-        lf1_t: '1. Fini la monnaie et les appels', lf1_d: 'Payez en 1 clic (Apple Pay, Google Pay, Bizum, PayPal, Carte).',
-        lf2_t: '2. Votre sac toujours localisé', lf2_d: 'Clignotement BLE et suivi GPS en direct.',
-        lf3_t: '3. Légère et étanche', lf3_d: 'Pile CR2450 incluse pour tout le Chemin.',
+        tab_home: '📰 Actualités', tab_routes: '🗺️ Chemins & Auberges', tab_guide: '📖 Guide du Pèlerin', tab_light: '🐚 Marcher Léger', tab_downloads: '📲 Téléchargements',
+        hero_badge: '🥾 Actualités & Infos du Chemin', hero_title: 'Actualités et guide pratique du Chemin de Compostelle',
+        hero_desc: 'Retrouvez chaque semaine les nouvelles des auberges, des étapes et des villages jacquaires.',
+        news_title: '📰 Les infos clés de la semaine',
+        choose_title: '🧭 Quel Chemin choisir selon vos jours ?', choose_sub: 'Filtrez par durée pour trouver votre itinéraire idéal.',
+        dur_all: 'Tous', dur_week: '5–7 jours (100 km)', dur_fortnight: '10–15 jours', dur_month: '~1 mois complet',
+        routes_title: 'Villes, Étapes et Auberges', routes_subtitle: 'Sélectionnez un chemin pour voir les étapes et hébergements.',
+        subtle_hook_routes: '🪶 Envie de marcher léger ? →',
+        exp_towns_label: '📍 Villes étapes dans l’ordre',
+        guide_title: 'Guide Pratique du Pèlerin', guide_sub: 'Dépliez chaque rubrique avant de partir.',
+        tip1_title: '📜 Credencial, Compostela & Messe', tip1_desc: '100 derniers km à pied (200 km à vélo) avec 2 tampons par jour.',
+        tip1_extra: 'Demandez aussi le Certificat de Distance à Santiago.',
+        tip2_title: '🛏️ Auberges, Réservations & Budget', tip2_desc: 'Municipales ~10 € (sans réservation) ; privées 15–27 €.',
+        tip2_extra: 'Budget moyen : 30–50 €/jour.',
+        tip3_title: '🩹 Santé : Ampoules, Tendinites & Poids', tip3_desc: 'Chaussures déjà rodées, chaussettes sans coutures et hydratation.',
+        tip3_weight: 'Ne dépassez jamais 10% de votre poids corporel.',
+        tip3_link: 'Comment éviter de porter votre sac →',
+        tip4_title: '🎒 Checklist du sac à dos',
+        chk1: 'Credencial + Pièce d’identité', chk2: 'Chaussures rodées + tongs',
+        chk3: '3 paires de chaussettes techniques', chk4: 'Drap-sac + bouchons d’oreilles',
+        chk5: 'Cape de pluie respirante', chk6: 'Trousse secours : vaseline, Compeed',
+        chk7: 'Gourde 1L, casquette & crème solaire', chk8: 'Chargeur, batterie externe & lampe',
+        tip5_title: '🚆 Transports vers le départ & retour', tip5_desc: 'Trains et bus quotidiens vers Sarria, Tui, Ferrol, Ourense et depuis Santiago.',
+        light_kicker: 'Vivre l’étape plutôt que la subir', light_title: 'Le Chemin se marche avec le cœur, pas avec dix kilos sur le dos',
+        light_desc: 'SmartVieira simplifie l’envoi quotidien de votre sac entre auberges.',
+        lf1_t: '1. Sans espèces ni appels', lf1_d: 'Paiement en 1 clic (Apple Pay, Google Pay, Bizum, PayPal, Carte).',
+        lf2_t: '2. Sac toujours localisé', lf2_d: 'Balise BLE lumineuse et GPS en direct.',
+        lf3_t: '3. Étanche et légère', lf3_d: 'Pile CR2450 incluse.',
         order_price_label: 'Coquille SmartVieira', order_ship_inline: '+ 2,00 € port', in_stock: 'Disponible',
         order_qty: 'Quantité', order_total_label: 'Total :',
         ord_name: 'Nom complet *', ord_email: 'E-mail *', ord_phone: 'Téléphone *', ord_country: 'Pays *',
-        ord_address: 'Adresse de livraison *', ord_cp: 'Code Postal *', ord_city: 'Ville *',
-        ord_submit: 'Commander ma SmartVieira →', ord_methods_hint: 'Paiement Stripe : Apple Pay • Google Pay • Bizum • PayPal • Carte',
+        ord_address: 'Adresse *', ord_cp: 'Code Postal *', ord_city: 'Ville *',
+        ord_submit: 'Commander ma SmartVieira →', ord_methods_hint: 'Stripe : Apple Pay • Google Pay • Bizum • PayPal • Carte',
         ord_success_title: 'Commande Confirmée !',
-        footer_rights: 'Tous droits réservés', footer_pilgrim_app: 'App Pèlerin', footer_courier_app: 'App Transporteur', footer_apk: 'Téléchargements APK',
+        dl_badge: 'Applications Mobiles', dl_title: '📲 Téléchargez l’App sur votre Téléphone',
+        dl_desc: 'Installez les applications sur votre smartphone pour associer votre coquille.',
+        dl_p_t: 'App du Pèlerin', dl_p_d: 'Scannez votre SmartVieira et suivez votre sac par GPS.',
+        dl_c_t: 'App du Transporteur', dl_c_d: 'Gestion des collectes et livraisons en auberge.',
+        dl_cta: 'Aller au Centre de Téléchargement APK →', dl_play: '▶ Google Play Store (Bientôt)', dl_apple: ' Apple App Store (Bientôt)',
+        footer_rights: 'Tous droits réservés', footer_apk: 'Téléchargements',
         modal_title: 'Paiement Sécurisé Stripe', modal_or: 'ou payer avec', modal_cancel: 'Annuler', modal_pay_btn: '🔒 Payer Maintenant',
         all_towns: 'Toutes les villes', no_hostels: 'Aucune auberge trouvée.', stages_word: 'étapes'
       },
       DE: {
-        nav_app: 'Pilger-App →',
-        tab_home: '📰 Aktuelles & Start', tab_routes: '🗺️ Routen & Herbergen', tab_guide: '📖 Pilgerführer', tab_light: '🐚 Ohne Gepäck',
-        hero_badge: '🥾 Unabhängiges Pilgerportal',
-        hero_title: 'Jakobsweg-Führer: Routen, Herbergen & wöchentliche News',
-        hero_desc: 'Entdecken Sie die 8 Haupt-Jakobswege, Etappenorte, Herbergen und wichtige Tipps.',
-        idx_routes_t: '🗺️ 8 Routen & Herbergen', idx_routes_d: 'Etappen nach Orten filtern →',
-        idx_guide_t: '📖 Tipps & Compostela', idx_guide_d: 'Regeln, Preise & Ausrüstung →',
-        idx_light_t: '🪶 Leicht pilgern', idx_light_d: 'Ohne Rückenschmerzen ankommen →',
-        news_title: '📰 Nachrichten der Woche',
-        routes_title: 'Die 8 Haupt-Jakobswege', routes_subtitle: 'Route wählen, um Orte und Herbergen anzuzeigen.',
-        subtle_hook_routes: '🪶 Lieber ohne schweres Gepäck pilgern? So geht’s →',
+        tab_home: '📰 Aktuelles', tab_routes: '🗺️ Routen & Herbergen', tab_guide: '📖 Pilgerführer', tab_light: '🐚 Ohne Gepäck', tab_downloads: '📲 Downloads',
+        hero_badge: '🥾 Aktuelles vom Jakobsweg', hero_title: 'Nachrichten & Praxisführer für den Jakobsweg',
+        hero_desc: 'Wöchentliche News zu Herbergen, Etappen und Orten sowie alle Infos für Ihre Vorbereitung.',
+        news_title: '📰 Wichtigste Meldungen der Woche',
+        choose_title: '🧭 Welcher Jakobsweg passt zu Ihrer Zeit?', choose_sub: 'Nach Reisedauer filtern.',
+        dur_all: 'Alle', dur_week: '5–7 Tage (100 km)', dur_fortnight: '10–15 Tage', dur_month: '~1 Monat',
+        routes_title: 'Orte, Etappen & Herbergen', routes_subtitle: 'Route wählen, um Orte und Herbergen anzuzeigen.',
+        subtle_hook_routes: '🪶 Lieber ohne Gepäck pilgern? →',
         exp_towns_label: '📍 Etappenorte in Reihenfolge',
-        guide_title: 'Praktischer Ratgeber & FAQ', guide_sub: 'Tippen Sie auf einen Bereich zum Aufklappen.',
-        tip1_title: '📜 Pilgerausweis & Compostela', tip1_desc: 'Mindestens 100 km zu Fuß (200 km per Rad) mit 2 Stempeln täglich.',
-        tip2_title: '🛏️ Herbergen & Preise', tip2_desc: 'Kommunale ~10 €; private 15–27 €.',
-        tip3_title: '🎒 Rucksackgewicht', tip3_desc: 'Max. 10% des Körpergewichts oder Gepäcktransport nutzen.',
-        tip3_link: 'Mehr über entspannten Rucksacktransport erfahren →',
-        tip4_title: '👟 Schuhe & Blasen', tip4_desc: 'Nur eingelaufene Schuhe und nahtlose Socken tragen.',
-        tip5_title: '🌤️ Beste Zeit & Budget', tip5_desc: 'Frühling & Herbst. Ca. 30–50 €/Tag.',
-        light_kicker: 'Erleben statt schleppen',
-        light_title: 'Den Jakobsweg geht man mit dem Herzen, nicht mit zehn Kilo auf dem Rücken',
-        light_desc: 'Mit SmartVieira senden Sie Ihren Rucksack per 1-Klick von Herberge zu Herberge – mit BLE-Blinksignal und Live-GPS.',
+        guide_title: 'Praktischer Pilger-Ratgeber', guide_sub: 'Bereiche zum Aufklappen antippen.',
+        tip1_title: '📜 Pilgerausweis, Compostela & Messe', tip1_desc: 'Mindestens 100 km zu Fuß (200 km per Rad) mit 2 Stempeln täglich.',
+        tip1_extra: 'Auch das Entfernungszertifikat ist in Santiago erhältlich.',
+        tip2_title: '🛏️ Herbergen, Buchung & Budget', tip2_desc: 'Kommunale ~10 €; private 15–27 €. Tagesbudget ca. 30–50 €.',
+        tip2_extra: 'Bargeld für kleine Dörfer mitnehmen.',
+        tip3_title: '🩹 Gesundheit: Blasen & Sehnenscheiden', tip3_desc: 'Eingelaufene Schuhe, nahtlose Socken und regelmäßig trinken.',
+        tip3_weight: 'Max. 10% des Körpergewichts tragen.',
+        tip3_link: 'Wie Sie schweres Gepäck vermeiden →',
+        tip4_title: '🎒 Packliste zum Abhaken',
+        chk1: 'Pilgerausweis + Ausweis/Pass', chk2: 'Eingelaufene Wanderschuhe + Badelatschen',
+        chk3: '3 Paar nahtlose Wandersocken', chk4: 'Hüttenschlafsack + Ohrstöpsel',
+        chk5: 'Regenjacke / Poncho', chk6: 'Erste Hilfe: Hirschtalg, Blasenpflaster',
+        chk7: 'Trinkflasche 1L, Hut & Sonnenschutz', chk8: 'Ladegerät, Powerbank & Stirnlampe',
+        tip5_title: '🚆 An- & Abreise', tip5_desc: 'Zug- und Busverbindungen nach Sarria, Tui, Ferrol, Ourense und ab Santiago.',
+        light_kicker: 'Erleben statt schleppen', light_title: 'Den Jakobsweg geht man mit dem Herzen, nicht mit zehn Kilo auf dem Rücken',
+        light_desc: 'SmartVieira macht den Rucksacktransport von Herberge zu Herberge kinderleicht.',
         lf1_t: '1. Keine Umschläge oder Anrufe', lf1_d: '1-Klick-Zahlung mit Apple Pay, Google Pay, Bizum, PayPal oder Karte.',
-        lf2_t: '2. Immer im Blick', lf2_d: 'BLE-Signal und Live-GPS in der App.',
-        lf3_t: '3. Leicht & wasserfest', lf3_d: 'Inklusive CR2450-Batterie.',
+        lf2_t: '2. Immer im Blick', lf2_d: 'BLE-Signal und Live-GPS.',
+        lf3_t: '3. Leicht & wasserfest', lf3_d: 'Inkl. CR2450-Batterie.',
         order_price_label: 'SmartVieira Muschel', order_ship_inline: '+ 2,00 € Versand', in_stock: 'Verfügbar',
         order_qty: 'Menge', order_total_label: 'Gesamt:',
-        ord_name: 'Vollständiger Name *', ord_email: 'E-Mail *', ord_phone: 'Telefon *', ord_country: 'Land *',
-        ord_address: 'Lieferadresse *', ord_cp: 'PLZ *', ord_city: 'Stadt *',
+        ord_name: 'Name *', ord_email: 'E-Mail *', ord_phone: 'Telefon *', ord_country: 'Land *',
+        ord_address: 'Adresse *', ord_cp: 'PLZ *', ord_city: 'Stadt *',
         ord_submit: 'SmartVieira bestellen →', ord_methods_hint: 'Stripe: Apple Pay • Google Pay • Bizum • PayPal • Karte',
         ord_success_title: 'Bestellung Bestätigt!',
-        footer_rights: 'Alle Rechte vorbehalten', footer_pilgrim_app: 'Pilger-App', footer_courier_app: 'Kurier-App', footer_apk: 'APK Downloads',
+        dl_badge: 'Mobile Apps', dl_title: '📲 App auf Ihr Smartphone laden',
+        dl_desc: 'Installieren Sie die App direkt auf Ihrem Handy.',
+        dl_p_t: 'Pilger-App', dl_p_d: 'Muschel scannen, Etappen buchen und Live-GPS sehen.',
+        dl_c_t: 'Kurier-App', dl_c_d: 'Abholungen und Lieferungen verwalten.',
+        dl_cta: 'Zum APK Download-Center →', dl_play: '▶ Google Play Store (Bald)', dl_apple: ' Apple App Store (Bald)',
+        footer_rights: 'Alle Rechte vorbehalten', footer_apk: 'Download-Center',
         modal_title: 'Sichere Stripe-Zahlung', modal_or: 'oder zahlen mit', modal_cancel: 'Abbrechen', modal_pay_btn: '🔒 Jetzt Bezahlen',
         all_towns: 'Alle Orte', no_hostels: 'Keine Herbergen gefunden.', stages_word: 'Etappen'
       },
       IT: {
-        nav_app: 'App Pellegrino →',
-        tab_home: '📰 Notizie e Home', tab_routes: '🗺️ Percorsi e Ostelli', tab_guide: '📖 Guida del Pellegrino', tab_light: '🐚 Camminare Leggeri',
-        hero_badge: '🥾 Portale Indipendente del Pellegrino',
-        hero_title: 'Guida al Cammino di Santiago: percorsi, ostelli e notizie',
-        hero_desc: 'Scopri gli 8 Cammini principali, le tappe, gli ostelli e le novità settimanali.',
-        idx_routes_t: '🗺️ 8 Percorsi e Ostelli', idx_routes_d: 'Esplora tappe e ostelli →',
-        idx_guide_t: '📖 Consigli e Compostela', idx_guide_d: 'Requisiti, prezzi e attrezzatura →',
-        idx_light_t: '🪶 Il segreto di camminare leggeri', idx_light_d: 'Goditi la tappa senza pesi →',
-        news_title: '📰 Notizie della Settimana',
-        routes_title: 'Gli 8 Cammini Principali', routes_subtitle: 'Seleziona un Cammino per vedere località e ostelli.',
-        subtle_hook_routes: '🪶 Preferisci camminare senza zaino? Scopri come →',
+        tab_home: '📰 Attualità', tab_routes: '🗺️ Percorsi e Ostelli', tab_guide: '📖 Guida del Pellegrino', tab_light: '🐚 Camminare Leggeri', tab_downloads: '📲 Download',
+        hero_badge: '🥾 Notizie e Info sul Cammino', hero_title: 'Notizie e guida pratica del Cammino di Santiago',
+        hero_desc: 'Aggiornamenti settimanali su ostelli, percorsi e paesi del Cammino.',
+        news_title: '📰 Le notizie più rilevanti della settimana',
+        choose_title: '🧭 Quale Cammino scegliere?', choose_sub: 'Filtra in base ai giorni disponibili.',
+        dur_all: 'Tutti', dur_week: '5–7 giorni (100 km)', dur_fortnight: '10–15 giorni', dur_month: '~1 mese',
+        routes_title: 'Località, Tappe e Ostelli', routes_subtitle: 'Seleziona un Cammino per vedere tappe e ostelli.',
+        subtle_hook_routes: '🪶 Preferisci camminare senza peso? →',
         exp_towns_label: '📍 Località in ordine di tappa',
-        guide_title: 'Guida Pratica e FAQ', guide_sub: 'Apri ogni sezione per leggere i consigli utili.',
-        tip1_title: '📜 Credenziale e Compostela', tip1_desc: 'Ultimi 100 km a piedi (200 km in bici) con 2 timbri al giorno.',
-        tip2_title: '🛏️ Ostelli e Prezzi', tip2_desc: 'Municipali ~10 €; privati 15–27 €.',
-        tip3_title: '🎒 Peso dello Zaino', tip3_desc: 'Max 10% del peso corporeo o trasporto bagagli tra ostelli.',
-        tip3_link: 'Scopri come inviare lo zaino tra gli ostelli →',
-        tip4_title: '👟 Scarpe e Vesciche', tip4_desc: 'Mai scarpe nuove; usa calze senza cuciture.',
-        tip5_title: '🌤️ Stagione e Budget', tip5_desc: 'Primavera e autunno. Circa 30–50 €/giorno.',
-        light_kicker: 'Vivere la tappa senza soffrirla',
-        light_title: 'Il Cammino si fa con il cuore, non con dieci chili sulle spalle',
-        light_desc: 'Con SmartVieira invii lo zaino tra ostelli in 1 clic con LED BLE e GPS live.',
+        guide_title: 'Guida Pratica del Pellegrino', guide_sub: 'Apri ogni sezione per i consigli utili.',
+        tip1_title: '📜 Credenziale, Compostela e Messa', tip1_desc: 'Ultimi 100 km a piedi (200 km in bici) con 2 timbri al giorno.',
+        tip1_extra: 'Puoi richiedere anche il Certificato di Distanza.',
+        tip2_title: '🛏️ Ostelli, Prenotazioni e Budget', tip2_desc: 'Municipali ~10 €; privati 15–27 €. Budget ~30–50 €/giorno.',
+        tip2_extra: 'Porta contanti per i piccoli paesi.',
+        tip3_title: '🩹 Salute: Vesciche, Tendiniti e Peso', tip3_desc: 'Scarpe rodate, calze senza cuciture e idratazione.',
+        tip3_weight: 'Non superare il 10% del peso corporeo.',
+        tip3_link: 'Come evitare di portare peso →',
+        tip4_title: '🎒 Checklist zaino',
+        chk1: 'Credenziale + Documento', chk2: 'Scarpe rodate + ciabatte',
+        chk3: '3 paia di calze tecniche', chk4: 'Sacco lenzuolo + tappi',
+        chk5: 'Mantella impermeabile', chk6: 'Kit vesciche: vaselina, Compeed',
+        chk7: 'Borraccia 1L, cappello e crema', chk8: 'Caricabatterie e powerbank',
+        tip5_title: '🚆 Come arrivare e tornare', tip5_desc: 'Treni e bus giornalieri per Sarria, Tui, Ferrol, Ourense e da Santiago.',
+        light_kicker: 'Vivere la tappa senza soffrirla', light_title: 'Il Cammino si fa con il cuore, non con dieci chili sulle spalle',
+        light_desc: 'SmartVieira rende semplice il trasporto dello zaino tra ostelli.',
         lf1_t: '1. Addio contanti e chiamate', lf1_d: 'Paga in 1 clic con Apple Pay, Google Pay, Bizum, PayPal o Carta.',
-        lf2_t: '2. Zaino sempre tracciato', lf2_d: 'Lampeggio BLE e GPS in diretta.',
+        lf2_t: '2. Zaino sempre tracciato', lf2_d: 'LED BLE e GPS in diretta.',
         lf3_t: '3. Leggera e impermeabile', lf3_d: 'Batteria CR2450 inclusa.',
         order_price_label: 'Conchiglia SmartVieira', order_ship_inline: '+ 2,00 € spedizione', in_stock: 'Disponibile',
         order_qty: 'Quantità', order_total_label: 'Totale:',
-        ord_name: 'Nome completo *', ord_email: 'Email *', ord_phone: 'Telefono *', ord_country: 'Paese *',
-        ord_address: 'Indirizzo di spedizione *', ord_cp: 'CAP *', ord_city: 'Città *',
+        ord_name: 'Nome *', ord_email: 'Email *', ord_phone: 'Telefono *', ord_country: 'Paese *',
+        ord_address: 'Indirizzo *', ord_cp: 'CAP *', ord_city: 'Città *',
         ord_submit: 'Richiedi SmartVieira →', ord_methods_hint: 'Stripe: Apple Pay • Google Pay • Bizum • PayPal • Carta',
         ord_success_title: 'Ordine Confermato!',
-        footer_rights: 'Tutti i diritti riservati', footer_pilgrim_app: 'App Pellegrino', footer_courier_app: 'App Corriere', footer_apk: 'Download APK',
+        dl_badge: 'App Mobili', dl_title: '📲 Scarica l’App sul tuo Telefono',
+        dl_desc: 'Installa l’app sul tuo smartphone per collegare la conchiglia.',
+        dl_p_t: 'App Pellegrino', dl_p_d: 'Scansiona SmartVieira e segui il GPS.',
+        dl_c_t: 'App Corriere', dl_c_d: 'Gestione ritiri e consegne.',
+        dl_cta: 'Vai al Centro Download APK →', dl_play: '▶ Google Play Store (Prossimamente)', dl_apple: ' Apple App Store (Prossimamente)',
+        footer_rights: 'Tutti i diritti riservati', footer_apk: 'Centro Download',
         modal_title: 'Pagamento Sicuro Stripe', modal_or: 'oppure paga con', modal_cancel: 'Annulla', modal_pay_btn: '🔒 Paga Ora',
         all_towns: 'Tutte le località', no_hostels: 'Nessun ostello trovato.', stages_word: 'tappe'
       },
       PT: {
-        nav_app: 'App Peregrino →',
-        tab_home: '📰 Atualidade e Início', tab_routes: '🗺️ Rotas e Albergues', tab_guide: '📖 Guia do Peregrino', tab_light: '🐚 Caminhar sem Peso',
-        hero_badge: '🥾 Portal Independente do Peregrino',
-        hero_title: 'Guia do Caminho de Santiago: rotas, albergues e atualidade',
-        hero_desc: 'Consulte as 8 grandes rotas, localidades, albergues e notícias semanais.',
-        idx_routes_t: '🗺️ 8 Rotas e Albergues', idx_routes_d: 'Explorar etapas e albergues →',
-        idx_guide_t: '📖 Conselhos e Compostela', idx_guide_d: 'Requisitos, preços e calçado →',
-        idx_light_t: '🪶 Caminhar mais leve', idx_light_d: 'Desfrute da etapa sem dores →',
-        news_title: '📰 Notícias da Semana',
-        routes_title: 'Os 8 Caminhos Principais', routes_subtitle: 'Selecione um Caminho para ver localidades e albergues.',
-        subtle_hook_routes: '🪶 Prefere fazer estas etapas sem peso? Ver como →',
+        tab_home: '📰 Atualidade', tab_routes: '🗺️ Rotas e Albergues', tab_guide: '📖 Guia do Peregrino', tab_light: '🐚 Caminhar sem Peso', tab_downloads: '📲 Transferências',
+        hero_badge: '🥾 Atualidade do Caminho', hero_title: 'Notícias e guia prático do Caminho de Santiago',
+        hero_desc: 'Atualizações semanais sobre albergues, etapas e localidades jacobeias.',
+        news_title: '📰 Destaques desta semana no Caminho',
+        choose_title: '🧭 Que Caminho escolher?', choose_sub: 'Filtre pela duração disponível.',
+        dur_all: 'Todos', dur_week: '5–7 dias (100 km)', dur_fortnight: '10–15 dias', dur_month: '~1 mês',
+        routes_title: 'Localidades, Etapas e Albergues', routes_subtitle: 'Selecione um Caminho para ver etapas e albergues.',
+        subtle_hook_routes: '🪶 Prefere caminhar sem peso? →',
         exp_towns_label: '📍 Localidades por ordem de etapa',
-        guide_title: 'Guia Prático e Perguntas Frequentes', guide_sub: 'Toque em cada tema para abrir os conselhos.',
-        tip1_title: '📜 Credencial e Compostela', tip1_desc: 'Últimos 100 km a pé (200 km de bicicleta) com 2 carimbos diários.',
-        tip2_title: '🛏️ Albergues e Preços', tip2_desc: 'Municipais ~10 €; privados 15–27 €.',
-        tip3_title: '🎒 Peso da Mochila', tip3_desc: 'Máx. 10% do peso corporal ou transporte diário de mochilas.',
-        tip3_link: 'Saiba como enviar a mochila entre albergues →',
-        tip4_title: '👟 Calçado e Bolhas', tip4_desc: 'Nunca estreie botas; use meias sem costuras.',
-        tip5_title: '🌤️ Melhor Época e Orçamento', tip5_desc: 'Primavera e outono. Cerca de 30–50 €/dia.',
-        light_kicker: 'Viver a etapa sem sofrer',
-        light_title: 'O Caminho faz-se com o coração, não com dez quilos às costas',
-        light_desc: 'Com a SmartVieira envia a mochila entre albergues em 1 clique, com sinal BLE e GPS em direto.',
+        guide_title: 'Guia Prático do Peregrino', guide_sub: 'Abra cada secção para ver os conselhos.',
+        tip1_title: '📜 Credencial, Compostela e Missa', tip1_desc: 'Últimos 100 km a pé (200 km de bicicleta) com 2 carimbos diários.',
+        tip1_extra: 'Também pode pedir o Certificado de Distância.',
+        tip2_title: '🛏️ Albergues, Reservas e Orçamento', tip2_desc: 'Municipais ~10 €; privados 15–27 €. Orçamento ~30–50 €/dia.',
+        tip2_extra: 'Leve dinheiro vivo para pequenas aldeias.',
+        tip3_title: '🩹 Saúde: Bolhas, Tendinites e Peso', tip3_desc: 'Calçado já usado, meias sem costuras e hidratação.',
+        tip3_weight: 'Nunca ultrapasse 10% do peso corporal.',
+        tip3_link: 'Como evitar carregar peso →',
+        tip4_title: '🎒 Checklist da mochila',
+        chk1: 'Credencial + Cartão de Cidadão', chk2: 'Botas usadas + chinelos',
+        chk3: '3 pares de meias técnicas', chk4: 'Saco-lençol + tampões ouvidos',
+        chk5: 'Impermeável respirável', chk6: 'Farmácia: vaselina, Compeed',
+        chk7: 'Cantil 1L, boné e protetor', chk8: 'Carregador e powerbank',
+        tip5_title: '🚆 Como chegar e regressar', tip5_desc: 'Comboios e autocarros diários para Sarria, Tui, Ferrol, Ourense e desde Santiago.',
+        light_kicker: 'Viver a etapa sem sofrer', light_title: 'O Caminho faz-se com o coração, não com dez quilos às costas',
+        light_desc: 'A SmartVieira torna simples o transporte da mochila entre albergues.',
         lf1_t: '1. Sem trocos nem chamadas', lf1_d: 'Pague em 1 clique com Apple Pay, Google Pay, Bizum, PayPal ou Cartão.',
-        lf2_t: '2. Mochila sempre localizada', lf2_d: 'Sinal BLE e GPS em tempo real.',
-        lf3_t: '3. Leve e resistente à água', lf3_d: 'Inclui pilha CR2450.',
+        lf2_t: '2. Mochila sempre localizada', lf2_d: 'Sinal BLE e GPS em direto.',
+        lf3_t: '3. Leve e impermeável', lf3_d: 'Pilha CR2450 incluída.',
         order_price_label: 'Concha SmartVieira', order_ship_inline: '+ 2,00 € envio', in_stock: 'Disponível',
         order_qty: 'Quantidade', order_total_label: 'Total:',
-        ord_name: 'Nome completo *', ord_email: 'E-mail *', ord_phone: 'Telemóvel *', ord_country: 'País *',
-        ord_address: 'Morada de envio *', ord_cp: 'Código Postal *', ord_city: 'Cidade *',
+        ord_name: 'Nome *', ord_email: 'E-mail *', ord_phone: 'Telemóvel *', ord_country: 'País *',
+        ord_address: 'Morada *', ord_cp: 'Código Postal *', ord_city: 'Cidade *',
         ord_submit: 'Pedir a minha SmartVieira →', ord_methods_hint: 'Stripe: Apple Pay • Google Pay • Bizum • PayPal • Cartão',
         ord_success_title: 'Encomenda Confirmada!',
-        footer_rights: 'Todos os direitos reservados', footer_pilgrim_app: 'App Peregrino', footer_courier_app: 'App Estafeta', footer_apk: 'Transferências APK',
+        dl_badge: 'Aplicações Móveis', dl_title: '📲 Descarregue a App no seu Telemóvel',
+        dl_desc: 'Instale a app no seu smartphone para associar a concha.',
+        dl_p_t: 'App do Peregrino', dl_p_d: 'Leia a SmartVieira e acompanhe o GPS.',
+        dl_c_t: 'App do Estafeta', dl_c_d: 'Gestão de recolhas e entregas.',
+        dl_cta: 'Ir para Centro de Transferências APK →', dl_play: '▶ Google Play Store (Em breve)', dl_apple: ' Apple App Store (Em breve)',
+        footer_rights: 'Todos os direitos reservados', footer_apk: 'Centro de Transferências',
         modal_title: 'Pagamento Seguro Stripe', modal_or: 'ou pague com', modal_cancel: 'Cancelar', modal_pay_btn: '🔒 Pagar Agora',
         all_towns: 'Todas as localidades', no_hostels: 'Nenhum albergue encontrado.', stages_word: 'etapas'
       },
       KO: {
-        nav_app: '순례자 앱 →',
-        tab_home: '📰 소식 & 홈', tab_routes: '🗺️ 코스 & 알베르게', tab_guide: '📖 순례자 가이드', tab_light: '🐚 가볍게 걷기',
-        hero_badge: '🥾 순례자 정보 포털',
-        hero_title: '산티아고 순례길 가이드: 코스, 알베르게 & 주간 뉴스',
-        hero_desc: '8대 순례길의 거리, 마을, 알베르게 정보와 주간 주요 소식을 한눈에 확인하세요.',
-        idx_routes_t: '🗺️ 8개 코스 & 알베르게', idx_routes_d: '마을별 알베르게 탐색 →',
-        idx_guide_t: '📖 팁 & 콤포스텔라', idx_guide_d: '조건, 요금, 신발 & 예산 →',
-        idx_light_t: '🪶 가볍게 걷는 비결', idx_light_d: '짐 부담 없이 걷기 →',
-        news_title: '📰 이번 주 순례길 뉴스',
-        routes_title: '8대 주요 순례길', routes_subtitle: '코스를 선택해 마을과 알베르게를 확인하세요.',
+        tab_home: '📰 최신 소식', tab_routes: '🗺️ 코스 & 알베르게', tab_guide: '📖 순례자 가이드', tab_light: '🐚 가볍게 걷기', tab_downloads: '📲 다운로드',
+        hero_badge: '🥾 순례길 주간 소식', hero_title: '산티아고 순례길 뉴스 & 실전 가이드',
+        hero_desc: '매주 업데이트되는 알베르게·구간 소식과 순례길 준비 정보를 확인하세요.',
+        news_title: '📰 이번 주 주요 소식',
+        choose_title: '🧭 일정에 맞는 순례길 찾기', choose_sub: '기간별로 추천 코스를 확인하세요.',
+        dur_all: '전체', dur_week: '5–7일 (100 km)', dur_fortnight: '10–15일', dur_month: '~1개월 완주',
+        routes_title: '마을, 구간 및 알베르게', routes_subtitle: '코스를 선택해 마지막 100km 구간과 알베르게를 확인하세요.',
         subtle_hook_routes: '🪶 짐 없이 편하게 걷고 싶다면? →',
         exp_towns_label: '📍 구간 순서별 경유 마을',
-        guide_title: '실전 가이드 & FAQ', guide_sub: '항목을 눌러 자세한 내용을 확인하세요.',
-        tip1_title: '📜 크레덴시알 & 콤포스텔라', tip1_desc: '도보 마지막 100km(자전거 200km) 및 하루 2개 스탬프 필요.',
-        tip2_title: '🛏️ 알베르게 유형 & 요금', tip2_desc: '공립 ~10€; 사립 15–27€.',
-        tip3_title: '🎒 배낭 무게 관리', tip3_desc: '체중의 10% 이하 권장 또는 배낭 운송 서비스 이용.',
-        tip3_link: '알베르게 간 배낭 운송 방법 보기 →',
-        tip4_title: '👟 등산화 & 물집 예방', tip4_desc: '새 신발 금지, 무봉제 양말 착용.',
-        tip5_title: '🌤️ 최적 시즌 & 예산', tip5_desc: '봄·가을 추천. 하루 약 30–50€.',
-        light_kicker: '고통이 아닌 즐거움으로',
-        light_title: '순례길은 어깨의 10kg이 아니라 마음으로 걷는 길입니다',
-        light_desc: 'SmartVieira 조개로 알베르게 간 배낭 운송을 원클릭으로 예약하고 실시간 GPS로 확인하세요.',
-        lf1_t: '1. 현금 봉투·전화 예약 불필요', lf1_d: 'Apple Pay, Google Pay, Bizum, PayPal, 카드로 원클릭 결제.',
-        lf2_t: '2. 실시간 GPS & BLE 식별', lf2_d: '조개 LED 깜빡임과 실시간 위치 추적.',
+        guide_title: '순례자 실전 가이드', guide_sub: '항목을 눌러 자세한 내용을 확인하세요.',
+        tip1_title: '📜 크레덴시알, 콤포스텔라 & 순례자 미사', tip1_desc: '도보 마지막 100km(자전거 200km) 및 하루 2회 스탬프 필요.',
+        tip1_extra: '거리 증명서 발급 및 대성당 미사 참석 가능.',
+        tip2_title: '🛏️ 알베르게 유형, 예약 & 예산', tip2_desc: '공립 ~10€, 사립 15–27€. 하루 예산 약 30–50€.',
+        tip2_extra: '작은 마을을 위해 소액 현금을 준비하세요.',
+        tip3_title: '🩹 건강 관리: 물집, 건염 & 배낭 무게', tip3_desc: '길들인 등산화, 무봉제 양말, 충분한 수분 섭취.',
+        tip3_weight: '체중의 10% 이하를 유지하세요.',
+        tip3_link: '짐 없이 걷는 방법 알아보기 →',
+        tip4_title: '🎒 배낭 준비물 체크리스트',
+        chk1: '크레덴시알 + 여권/신분증', chk2: '길들인 등산화 + 슬리퍼',
+        chk3: '무봉제 등산 양말 3켤레', chk4: '침낭 라이너 + 귀마개',
+        chk5: '방수 우비/판초', chk6: '구급약: 바세린, 컴피드',
+        chk7: '물병 1L, 모자 & 선크림', chk8: '충전기, 보조배터리 & 헤드랜턴',
+        tip5_title: '🚆 출발지 이동 & 산티아고 복귀', tip5_desc: '사리아·투이·페롤·오우렌세 기차/버스 및 산티아고 공항 이용.',
+        light_kicker: '고통이 아닌 즐거움으로', light_title: '순례길은 어깨의 10kg이 아니라 마음으로 걷는 길입니다',
+        light_desc: 'SmartVieira 조개로 알베르게 간 배낭 운송을 간편하게 이용하세요.',
+        lf1_t: '1. 현금·전화 예약 불필요', lf1_d: 'Apple Pay, Google Pay, Bizum, PayPal, 카드로 원클릭 결제.',
+        lf2_t: '2. 실시간 GPS & BLE 식별', lf2_d: '조개 LED 깜빡임과 실시간 위치 확인.',
         lf3_t: '3. 가볍고 방수 가능', lf3_d: 'CR2450 배터리 포함.',
         order_price_label: 'SmartVieira 조개', order_ship_inline: '+ 배송비 2.00€', in_stock: '재고 있음',
         order_qty: '수량', order_total_label: '합계:',
@@ -742,76 +848,88 @@
         ord_address: '배송 주소 *', ord_cp: '우편번호 *', ord_city: '도시 *',
         ord_submit: 'SmartVieira 신청하기 →', ord_methods_hint: 'Stripe: Apple Pay • Google Pay • Bizum • PayPal • 카드',
         ord_success_title: '주문 완료!',
-        footer_rights: '모든 권리 보유', footer_pilgrim_app: '순례자 앱', footer_courier_app: '배송 기사 앱', footer_apk: 'APK 다운로드',
+        dl_badge: '모바일 앱', dl_title: '📲 스마트폰에 앱 다운로드',
+        dl_desc: '스마트폰에 앱을 설치해 조개를 블루투스로 연결하세요.',
+        dl_p_t: '순례자 앱', dl_p_d: 'SmartVieira 스캔 및 실시간 GPS 확인.',
+        dl_c_t: '배송 기사 앱', dl_c_d: '알베르게 수거 및 배송 관리.',
+        dl_cta: 'APK 다운로드 센터로 이동 →', dl_play: '▶ Google Play 스토어 (출시 예정)', dl_apple: ' Apple App Store (출시 예정)',
+        footer_rights: '모든 권리 보유', footer_apk: '다운로드 센터',
         modal_title: 'Stripe 안전 결제', modal_or: '또는 다음으로 결제', modal_cancel: '취소', modal_pay_btn: '🔒 지금 결제',
         all_towns: '모든 마을', no_hostels: '알베르게가 없습니다.', stages_word: '구간'
       },
       ZH: {
-        nav_app: '朝圣者 App →',
-        tab_home: '📰 资讯与首页', tab_routes: '🗺️ 路线与庇护所', tab_guide: '📖 朝圣指南', tab_light: '🐚 轻装前行',
-        hero_badge: '🥾 独立朝圣者信息门户',
-        hero_title: '圣地亚哥朝圣之路指南：路线、庇护所与每周资讯',
-        hero_desc: '一站式查询 8 条主要朝圣之路的里程、城镇、庇护所及每周重要新闻，助您轻松规划旅程。',
-        idx_routes_t: '🗺️ 8 条路线与庇护所', idx_routes_d: '按城镇浏览路段与住宿 →',
-        idx_guide_t: '📖 贴士与朝圣证书', idx_guide_d: '申请条件、住宿价格与预算 →',
-        idx_light_t: '🪶 轻装步行的秘密', idx_light_d: '告别腰酸背痛，享受每一步 →',
-        news_title: '📰 本周朝圣之路精选新闻',
-        routes_title: '8 条主要圣地亚哥朝圣之路', routes_subtitle: '点击路线即可展开沿途城镇与庇护所清单。',
-        subtle_hook_routes: '🪶 想在这些路段轻装前行？了解方法 →',
-        exp_towns_label: '📍 按路段顺序排列的途经城镇（点击筛选）',
-        guide_title: '实用指南与常见问题', guide_sub: '点击展开每一项朝圣准备要点。',
-        tip1_title: '📜 朝圣护照与朝圣证书 (Compostela)', tip1_desc: '步行至少走完最后 100 公里（骑行 200 公里），并在最后 100 公里内每天盖 2 个印章。',
-        tip2_title: '🛏️ 庇护所类型、预订与价格', tip2_desc: '公立庇护所约 10 €（先到先得）；私立庇护所 15–27 €（可预订）。',
-        tip3_title: '🎒 背包重量与护脊建议', tip3_desc: '负重勿超体重的 10%。许多朝圣者在第二天或第三天就会体会到轻装上阵的重要性。',
-        tip3_link: '了解如何在庇护所之间托运背包 →',
-        tip4_title: '👟 鞋袜与防磨水泡', tip4_desc: '切勿穿新鞋上路，选择已磨合的徒步鞋与无缝袜。',
-        tip5_title: '🌤️ 最佳季节与每日预算', tip5_desc: '春秋两季最佳。每天预算约 30–50 €（含住宿与朝圣者套餐）。',
-        light_kicker: '用心感受朝圣，而非负重忍耐',
-        light_title: '朝圣之路靠的是内心前行，而不是背上的十公斤重担',
-        light_desc: '走过朝圣之路的人都懂：当膝盖与腰背得以放松，沿途的风景与交谈才更令人难忘。SmartVieira 让庇护所间的背包托运变得自然又省心。',
-        lf1_t: '1. 告别零钱信封与电话沟通', lf1_d: '扫描贝壳二维码，选择起点与终点庇护所，支持 Apple Pay、Google Pay、Bizum、PayPal 或银行卡一键付款。',
-        lf2_t: '2. 背包位置与交接清晰可见', lf2_d: '蓝牙 BLE 信标闪烁识别，并在 App 中实时查看背包 GPS 位置。',
-        lf3_t: '3. 轻巧防水，全程相伴', lf3_d: '内含 CR2450 电池，陪伴您走到圣地亚哥大教堂。',
+        tab_home: '📰 每周资讯', tab_routes: '🗺️ 路线与庇护所', tab_guide: '📖 朝圣指南', tab_light: '🐚 轻装前行', tab_downloads: '📲 应用下载',
+        hero_badge: '🥾 圣地亚哥朝圣之路最新动态', hero_title: '朝圣之路每周新闻与实用指南',
+        hero_desc: '每周更新庇护所动态、新开站点与沿途城镇资讯。使用上方选项卡查询路线、打包清单或了解如何轻装步行。',
+        news_title: '📰 本周朝圣之路重要新闻',
+        choose_title: '🧭 根据您的假期天数选择路线', choose_sub: '按天数筛选最适合您的朝圣路线与起点。',
+        dur_all: '全部', dur_week: '5–7 天 (100 公里)', dur_fortnight: '10–15 天', dur_month: '约 1 个月全程',
+        routes_title: '城镇、路段与庇护所', routes_subtitle: '点击路线查看最后 100 公里常见分段及沿途庇护所。',
+        subtle_hook_routes: '🪶 想在这些路段轻装步行？ →',
+        exp_towns_label: '📍 按路段顺序排列的途经城镇',
+        guide_title: '朝圣者实用指南', guide_sub: '点击展开每一项朝圣准备要点。',
+        tip1_title: '📜 朝圣护照、朝圣证书、里程证明与弥撒', tip1_desc: '步行至少走完最后 100 公里（骑行 200 公里），并在最后 100 公里内每天盖 2 个印章。',
+        tip1_extra: '也可申请里程证明并参加圣地亚哥大教堂的朝圣者弥撒（通常 12:00 与 19:30）。',
+        tip2_title: '🛏️ 庇护所类型、预订与每日预算', tip2_desc: '公立庇护所约 10 €（先到先得）；私立庇护所 15–27 €（可预订）。每日预算约 30–50 €。',
+        tip2_extra: '建议随身备少量现金用于小城镇。',
+        tip3_title: '🩹 沿途健康：防磨水泡、肌腱炎与负重', tip3_desc: '穿已磨合的徒步鞋、无缝袜并涂抹凡士林，每 45 分钟补水一次。',
+        tip3_weight: '负重超过体重的 10% 是导致膝盖疼痛和肌腱炎的主要原因。',
+        tip3_link: '了解如何告别负重、轻松走完每段路 →',
+        tip4_title: '🎒 背包打包清单（可勾选）',
+        chk1: '朝圣护照 + 护照/身份证', chk2: '已磨合徒步鞋 + 洗澡拖鞋',
+        chk3: '3 双无缝专业徒步袜', chk4: '轻便睡袋内胆 + 耳塞',
+        chk5: '透气防雨冲锋衣或雨披', chk6: '急救包：凡士林、水泡贴、布洛芬',
+        chk7: '1L 水壶、遮阳帽与防晒霜', chk8: '充电器、充电宝与小头灯',
+        tip5_title: '🚆 如何前往起点与从圣地亚哥返程', tip5_desc: '萨里亚、图伊、费罗尔与奥伦塞均有每日火车与巴士；圣地亚哥设有综合交通枢纽与国际机场 (SCQ)。',
+        light_kicker: '用心感受朝圣，而非负重忍耐', light_title: '朝圣之路靠的是内心前行，而不是背上的十公斤重担',
+        light_desc: 'SmartVieira 让庇护所间的背包托运变得自然又省心。',
+        lf1_t: '1. 告别零钱信封与电话沟通', lf1_d: '手机扫码即可选择庇护所并支持 Apple Pay、Google Pay、Bizum、PayPal 或银行卡一键付款。',
+        lf2_t: '2. 背包位置与交接清晰可见', lf2_d: '蓝牙 BLE 信标闪烁识别，并在 App 中实时查看背包 GPS。',
+        lf3_t: '3. 轻巧防水，全程相伴', lf3_d: '内含长续航 CR2450 电池。',
         order_price_label: 'SmartVieira 智能贝壳', order_ship_inline: '+ 2.00 € 运费', in_stock: '现货供应',
         order_qty: '数量', order_total_label: '总计：',
         ord_name: '收件人姓名 *', ord_email: '电子邮箱 *', ord_phone: '联系电话 *', ord_country: '国家 *',
         ord_address: '收货地址 *', ord_cp: '邮政编码 *', ord_city: '城市 *',
         ord_submit: '订购 SmartVieira →', ord_methods_hint: 'Stripe 安全支付：Apple Pay • Google Pay • Bizum • PayPal • 银行卡',
         ord_success_title: '订单确认成功！',
-        footer_rights: '保留所有权利', footer_pilgrim_app: '朝圣者 App', footer_courier_app: '配送员 App', footer_apk: 'APK 下载',
+        dl_badge: 'SmartVieira 手机应用', dl_title: '📲 在手机上下载安装 App',
+        dl_desc: '在智能手机上安装应用，即可通过蓝牙绑定贝壳并追踪行程。',
+        dl_p_t: '朝圣者端 App', dl_p_d: '扫描绑定 SmartVieira 并实时查看背包 GPS。',
+        dl_c_t: '配送员端 App', dl_c_d: '庇护所取送管理与闪烁定位。',
+        dl_cta: '前往 APK 下载中心 →', dl_play: '▶ Google Play 商店（即将上线）', dl_apple: ' Apple App Store（即将上线）',
+        footer_rights: '保留所有权利', footer_apk: '应用下载中心',
         modal_title: 'Stripe 安全支付网关', modal_or: '或使用以下方式支付', modal_cancel: '取消', modal_pay_btn: '🔒 立即支付',
         all_towns: '全部城镇', no_hostels: '未找到庇护所。', stages_word: '个路段'
       }
     };
 
     const CAMINO_ROUTES = [
-      { id: 'camino-frances', name: 'Camino Francés', start: 'Saint-Jean-Pied-de-Port / Sarria (100 km)', km: '780 km', stages: '32-35', diff: 'Media', desc: 'La ruta más emblemática y con mayor red de albergues y servicios del mundo.' },
-      { id: 'camino-ingles', name: 'Camino Inglés', start: 'Ferrol (118 km) / A Coruña', km: '118 km', stages: '5-6', diff: 'Baja-Media', desc: 'Ideal para completar el Camino oficial en 5-6 días saliendo desde Ferrol.' },
-      { id: 'camino-portugues-interior', name: 'Camino Portugués', start: 'Lisboa / Porto / Tui (119 km)', km: '620 / 119 km', stages: '6-26', diff: 'Baja-Media', desc: 'Segunda ruta más popular; desde Tui ofrece etapas verdes y muy accesibles.' },
-      { id: 'camino-del-norte', name: 'Camino del Norte', start: 'Irún / Vilalba (100 km)', km: '825 km', stages: '32-35', diff: 'Media-Alta', desc: 'Recorre la costa cantábrica entre acantilados, playas y villas marineras.' },
-      { id: 'camino-primitivo', name: 'Camino Primitivo', start: 'Oviedo / Lugo (100 km)', km: '320 km', stages: '13-14', diff: 'Alta', desc: 'El trazado histórico original de Alfonso II, montañoso y espectacular.' },
-      { id: 'camino-sanabres', name: 'Camino Sanabrés / Vía Plata', start: 'Sevilla / Ourense (108 km)', km: '360-1000 km', stages: '14-38', diff: 'Media', desc: 'Itinerario tranquilo de gran riqueza patrimonial desde el sur y Zamora.' },
-      { id: 'camino-invierno', name: 'Camino de Invierno', start: 'Ponferrada / Monforte', km: '260 km', stages: '10-12', diff: 'Media', desc: 'Alternativa histórica por la Ribeira Sacra evitando las cumbres nevadas.' },
-      { id: 'camino-fisterra-muxia', name: 'Fisterra y Muxía', start: 'Santiago de Compostela', km: '90-115 km', stages: '3-5', diff: 'Baja-Media', desc: 'Prolongación desde Santiago hasta el fin del mundo atlántico en Galicia.' }
+      { id: 'camino-frances', name: 'Camino Francés', dur: 'month', start: 'Saint-Jean-Pied-de-Port / Sarria (100 km)', km: '780 km', stages: '32-35', diff: 'Media', last100: 'Sarria → Portomarín → Palas de Rei → Arzúa → O Pedrouzo → Santiago (5 etapas)', desc: 'La ruta más emblemática y con mayor red de albergues y servicios del mundo.' },
+      { id: 'camino-ingles', name: 'Camino Inglés', dur: 'week', start: 'Ferrol (118 km)', km: '118 km', stages: '5-6', diff: 'Baja-Media', last100: 'Ferrol → Neda → Pontedeume → Betanzos → Hospital de Bruma → Sigüeiro → Santiago (5-6 etapas)', desc: 'Ideal para hacer el Camino completo oficial en una semana.' },
+      { id: 'camino-portugues-interior', name: 'Camino Portugués', dur: 'week', start: 'Lisboa / Porto / Tui (119 km)', km: '620 / 119 km', stages: '6-26', diff: 'Baja-Media', last100: 'Tui → O Porriño → Redondela → Pontevedra → Caldas de Reis → Padrón → Santiago (6 etapas)', desc: 'Segunda ruta más popular; desde Tui ofrece etapas verdes y muy accesibles.' },
+      { id: 'camino-del-norte', name: 'Camino del Norte', dur: 'month', start: 'Irún / Vilalba (100 km)', km: '825 km', stages: '32-35', diff: 'Media-Alta', last100: 'Vilalba → Baamonde → Sobrado dos Monxes → Arzúa → O Pedrouzo → Santiago (5 etapas)', desc: 'Recorre la costa cantábrica entre acantilados, playas y villas marineras.' },
+      { id: 'camino-primitivo', name: 'Camino Primitivo', dur: 'fortnight', start: 'Oviedo / Lugo (100 km)', km: '320 km', stages: '13-14', diff: 'Alta', last100: 'Lugo → San Romão da Retorta → Melide → Arzúa → O Pedrouzo → Santiago (4-5 etapas)', desc: 'El trazado histórico original de Alfonso II, montañoso y espectacular.' },
+      { id: 'camino-sanabres', name: 'Camino Sanabrés / Vía Plata', dur: 'fortnight', start: 'Sevilla / Ourense (108 km)', km: '360-1000 km', stages: '14-38', diff: 'Media', last100: 'Ourense → Cea → Dozón → Lalín/Silleda → Ponte Ulla → Santiago (5 etapas)', desc: 'Itinerario tranquilo de gran riqueza patrimonial desde el sur y Zamora.' },
+      { id: 'camino-invierno', name: 'Camino de Invierno', dur: 'fortnight', start: 'Ponferrada / Monforte', km: '260 km', stages: '10-12', diff: 'Media', last100: 'Chantada → Rodeiro → Lalín → Silleda → A Estrada/Vedra → Santiago (5 etapas)', desc: 'Alternativa histórica por la Ribeira Sacra evitando las cumbres nevadas.' },
+      { id: 'camino-fisterra-muxia', name: 'Fisterra y Muxía', dur: 'week', start: 'Santiago de Compostela', km: '90-115 km', stages: '3-5', diff: 'Baja-Media', last100: 'Santiago → Negreira → Olveiroa → Cee/Fisterra → Muxía (4-5 etapas)', desc: 'Prolongación desde Santiago hasta el fin del mundo atlántico en Galicia.' }
     ];
 
     let currentWebLang = 'ES';
     let activeTab = 'inicio';
     let selectedRouteId = 'camino-frances';
     let selectedExplorerTown = '';
+    let activeDurFilter = 'all';
 
     function switchWebTab(tab) {
-      activeTab = ['inicio', 'rutas', 'guia', 'ligero'].includes(tab) ? tab : 'inicio';
-      ['inicio', 'rutas', 'guia', 'ligero'].forEach(t => {
+      activeTab = ['inicio', 'rutas', 'guia', 'ligero', 'descargas'].includes(tab) ? tab : 'inicio';
+      ['inicio', 'rutas', 'guia', 'ligero', 'descargas'].forEach(t => {
         const panel = document.getElementById('tabPanel-' + t);
         const btn = document.getElementById('tabBtn-' + t);
         if (panel) panel.classList.toggle('hidden', t !== activeTab);
         if (btn) {
-          if (t === activeTab) {
-            btn.className = 'tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-[#1E4D3B] text-white';
-          } else {
-            btn.className = 'tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-white text-[#5F6C65] border border-[#E5DEC9] hover:border-[#1E4D3B]';
-          }
+          btn.className = (t === activeTab)
+            ? 'tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-[#1E4D3B] text-white'
+            : 'tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-white text-[#5F6C65] border border-[#E5DEC9] hover:border-[#1E4D3B]';
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -827,11 +945,41 @@
         const key = el.getAttribute('data-i18n');
         if (dict[key]) el.textContent = dict[key];
       });
+      renderDurationCompare();
       renderRoutePills();
       renderActiveRouteSummary();
       renderExplorerTowns();
       renderExplorerHostels();
       updateOrderTotals();
+    }
+
+    function filterDuration(dur) {
+      activeDurFilter = dur;
+      ['all', 'week', 'fortnight', 'month'].forEach(d => {
+        const b = document.getElementById('durBtn-' + d);
+        if (b) {
+          b.className = (d === dur)
+            ? 'dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#1E4D3B] text-white'
+            : 'dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9]';
+        }
+      });
+      renderDurationCompare();
+    }
+
+    function renderDurationCompare() {
+      const grid = document.getElementById('durationCompareGrid');
+      if (!grid) return;
+      const list = activeDurFilter === 'all' ? CAMINO_ROUTES : CAMINO_ROUTES.filter(r => r.dur === activeDurFilter);
+      grid.innerHTML = list.map(r => `
+        <button onclick="selectRoute('${r.id}')" class="text-left p-3.5 rounded-2xl border transition-all ${r.id === selectedRouteId ? 'bg-[#EBF3EE] border-[#1E4D3B]' : 'bg-[#F7F3EB] border-[#E5DEC9] hover:border-[#1E4D3B]'}">
+          <div class="flex items-center justify-between text-[10px] font-bold text-[#1E4D3B]">
+            <span>${r.km}</span>
+            <span class="text-[#5F6C65]">${r.diff}</span>
+          </div>
+          <div class="font-bold text-sm text-[#1C2826] mt-1">${r.name}</div>
+          <div class="text-[11px] text-[#5F6C65] mt-0.5 truncate">📍 ${r.start}</div>
+        </button>
+      `).join('');
     }
 
     async function loadWeeklyNews() {
@@ -870,6 +1018,7 @@
     function selectRoute(routeId) {
       selectedRouteId = routeId;
       selectedExplorerTown = '';
+      renderDurationCompare();
       renderRoutePills();
       renderActiveRouteSummary();
       renderExplorerTowns();
@@ -891,15 +1040,13 @@
       const box = document.getElementById('activeRouteSummary');
       if (!box) return;
       box.innerHTML = `
-        <div class="space-y-1">
-          <div class="flex flex-wrap items-center gap-2">
-            <h3 class="serif-title text-lg font-bold text-[#1C2826]">${r.name}</h3>
-            <span class="px-2 py-0.5 rounded-full bg-white border border-[#E5DEC9] text-[10px] font-bold text-[#1E4D3B]">${r.km}</span>
-            <span class="px-2 py-0.5 rounded-full bg-white border border-[#E5DEC9] text-[10px] font-bold text-[#5F6C65]">${r.stages} ${dict.stages_word} • ${r.diff}</span>
-          </div>
-          <p class="text-xs text-[#5F6C65]">📍 <strong>${r.start}</strong> — ${r.desc}</p>
+        <div class="flex flex-wrap items-center gap-2">
+          <h3 class="serif-title text-lg font-bold text-[#1C2826]">${r.name}</h3>
+          <span class="px-2 py-0.5 rounded-full bg-white border border-[#E5DEC9] text-[10px] font-bold text-[#1E4D3B]">${r.km}</span>
+          <span class="px-2 py-0.5 rounded-full bg-white border border-[#E5DEC9] text-[10px] font-bold text-[#5F6C65]">${r.stages} ${dict.stages_word} • ${r.diff}</span>
         </div>
-        <a href="/pilgrim-app.html" class="shrink-0 px-3.5 py-2 rounded-xl bg-[#EBF3EE] text-[#1E4D3B] border border-[#1E4D3B]/20 text-xs font-bold hover:bg-[#1E4D3B] hover:text-white transition-all text-center">🎒 App Peregrino →</a>
+        <p class="text-xs text-[#5F6C65]">📍 <strong>${r.start}</strong> — ${r.desc}</p>
+        <p class="text-xs text-[#1E4D3B] bg-white/80 rounded-xl px-3 py-2 border border-[#E5DEC9]">🥾 <strong>Últimos 100 km habituales:</strong> ${r.last100}</p>
       `;
     }
 
@@ -946,7 +1093,7 @@
             <div class="text-xs font-bold text-[#1C2826] leading-snug">${h.name}</div>
             <div class="text-[11px] text-[#D48B28] font-bold mt-1">📍 ${h.town}</div>
           </div>
-          <button onclick="switchWebTab('ligero')" title="Enviar mochila sin peso" class="shrink-0 px-2 py-1 rounded-lg bg-white text-[#1E4D3B] border border-[#E5DEC9] text-[10px] font-bold hover:border-[#1E4D3B] transition-all">🪶</button>
+          <button onclick="switchWebTab('ligero')" title="Caminar sin peso" class="shrink-0 px-2 py-1 rounded-lg bg-white text-[#1E4D3B] border border-[#E5DEC9] text-[10px] font-bold hover:border-[#1E4D3B] transition-all">🪶</button>
         </div>
       `).join('');
     }
@@ -1100,7 +1247,7 @@
       loadWeeklyNews();
 
       const hash = window.location.hash.replace('#', '');
-      if (['inicio', 'rutas', 'guia', 'ligero'].includes(hash)) {
+      if (['inicio', 'rutas', 'guia', 'ligero', 'descargas'].includes(hash)) {
         switchWebTab(hash);
       }
 
