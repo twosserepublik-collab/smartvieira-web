@@ -374,10 +374,6 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Nájera"
     },
     {
-      "name": "Albergue Nájera (Nájera)",
-      "town": "Nájera"
-    },
-    {
       "name": "Albergue de la Cofradía del Santo (Santo Domingo de la Calzada)",
       "town": "Santo Domingo de la Calzada"
     },
@@ -607,10 +603,6 @@ const ALBERGUES_Y_HOTELES = {
     },
     {
       "name": "Albergue de la Piedra (Villafranca del Bierzo)",
-      "town": "Villafranca del Bierzo"
-    },
-    {
-      "name": "Albergue La Piedra (Villafranca del Bierzo)",
       "town": "Villafranca del Bierzo"
     },
     {
@@ -1292,10 +1284,6 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Redondela"
     },
     {
-      "name": "Albergue Virgen Peregrina (Pontevedra)",
-      "town": "Pontevedra"
-    },
-    {
       "name": "Aloxa (Pontevedra)",
       "town": "Pontevedra"
     },
@@ -1330,18 +1318,6 @@ const ALBERGUES_Y_HOTELES = {
     {
       "name": "Albergue de Peregrinos (Padrón)",
       "town": "Padrón"
-    },
-    {
-      "name": "Seminario Menor (Santiago)",
-      "town": "Santiago"
-    },
-    {
-      "name": "San Lázaro (Santiago)",
-      "town": "Santiago"
-    },
-    {
-      "name": "Monte do Gozo (Santiago)",
-      "town": "Santiago"
     }
   ],
   "camino-portugues-costa": [
@@ -1650,10 +1626,6 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Redondela"
     },
     {
-      "name": "Albergue Virgen Peregrina (Pontevedra)",
-      "town": "Pontevedra"
-    },
-    {
       "name": "Aloxa (Pontevedra)",
       "town": "Pontevedra"
     },
@@ -1690,36 +1662,12 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Padrón"
     },
     {
-      "name": "Seminario Menor (Santiago)",
-      "town": "Santiago"
-    },
-    {
-      "name": "San Lázaro (Santiago)",
-      "town": "Santiago"
-    },
-    {
-      "name": "Monte do Gozo (Santiago)",
-      "town": "Santiago"
-    },
-    {
-      "name": "Albergue de Peregrinos de A Guarda (Municipal)",
-      "town": "A Guarda"
-    },
-    {
-      "name": "Albergue O Peirao (A Guarda)",
-      "town": "A Guarda"
-    },
-    {
-      "name": "Albergue de Peregrinos de Vigo Juan Manuel López-Chaves (Xunta)",
+      "name": "Albergue de Peregrinos de Vigo Juan Manuel López-Chaves (Vigo)",
       "town": "Vigo"
     },
     {
       "name": "R4Hostel Vigo (Vigo)",
       "town": "Vigo"
-    },
-    {
-      "name": "Albergue de Peregrinos Casa da Torre (Redondela - Xunta)",
-      "town": "Redondela"
     }
   ],
   "camino-ingles": [
@@ -1788,10 +1736,6 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Betanzos"
     },
     {
-      "name": "Albergue de Peregrinos de Presedo (Presedo)",
-      "town": "Presedo"
-    },
-    {
       "name": "Albergue de Peregrinos de Hospital de Bruma (Hospital de Bruma)",
       "town": "Hospital de Bruma"
     },
@@ -1804,10 +1748,6 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Santiago"
     },
     {
-      "name": "Albergue de Peregrinos de Ferrol (Xunta - Curuxeiras)",
-      "town": "Ferrol"
-    },
-    {
       "name": "Hotel Almirante (Ferrol)",
       "town": "Ferrol"
     },
@@ -1816,24 +1756,16 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Ferrol"
     },
     {
-      "name": "Albergue de Peregrinos de Neda (Xunta)",
-      "town": "Neda"
-    },
-    {
       "name": "Pensión Maragoto (Neda)",
       "town": "Neda"
     },
     {
-      "name": "Albergue de Peregrinos de Fene (Municipal)",
+      "name": "Albergue de Peregrinos de Fene (Fene)",
       "town": "Fene"
     },
     {
       "name": "Albergue O Pinar de Cabanas (Cabanas)",
       "town": "Cabanas"
-    },
-    {
-      "name": "Albergue de Peregrinos de Pontedeume (Municipal)",
-      "town": "Pontedeume"
     },
     {
       "name": "Albergue Alecrín (Pontedeume)",
@@ -1844,14 +1776,6 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Pontedeume"
     },
     {
-      "name": "Albergue de Peregrinos de Miño (Municipal)",
-      "town": "Miño"
-    },
-    {
-      "name": "Albergue de Peregrinos de Betanzos (Xunta - Santa María)",
-      "town": "Betanzos"
-    },
-    {
       "name": "Albergue Río Mondeo (Betanzos)",
       "town": "Betanzos"
     },
@@ -1860,31 +1784,15 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Betanzos"
     },
     {
-      "name": "Albergue de Peregrinos de Presedo (Xunta)",
-      "town": "Presedo"
-    },
-    {
-      "name": "Albergue de Peregrinos de A Coruña (Municipal)",
-      "town": "A Coruña"
-    },
-    {
-      "name": "Albergue de Peregrinos de Sergude (Xunta)",
-      "town": "Sergude"
-    },
-    {
-      "name": "Albergue de Peregrinos de Hospital de Bruma (Xunta)",
-      "town": "Hospital de Bruma"
-    },
-    {
       "name": "Albergue Rectoral de Outeiro (Hospital de Bruma)",
       "town": "Hospital de Bruma"
     },
     {
-      "name": "Albergue O Mesón (Poulo - Ordes)",
+      "name": "Albergue O Mesón (Hospital de Bruma)",
       "town": "Hospital de Bruma"
     },
     {
-      "name": "Albergue de Peregrinos de Poulo (Xunta)",
+      "name": "Albergue de Peregrinos de Poulo (Hospital de Bruma)",
       "town": "Hospital de Bruma"
     },
     {
@@ -2864,15 +2772,15 @@ const ALBERGUES_Y_HOTELES = {
       "town": "O Barco de Valdeorras"
     },
     {
-      "name": "Albergue Municipal de Vilamartín de Valdeorras",
+      "name": "Albergue Municipal de Vilamartín de Valdeorras (Vilamartín de Valdeorras)",
       "town": "Vilamartín de Valdeorras"
     },
     {
-      "name": "Albergue Juvenil / Municipal de Quiroga",
+      "name": "Albergue Juvenil / Municipal de Quiroga (Quiroga)",
       "town": "Quiroga"
     },
     {
-      "name": "Albergue Municipal de A Pobra do Brollón",
+      "name": "Albergue Municipal de A Pobra do Brollón (A Pobra do Brollón)",
       "town": "A Pobra do Brollón"
     },
     {
@@ -2880,7 +2788,7 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Monforte de Lemos"
     },
     {
-      "name": "Albergue de Peregrinos de Diomondi (Xunta)",
+      "name": "Albergue de Peregrinos de Diomondi (Diomondi)",
       "town": "Diomondi"
     },
     {
@@ -3006,10 +2914,6 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Muxía"
     },
     {
-      "name": "Albergue de Peregrinos de Negreira (Xunta)",
-      "town": "Negreira"
-    },
-    {
       "name": "Albergue San José (Negreira)",
       "town": "Negreira"
     },
@@ -3019,10 +2923,6 @@ const ALBERGUES_Y_HOTELES = {
     },
     {
       "name": "Albergue Alecrín (Negreira)",
-      "town": "Negreira"
-    },
-    {
-      "name": "Albergue Bergando (Negreira)",
       "town": "Negreira"
     },
     {
@@ -3038,10 +2938,6 @@ const ALBERGUES_Y_HOTELES = {
       "town": "A Pena"
     },
     {
-      "name": "Albergue de Peregrinos de Olveiroa (Xunta)",
-      "town": "Olveiroa"
-    },
-    {
       "name": "Albergue O Refuxio de Xallas (Olveiroa)",
       "town": "Olveiroa"
     },
@@ -3054,7 +2950,7 @@ const ALBERGUES_Y_HOTELES = {
       "town": "O Logoso"
     },
     {
-      "name": "Albergue San Roque de Corcubión (Municipal)",
+      "name": "Albergue San Roque de Corcubión (Corcubión)",
       "town": "Corcubión"
     },
     {
@@ -3062,15 +2958,7 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Cee"
     },
     {
-      "name": "Albergue de Peregrinos de Fisterra (Xunta)",
-      "town": "Fisterra"
-    },
-    {
       "name": "Albergue Por Fin (Fisterra)",
-      "town": "Fisterra"
-    },
-    {
-      "name": "Albergue-Pensión Finistellae (Fisterra)",
       "town": "Fisterra"
     },
     {
@@ -3079,10 +2967,6 @@ const ALBERGUES_Y_HOTELES = {
     },
     {
       "name": "Albergue Mar de Rostro (Fisterra)",
-      "town": "Fisterra"
-    },
-    {
-      "name": "Albergue Mar de Fora (Fisterra)",
       "town": "Fisterra"
     },
     {
@@ -3102,27 +2986,11 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Lires"
     },
     {
-      "name": "Albergue de Peregrinos de Muxía (Municipal)",
-      "town": "Muxía"
-    },
-    {
-      "name": "Albergue Bela Muxía (Muxía)",
-      "town": "Muxía"
-    },
-    {
-      "name": "Albergue Arribada (Muxía)",
-      "town": "Muxía"
-    },
-    {
       "name": "Albergue Da Costa (Muxía)",
       "town": "Muxía"
     },
     {
       "name": "Albergue Muxía Mare (Muxía)",
-      "town": "Muxía"
-    },
-    {
-      "name": "Albergue @Muxía (Muxía)",
       "town": "Muxía"
     }
   ]
