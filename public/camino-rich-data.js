@@ -1,4 +1,67 @@
-// Datos detallados propios de Etapas, Desniveles, Alertas de Tramos, Servicios por Localidad y Fichas de Albergues
+// Configuración de Afiliado Booking.com (introduce tu Affiliate ID "aid" cuando lo tengas activo para cobrar comisiones automáticamente)
+const BOOKING_AFFILIATE_ID = '';
+
+function classifyHostel(name) {
+  const lower = (name || '').toLowerCase();
+  if (/xunta|municipal|p[uú]blico|peregrinos de |casa da torre|casa da pescader[ií]a/.test(lower)) {
+    return { key: 'public', label: '🏛️ Público / Xunta', bookable: false };
+  }
+  if (/parroquial|donativo|monasterio|convento|seminario|maristas/.test(lower)) {
+    const canReserve = /seminario menor/.test(lower);
+    return { key: 'parroquial', label: '⛪ Parroquial / Tradicional', bookable: canReserve };
+  }
+  if (/hotel|hostal|pensi[óo]n|casa rural|apartamentos|parador|posada|pazo/.test(lower)) {
+    return { key: 'hotel', label: '🛏️ Hotel / Casa Rural', bookable: true };
+  }
+  return { key: 'private', label: '🏡 Albergue Privado', bookable: true };
+}
+
+function getBookingAffiliateUrl(name, town) {
+  const cleanName = (name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+  const q = encodeURIComponent((cleanName + ' ' + (town || '')).trim());
+  const aidPart = BOOKING_AFFILIATE_ID ? '&aid=' + encodeURIComponent(BOOKING_AFFILIATE_ID) : '';
+  return 'https://www.booking.com/searchresults.es.html?ss=' + q + '&lang=es' + aidPart + '&label=smartvieira-camino';
+}
+
+const CAMINO_EXTRA_CULTURA = {
+  'camino-frances': {
+    see: 'Colegiata de Roncesvalles, Puente la Reina, Monasterio de Irache, Catedral de Burgos, Frómista, Catedral de León, Palacio de Gaudí (Astorga), Cruz de Ferro, O Cebreiro y Praza do Obradoiro.',
+    food: 'Vino D.O. Navarra y Rioja, cordero al chilindrón, morcilla de Burgos, cocido maragato en Astorga, botillo del Bierzo, pulpo á feira en Melide y queso de Arzúa-Ulloa.'
+  },
+  'camino-portugues-interior': {
+    see: 'Sé de Lisboa, Convento de Cristo (Tomar), Universidad de Coimbra, Ribeira de Oporto, Puente romano de Ponte de Lima, Fortaleza de Valença, Catedral de Tui, Ponte Sampaio y Padrón.',
+    food: 'Pastéis de nata, bacalhau à Brás, francesinha en Oporto, pimientos de Padrón ("uns pican e outros non"), lamprea del Ulla y vino Albariño D.O. Rías Baixas.'
+  },
+  'camino-portugues-costa': {
+    see: 'Foz do Douro, santuario de Santa Luzia (Viana do Castelo), barca por el Miño en Caminha, castro de Santa Trega, Monasterio de Oia sobre el mar, Baiona y las Islas Cíes desde Vigo.',
+    food: 'Marisco fresco de las Rías Baixas, navajas, empanada gallega de zamburiñas, pescado a la brasa y caldeirada marinera.'
+  },
+  'camino-del-norte': {
+    see: 'Bahía de La Concha, Flysch de Zumaia, Puente Colgante de Portugalete, Santillana del Mar, Comillas, Picos de Europa, Bufones de Pría, Playa de As Catedrais y Sobrado dos Monxes.',
+    food: 'Pintxos donostiarras, marmitako, rabas y sobaos pasiegos de Cantabria, fabada asturiana y sidra natural, queso de Cabrales y percebes de Ribadeo.'
+  },
+  'camino-primitivo': {
+    see: 'Catedral de Oviedo (Cámara Santa), Salas medieval, Cordillera de Hospitales, embalse de Grandas de Salime, Muralla Romana de Lugo (Patrimonio Mundial) y San Romão da Retorta.',
+    food: 'Pote asturiano, cachopo, quesos artesanales de Tineo y Afuega’l Pitu, caldo gallego de A Fonsagrada y tapas gratuitas con cada consumición en Lugo.'
+  },
+  'camino-ingles': {
+    see: 'Arsenal de Ferrol, Torre de Hércules (A Coruña), puente medieval de Pontedeume, Fragas do Eume (cercano), casco gótico de Betanzos, Hospital de Bruma y pazo de Sigüeiro.',
+    food: 'Tortilla jugosa de Betanzos (fama mundial), marisco de las rías de Ferrol y Ares, requesón y miel de Pontedeume.'
+  },
+  'camino-sanabres': {
+    see: 'Teatro Romano de Mérida, Cáceres monumental, Plaza Mayor de Salamanca, Lago y Puebla de Sanabria, termas de As Burgas (Ourense), Monasterio de Oseira y Pazo de Oca.',
+    food: 'Jamón ibérico de bellota, torta del Casar, hornazo de Salamanca, habones de Sanabria, pan artesanal de Cea y pulpo ourensano.'
+  },
+  'camino-invierno': {
+    see: 'Castillo de los Templarios (Ponferrada), Las Médulas, túnel romano de Montefurado, cañones del Sil y Belesar en la Ribeira Sacra, Monforte de Lemos, Diomondi y Pico Sacro.',
+    food: 'Botillo y pimientos del Bierzo, vinos heroicos D.O. Ribeira Sacra y Valdeorras, queso de tetilla y cocido de Lalín.'
+  },
+  'camino-fisterra-muxia': {
+    see: 'Ponte Maceira sobre el Tambre, hórreos de Olveiroa, cascada del Ézaro (desvío cercano), Faro de Cabo Fisterra (Km 0), playa de Lires y Santuario da Virxe da Barca en Muxía.',
+    food: 'Longueiróns (navajas) de Fisterra, congrio seco tradicional de Muxía, centolla, lubina salvaje de Costa da Morte y tarta de Santiago.'
+  }
+};
+
 const CAMINO_ETAPAS = {
   'camino-frances': [
     { n: 'Etapa 1–5', route: 'Saint-Jean-Pied-de-Port → Pamplona', km: '65,2 km', time: '3–4 días', up: '+1.850 m', down: '-1.580 m', diff: 4, profile: [20, 95, 65, 55, 45], town: 'Pamplona', desc: 'Cruce mítico de los Pirineos por la Ruta de Napoleón (24,2 km; o Valcarlos 23,4 km en invierno) hasta Roncesvalles, bosques de Zubiri y Pamplona.' },

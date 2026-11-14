@@ -375,6 +375,17 @@
     <!-- TAB 2: RUTAS, COMPARATIVA, ÚLTIMOS 100 KM Y ALBERGUES                 -->
     <!-- ===================================================================== -->
     <section id="tabPanel-rutas" class="hidden space-y-5">
+      <!-- Buscador instantáneo global de pueblos y 691 alojamientos -->
+      <div class="glass-card rounded-2xl p-3.5 sm:p-4 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2.5">
+          <div class="relative flex-1">
+            <input id="globalHostelSearchInput" type="search" oninput="runGlobalHostelSearch()" placeholder="🔍 Busca cualquier pueblo o albergue entre los 691 alojamientos (ej. Sarria, Roncesvalles, Betanzos)..." class="w-full px-4 py-2.5 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] text-xs font-medium text-[#1C2826] focus:outline-none focus:border-[#1E4D3B]" />
+          </div>
+          <span class="text-[11px] font-semibold text-[#5F6C65] shrink-0">691 alojamientos · 522 con reserva Booking</span>
+        </div>
+        <div id="globalHostelSearchResults" class="hidden grid sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-80 overflow-y-auto pt-1"></div>
+      </div>
+
       <!-- Barra de progreso / Migas de pan del asistente de rutas -->
       <div class="glass-card rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-2">
         <div class="flex flex-wrap items-center gap-1.5 text-xs">
@@ -602,6 +613,20 @@
               <p><strong>Norma obligatoria de los 2 sellos diarios:</strong> Dentro de los últimos 100 km (o últimos 200 km en bici) la Oficina del Peregrino exige <strong>al menos 2 sellos por día con fecha</strong> en la Credencial (sella al salir/desayunar y a mitad o al llegar). Antes de los últimos 100 km basta con 1 sello diario.</p>
               <p><strong>Dónde conseguir la Credencial:</strong> En Asociaciones de Amigos del Camino, catedrales, parroquias, albergues de inicio (SJPP, Sarria, Tui, Ferrol, Ourense) o por correo postal oficial.</p>
               <p><strong>🚲 Bicigrinos:</strong> Los albergues públicos priorizan plaza al caminante a pie hasta última hora de la tarde; conviene reservar albergues privados con aparcabicis cerrado y usar envío de alforjas o bicicleta.</p>
+            </div>
+          </details>
+
+          <!-- 8. Clima por estación, ropa recomendada y ritmos a pie/bici -->
+          <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
+            <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
+              <span>🌦️ Clima por estación, qué ropa llevar y ritmos (a pie vs bicicleta)</span>
+              <span class="text-[#1E4D3B]">▾</span>
+            </summary>
+            <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
+              <p><strong>Primavera (abril–junio) y Otoño (septiembre–octubre):</strong> Las mejores épocas. Temperaturas suaves (12–24 °C) con lluvias probables en Galicia y Pirineos; lleva siempre capa de lluvia/poncho transpirable y vestimenta por capas.</p>
+              <p><strong>Verano (julio–agosto):</strong> Muy seco y caluroso en Navarra, La Rioja, Meseta y Vía de la Plata (sal al amanecer sobre las 06:00h). En Galicia y Costa da Morte refresca por la noche; reserva alojamiento con antelación.</p>
+              <p><strong>Invierno (noviembre–marzo):</strong> Etapas solitarias y días cortos (~8–9h de luz). Muchos albergues privados cierran, por lo que conviene confirmar apertura por teléfono y evitar puertos nevados (Valcarlos en lugar de Napoleón; Pola de Allande en lugar de Hospitales).</p>
+              <p><strong>⏱️ Ritmos medios orientativos:</strong> A pie: <strong>4–4,5 km/h</strong> (etapas de 20–25 km en 5–6 horas con descansos). En bicicleta: <strong>12–16 km/h</strong> (50–70 km/día).</p>
             </div>
           </details>
         </div>
@@ -1660,6 +1685,19 @@
           </div>
         </div>
 
+        ${(typeof CAMINO_EXTRA_CULTURA !== 'undefined' && CAMINO_EXTRA_CULTURA[r.id]) ? `
+        <div class="grid md:grid-cols-2 gap-3 text-xs">
+          <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3.5 space-y-1">
+            <div class="font-bold text-[#1E4D3B]">🏛️ Monumentos e hitos imprescindibles</div>
+            <p class="text-[11px] text-[#5F6C65] leading-relaxed">${CAMINO_EXTRA_CULTURA[r.id].see}</p>
+          </div>
+          <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3.5 space-y-1">
+            <div class="font-bold text-[#D48B28]">🍽️ Gastronomía típica en ruta</div>
+            <p class="text-[11px] text-[#5F6C65] leading-relaxed">${CAMINO_EXTRA_CULTURA[r.id].food}</p>
+          </div>
+        </div>
+        ` : ''}
+
         ${(typeof CAMINO_ALERTAS_TRAMOS !== 'undefined' && CAMINO_ALERTAS_TRAMOS[r.id]) ? `
         <div class="rounded-2xl bg-amber-50 border border-amber-300/70 p-3.5 text-xs text-amber-950 leading-relaxed">
           ${CAMINO_ALERTAS_TRAMOS[r.id]}
@@ -1911,6 +1949,65 @@
       if (wrap) wrap.classList.remove('hidden');
     }
 
+    let hostelTypeFilter = 'all';
+
+    function setHostelTypeFilter(type) {
+      hostelTypeFilter = type;
+      renderExplorerHostels();
+    }
+
+    function runGlobalHostelSearch() {
+      const inp = document.getElementById('globalHostelSearchInput');
+      const box = document.getElementById('globalHostelSearchResults');
+      if (!inp || !box) return;
+      const q = inp.value.trim().toLowerCase();
+      if (q.length < 2) {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+        return;
+      }
+      const allByRoute = (typeof ALBERGUES_Y_HOTELES !== 'undefined') ? ALBERGUES_Y_HOTELES : {};
+      const matches = [];
+      for (const [routeId, items] of Object.entries(allByRoute)) {
+        const routeObj = CAMINO_ROUTES.find(r => r.id === routeId);
+        const routeName = routeObj ? routeObj.name : routeId;
+        for (const h of items) {
+          if ((h.name || '').toLowerCase().includes(q) || (h.town || '').toLowerCase().includes(q)) {
+            matches.push({ ...h, routeName });
+          }
+          if (matches.length >= 24) break;
+        }
+        if (matches.length >= 24) break;
+      }
+      box.classList.remove('hidden');
+      if (!matches.length) {
+        box.innerHTML = `<div class="col-span-full text-center py-4 text-xs text-[#5F6C65]">No se encontraron alojamientos para "${inp.value}".</div>`;
+        return;
+      }
+      box.innerHTML = matches.map(h => {
+        const safeName = h.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const safeTown = (h.town || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const cls = (typeof classifyHostel === 'function') ? classifyHostel(h.name) : { label: '🏡 Alojamiento', bookable: false };
+        const bookingUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(h.name, h.town) : '';
+        return `
+          <div onclick="openHostelDetailModal('${safeName}', '${safeTown}')" class="cursor-pointer bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] rounded-2xl p-3 flex flex-col justify-between gap-2 transition-all">
+            <div>
+              <div class="flex items-center justify-between gap-1.5 mb-1">
+                <span class="text-[10px] font-bold text-[#1E4D3B] bg-[#EBF3EE] px-2 py-0.5 rounded-full">${cls.label}</span>
+                <span class="text-[10px] text-[#5F6C65] truncate">${h.routeName}</span>
+              </div>
+              <div class="text-xs font-bold text-[#1C2826] leading-snug">${h.name}</div>
+              <div class="text-[11px] text-[#D48B28] font-bold mt-0.5">📍 ${h.town}</div>
+            </div>
+            <div class="flex items-center gap-1.5 pt-1">
+              <span class="px-2 py-1 rounded-lg bg-white text-[#1E4D3B] border border-[#E5DEC9] text-[10px] font-bold">ℹ️ Ficha</span>
+              ${bookingUrl ? `<a href="${bookingUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="px-2.5 py-1 rounded-lg bg-[#003580] text-white text-[10px] font-bold hover:opacity-90 transition-all">🏨 Booking →</a>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     function renderExplorerHostels() {
       const dict = WEB_I18N[currentWebLang] || WEB_I18N.ES;
       const list = (typeof ALBERGUES_Y_HOTELES !== 'undefined' && ALBERGUES_Y_HOTELES[selectedRouteId]) ? ALBERGUES_Y_HOTELES[selectedRouteId] : [];
@@ -1919,7 +2016,15 @@
       const countEl = document.getElementById('selectedTownHostelCount');
       if (!grid || !selectedExplorerTown) return;
 
-      const filtered = list.filter(item => (item.town || '').toLowerCase() === selectedExplorerTown.toLowerCase());
+      const allTown = list.filter(item => (item.town || '').toLowerCase() === selectedExplorerTown.toLowerCase());
+      const filtered = allTown.filter(item => {
+        if (hostelTypeFilter === 'all') return true;
+        const cls = (typeof classifyHostel === 'function') ? classifyHostel(item.name) : { bookable: true, key: 'private' };
+        if (hostelTypeFilter === 'public') return cls.key === 'public' || cls.key === 'parroquial';
+        if (hostelTypeFilter === 'bookable') return cls.bookable;
+        return true;
+      });
+
       if (titleEl) titleEl.textContent = `🏠 2. Albergues y alojamientos en ${selectedExplorerTown}`;
       if (countEl) countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}`;
 
@@ -1928,21 +2033,35 @@
         ? `<div class="col-span-full rounded-2xl bg-[#EBF3EE]/70 border border-[#1E4D3B]/15 p-3 flex flex-wrap items-center gap-1.5"><span class="text-[11px] font-bold text-[#1E4D3B] mr-1">Servicios en ${selectedExplorerTown}:</span>${townServices.map(s => `<span class="text-[10px] font-semibold bg-white border border-[#E5DEC9] text-[#1C2826] px-2 py-0.5 rounded-full">${s}</span>`).join('')}</div>`
         : '';
 
+      const filterPills = `
+        <div class="col-span-full flex flex-wrap items-center gap-1.5 pb-1">
+          <button type="button" onclick="setHostelTypeFilter('all')" class="px-3 py-1 rounded-full text-[11px] font-bold border transition-all ${hostelTypeFilter === 'all' ? 'bg-[#1E4D3B] text-white border-[#1E4D3B]' : 'bg-white text-[#5F6C65] border-[#E5DEC9] hover:border-[#1E4D3B]'}">Todos (${allTown.length})</button>
+          <button type="button" onclick="setHostelTypeFilter('public')" class="px-3 py-1 rounded-full text-[11px] font-bold border transition-all ${hostelTypeFilter === 'public' ? 'bg-[#1E4D3B] text-white border-[#1E4D3B]' : 'bg-white text-[#5F6C65] border-[#E5DEC9] hover:border-[#1E4D3B]'}">🏛️ Públicos / Parroquiales</button>
+          <button type="button" onclick="setHostelTypeFilter('bookable')" class="px-3 py-1 rounded-full text-[11px] font-bold border transition-all ${hostelTypeFilter === 'bookable' ? 'bg-[#003580] text-white border-[#003580]' : 'bg-white text-[#003580] border-[#E5DEC9] hover:border-[#003580]'}">🏨 Privados y Reserva Booking</button>
+        </div>
+      `;
+
       if (filtered.length === 0) {
-        grid.innerHTML = svcBanner + `<div class="col-span-full text-center py-8 text-xs text-[#5F6C65]">${dict.no_hostels}</div>`;
+        grid.innerHTML = svcBanner + filterPills + `<div class="col-span-full text-center py-8 text-xs text-[#5F6C65]">${dict.no_hostels}</div>`;
         return;
       }
 
-      grid.innerHTML = svcBanner + filtered.map(h => {
+      grid.innerHTML = svcBanner + filterPills + filtered.map(h => {
         const safeName = h.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const safeTown = (h.town || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const cls = (typeof classifyHostel === 'function') ? classifyHostel(h.name) : { label: '🏡 Alojamiento', bookable: false };
+        const bookingUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(h.name, h.town) : '';
         return `
-          <div onclick="openHostelDetailModal('${safeName}', '${safeTown}')" class="cursor-pointer bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] rounded-2xl p-3.5 flex items-start justify-between gap-2 transition-all">
+          <div onclick="openHostelDetailModal('${safeName}', '${safeTown}')" class="cursor-pointer bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] rounded-2xl p-3.5 flex flex-col justify-between gap-2.5 transition-all">
             <div>
+              <div class="text-[10px] font-bold text-[#1E4D3B] mb-1">${cls.label}</div>
               <div class="text-xs font-bold text-[#1C2826] leading-snug">${h.name}</div>
               <div class="text-[11px] text-[#D48B28] font-bold mt-1">📍 ${h.town}</div>
             </div>
-            <button type="button" title="Ver ficha, precio, contacto y web" class="shrink-0 px-2.5 py-1 rounded-lg bg-white text-[#1E4D3B] border border-[#E5DEC9] text-[10px] font-bold hover:border-[#1E4D3B] transition-all">ℹ️ Info</button>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button type="button" title="Ver ficha, precio, contacto y web" class="px-2.5 py-1 rounded-lg bg-white text-[#1E4D3B] border border-[#E5DEC9] text-[10px] font-bold hover:border-[#1E4D3B] transition-all">ℹ️ Info</button>
+              ${bookingUrl ? `<a href="${bookingUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="px-2.5 py-1 rounded-lg bg-[#003580] text-white text-[10px] font-bold hover:opacity-90 transition-all">🏨 Booking →</a>` : ''}
+            </div>
           </div>
         `;
       }).join('');
@@ -2006,8 +2125,18 @@
       `;
 
       const queryMaps = encodeURIComponent(`${name} ${town} Camino de Santiago`);
+      const cls = (typeof classifyHostel === 'function') ? classifyHostel(name) : { bookable: !isPublic && !isParroquial };
+      const bookingUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(name, town) : '';
 
-      let linksHtml = `
+      let linksHtml = '';
+      if (bookingUrl) {
+        linksHtml += `
+          <a href="${bookingUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-[#003580] text-white text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-all">
+            🏨 Ver disponibilidad y reservar en Booking.com →
+          </a>
+        `;
+      }
+      linksHtml += `
         <a href="https://www.google.com/maps/search/?api=1&query=${queryMaps}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-[#1E4D3B] text-white text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-all">
           📞 Ver Teléfono, Reseñas y Ubicación GPS en Mapa →
         </a>
