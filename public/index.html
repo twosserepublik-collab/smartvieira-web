@@ -145,7 +145,10 @@
       </div>
 
       <nav class="flex items-center gap-1.5 overflow-x-auto pb-1" aria-label="Secciones de la guía">
-        <button id="tabBtn-inicio" onclick="switchWebTab('inicio')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-[#1E4D3B] text-white" data-i18n="tab_home">
+        <button id="tabBtn-caminos" onclick="switchWebTab('caminos')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-[#1E4D3B] text-white" data-i18n="tab_caminos">
+          🧭 Los Caminos
+        </button>
+        <button id="tabBtn-inicio" onclick="switchWebTab('inicio')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-white text-[#5F6C65] border border-[#E5DEC9] hover:border-[#1E4D3B]" data-i18n="tab_home">
           📰 Actualidad
         </button>
         <button id="tabBtn-rutas" onclick="switchWebTab('rutas')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-white text-[#5F6C65] border border-[#E5DEC9] hover:border-[#1E4D3B]" data-i18n="tab_routes">
@@ -167,9 +170,92 @@
   <main class="max-w-5xl w-full mx-auto px-4 py-6 md:py-8 flex-grow">
 
     <!-- ===================================================================== -->
+    <!-- TAB 0: LOS CAMINOS (MAPA INTERACTIVO + FICHAS ESTILO GRONZE)          -->
+    <!-- ===================================================================== -->
+    <section id="tabPanel-caminos" class="space-y-6">
+      <div class="glass-card rounded-3xl p-6 sm:p-7 space-y-5">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold uppercase tracking-wider border border-[#1E4D3B]/15">
+              🧭 Mapa y Rutas Jacobeas
+            </span>
+            <h1 class="text-2xl sm:text-3xl font-bold text-[#1C2826] mt-2 leading-tight">
+              Los Caminos de Santiago: mapas, variantes y etapas
+            </h1>
+            <p class="text-xs sm:text-sm text-[#5F6C65] mt-1 max-w-2xl">
+              Pulsa cualquier trazado en el mapa o elige una ruta abajo para consultar sus variantes de inicio, kilometraje, dificultad y tabla de etapas habituales.
+            </p>
+          </div>
+          <button onclick="resetMapSelection()" id="btnShowAllMap" class="hidden shrink-0 px-3 py-1.5 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] text-xs font-bold text-[#1C2826] hover:border-[#1E4D3B] transition-all">
+            🗺️ Ver todos en el mapa
+          </button>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-5 items-start">
+          <!-- Mapa interactivo SVG Península Ibérica -->
+          <div class="lg:col-span-7 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3 relative overflow-hidden">
+            <svg id="caminoIberiaSvg" viewBox="0 0 600 410" class="w-full h-auto select-none" role="img" aria-label="Mapa interactivo de las rutas del Camino de Santiago">
+              <!-- Fondo mar -->
+              <rect x="0" y="0" width="600" height="410" rx="16" fill="#F2EDE1" />
+              <text x="34" y="42" fill="#8C9790" font-size="10" font-weight="700" letter-spacing="1">OCÉANO ATLÁNTICO</text>
+              <text x="235" y="28" fill="#8C9790" font-size="10" font-weight="700" letter-spacing="1">MAR CANTÁBRICO</text>
+              <text x="485" y="255" fill="#8C9790" font-size="10" font-weight="700" letter-spacing="1">MEDITERRÁNEO</text>
+
+              <!-- Silueta esquemática limpia de España + Portugal + SO Francia -->
+              <path d="M 380 40 L 475 55 L 495 102 L 455 128 L 520 148 L 502 188 L 430 228 L 402 292 L 330 342 L 245 362 L 180 385 L 145 375 L 130 345 L 105 348 L 74 334 L 68 300 L 78 242 L 80 185 L 88 135 L 72 95 L 82 62 L 132 48 L 220 50 L 325 52 Z"
+                    fill="#E5DEC9" fill-opacity="0.55" stroke="#C8BFA6" stroke-width="2" stroke-linejoin="round" />
+              <!-- Línea fronteriza sutil Portugal -->
+              <path d="M 96 135 L 136 144 L 142 192 L 132 238 L 142 292 L 130 345"
+                    fill="none" stroke="#C8BFA6" stroke-width="1.3" stroke-dasharray="4 3" />
+
+              <!-- Trazados interactivos de los 9 Caminos -->
+              <g id="svgRoutesGroup" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                <path data-route="camino-frances" onclick="selectMapCamino('camino-frances')" d="M 404 62 Q 350 92 278 108 T 158 104 L 136 96 L 115 88" stroke="#D48B28" stroke-width="4" class="cursor-pointer transition-all" />
+                <path data-route="camino-del-norte" onclick="selectMapCamino('camino-del-norte')" d="M 374 56 Q 300 54 212 56 L 160 58 L 135 76 L 115 88" stroke="#2563EB" stroke-width="3.5" class="cursor-pointer transition-all" />
+                <path data-route="camino-primitivo" onclick="selectMapCamino('camino-primitivo')" d="M 204 68 Q 170 78 144 84 L 115 88" stroke="#7C3AED" stroke-width="3.5" class="cursor-pointer transition-all" />
+                <path data-route="camino-ingles" onclick="selectMapCamino('camino-ingles')" d="M 116 52 L 114 72 L 115 88 M 102 60 L 114 72" stroke="#0D9488" stroke-width="3.5" class="cursor-pointer transition-all" />
+                <path data-route="camino-portugues-interior" onclick="selectMapCamino('camino-portugues-interior')" d="M 74 302 Q 86 244 86 196 T 101 138 L 105 114 L 115 88" stroke="#1E4D3B" stroke-width="3.5" class="cursor-pointer transition-all" />
+                <path data-route="camino-portugues-costa" onclick="selectMapCamino('camino-portugues-costa')" d="M 86 196 Q 78 164 88 140 L 96 122 L 105 114 L 115 88" stroke="#0284C7" stroke-width="3.5" class="cursor-pointer transition-all" />
+                <path data-route="camino-sanabres" onclick="selectMapCamino('camino-sanabres')" d="M 166 356 Q 152 285 184 198 T 165 142 L 134 124 L 115 88" stroke="#B45309" stroke-width="3.5" class="cursor-pointer transition-all" />
+                <path data-route="camino-invierno" onclick="selectMapCamino('camino-invierno')" d="M 158 104 L 146 114 L 134 112 L 124 102 L 115 88" stroke="#4F46E5" stroke-width="3.2" class="cursor-pointer transition-all" />
+                <path data-route="camino-fisterra-muxia" onclick="selectMapCamino('camino-fisterra-muxia')" d="M 115 88 L 96 88 L 76 86 M 96 88 L 79 74" stroke="#BE123C" stroke-width="3.2" class="cursor-pointer transition-all" />
+              </g>
+
+              <!-- Puntos de inicio y nodo Santiago -->
+              <g font-size="9" font-weight="700" fill="#1C2826">
+                <circle cx="404" cy="62" r="3.5" fill="#D48B28" /><text x="409" y="65">SJPP</text>
+                <circle cx="374" cy="56" r="3.5" fill="#2563EB" /><text x="366" y="48">Irún</text>
+                <circle cx="204" cy="68" r="3.2" fill="#7C3AED" /><text x="209" y="72">Oviedo</text>
+                <circle cx="116" cy="52" r="3" fill="#0D9488" /><text x="121" y="51">Ferrol</text>
+                <circle cx="278" cy="108" r="3" fill="#D48B28" /><text x="275" y="120">Burgos</text>
+                <circle cx="198" cy="98" r="3" fill="#D48B28" /><text x="195" y="110">León</text>
+                <circle cx="74" cy="302" r="3.5" fill="#1E4D3B" /><text x="80" y="306">Lisboa</text>
+                <circle cx="86" cy="196" r="3.5" fill="#0284C7" /><text x="48" y="198">Oporto</text>
+                <circle cx="166" cy="356" r="3.5" fill="#B45309" /><text x="172" y="360">Sevilla</text>
+                <circle cx="76" cy="86" r="3" fill="#BE123C" /><text x="36" y="89">Fisterra</text>
+                <!-- Santiago estrella -->
+                <circle cx="115" cy="88" r="6" fill="#D48B28" stroke="#FFFFFF" stroke-width="2" />
+                <text x="122" y="84" font-size="10.5" font-weight="800" fill="#1E4D3B">★ Santiago</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Lista rápida de Caminos para elegir -->
+          <div class="lg:col-span-5 space-y-2.5">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-[#5F6C65]">Elige un Camino para ver su guía completa</h2>
+            <div id="mapCaminoList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ficha completa estilo Gronze del Camino seleccionado -->
+      <div id="caminoGronzeDetail" class="glass-card rounded-3xl p-6 sm:p-7 space-y-5"></div>
+    </section>
+
+    <!-- ===================================================================== -->
     <!-- TAB 1: ACTUALIDAD (SOLO CABECERA LIMPIA + 2 NOTICIAS SEMANALES)       -->
     <!-- ===================================================================== -->
-    <section id="tabPanel-inicio" class="space-y-6">
+    <section id="tabPanel-inicio" class="hidden space-y-6">
       <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <span class="px-3 py-1 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold uppercase tracking-wider border border-[#1E4D3B]/15" data-i18n="hero_badge">
@@ -588,7 +674,7 @@
   <script>
     const WEB_I18N = {
       ES: {
-        tab_home: '📰 Actualidad', tab_routes: '🗺️ Rutas y Albergues', tab_guide: '📖 Guía del Peregrino', tab_light: '🐚 Caminar sin Peso', tab_downloads: '📲 Descargas',
+        tab_caminos: '🧭 Los Caminos', tab_home: '📰 Actualidad', tab_routes: '🗺️ Rutas y Albergues', tab_guide: '📖 Guía del Peregrino', tab_light: '🐚 Caminar sin Peso', tab_downloads: '📲 Descargas',
         hero_badge: '🥾 Actualidad e Información del Camino',
         hero_title: 'Noticias y guía práctica del Camino de Santiago',
         hero_desc: 'Información actualizada cada semana sobre albergues, aperturas, tramos y vida en los pueblos del Camino. Usa las pestañas superiores para consultar rutas, preparar tu mochila o descubrir cómo caminar sin peso.',
@@ -638,7 +724,7 @@
         all_towns: 'Todas las localidades', no_hostels: 'No se encontraron albergues para ese filtro.', stages_word: 'etapas'
       },
       EN: {
-        tab_home: '📰 News', tab_routes: '🗺️ Routes & Hostels', tab_guide: '📖 Pilgrim Guide', tab_light: '🐚 Walk Weight-Free', tab_downloads: '📲 Downloads',
+        tab_caminos: '🧭 The Caminos', tab_home: '📰 News', tab_routes: '🗺️ Routes & Hostels', tab_guide: '📖 Pilgrim Guide', tab_light: '🐚 Walk Weight-Free', tab_downloads: '📲 Downloads',
         hero_badge: '🥾 Camino News & Pilgrim Information',
         hero_title: 'Camino de Santiago News & Practical Guide',
         hero_desc: 'Weekly updates on hostels, openings, route conditions and Camino towns. Use the tabs above to explore routes, pack your bag, or discover how to walk weight-free.',
@@ -688,7 +774,7 @@
         all_towns: 'All towns', no_hostels: 'No hostels found.', stages_word: 'stages'
       },
       FR: {
-        tab_home: '📰 Actualités', tab_routes: '🗺️ Chemins & Auberges', tab_guide: '📖 Guide du Pèlerin', tab_light: '🐚 Marcher Léger', tab_downloads: '📲 Téléchargements',
+        tab_caminos: '🧭 Les Chemins', tab_home: '📰 Actualités', tab_routes: '🗺️ Chemins & Auberges', tab_guide: '📖 Guide du Pèlerin', tab_light: '🐚 Marcher Léger', tab_downloads: '📲 Téléchargements',
         hero_badge: '🥾 Actualités & Infos du Chemin', hero_title: 'Actualités et guide pratique du Chemin de Compostelle',
         hero_desc: 'Retrouvez chaque semaine les nouvelles des auberges, des étapes et des villages jacquaires.',
         news_title: '📰 Les infos clés de la semaine',
@@ -732,7 +818,7 @@
         all_towns: 'Toutes les villes', no_hostels: 'Aucune auberge trouvée.', stages_word: 'étapes'
       },
       DE: {
-        tab_home: '📰 Aktuelles', tab_routes: '🗺️ Routen & Herbergen', tab_guide: '📖 Pilgerführer', tab_light: '🐚 Ohne Gepäck', tab_downloads: '📲 Downloads',
+        tab_caminos: '🧭 Die Wege', tab_home: '📰 Aktuelles', tab_routes: '🗺️ Routen & Herbergen', tab_guide: '📖 Pilgerführer', tab_light: '🐚 Ohne Gepäck', tab_downloads: '📲 Downloads',
         hero_badge: '🥾 Aktuelles vom Jakobsweg', hero_title: 'Nachrichten & Praxisführer für den Jakobsweg',
         hero_desc: 'Wöchentliche News zu Herbergen, Etappen und Orten sowie alle Infos für Ihre Vorbereitung.',
         news_title: '📰 Wichtigste Meldungen der Woche',
@@ -776,7 +862,7 @@
         all_towns: 'Alle Orte', no_hostels: 'Keine Herbergen gefunden.', stages_word: 'Etappen'
       },
       IT: {
-        tab_home: '📰 Attualità', tab_routes: '🗺️ Percorsi e Ostelli', tab_guide: '📖 Guida del Pellegrino', tab_light: '🐚 Camminare Leggeri', tab_downloads: '📲 Download',
+        tab_caminos: '🧭 I Cammini', tab_home: '📰 Attualità', tab_routes: '🗺️ Percorsi e Ostelli', tab_guide: '📖 Guida del Pellegrino', tab_light: '🐚 Camminare Leggeri', tab_downloads: '📲 Download',
         hero_badge: '🥾 Notizie e Info sul Cammino', hero_title: 'Notizie e guida pratica del Cammino di Santiago',
         hero_desc: 'Aggiornamenti settimanali su ostelli, percorsi e paesi del Cammino.',
         news_title: '📰 Le notizie più rilevanti della settimana',
@@ -820,7 +906,7 @@
         all_towns: 'Tutte le località', no_hostels: 'Nessun ostello trovato.', stages_word: 'tappe'
       },
       PT: {
-        tab_home: '📰 Atualidade', tab_routes: '🗺️ Rotas e Albergues', tab_guide: '📖 Guia do Peregrino', tab_light: '🐚 Caminhar sem Peso', tab_downloads: '📲 Transferências',
+        tab_caminos: '🧭 Os Caminhos', tab_home: '📰 Atualidade', tab_routes: '🗺️ Rotas e Albergues', tab_guide: '📖 Guia do Peregrino', tab_light: '🐚 Caminhar sem Peso', tab_downloads: '📲 Transferências',
         hero_badge: '🥾 Atualidade do Caminho', hero_title: 'Notícias e guia prático do Caminho de Santiago',
         hero_desc: 'Atualizações semanais sobre albergues, etapas e localidades jacobeias.',
         news_title: '📰 Destaques desta semana no Caminho',
@@ -864,7 +950,7 @@
         all_towns: 'Todas as localidades', no_hostels: 'Nenhum albergue encontrado.', stages_word: 'etapas'
       },
       KO: {
-        tab_home: '📰 최신 소식', tab_routes: '🗺️ 코스 & 알베르게', tab_guide: '📖 순례자 가이드', tab_light: '🐚 가볍게 걷기', tab_downloads: '📲 다운로드',
+        tab_caminos: '🧭 순례길 지도', tab_home: '📰 최신 소식', tab_routes: '🗺️ 코스 & 알베르게', tab_guide: '📖 순례자 가이드', tab_light: '🐚 가볍게 걷기', tab_downloads: '📲 다운로드',
         hero_badge: '🥾 순례길 주간 소식', hero_title: '산티아고 순례길 뉴스 & 실전 가이드',
         hero_desc: '매주 업데이트되는 알베르게·구간 소식과 순례길 준비 정보를 확인하세요.',
         news_title: '📰 이번 주 주요 소식',
@@ -908,7 +994,7 @@
         all_towns: '모든 마을', no_hostels: '알베르게가 없습니다.', stages_word: '구간'
       },
       ZH: {
-        tab_home: '📰 每周资讯', tab_routes: '🗺️ 路线与庇护所', tab_guide: '📖 朝圣指南', tab_light: '🐚 轻装前行', tab_downloads: '📲 应用下载',
+        tab_caminos: '🧭 朝圣之路', tab_home: '📰 每周资讯', tab_routes: '🗺️ 路线与庇护所', tab_guide: '📖 朝圣指南', tab_light: '🐚 轻装前行', tab_downloads: '📲 应用下载',
         hero_badge: '🥾 圣地亚哥朝圣之路最新动态', hero_title: '朝圣之路每周新闻与实用指南',
         hero_desc: '每周更新庇护所动态、新开站点与沿途城镇资讯。使用上方选项卡查询路线、打包清单或了解如何轻装步行。',
         news_title: '📰 本周朝圣之路重要新闻',
@@ -1028,16 +1114,147 @@
       }
     ];
 
+    const CAMINO_GRONZE_DETAILS = {
+      'camino-frances': {
+        color: '#D48B28', season: 'Abril – Octubre', bike: 'Muy buena (pistas y arcenes)', infra: 'Máxima densidad de albergues del mundo',
+        variants: [
+          { title: 'Desde Saint-Jean-Pied-de-Port', meta: '780 km • 32-35 etapas', note: 'Cruza los Pirineos por la Ruta de Napoleón (o Valcarlos en invierno).' },
+          { title: 'Variante Aragonesa (Somport)', meta: '855 km • +6 etapas', note: 'Enlaza en Puente la Reina atravesando Jaca y Sangüesa.' },
+          { title: 'Desde León o Ponferrada', meta: '310 / 205 km • 9-14 días', note: 'Combina la meseta final, Cruz de Ferro y la entrada verde a Galicia.' },
+          { title: 'Últimos 100 km desde Sarria', meta: '115 km • 5 etapas', note: 'Opción más popular para conseguir la Compostela en una semana.' }
+        ],
+        stagesSample: [
+          ['Saint-Jean → Roncesvalles', '24,2 km'], ['Roncesvalles → Pamplona', '41 km (2 etapas)'],
+          ['Pamplona → Logroño', '96 km (4 etapas)'], ['Logroño → Burgos', '120 km (5 etapas)'],
+          ['Burgos → León', '182 km (7 etapas)'], ['León → Ponferrada', '104 km (4 etapas)'],
+          ['Ponferrada → Sarria', '90 km (4 etapas)'], ['Sarria → Santiago', '115 km (5 etapas)']
+        ],
+        highlights: 'Patrimonio único (Pamplona, Burgos, León, O Cebreiro), ambiente internacional y señalización imposible de perder.'
+      },
+      'camino-portugues-interior': {
+        color: '#1E4D3B', season: 'Marzo – Octubre', bike: 'Muy buena', infra: 'Excelente red desde Oporto y Galicia',
+        variants: [
+          { title: 'Camino Central desde Lisboa', meta: '620 km • 25-26 etapas', note: 'Recorre todo Portugal pasando por Santarém, Tomar y Coimbra.' },
+          { title: 'Desde Oporto (Central)', meta: '240 km • 10-12 etapas', note: 'Equilibrio perfecto entre aldeas rurales portuguesas y buena red de albergues.' },
+          { title: 'Últimos 100 km desde Tui', meta: '119 km • 6 etapas', note: 'Muy cómodo, etapas suaves, bosque atlántico y gastronomía gallega.' }
+        ],
+        stagesSample: [
+          ['Lisboa → Tomar', '142 km (6 etapas)'], ['Tomar → Coimbra', '75 km (3 etapas)'],
+          ['Coimbra → Oporto', '120 km (5 etapas)'], ['Oporto → Barcelos → Ponte de Lima', '88 km (3 etapas)'],
+          ['Ponte de Lima → Tui', '37 km (2 etapas)'], ['Tui → Redondela → Pontevedra', '51 km (2 etapas)'],
+          ['Pontevedra → Caldas → Padrón → Santiago', '68 km (3 etapas)']
+        ],
+        highlights: 'Desniveles amables, tramos históricos romanos (Vía XIX), hospitalidad portuguesa y excelente relación calidad-precio.'
+      },
+      'camino-portugues-costa': {
+        color: '#0284C7', season: 'Abril – Octubre', bike: 'Buena (muchas pasarelas)', infra: 'Albergues modernos en costa y ciudades',
+        variants: [
+          { title: 'Completo desde Oporto por la Costa', meta: '270 km • 11-12 etapas', note: 'Bordeando el Atlántico por Vila do Conde, Viana do Castelo y Caminha (barco por el Miño).' },
+          { title: 'Variante Espiritual (desde Pontevedra)', meta: '+1 etapa + barca', note: 'Desvío por Armenteira, Vilanova de Arousa y Traslatio marítima hasta Padrón.' },
+          { title: 'Desde A Guarda o Vigo (100 km)', meta: '100-145 km • 5-7 días', note: 'Acantilados de Oia, Baiona y ría de Vigo hasta enlazar en Redondela.' }
+        ],
+        stagesSample: [
+          ['Oporto → Póvoa de Varzim', '30,6 km'], ['Póvoa → Esposende → Viana do Castelo', '45 km (2 etapas)'],
+          ['Viana → Caminha → A Guarda', '31 km'], ['A Guarda → Oia → Baiona', '31 km'],
+          ['Baiona → Vigo', '25,3 km'], ['Vigo → Redondela → Pontevedra', '35 km'],
+          ['Pontevedra → Santiago', '68 km (3 etapas)']
+        ],
+        highlights: 'Vistas constantes al océano Atlántico, pasarelas de madera sobre dunas y clima fresco en verano.'
+      },
+      'camino-del-norte': {
+        color: '#2563EB', season: 'Mayo – Septiembre', bike: 'Exigente (desniveles continuos)', infra: 'Buena; conviene reservar en verano turístico',
+        variants: [
+          { title: 'Completo desde Irún', meta: '825 km • 32-35 etapas', note: 'Atraviesa País Vasco, Cantabria, Asturias y Galicia por la cornisa cantábrica.' },
+          { title: 'Enlace con el Primitivo (Villaviciosa)', meta: 'Ahorra costa occidental', note: 'Desvío hacia Oviedo para tomar la ruta montañosa de Alfonso II.' },
+          { title: 'Últimos 100 km desde Vilalba', meta: '122 km • 5 etapas', note: 'Cruza la Terra Chá y Sobrado dos Monxes antes de unir en Arzúa.' }
+        ],
+        stagesSample: [
+          ['Irún → San Sebastián → Bilbao', '128 km (5-6 etapas)'], ['Bilbao → Santander → Santillana', '145 km (6 etapas)'],
+          ['Santillana → Llanes → Ribadesella → Gijón', '165 km (7 etapas)'], ['Gijón → Luarca → Ribadeo', '160 km (6-7 etapas)'],
+          ['Ribadeo → Mondoñedo → Vilalba', '72 km (3 etapas)'], ['Vilalba → Sobrado → Santiago', '122 km (5 etapas)']
+        ],
+        highlights: 'Paisaje verde y acantilados impresionantes; etapas exigentes tipo "rompepiernas" con gran recompensa visual.'
+      },
+      'camino-primitivo': {
+        color: '#7C3AED', season: 'Mayo – Septiembre', bike: 'Solo BTT experimentada', infra: 'Suficiente pero conviene planificar Hospitales',
+        variants: [
+          { title: 'Desde Oviedo por Hospitales', meta: '320 km • 13-14 etapas', note: 'Variante alpina clásica por puertos de alta montaña entre Borres y Berducedo.' },
+          { title: 'Variante por Pola de Allande', meta: 'Alternativa de valle', note: 'Recomendada con niebla, nieve o mal tiempo en lugar de Hospitales.' },
+          { title: 'Últimos 100 km desde Lugo', meta: '101 km • 4-5 etapas', note: 'Saliendo por la Muralla Romana hasta enlazar en Melide con el Francés.' }
+        ],
+        stagesSample: [
+          ['Oviedo → Grado → Salas', '48 km (2 etapas)'], ['Salas → Tineo → Pola de Allande / Hospitales', '49 km (2 etapas)'],
+          ['Berducedo → Grandas de Salime → A Fonsagrada', '53 km (2 etapas)'], ['A Fonsagrada → O Cádavo → Lugo', '55 km (2 etapas)'],
+          ['Lugo → San Romão → Melide', '47 km (2 etapas)'], ['Melide → Arzúa → Santiago', '54 km (2 etapas)']
+        ],
+        highlights: 'El primer Camino histórico (siglo IX); menos masificado, alta montaña asturiana y fuerte espíritu peregrino.'
+      },
+      'camino-ingles': {
+        color: '#0D9488', season: 'Todo el año (abril – octubre ideal)', bike: 'Moderada (rampas en Bruma)', infra: 'Red pública Xunta + privados en cada final',
+        variants: [
+          { title: 'Ramal principal desde Ferrol', meta: '118 km • 5-6 etapas', note: 'Otorga la Compostela completa en menos de una semana.' },
+          { title: 'Ramal desde A Coruña', meta: '73 km • 3 etapas', note: 'Se une en Hospital de Bruma (para Compostela requiere 25 km previos acreditados).' }
+        ],
+        stagesSample: [
+          ['Ferrol → Neda → Pontedeume', '28-30 km (1-2 etapas)'], ['Pontedeume → Betanzos', '20,5 km'],
+          ['Betanzos → Hospital de Bruma', '24,2 km (subida exigente)'], ['Hospital de Bruma → Sigüeiro', '24,4 km'],
+          ['Sigüeiro → Santiago de Compostela', '16,5 km']
+        ],
+        highlights: 'Corto, marítimo al principio (rías de Ferrol y Ares) y muy práctico para quienes disponen de 5 o 6 días.'
+      },
+      'camino-sanabres': {
+        color: '#B45309', season: 'Primavera y Otoño', bike: 'Muy apta en Meseta y Galicia', infra: 'Más espaciada en el sur; buena en Galicia',
+        variants: [
+          { title: 'Vía de la Plata completa (Sevilla)', meta: '1.000 km • 36-38 etapas', note: 'Gran ruta histórica romana por Mérida, Cáceres, Salamanca y Zamora.' },
+          { title: 'Camino Sanabrés (desde Granja de Moreruela)', meta: '368 km • 13-14 etapas', note: 'Gira hacia Puebla de Sanabria, A Gudiña y Ourense en lugar de ir a Astorga.' },
+          { title: 'Últimos 100 km desde Ourense', meta: '108 km • 5 etapas', note: 'Termas de Ourense, monasterio de Oseira y valles tranquilos hacia Santiago.' }
+        ],
+        stagesSample: [
+          ['Sevilla → Mérida → Cáceres', '275 km (10 etapas)'], ['Cáceres → Salamanca → Zamora', '280 km (10 etapas)'],
+          ['Zamora → Puebla de Sanabria', '112 km (4 etapas)'], ['Sanabria → A Gudiña → Laza → Ourense', '128 km (5 etapas)'],
+          ['Ourense → Cea → Dozón → Lalín → Silleda → Santiago', '108 km (5 etapas)']
+        ],
+        highlights: 'Soledad, historia romana y tranquilidad absoluta lejos de aglomeraciones; evita julio-agosto en Extremadura y Andalucía.'
+      },
+      'camino-invierno': {
+        color: '#4F46E5', season: 'Todo el año (ideal otoño/invierno)', bike: 'Exigente en Ribeira Sacra', infra: 'Albergues más espaciados; conviene reservar antes',
+        variants: [
+          { title: 'Completo desde Ponferrada', meta: '263 km • 10-12 etapas', note: 'Alternativa histórica al Cebreiro entrando a Galicia por el valle del Sil.' },
+          { title: 'Últimos 100 km desde Chantada', meta: '105 km • 5 etapas', note: 'Atraviesa el corazón de Galicia enlazando en Lalín con el Sanabrés.' }
+        ],
+        stagesSample: [
+          ['Ponferrada → Las Médulas → O Barco', '44 km (2 etapas)'], ['O Barco → A Rúa → Quiroga', '40 km (2 etapas)'],
+          ['Quiroga → Monforte de Lemos', '35 km'], ['Monforte → Chantada → Rodeiro', '55 km (2 etapas)'],
+          ['Rodeiro → Lalín → Silleda → Santiago', '89 km (3-4 etapas)']
+        ],
+        highlights: 'Único Camino que cruza las 4 provincias gallegas; Las Médulas y cañones de la Ribeira Sacra.'
+      },
+      'camino-fisterra-muxia': {
+        color: '#BE123C', season: 'Todo el año (primavera – otoño ideal)', bike: 'Moderada', infra: 'Muy buena oferta en Negreira, Olveiroa, Fisterra y Muxía',
+        variants: [
+          { title: 'Santiago → Fisterra → Muxía', meta: '117 km • 4-5 etapas', note: 'El epílogo tradicional hasta el Cabo Fisterra (km 0) rematando en Muxía.' },
+          { title: 'Circular por Muxía primero', meta: '117 km • 4-5 etapas', note: 'Bifurcación en Hospital hacia Muxía primero y bajada por Lires a Fisterra.' }
+        ],
+        stagesSample: [
+          ['Santiago → Negreira', '20,6 km'], ['Negreira → Olveiroa', '33,6 km'],
+          ['Olveiroa → Cee / Corcubión → Fisterra', '34 km'], ['Olveiroa → Muxía (ramal norte)', '32,5 km'],
+          ['Fisterra ↔ Muxía (por Lires)', '27,6 km']
+        ],
+        highlights: 'Permite conseguir la Fisterrana y la Muxiana; puesta de sol atlántica como broche final del Camino.'
+      }
+    };
+
     let currentWebLang = 'ES';
-    let activeTab = 'inicio';
+    let activeTab = 'caminos';
+    let activeMapCaminoId = '';
     let currentRouteStep = 1;
     let selectedRouteId = '';
     let selectedExplorerTown = '';
     let activeDurFilter = '';
 
     function switchWebTab(tab) {
-      activeTab = ['inicio', 'rutas', 'guia', 'ligero', 'descargas'].includes(tab) ? tab : 'inicio';
-      ['inicio', 'rutas', 'guia', 'ligero', 'descargas'].forEach(t => {
+      activeTab = ['caminos', 'inicio', 'rutas', 'guia', 'ligero', 'descargas'].includes(tab) ? tab : 'caminos';
+      ['caminos', 'inicio', 'rutas', 'guia', 'ligero', 'descargas'].forEach(t => {
         const panel = document.getElementById('tabPanel-' + t);
         const btn = document.getElementById('tabBtn-' + t);
         if (panel) panel.classList.toggle('hidden', t !== activeTab);
@@ -1048,6 +1265,135 @@
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderMapCaminoList() {
+      const container = document.getElementById('mapCaminoList');
+      if (!container) return;
+      container.innerHTML = CAMINO_ROUTES.map(r => {
+        const g = CAMINO_GRONZE_DETAILS[r.id] || {};
+        const selected = r.id === activeMapCaminoId;
+        return `
+          <button onclick="selectMapCamino('${r.id}')" class="w-full text-left px-3.5 py-2.5 rounded-2xl border transition-all flex items-center justify-between gap-2 ${selected ? 'bg-[#EBF3EE] border-[#1E4D3B] shadow-sm' : 'bg-[#F7F3EB] border-[#E5DEC9] hover:border-[#1E4D3B]'}">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="w-3 h-3 rounded-full shrink-0" style="background:${g.color || '#1E4D3B'}"></span>
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-[#1C2826] truncate">${r.name}</div>
+                <div class="text-[10px] text-[#5F6C65] truncate">${r.km} • ${r.stages} etapas</div>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-[#1E4D3B] shrink-0">→</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectMapCamino(routeId) {
+      activeMapCaminoId = routeId;
+      const btnReset = document.getElementById('btnShowAllMap');
+      if (btnReset) btnReset.classList.remove('hidden');
+
+      document.querySelectorAll('#svgRoutesGroup path[data-route]').forEach(p => {
+        const isSel = p.getAttribute('data-route') === routeId;
+        p.style.opacity = isSel ? '1' : '0.22';
+        p.setAttribute('stroke-width', isSel ? '6' : '3');
+      });
+
+      renderMapCaminoList();
+      renderGronzeCaminoDetail(routeId);
+    }
+
+    function resetMapSelection() {
+      activeMapCaminoId = '';
+      const btnReset = document.getElementById('btnShowAllMap');
+      if (btnReset) btnReset.classList.add('hidden');
+
+      document.querySelectorAll('#svgRoutesGroup path[data-route]').forEach(p => {
+        p.style.opacity = '1';
+        p.setAttribute('stroke-width', p.getAttribute('data-route') === 'camino-frances' ? '4' : '3.4');
+      });
+      renderMapCaminoList();
+      renderGronzeCaminoDetail('camino-frances');
+    }
+
+    function renderGronzeCaminoDetail(routeId) {
+      const box = document.getElementById('caminoGronzeDetail');
+      const r = CAMINO_ROUTES.find(x => x.id === routeId) || CAMINO_ROUTES[0];
+      const g = CAMINO_GRONZE_DETAILS[r.id];
+      if (!box || !g) return;
+      const hostelCount = (typeof ALBERGUES_Y_HOTELES !== 'undefined' && ALBERGUES_Y_HOTELES[r.id]) ? ALBERGUES_Y_HOTELES[r.id].length : 0;
+
+      box.innerHTML = `
+        <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#E5DEC9] pb-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="w-3.5 h-3.5 rounded-full" style="background:${g.color}"></span>
+              <h2 class="serif-title text-2xl font-bold text-[#1C2826]">${r.name}</h2>
+            </div>
+            <p class="text-xs text-[#5F6C65] max-w-2xl">${r.desc}</p>
+          </div>
+          <button onclick="openCaminoFromMapInPlanner('${r.id}')" class="px-4 py-2.5 rounded-xl bg-[#1E4D3B] text-white text-xs font-bold hover:opacity-95 transition-all shrink-0">
+            🏠 Ver puntos y ${hostelCount} albergues →
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+          <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
+            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">Distancia</div>
+            <div class="font-bold text-[#1C2826] mt-0.5">${r.km}</div>
+          </div>
+          <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
+            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">Dificultad</div>
+            <div class="font-bold text-[#1C2826] mt-0.5">${r.diff}</div>
+          </div>
+          <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
+            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">Mejor época</div>
+            <div class="font-bold text-[#1C2826] mt-0.5">${g.season}</div>
+          </div>
+          <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
+            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">En bicicleta</div>
+            <div class="font-bold text-[#1C2826] mt-0.5">${g.bike}</div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <div class="space-y-2.5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">🔀 Posibilidades de inicio y variantes</h3>
+            <div class="space-y-2">
+              ${g.variants.map(v => `
+                <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-bold text-[#1C2826]">${v.title}</span>
+                    <span class="text-[10px] font-bold text-[#D48B28] shrink-0">${v.meta}</span>
+                  </div>
+                  <p class="text-[11px] text-[#5F6C65] mt-1">${v.note}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="space-y-2.5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">🥾 Etapas y bloques habituales</h3>
+            <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] divide-y divide-[#E5DEC9]">
+              ${g.stagesSample.map(st => `
+                <div class="px-3.5 py-2 flex items-center justify-between gap-2 text-xs">
+                  <span class="font-semibold text-[#1C2826]">${st[0]}</span>
+                  <span class="font-bold text-[#1E4D3B] shrink-0">${st[1]}</span>
+                </div>
+              `).join('')}
+            </div>
+            <p class="text-[11px] text-[#5F6C65] bg-[#EBF3EE]/70 border border-[#1E4D3B]/15 rounded-xl p-3">
+              <strong class="text-[#1E4D3B]">✨ Lo mejor y red de albergues:</strong> ${g.highlights} (${g.infra}).
+            </p>
+          </div>
+        </div>
+      `;
+    }
+
+    function openCaminoFromMapInPlanner(routeId) {
+      filterDuration('all');
+      selectRoute(routeId);
+      switchWebTab('rutas');
     }
 
     function setWebLang(lang) {
@@ -1467,10 +1813,12 @@
     document.addEventListener('DOMContentLoaded', async () => {
       const savedLang = (localStorage.getItem('vieira_lang') || 'ES').toUpperCase();
       setWebLang(WEB_I18N[savedLang] ? savedLang : 'ES');
+      renderMapCaminoList();
+      renderGronzeCaminoDetail('camino-frances');
       loadWeeklyNews();
 
       const hash = window.location.hash.replace('#', '');
-      if (['inicio', 'rutas', 'guia', 'ligero', 'descargas'].includes(hash)) {
+      if (['caminos', 'inicio', 'rutas', 'guia', 'ligero', 'descargas'].includes(hash)) {
         switchWebTab(hash);
       }
 
