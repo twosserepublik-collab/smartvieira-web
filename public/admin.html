@@ -677,19 +677,28 @@
           }
         }
 
+        function escHtml(v) {
+          return String(v == null ? '' : v)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        }
+
         if (tbodyEm) {
           if (activeEm.length === 0) {
             tbodyEm.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-slate-500">Sin alertas de emergencia</td></tr>';
           } else {
             tbodyEm.innerHTML = activeEm.map(e => `
               <tr class="bg-red-500/10">
-                <td class="font-mono text-xs">${new Date(e.timestamp).toLocaleString()}</td>
-                <td class="font-bold text-white">${e.driverName}</td>
-                <td>${e.companyName}</td>
-                <td class="font-mono font-bold text-amber-300">${e.phone || 'N/A'}</td>
+                <td class="font-mono text-xs">${escHtml(new Date(e.timestamp).toLocaleString())}</td>
+                <td class="font-bold text-white">${escHtml(e.driverName)}</td>
+                <td>${escHtml(e.companyName)}</td>
+                <td class="font-mono font-bold text-amber-300">${escHtml(e.phone || 'N/A')}</td>
                 <td class="flex items-center gap-2">
-                  <a href="tel:${e.phone}" class="bg-amber-500 text-slate-900 px-3 py-1 rounded font-bold text-xs">📞 Llamar</a>
-                  <button onclick="resolveEmergency('${e.id}')" class="text-slate-400 hover:text-red-400 text-lg ml-2" title="Marcar como resuelta y eliminar">🗑️</button>
+                  <a href="tel:${escHtml(e.phone)}" class="bg-amber-500 text-slate-900 px-3 py-1 rounded font-bold text-xs">📞 Llamar</a>
+                  <button onclick="resolveEmergency('${escHtml(e.id)}')" class="text-slate-400 hover:text-red-400 text-lg ml-2" title="Marcar como resuelta y eliminar">🗑️</button>
                 </td>
               </tr>
             `).join('');
@@ -762,15 +771,15 @@
         } else {
           tbodyP.innerHTML = filteredPilgrims.map(p => `
             <tr>
-              <td class="font-mono text-[11px] text-amber-400">${p.id}</td>
-              <td class="font-bold text-white">${p.name}</td>
-              <td>${p.surname || '-'}</td>
-              <td class="font-mono text-amber-300 text-xs">${p.phone || '-'}</td>
-              <td class="font-mono text-slate-300">${p.email}</td>
-              <td class="font-mono font-bold text-emerald-400">${p.passwordPlain || '<span class="text-slate-500 text-[10px]">Pendiente login/recup.</span>'}</td>
-              <td class="font-mono font-bold text-amber-300">${p.smartVieiraId}</td>
-              <td class="uppercase font-bold">${p.language || 'ES'}</td>
-              <td class="text-[11px] text-slate-400">${new Date(p.createdAt).toLocaleString()}</td>
+              <td class="font-mono text-[11px] text-amber-400">${escHtml(p.id)}</td>
+              <td class="font-bold text-white">${escHtml(p.name)}</td>
+              <td>${escHtml(p.surname || '-')}</td>
+              <td class="font-mono text-amber-300 text-xs">${escHtml(p.phone || '-')}</td>
+              <td class="font-mono text-slate-300">${escHtml(p.email)}</td>
+              <td class="font-mono font-bold text-emerald-400">${p.passwordPlain ? escHtml(p.passwordPlain) : '<span class="text-slate-500 text-[10px]">Protegida (PBKDF2)</span>'}</td>
+              <td class="font-mono font-bold text-amber-300">${escHtml(p.smartVieiraId)}</td>
+              <td class="uppercase font-bold">${escHtml(p.language || 'ES')}</td>
+              <td class="text-[11px] text-slate-400">${escHtml(new Date(p.createdAt).toLocaleString())}</td>
             </tr>
           `).join('');
         }
@@ -809,24 +818,24 @@
         } else {
           tbodyC.innerHTML = filteredCouriers.map(c => `
             <tr class="${c.isActive === false ? 'opacity-50 grayscale' : ''}">
-              <td class="font-mono text-[11px] text-cyan-400">${c.id}</td>
-              <td class="font-bold text-white">${c.companyName}</td>
-              <td class="font-semibold text-cyan-200">${c.driverName}</td>
-              <td class="font-mono text-amber-300 font-bold">${c.phone || 'N/A'}</td>
+              <td class="font-mono text-[11px] text-cyan-400">${escHtml(c.id)}</td>
+              <td class="font-bold text-white">${escHtml(c.companyName)}</td>
+              <td class="font-semibold text-cyan-200">${escHtml(c.driverName)}</td>
+              <td class="font-mono text-amber-300 font-bold">${escHtml(c.phone || 'N/A')}</td>
               <td>
                 ${c.isActive === false 
                   ? '<span class="bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] font-bold">PAUSA</span>' 
                   : '<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 border border-emerald-500/40 rounded text-[10px] font-bold">ACTIVO</span>'
                 }
               </td>
-              <td>${c.vehicle || '-'}</td>
-              <td class="font-mono text-amber-300 text-[11px]">${c.cif || '-'}</td>
+              <td>${escHtml(c.vehicle || '-')}</td>
+              <td class="font-mono text-amber-300 text-[11px]">${escHtml(c.cif || '-')}</td>
               <td class="font-bold text-emerald-400">${c.pricePerBag ? Number(c.pricePerBag).toFixed(2) + ' €' : '6.50 €'}</td>
-              <td>${c.routes || '-'}</td>
-              <td>${c.routeStart || 'Toda'} &rarr; ${c.routeEnd || 'Toda'}</td>
-              <td class="font-mono text-slate-300">${c.email}</td>
-              <td class="font-mono font-bold text-emerald-400">${c.passwordPlain || '<span class="text-slate-500 text-[10px]">Pendiente login/recup.</span>'}</td>
-              <td class="font-mono text-emerald-400 font-bold">${c.accessCode}</td>
+              <td>${escHtml(c.routes || '-')}</td>
+              <td>${escHtml(c.routeStart || 'Toda')} &rarr; ${escHtml(c.routeEnd || 'Toda')}</td>
+              <td class="font-mono text-slate-300">${escHtml(c.email)}</td>
+              <td class="font-mono font-bold text-emerald-400">${c.passwordPlain ? escHtml(c.passwordPlain) : '<span class="text-slate-500 text-[10px]">Protegida (PBKDF2)</span>'}</td>
+              <td class="font-mono text-emerald-400 font-bold">${escHtml(c.accessCode)}</td>
             </tr>
           `).join('');
         }
@@ -858,12 +867,12 @@
         } else {
           tbodyR.innerHTML = filteredReservations.map(r => `
             <tr>
-              <td class="font-mono font-bold text-amber-400">${r.id}</td>
-              <td class="font-mono text-slate-300">${r.pilgrimEmail}</td>
-              <td class="font-mono font-bold text-amber-300">${r.smartVieiraId}</td>
-              <td class="text-white">${r.originAlbergue}</td>
-              <td class="text-white">${r.destinationAlbergue}</td>
-              <td class="text-cyan-300 font-semibold">${r.companyName || '-'}${r.driverName ? ' <span class="text-slate-400 text-[10px]">(' + r.driverName + ')</span>' : ''}</td>
+              <td class="font-mono font-bold text-amber-400">${escHtml(r.id)}</td>
+              <td class="font-mono text-slate-300">${escHtml(r.pilgrimEmail)}</td>
+              <td class="font-mono font-bold text-amber-300">${escHtml(r.smartVieiraId)}</td>
+              <td class="text-white">${escHtml(r.originAlbergue)}</td>
+              <td class="text-white">${escHtml(r.destinationAlbergue)}</td>
+              <td class="text-cyan-300 font-semibold">${escHtml(r.companyName || '-')}${r.driverName ? ' <span class="text-slate-400 text-[10px]">(' + escHtml(r.driverName) + ')</span>' : ''}</td>
               <td class="font-bold text-emerald-400">${Number(r.amountEuros || 0).toFixed(2)} €</td>
               <td>
                 ${r.status === 'EN_CAMINO'
@@ -873,12 +882,12 @@
                     : '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">🟡 PENDIENTE</span>'
                 }
                 ${r.deliveredLocation
-                  ? `<button onclick="focusReservationOnMap('${r.id}')" class="text-[9px] text-cyan-400 underline block mt-0.5">📍 Coords entrega</button>`
-                  : (r.currentLocation ? `<button onclick="focusReservationOnMap('${r.id}')" class="text-[9px] text-amber-400 underline block mt-0.5">📡 GPS en vivo</button>` : '')
+                  ? `<button onclick="focusReservationOnMap('${escHtml(r.id)}')" class="text-[9px] text-cyan-400 underline block mt-0.5">📍 Coords entrega</button>`
+                  : (r.currentLocation ? `<button onclick="focusReservationOnMap('${escHtml(r.id)}')" class="text-[9px] text-amber-400 underline block mt-0.5">📡 GPS en vivo</button>` : '')
                 }
               </td>
-              <td class="font-mono text-[10px] text-slate-400">${r.paymentIntentId}</td>
-              <td class="text-[11px] text-slate-400">${new Date(r.createdAt).toLocaleString()}</td>
+              <td class="font-mono text-[10px] text-slate-400">${escHtml(r.paymentIntentId)}</td>
+              <td class="text-[11px] text-slate-400">${escHtml(new Date(r.createdAt).toLocaleString())}</td>
             </tr>
           `).join('');
         }
@@ -892,14 +901,14 @@
           } else {
             tbodyPO.innerHTML = productOrders.map(o => `
               <tr>
-                <td class="font-mono font-bold text-amber-400">${o.id}</td>
-                <td class="text-white font-semibold">${o.customerName || '-'}</td>
-                <td class="text-xs text-slate-300">${o.customerEmail || '-'}<br><span class="text-slate-400">${o.phone || ''}</span></td>
-                <td class="text-xs text-slate-300">${o.address || ''}, ${o.postalCode || ''} ${o.city || ''} (${o.country || ''})</td>
-                <td class="font-bold text-white">${o.quantity || 1}</td>
+                <td class="font-mono font-bold text-amber-400">${escHtml(o.id)}</td>
+                <td class="text-white font-semibold">${escHtml(o.customerName || '-')}</td>
+                <td class="text-xs text-slate-300">${escHtml(o.customerEmail || '-')}<br><span class="text-slate-400">${escHtml(o.phone || '')}</span></td>
+                <td class="text-xs text-slate-300">${escHtml(o.address || '')}, ${escHtml(o.postalCode || '')} ${escHtml(o.city || '')} (${escHtml(o.country || '')})</td>
+                <td class="font-bold text-white">${escHtml(o.quantity || 1)}</td>
                 <td class="font-bold text-emerald-400">${Number(o.totalEuros || 0).toFixed(2)} €</td>
-                <td><span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">${o.status || 'Pagado'}</span></td>
-                <td class="text-[11px] text-slate-400">${new Date(o.createdAt).toLocaleString()}</td>
+                <td><span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">${escHtml(o.status || 'Pagado')}</span></td>
+                <td class="text-[11px] text-slate-400">${escHtml(new Date(o.createdAt).toLocaleString())}</td>
               </tr>
             `).join('');
           }
@@ -958,22 +967,22 @@
             '<td class="py-3 px-4 font-bold text-white">' +
               '<div class="flex items-center gap-1.5">' +
                 '<span>🏨</span>' +
-                '<span>' + (h.name || '-') + '</span>' +
+                '<span>' + escHtml(h.name || '-') + '</span>' +
               '</div>' +
             '</td>' +
-            '<td class="py-3 px-4 font-black text-amber-400">' + (h.town || '-') + '</td>' +
-            '<td class="py-3 px-4 text-slate-300 text-[11px] max-w-[200px] truncate" title="' + (h.address || '') + '">' + (h.address || 'Personalizado') + '</td>' +
-            '<td class="py-3 px-4 text-slate-400">' + (h.routeName || h.routeId || '-') + '</td>' +
+            '<td class="py-3 px-4 font-black text-amber-400">' + escHtml(h.town || '-') + '</td>' +
+            '<td class="py-3 px-4 text-slate-300 text-[11px] max-w-[200px] truncate" title="' + escHtml(h.address || '') + '">' + escHtml(h.address || 'Personalizado') + '</td>' +
+            '<td class="py-3 px-4 text-slate-400">' + escHtml(h.routeName || h.routeId || '-') + '</td>' +
             '<td class="py-3 px-4 text-[11px] text-slate-400">' +
-              '<div>' + dateStr + '</div>' +
-              '<div class="text-[10px] text-slate-500">' + (h.addedBy || 'peregrino') + '</div>' +
+              '<div>' + escHtml(dateStr) + '</div>' +
+              '<div class="text-[10px] text-slate-500">' + escHtml(h.addedBy || 'peregrino') + '</div>' +
             '</td>' +
             '<td class="py-3 px-4 text-center">' + statusBadge + '</td>' +
             '<td class="py-3 px-4 text-right space-x-1.5 whitespace-nowrap">' +
               '<a href="' + mapsUrl + '" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Verificar en Google Maps">🗺️ Maps</a>' +
-              '<button onclick="openEditCustomPlaceModal(\'' + h.id + '\')" class="px-2 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Editar / Corregir">✏️</button>' +
+              '<button onclick="openEditCustomPlaceModal(\'' + escHtml(h.id) + '\')" class="px-2 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Editar / Corregir">✏️</button>' +
               approveBtn +
-              '<button onclick="deleteCustomPlace(\'' + h.id + '\')" class="px-2 py-1 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Descartar / Eliminar">🗑️</button>' +
+              '<button onclick="deleteCustomPlace(\'' + escHtml(h.id) + '\')" class="px-2 py-1 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Descartar / Eliminar">🗑️</button>' +
             '</td>' +
           '</tr>';
         }).join('');

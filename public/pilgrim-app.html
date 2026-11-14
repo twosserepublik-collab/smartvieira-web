@@ -4260,6 +4260,7 @@
       applyGlobalTranslations(lang);
       if (typeof currentUser !== 'undefined' && currentUser) {
         currentUser.lang = currentAppLang;
+        if (data.token) localStorage.setItem('vieira_pilgrim_jwt', data.token);
         localStorage.setItem('vieira_current_user', JSON.stringify(currentUser));
         if (typeof renderHomeBookings === 'function') {
           renderHomeBookings();
@@ -4563,6 +4564,7 @@
           deviceId: data.user.smartVieiraId || 'VIEIRA-SMARTSHELL-S3-9982'
         };
 
+        if (data.token) localStorage.setItem('vieira_pilgrim_jwt', data.token);
         localStorage.setItem('vieira_current_user', JSON.stringify(currentUser));
         if (document.getElementById('rememberLogin').checked) {
           localStorage.setItem('vieira_session_token', currentUser.email);
@@ -4613,6 +4615,7 @@
           deviceId: data.user.smartVieiraId || devId
         };
 
+        if (data.token) localStorage.setItem('vieira_pilgrim_jwt', data.token);
         localStorage.setItem('vieira_current_user', JSON.stringify(currentUser));
         localStorage.setItem('vieira_session_token', currentUser.email);
         document.getElementById('viewAuth').classList.add('hidden');

@@ -10,6 +10,10 @@ services:
         value: 3000
       - key: JWT_SECRET
         generateValue: true
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASS
+        generateValue: true
       - key: COURIER_ACCESS_CODE
         value: VIEIRA-COURIER-2026
       - key: STRIPE_SECRET_KEY

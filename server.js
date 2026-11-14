@@ -17,7 +17,10 @@ const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
 
 const DEFAULT_COURIER_ACCESS_CODE = process.env.COURIER_ACCESS_CODE || 'VIEIRA-COURIER-2026';
-const JWT_SECRET = process.env.JWT_SECRET || 'SMARTSHELL_SECRET_KEY_2026_CAMINO_PROD_9982';
+const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
+if (!process.env.JWT_SECRET) {
+  console.warn('[SECURITY WARN] JWT_SECRET no definido en env; usando secreto efimero aleatorio.');
+}
 
 // =========================================================================
 // PROCESS RESILIENCE & UNCAUGHT EXCEPTION ISOLATION (ANTI-CRASH)
@@ -83,13 +86,15 @@ function generateToken(payload) {
 }
 
 function verifyToken(token) {
-  if (!token) return null;
+  if (!token || typeof token !== 'string') return null;
   const parts = token.split('.');
   if (parts.length !== 3) return null;
   const [header, body, sig] = parts;
   const expectedSig = crypto.createHmac('sha256', JWT_SECRET).update(`${header}.${body}`).digest('base64url');
-  if (sig !== expectedSig) return null;
   try {
+    const a = Buffer.from(sig, 'utf8');
+    const b = Buffer.from(expectedSig, 'utf8');
+    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
     const parsed = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'));
     if (parsed.exp && parsed.exp < Math.floor(Date.now()/1000)) return null;
     return parsed;
@@ -379,9 +384,17 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 2. Set CORS & Security Headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const ALLOWED_ORIGINS = ['https://www.smartvieira.com', 'https://smartvieira.com', 'capacitor://localhost', 'http://localhost', 'http://127.0.0.1:3000', 'http://localhost:3000'];
+  const reqOrigin = req.headers.origin;
+  if (reqOrigin && (ALLOWED_ORIGINS.includes(reqOrigin) || reqOrigin.startsWith('http://localhost:') || reqOrigin.startsWith('http://127.0.0.1:'))) {
+    res.setHeader('Access-Control-Allow-Origin', reqOrigin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', 'https://www.smartvieira.com');
+  }
+  res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('X-XSS-Protection', '1; mode=block');
@@ -409,15 +422,38 @@ const server = http.createServer(async (req, res) => {
     user: process.env.ADMIN_USER || 'admin',
     pass: process.env.ADMIN_PASS || 'admin'
   };
+  if (ADMIN_CREDENTIALS.pass === 'admin') {
+    console.warn('[SECURITY WARN] ADMIN_PASS usa valor por defecto; configura ADMIN_USER y ADMIN_PASS en producción.');
+  }
 
-  function verifyAdminAuth(req, qParams = {}) {
+  function getBearerDecoded(req, qParams = {}) {
     const authHeader = req.headers['authorization'] || '';
     const token = authHeader.replace(/^Bearer\s+/i, '').trim() || qParams.token;
-    if (!token) return false;
-    const decoded = verifyToken(token);
-    if (decoded && decoded.role === 'admin') return true;
-    if (token === 'admin_secure_token_12345') return true; // Migración retrocompatible segura
-    return false;
+    return token ? verifyToken(token) : null;
+  }
+
+  function verifyAdminAuth(req, qParams = {}) {
+    const decoded = getBearerDecoded(req, qParams);
+    return !!(decoded && decoded.role === 'admin');
+  }
+
+  function verifyCourierAuth(req, targetCourierId = null, targetCompany = null) {
+    const decoded = getBearerDecoded(req);
+    if (!decoded) return { ok: false, decoded: null };
+    if (decoded.role === 'admin') return { ok: true, decoded };
+    if (decoded.role !== 'courier') return { ok: false, decoded };
+    if (targetCourierId && decoded.id && decoded.id !== targetCourierId) return { ok: false, decoded };
+    if (targetCompany && decoded.companyName && decoded.companyName.toLowerCase() !== String(targetCompany).trim().toLowerCase()) return { ok: false, decoded };
+    return { ok: true, decoded };
+  }
+
+  function verifyPilgrimAuth(req, targetEmail = null) {
+    const decoded = getBearerDecoded(req);
+    if (!decoded) return { ok: false, decoded: null };
+    if (decoded.role === 'admin') return { ok: true, decoded };
+    if (decoded.role !== 'pilgrim') return { ok: false, decoded };
+    if (targetEmail && decoded.email && decoded.email.toLowerCase() !== String(targetEmail).trim().toLowerCase()) return { ok: false, decoded };
+    return { ok: true, decoded };
   }
 
   // Backwards compatibility alias
@@ -426,11 +462,21 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (reqPath === '/api/admin/login' && req.method === 'POST') {
+    if (!checkRateLimit('auth_admin_' + clientIp, 12, 900000)) {
+      res.writeHead(429, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, error: 'Demasiados intentos de acceso. Espera 15 minutos.' }));
+    }
     try {
       const body = await parseRequestBody(req);
       const user = (body.user || '').trim().toLowerCase();
       const pass = (body.pass || '').trim();
-      if (user === ADMIN_CREDENTIALS.user.toLowerCase() && pass === ADMIN_CREDENTIALS.pass) {
+      const expectedUser = Buffer.from(ADMIN_CREDENTIALS.user.toLowerCase(), 'utf8');
+      const gotUser = Buffer.from(user, 'utf8');
+      const expectedPass = Buffer.from(ADMIN_CREDENTIALS.pass, 'utf8');
+      const gotPass = Buffer.from(pass, 'utf8');
+      const userOk = expectedUser.length === gotUser.length && crypto.timingSafeEqual(expectedUser, gotUser);
+      const passOk = expectedPass.length === gotPass.length && crypto.timingSafeEqual(expectedPass, gotPass);
+      if (userOk && passOk) {
         const token = generateToken({ role: 'admin', user: ADMIN_CREDENTIALS.user });
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ success: true, token: token }));
@@ -458,12 +504,17 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(401, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ error: 'No autorizado' }));
     }
-    const dbData = fs.readFileSync(DB_FILE, 'utf8');
-    res.writeHead(200, {
-      'Content-Type': 'application/json',
-      'Content-Disposition': 'attachment; filename="smartvieira_backup_' + Date.now() + '.json"'
-    });
-    return res.end(dbData);
+    try {
+      const dbData = fs.readFileSync(DB_FILE, 'utf8');
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+        'Content-Disposition': 'attachment; filename="smartvieira_backup_' + Date.now() + '.json"'
+      });
+      return res.end(dbData);
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Error leyendo copia de seguridad' }));
+    }
   }
 
   if (reqPath === '/api/admin/load-demo-db' && req.method === 'POST') {
@@ -573,6 +624,10 @@ const server = http.createServer(async (req, res) => {
 
   // ── 2. LOGIN PILGRIM ──────────────────────────────────────────────────
   if (reqPath === '/api/login/pilgrim' && req.method === 'POST') {
+    if (!checkRateLimit('auth_pilgrim_' + clientIp, 15, 900000)) {
+      res.writeHead(429, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Demasiados intentos de acceso. Espera unos minutos.' }));
+    }
     try {
       const body = await parseRequestBody(req);
       const { email, password } = body;
@@ -653,7 +708,6 @@ const server = http.createServer(async (req, res) => {
         routeStart: (routeStart || '').trim(),
         routeEnd: (routeEnd || '').trim(),
         email: email.toLowerCase().trim(),
-        passwordPlain: password,
         passwordHash: hash,
         salt: salt,
         accessCode: accessCode.trim(),
@@ -667,7 +721,7 @@ const server = http.createServer(async (req, res) => {
       db.couriers.push(newCourier);
       saveDb(db);
 
-      const token = generateToken({ role: 'courier', email: newCourier.email, companyName: newCourier.companyName });
+      const token = generateToken({ role: 'courier', id: newCourier.id, email: newCourier.email, companyName: newCourier.companyName });
       console.log(`[DB] Registered Courier Company: ${companyName} (${driverName})`);
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -695,6 +749,10 @@ const server = http.createServer(async (req, res) => {
 
   // ── 4. LOGIN COURIER ──────────────────────────────────────────────────
   if (reqPath === '/api/login/courier' && req.method === 'POST') {
+    if (!checkRateLimit('auth_courier_' + clientIp, 15, 900000)) {
+      res.writeHead(429, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Demasiados intentos de acceso. Espera unos minutos.' }));
+    }
     try {
       const body = await parseRequestBody(req);
       const { email, password } = body;
@@ -720,7 +778,7 @@ const server = http.createServer(async (req, res) => {
 
       
 
-      const token = generateToken({ role: 'courier', email: courier.email, companyName: courier.companyName });
+      const token = generateToken({ role: 'courier', id: courier.id, email: courier.email, companyName: courier.companyName });
       console.log(`[DB] Secure Courier Login: ${email}`);
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -746,6 +804,10 @@ const server = http.createServer(async (req, res) => {
 
   // ── PASSWORD RECOVERY (PILGRIM & COURIER) + EMAIL SENDING ───────────
   if (reqPath === '/api/recover-password' && req.method === 'POST') {
+    if (!checkRateLimit('auth_recover_' + clientIp, 6, 900000)) {
+      res.writeHead(429, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Demasiadas solicitudes de recuperación. Espera 15 minutos.' }));
+    }
     try {
       const body = await parseRequestBody(req);
       const email = (body.email || '').toLowerCase().trim();
@@ -863,6 +925,10 @@ const server = http.createServer(async (req, res) => {
   if (reqPath === '/api/courier/status' && req.method === 'POST') {
     let bodyObj;
     try { bodyObj = await parseRequestBody(req); } catch(e) { return res.end(JSON.stringify({success:false})); }
+    if (!verifyCourierAuth(req, bodyObj.courierId).ok) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Sesión de repartidor no autorizada' }));
+    }
     
     const db = loadDb();
     const courier = db.couriers.find(c => c.id === bodyObj.courierId);
@@ -880,6 +946,10 @@ const server = http.createServer(async (req, res) => {
   if (reqPath === '/api/courier/emergency' && req.method === 'POST') {
     let bodyObj;
     try { bodyObj = await parseRequestBody(req); } catch(e) { return res.end(JSON.stringify({success:false})); }
+    if (!verifyCourierAuth(req, bodyObj.courierId).ok) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Sesión de repartidor no autorizada' }));
+    }
 
     const db = loadDb();
     const courier = db.couriers.find(c => c.id === bodyObj.courierId);
@@ -903,10 +973,13 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (reqPath === '/api/courier/reservations' && req.method === 'GET') {
+    const authRes = verifyCourierAuth(req);
+    if (!authRes.ok) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
     const db = loadDb();
-    const authHeader = req.headers['authorization'] || '';
-    const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-    const decoded = verifyToken(token);
+    const decoded = authRes.decoded;
 
     const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     const filterCompany = (urlObj.searchParams.get('companyName') || (decoded && decoded.companyName) || '').trim().toLowerCase();
@@ -965,6 +1038,10 @@ const server = http.createServer(async (req, res) => {
     try {
       const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
       const companyName = (urlObj.searchParams.get('companyName') || '').trim();
+      if (!verifyCourierAuth(req, null, companyName || null).ok) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+      }
       const db = loadDb();
       db.courierNotifications = db.courierNotifications || [];
 
@@ -1029,6 +1106,10 @@ const server = http.createServer(async (req, res) => {
     try {
       const body = await parseRequestBody(req);
       const { courierId, smartVieiraIds } = body;
+      if (!verifyCourierAuth(req, courierId).ok) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Sesión de repartidor no autorizada' }));
+      }
       const db = loadDb();
       const courier = db.couriers.find(c => c.id === courierId);
       if (!courier) {
@@ -1086,6 +1167,10 @@ const server = http.createServer(async (req, res) => {
     try {
       const body = await parseRequestBody(req);
       const { courierId, lat, lng, accuracy } = body;
+      if (!verifyCourierAuth(req, courierId).ok) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Sesión de repartidor no autorizada' }));
+      }
       const db = loadDb();
       const courier = db.couriers.find(c => c.id === courierId);
       if (!courier) {
@@ -1124,6 +1209,10 @@ const server = http.createServer(async (req, res) => {
     try {
       const body = await parseRequestBody(req);
       const { courierId, destinationAlbergue, lat, lng } = body;
+      if (!verifyCourierAuth(req, courierId).ok) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Sesión de repartidor no autorizada' }));
+      }
       const db = loadDb();
       const courier = db.couriers.find(c => c.id === courierId);
       if (!courier) {
@@ -1224,6 +1313,10 @@ const server = http.createServer(async (req, res) => {
   // ── PILGRIM NOTIFICATIONS ───────────────────────────────────────
   if (reqPath === '/api/pilgrim/notifications' && req.method === 'GET') {
     const email = (queryParams.email || '').toLowerCase();
+    if (!verifyPilgrimAuth(req, email).ok) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Sesión de peregrino no autorizada' }));
+    }
     const db = loadDb();
     const notifs = (db.notifications || []).filter(n => n.pilgrimEmail === email);
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -1235,6 +1328,10 @@ const server = http.createServer(async (req, res) => {
     try {
       const body = await parseRequestBody(req);
       const email = (body.email || '').toLowerCase();
+      if (!verifyPilgrimAuth(req, email).ok) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Sesión de peregrino no autorizada' }));
+      }
       const notifIds = body.notificationIds || [];
       const db = loadDb();
       if (db.notifications) {
@@ -1498,7 +1595,7 @@ const server = http.createServer(async (req, res) => {
       if (targetCourier && targetCourier.pricePerBag) {
         const tariff = parseFloat(targetCourier.pricePerBag);
         verifiedEuros = Math.ceil(((tariff + 1.46) / 0.985) * 100) / 100;
-      } else if (amountEuros && parseFloat(amountEuros) >= 4.00) {
+      } else if (amountEuros && parseFloat(amountEuros) >= 6.00) {
         verifiedEuros = parseFloat(amountEuros);
       }
 

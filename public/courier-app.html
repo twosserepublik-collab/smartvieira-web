@@ -151,12 +151,19 @@
       }
     }
 
+    function getCourierAuthHeaders(withJson = false) {
+      const token = localStorage.getItem('vieira_courier_token') || '';
+      const h = token ? { 'Authorization': 'Bearer ' + token } : {};
+      if (withJson) h['Content-Type'] = 'application/json';
+      return h;
+    }
+
     // ── CHECK PENDING SERVER NOTIFICATIONS & MORNING DIGEST ───────
     async function checkPendingServerNotifications() {
       if (!currentCourier) return;
       try {
         const comp = encodeURIComponent(currentCourier.companyName || '');
-        const res = await fetch(getApiUrl('/api/courier/pending-notifications?companyName=' + comp));
+        const res = await fetch(getApiUrl('/api/courier/pending-notifications?companyName=' + comp), { headers: getCourierAuthHeaders() });
         const data = await res.json();
 
         if (data.success && data.notifications && data.notifications.length > 0) {
@@ -398,7 +405,7 @@
 
         <div class="p-3 rounded-xl bg-amber-50 border border-amber-200">
           <label class="block text-[10px] font-black text-amber-800 uppercase tracking-widest mb-1">Código Privado de Empresa (Admin) *</label>
-          <input type="text" id="courierAccessCode" required placeholder="Ej. VIEIRA-COURIER-2026" value="VIEIRA-COURIER-2026" class="w-full px-3 py-2 rounded-lg bg-white border border-amber-400 text-xs font-mono text-amber-900 font-bold focus:outline-none shadow-sm">
+          <input type="text" id="courierAccessCode" required placeholder="Código privado proporcionado por SmartVieira" class="w-full px-3 py-2 rounded-lg bg-white border border-amber-400 text-xs font-mono text-amber-900 font-bold focus:outline-none shadow-sm">
           <p class="text-[9px] text-slate-500 mt-1">Código privado proporcionado por la dirección de SmartVieira.</p>
         </div>
 
@@ -1013,6 +1020,7 @@
         // If the ID is a fake local ID or no longer exists, force re-login
         if (!currentCourier.id || currentCourier.id === 'courier-local-session') {
           localStorage.removeItem('vieira_courier_session');
+      localStorage.removeItem('vieira_courier_token');
           currentCourier = null;
           document.getElementById('courierDashboard').classList.add('hidden');
           document.getElementById('courierAuthSection').classList.remove('hidden');
@@ -1067,6 +1075,7 @@
           return;
         }
         currentCourier = data.courier;
+        if (data.token) localStorage.setItem('vieira_courier_token', data.token);
         localStorage.setItem('vieira_courier_session', JSON.stringify(currentCourier));
         document.getElementById('courierAuthSection').classList.add('hidden');
         setupCourierDashboard();
@@ -1113,6 +1122,7 @@
           }
         } else {
           currentCourier = data.courier;
+          if (data.token) localStorage.setItem('vieira_courier_token', data.token);
         }
       } catch (err) {
         console.log("Network offline fallback for register:", err);
@@ -1170,7 +1180,7 @@
           try {
             const r = await fetch(getApiUrl('/api/courier/status'), {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getCourierAuthHeaders(true),
                 body: JSON.stringify({ courierId: currentCourier.id, isActive: isCourierActive })
               });
             const d = await r.json();
@@ -1188,7 +1198,7 @@
         try {
           const res = await fetch(getApiUrl('/api/courier/emergency'), {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: getCourierAuthHeaders(true),
               body: JSON.stringify({ courierId: currentCourier.id })
             });
           const data = await res.json();
@@ -1313,6 +1323,7 @@
     function logoutCourier() {
       if (autoRefreshInterval) clearInterval(autoRefreshInterval);
       localStorage.removeItem('vieira_courier_session');
+      localStorage.removeItem('vieira_courier_token');
       currentCourier = null;
       myHiredSmartVieiraIds = [];
       myHiredReservationsObjects = [];
@@ -1410,7 +1421,7 @@
       try {
         const res = await fetch(getApiUrl('/api/courier/location'), {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getCourierAuthHeaders(true),
           body: JSON.stringify({
             courierId: currentCourier.id,
             lat: lat,
@@ -1502,7 +1513,7 @@
       if (!currentCourier) return;
       try {
         const compParam = (currentCourier && currentCourier.companyName) ? '?companyName=' + encodeURIComponent(currentCourier.companyName) : '';
-        const res  = await fetch(getApiUrl('/api/courier/reservations' + compParam));
+        const res  = await fetch(getApiUrl('/api/courier/reservations' + compParam), { headers: getCourierAuthHeaders() });
         const data = await res.json();
 
         if (data.success && data.reservations) {
@@ -1830,7 +1841,7 @@
       try {
         const resp = await fetch(getApiUrl('/api/courier/pickup'), {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getCourierAuthHeaders(true),
           body: JSON.stringify({
             courierId: currentCourier.id,
             smartVieiraIds: idsToMark
@@ -1881,7 +1892,7 @@
       try {
         const resp = await fetch(getApiUrl('/api/courier/delivery'), {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getCourierAuthHeaders(true),
           body: JSON.stringify({
             courierId: currentCourier.id,
             destinationAlbergue: selectedHostel,
