@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   <title>SmartVieira - Panel de Control & Base de Datos BD</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -287,6 +288,30 @@
             <tr><td colspan="10" class="text-center py-6 text-slate-500">Cargando datos...</td></tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- PEDIDOS PRODUCTO WEB -->
+      <div class="pt-4 border-t border-slate-700/70 space-y-3">
+        <h3 class="text-sm font-black text-amber-400">🐚 Pedidos de Concha SmartVieira (Web)</h3>
+        <div class="table-container rounded-2xl border border-slate-800">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Pedido</th>
+                <th>Cliente</th>
+                <th>Email / Tel</th>
+                <th>Dirección de Envío</th>
+                <th>Uds</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyProductOrders">
+              <tr><td colspan="8" class="text-center py-5 text-slate-500">Sin pedidos web todavía</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -856,6 +881,28 @@
               <td class="text-[11px] text-slate-400">${new Date(r.createdAt).toLocaleString()}</td>
             </tr>
           `).join('');
+        }
+
+        // RENDER PRODUCT ORDERS TABLE
+        const productOrders = [...(dbState.productOrders || [])].reverse();
+        const tbodyPO = document.getElementById('tbodyProductOrders');
+        if (tbodyPO) {
+          if (productOrders.length === 0) {
+            tbodyPO.innerHTML = '<tr><td colspan="8" class="text-center py-5 text-slate-500">Sin pedidos web todavía</td></tr>';
+          } else {
+            tbodyPO.innerHTML = productOrders.map(o => `
+              <tr>
+                <td class="font-mono font-bold text-amber-400">${o.id}</td>
+                <td class="text-white font-semibold">${o.customerName || '-'}</td>
+                <td class="text-xs text-slate-300">${o.customerEmail || '-'}<br><span class="text-slate-400">${o.phone || ''}</span></td>
+                <td class="text-xs text-slate-300">${o.address || ''}, ${o.postalCode || ''} ${o.city || ''} (${o.country || ''})</td>
+                <td class="font-bold text-white">${o.quantity || 1}</td>
+                <td class="font-bold text-emerald-400">${Number(o.totalEuros || 0).toFixed(2)} €</td>
+                <td><span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">${o.status || 'Pagado'}</span></td>
+                <td class="text-[11px] text-slate-400">${new Date(o.createdAt).toLocaleString()}</td>
+              </tr>
+            `).join('');
+          }
         }
 
         // RENDER CUSTOM HOSTELS TABLE

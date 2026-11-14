@@ -104,7 +104,7 @@ function verifyToken(token) {
 function loadDb() {
   try {
     if (!fs.existsSync(DB_FILE)) {
-      const initialDb = { pilgrims: [], couriers: [], reservations: [], emergencies: [], notifications: [] };
+      const initialDb = { pilgrims: [], couriers: [], reservations: [], emergencies: [], notifications: [], productOrders: [] };
       fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), 'utf8');
       return initialDb;
     }
@@ -131,6 +131,7 @@ function loadDb() {
     });
 
     db.customHostels = db.customHostels || [];
+    db.productOrders = db.productOrders || [];
     if (migrated) saveDb(db);
     return db;
   } catch (err) {
@@ -1630,11 +1631,164 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // ── 9. PRODUCT STORE: CREATE STRIPE PAYMENT INTENT ────────────────────
+  if (reqPath === '/api/product/create-payment-intent' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const qty = Math.max(1, Math.min(50, parseInt(body.quantity, 10) || 1));
+      const UNIT_PRICE = 15.00;
+      const SHIPPING_PRICE = 2.00;
+      const verifiedEuros = Number(((qty * UNIT_PRICE) + SHIPPING_PRICE).toFixed(2));
+      const amountCents = Math.round(verifiedEuros * 100);
+      const customerEmail = (body.customerEmail || '').trim();
+      const customerName = (body.customerName || 'Peregrino').trim();
+
+      if (!STRIPE_SECRET_KEY || !STRIPE_PUBLISHABLE_KEY) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+          success: true,
+          offlineFallback: true,
+          amountEuros: verifiedEuros,
+          unitPrice: UNIT_PRICE,
+          shippingPrice: SHIPPING_PRICE,
+          quantity: qty
+        }));
+      }
+
+      const stripeData = {
+        amount: amountCents,
+        currency: 'eur',
+        'automatic_payment_methods[enabled]': 'true',
+        'automatic_payment_methods[allow_redirects]': 'always',
+        'description': `Concha SmartVieira x${qty} + Envío - ${customerName} (${customerEmail})`
+      };
+
+      console.log(`[STRIPE PRODUCT] Creating PaymentIntent for €${verifiedEuros} (${qty} uds)...`);
+      const paymentIntent = await callStripeApi('/v1/payment_intents', stripeData);
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({
+        success: true,
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id,
+        publishableKey: STRIPE_PUBLISHABLE_KEY,
+        amountEuros: verifiedEuros,
+        unitPrice: UNIT_PRICE,
+        shippingPrice: SHIPPING_PRICE,
+        quantity: qty
+      }));
+    } catch (err) {
+      console.error('[STRIPE PRODUCT ERROR]', err);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({
+        success: false,
+        message: err.message || 'Error al conectar con la Pasarela de Pago de Stripe'
+      }));
+    }
+  }
+
+  // ── 10. PRODUCT STORE: CONFIRM ORDER & SAVE IN DB ─────────────────────
+  if (reqPath === '/api/product/confirm-order' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const {
+        paymentIntentId,
+        customerName,
+        customerEmail,
+        phone,
+        address,
+        postalCode,
+        city,
+        country,
+        quantity
+      } = body;
+
+      const qty = Math.max(1, Math.min(50, parseInt(quantity, 10) || 1));
+      const UNIT_PRICE = 15.00;
+      const SHIPPING_PRICE = 2.00;
+      const verifiedEuros = Number(((qty * UNIT_PRICE) + SHIPPING_PRICE).toFixed(2));
+
+      const db = loadDb();
+      db.productOrders = db.productOrders || [];
+
+      if (paymentIntentId) {
+        const existing = db.productOrders.find(o => o.paymentIntentId === paymentIntentId);
+        if (existing) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            success: true,
+            message: '¡Pedido ya confirmado!',
+            order: existing
+          }));
+        }
+      }
+
+      if (STRIPE_SECRET_KEY) {
+        if (!paymentIntentId || !paymentIntentId.startsWith('pi_') || paymentIntentId.startsWith('pi_direct_') || paymentIntentId.startsWith('pi_manual_')) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            success: false,
+            message: 'Error de validación: Se requiere un pago verificado por Stripe.'
+          }));
+        }
+        try {
+          const verifiedPi = await callStripeApi(`/v1/payment_intents/${paymentIntentId}`, null, 'GET');
+          if (verifiedPi.status !== 'succeeded' && verifiedPi.status !== 'processing') {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({
+              success: false,
+              message: `El pago no ha sido completado en Stripe (Estado: ${verifiedPi.status}).`
+            }));
+          }
+        } catch (stripeErr) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            success: false,
+            message: 'No se pudo verificar el pago con Stripe: ' + (stripeErr.message || 'ID inválido')
+          }));
+        }
+      }
+
+      const newOrder = {
+        id: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
+        customerName: (customerName || '').trim(),
+        customerEmail: (customerEmail || '').trim(),
+        phone: (phone || '').trim(),
+        address: (address || '').trim(),
+        postalCode: (postalCode || '').trim(),
+        city: (city || '').trim(),
+        country: (country || 'España').trim(),
+        quantity: qty,
+        unitPrice: UNIT_PRICE,
+        shippingPrice: SHIPPING_PRICE,
+        totalEuros: verifiedEuros,
+        paymentIntentId: paymentIntentId || ('ORD_LOCAL_' + Date.now()),
+        status: 'Pagado - Pendiente de Envío',
+        createdAt: new Date().toISOString()
+      };
+
+      db.productOrders.push(newOrder);
+      saveDb(db);
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({
+        success: true,
+        message: '¡Pedido confirmado! Prepararemos el envío de tu SmartVieira.',
+        order: newOrder
+      }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error guardando el pedido' }));
+    }
+  }
+
   // =========================================================================
   // STATIC FILE SERVING
   // =========================================================================
   let staticUrl = reqPath;
-  if (staticUrl === '/' || staticUrl === '/index.html' || staticUrl === '/downloads.html') {
+  if (staticUrl === '/') {
+    staticUrl = '/index.html';
+  } else if (staticUrl === '/downloads.html') {
     staticUrl = '/descargar.html';
   }
 
@@ -1647,7 +1801,7 @@ const server = http.createServer(async (req, res) => {
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
-      filePath = path.join(PUBLIC_DIR, 'descargar.html');
+      filePath = path.join(PUBLIC_DIR, 'index.html');
     }
 
     const ext = path.extname(filePath).toLowerCase();
