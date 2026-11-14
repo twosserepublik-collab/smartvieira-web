@@ -2672,11 +2672,48 @@
       `;
     }
 
+    const START_TOWN_BY_DUR = {
+      week: {
+        'camino-frances': 'sarria',
+        'camino-portugues-interior': 'tui',
+        'camino-portugues-costa': 'vigo',
+        'camino-ingles': 'ferrol',
+        'camino-fisterra-muxia': 'santiago',
+        'camino-primitivo': 'lugo',
+        'camino-sanabres': 'ourense',
+        'camino-invierno': 'chantada',
+        'camino-del-norte': 'vilalba'
+      },
+      fortnight: {
+        'camino-portugues-interior': 'porto',
+        'camino-portugues-costa': 'porto',
+        'camino-primitivo': 'oviedo',
+        'camino-sanabres': 'zamora',
+        'camino-invierno': 'ponferrada'
+      }
+    };
+
+    function getFilteredTownsForRoute(routeId) {
+      const allTowns = (typeof PUEBLOS_POR_ORDEN !== 'undefined' && PUEBLOS_POR_ORDEN[routeId]) ? PUEBLOS_POR_ORDEN[routeId] : [];
+      const startMap = START_TOWN_BY_DUR[activeDurFilter];
+      const startTown = startMap && startMap[routeId];
+      if (!startTown) return allTowns;
+      const idx = allTowns.findIndex(t => t.toLowerCase() === startTown.toLowerCase());
+      return idx >= 0 ? allTowns.slice(idx) : allTowns;
+    }
+
     function renderExplorerTowns() {
-      const towns = (typeof PUEBLOS_POR_ORDEN !== 'undefined' && PUEBLOS_POR_ORDEN[selectedRouteId]) ? PUEBLOS_POR_ORDEN[selectedRouteId] : [];
+      const allTowns = (typeof PUEBLOS_POR_ORDEN !== 'undefined' && PUEBLOS_POR_ORDEN[selectedRouteId]) ? PUEBLOS_POR_ORDEN[selectedRouteId] : [];
+      const towns = getFilteredTownsForRoute(selectedRouteId);
       const container = document.getElementById('expTownsContainer');
       const countEl = document.getElementById('routeTownCount');
-      if (countEl) countEl.textContent = towns.length + ' puntos de paso';
+      if (countEl) {
+        if (towns.length < allTowns.length) {
+          countEl.innerHTML = `${towns.length} / ${allTowns.length} <button type="button" onclick="activeDurFilter='all'; renderDurationCompare(); renderActiveRouteSummary(); renderExplorerTowns();" class="ml-1 underline text-[#1E4D3B] font-bold">(${(WEB_I18N[currentWebLang] || WEB_I18N.ES).dur_all || 'Ver toda la ruta'})</button>`;
+        } else {
+          countEl.textContent = towns.length + ' ' + ((WEB_I18N[currentWebLang] || WEB_I18N.ES).etapas_word || 'puntos');
+        }
+      }
       if (!container) return;
       container.innerHTML = towns.map((t, idx) => {
         const active = selectedExplorerTown.toLowerCase() === t.toLowerCase();
