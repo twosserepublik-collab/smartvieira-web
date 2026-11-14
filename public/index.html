@@ -164,6 +164,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://js.stripe.com/v3/"></script>
   <script src="/caminos-data.js"></script>
+  <script src="/camino-rich-data.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet">
@@ -549,6 +550,44 @@
             <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
               <p><strong>Encontrarse con uno mismo:</strong> Más allá de un viaje apasionante de senderismo y cultura, caminar cada mañana sin prisas ni pantallas regala claridad mental, silencio interior y una profunda sensación de renovación personal.</p>
               <p><strong>Dimensión religiosa y Xacobeo 2027:</strong> Desde el siglo IX los peregrinos acuden ante la tumba del Apóstol Santiago. En los albergues parroquiales se mantiene la acogida fraterna tradicional, la oración vespertina y las bendiciones al peregrino, culminando en la Misa del Peregrino en la Catedral y el Año Santo Compostelano 2027.</p>
+            </div>
+          </details>
+
+          <!-- 6. Cómo llegar al inicio y volver desde Santiago -->
+          <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
+            <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
+              <span>🚆 Cómo llegar al punto de inicio y volver desde Santiago</span>
+              <span class="text-[#1E4D3B]">▾</span>
+            </summary>
+            <div class="text-xs text-[#5F6C65] leading-relaxed pt-3 space-y-3">
+              <div class="grid sm:grid-cols-2 gap-2.5">
+                <div class="bg-white rounded-xl border border-[#E5DEC9] p-3 space-y-1">
+                  <div class="font-bold text-[#1E4D3B]">🏔️ Saint-Jean-Pied-de-Port / Roncesvalles</div>
+                  <p><strong>Tren:</strong> SNCF TER desde Bayona a SJPP (~1h). A Bayona llegan TGV desde París/Hendaya.</p>
+                  <p><strong>Bus:</strong> ALSA Pamplona ↔ Roncesvalles / SJPP (temporada abr–oct). Desde Pamplona taxis compartidos disponibles todo el año.</p>
+                </div>
+                <div class="bg-white rounded-xl border border-[#E5DEC9] p-3 space-y-1">
+                  <div class="font-bold text-[#1E4D3B]">🥾 Sarria y Ponferrada (Últimos 100–200 km)</div>
+                  <p><strong>Tren:</strong> Renfe AVE/Alvia directo desde Madrid, Barcelona, León y Ourense a Sarria y Ponferrada.</p>
+                  <p><strong>Bus:</strong> Monbus / ALSA directos desde Lugo, Santiago y Aeropuerto de Santiago (SCQ).</p>
+                </div>
+                <div class="bg-white rounded-xl border border-[#E5DEC9] p-3 space-y-1">
+                  <div class="font-bold text-[#1E4D3B]">🇵🇹 Oporto, Tui y Vigo (Portugués / Costa)</div>
+                  <p><strong>Avión + Tren:</strong> Aeropuerto de Oporto (OPO) conectado por Metro (línea E) al centro y tren CP Celta Porto-Campanhã ↔ Valença/Vigo.</p>
+                  <p><strong>Bus:</strong> FlixBus y ALSA conectan Oporto, Valença, Tui y Vigo diariamente.</p>
+                </div>
+                <div class="bg-white rounded-xl border border-[#E5DEC9] p-3 space-y-1">
+                  <div class="font-bold text-[#1E4D3B]">🌊 Ferrol, Oviedo, Irún y Sevilla/Ourense</div>
+                  <p><strong>Norte / Primitivo:</strong> ALSA/Renfe desde Bilbao/San Sebastián (Irún) y Oviedo. Ferrol tiene tren directo desde A Coruña (FGC/Renfe).</p>
+                  <p><strong>Vía de la Plata / Sanabrés:</strong> AVE directo a Ourense y Puebla de Sanabria desde Madrid en ~2h15m.</p>
+                </div>
+              </div>
+              <div class="bg-[#EBF3EE]/70 border border-[#1E4D3B]/15 rounded-xl p-3 space-y-1">
+                <div class="font-bold text-[#1E4D3B]">✈️ Regreso desde Santiago, Fisterra y Muxía</div>
+                <p><strong>Aeropuerto Santiago-Rosalía de Castro (SCQ):</strong> Autobús Freire cada 20–30 min desde la Estación Intermodal y centro (~20 min).</p>
+                <p><strong>Tren AVE / Larga Distancia:</strong> Conexiones directas Renfe desde la Estación Intermodal a Madrid (~3h), A Coruña, Vigo, León y Zaragoza.</p>
+                <p><strong>Desde Fisterra y Muxía:</strong> Autobuses diarios de Monbus de vuelta a la Estación Intermodal de Santiago (~2h30m Fisterra / ~2h10m Muxía).</p>
+              </div>
             </div>
           </details>
 
@@ -1575,6 +1614,51 @@
           </div>
         </div>
 
+        ${(typeof CAMINO_ETAPAS !== 'undefined' && CAMINO_ETAPAS[r.id]) ? `
+        <div class="space-y-3 pt-2 border-t border-[#E5DEC9]">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">📈 Etapas detalladas, perfil de desnivel y servicios</h3>
+            <span class="text-[11px] text-[#5F6C65]">${CAMINO_ETAPAS[r.id].length} etapas clave con altimetría y servicios</span>
+          </div>
+          <div class="grid md:grid-cols-2 gap-3">
+            ${CAMINO_ETAPAS[r.id].map(st => {
+              const pts = (st.profile || [20, 50, 30]).map((val, idx, arr) => {
+                const x = arr.length > 1 ? Math.round((idx / (arr.length - 1)) * 100) : 50;
+                const y = Math.max(4, Math.min(34, 34 - Math.round((val / 100) * 28)));
+                return x + ',' + y;
+              }).join(' ');
+              const areaPts = '0,36 ' + pts + ' 100,36';
+              const svcs = (typeof SERVICIOS_PUEBLO !== 'undefined' && st.town && SERVICIOS_PUEBLO[st.town.toLowerCase()]) ? SERVICIOS_PUEBLO[st.town.toLowerCase()] : [];
+              const stars = '●'.repeat(st.diff || 2) + '○'.repeat(Math.max(0, 5 - (st.diff || 2)));
+              return `
+                <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3.5 space-y-2">
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <span class="text-[10px] font-bold uppercase tracking-wider text-[#D48B28]">Etapa ${st.n}</span>
+                      <div class="text-xs font-bold text-[#1C2826] leading-snug">${st.route}</div>
+                    </div>
+                    <span class="text-xs font-extrabold text-[#1E4D3B] bg-white border border-[#E5DEC9] px-2 py-0.5 rounded-lg shrink-0">${st.km}</span>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#5F6C65]">
+                    <span>⏱️ ${st.time}</span>
+                    <span>⛰️ ${st.up} / ${st.down}</span>
+                    <span title="Dificultad ${st.diff}/5" class="text-[#1E4D3B] font-semibold">Dif: ${stars}</span>
+                  </div>
+                  <div class="bg-white rounded-xl border border-[#E5DEC9] px-2 pt-1.5 pb-0.5">
+                    <svg viewBox="0 0 100 36" class="w-full h-9 overflow-visible" preserveAspectRatio="none" aria-label="Perfil de desnivel">
+                      <polygon points="${areaPts}" fill="#EBF3EE"></polygon>
+                      <polyline points="${pts}" fill="none" stroke="#1E4D3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                    </svg>
+                  </div>
+                  <p class="text-[11px] text-[#5F6C65] leading-snug">${st.desc}</p>
+                  ${svcs.length ? `<div class="flex flex-wrap gap-1 pt-0.5">${svcs.map(s => `<span class="text-[10px] font-semibold bg-white border border-[#E5DEC9] text-[#1C2826] px-2 py-0.5 rounded-full">${s}</span>`).join('')}</div>` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+        ` : ''}
+
         ${ph ? `
         <div class="space-y-2.5 pt-2 border-t border-[#E5DEC9]">
           <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">📷 Lugares dignos de ver en el ${r.name}</h3>
@@ -1787,12 +1871,17 @@
       if (titleEl) titleEl.textContent = `🏠 2. Albergues y alojamientos en ${selectedExplorerTown}`;
       if (countEl) countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}`;
 
+      const townServices = (typeof SERVICIOS_PUEBLO !== 'undefined' && SERVICIOS_PUEBLO[selectedExplorerTown.toLowerCase()]) ? SERVICIOS_PUEBLO[selectedExplorerTown.toLowerCase()] : [];
+      const svcBanner = townServices.length
+        ? `<div class="col-span-full rounded-2xl bg-[#EBF3EE]/70 border border-[#1E4D3B]/15 p-3 flex flex-wrap items-center gap-1.5"><span class="text-[11px] font-bold text-[#1E4D3B] mr-1">Servicios en ${selectedExplorerTown}:</span>${townServices.map(s => `<span class="text-[10px] font-semibold bg-white border border-[#E5DEC9] text-[#1C2826] px-2 py-0.5 rounded-full">${s}</span>`).join('')}</div>`
+        : '';
+
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-8 text-xs text-[#5F6C65]">${dict.no_hostels}</div>`;
+        grid.innerHTML = svcBanner + `<div class="col-span-full text-center py-8 text-xs text-[#5F6C65]">${dict.no_hostels}</div>`;
         return;
       }
 
-      grid.innerHTML = filtered.map(h => {
+      grid.innerHTML = svcBanner + filtered.map(h => {
         const safeName = h.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const safeTown = (h.town || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
         return `
@@ -1843,22 +1932,32 @@
       document.getElementById('hdTitle').textContent = name;
       document.getElementById('hdTown').textContent = '📍 ' + town + ' • Camino de Santiago';
 
-      document.getElementById('hdMetaBox').innerHTML = `
+      const detailEntry = (typeof ALBERGUES_DETALLE !== 'undefined')
+        ? (Object.entries(ALBERGUES_DETALLE).find(([k]) => lower.includes(k)) || [])[1]
+        : null;
+      const townSvcs = (typeof SERVICIOS_PUEBLO !== 'undefined' && town && SERVICIOS_PUEBLO[town.toLowerCase()]) ? SERVICIOS_PUEBLO[town.toLowerCase()] : [];
+
+      document.getElementById('hdMetaBox').innerHTML = detailEntry ? `
+        <div><strong>🛏️ Plazas verificadas:</strong> ${detailEntry.plazas}</div>
+        <div><strong>💶 Tarifa exacta:</strong> ${detailEntry.price}</div>
+        <div><strong>📞 Teléfono directo:</strong> <a href="tel:${detailEntry.phone.replace(/[^\d+]/g, '')}" class="text-[#1E4D3B] font-bold underline">${detailEntry.phone}</a></div>
+        <div><strong>📆 Apertura:</strong> ${detailEntry.open}</div>
+        <div><strong>📅 Reservas:</strong> ${detailEntry.reserve}</div>
+        <div><strong>✨ Equipamiento:</strong> ${detailEntry.services}</div>
+        ${townSvcs.length ? `<div><strong>🏙️ Servicios en ${town}:</strong> ${townSvcs.join(' · ')}</div>` : ''}
+      ` : `
         <div><strong>💶 Precio orientativo:</strong> ${priceText}</div>
         <div><strong>📅 Reservas:</strong> ${reserveText}</div>
         <div><strong>🕒 Horarios:</strong> ${hoursText}</div>
         <div><strong>✨ Servicios:</strong> ${servicesText}</div>
+        ${townSvcs.length ? `<div><strong>🏙️ Servicios en ${town}:</strong> ${townSvcs.join(' · ')}</div>` : ''}
       `;
 
       const queryMaps = encodeURIComponent(`${name} ${town} Camino de Santiago`);
-      const queryGronze = encodeURIComponent(`site:gronze.com ${name} ${town}`);
 
       let linksHtml = `
         <a href="https://www.google.com/maps/search/?api=1&query=${queryMaps}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-[#1E4D3B] text-white text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-all">
-          📞 Ver Teléfono, Web Oficial y Ubicación en Mapa →
-        </a>
-        <a href="https://www.google.com/search?q=${queryGronze}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] text-[#1C2826] text-xs font-bold flex items-center justify-center gap-2 hover:border-[#1E4D3B] transition-all">
-          📖 Consultar Ficha y Opiniones en Gronze →
+          📞 Ver Teléfono, Reseñas y Ubicación GPS en Mapa →
         </a>
       `;
       if (isPublic) {
