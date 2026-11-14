@@ -193,15 +193,19 @@
     }
     h1, h2, .serif-title { font-family: 'Fraunces', Georgia, serif; letter-spacing: -0.02em; }
     .glass-card {
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.96);
       border: 1px solid var(--camino-border);
-      box-shadow: 0 10px 28px -12px rgba(28, 40, 38, 0.08);
+      box-shadow: 0 12px 30px -14px rgba(28, 40, 38, 0.10), 0 1px 2px rgba(28, 40, 38, 0.04);
+      transition: box-shadow 0.25s ease, border-color 0.25s ease;
     }
     .glass-nav {
-      background: rgba(247, 243, 235, 0.95);
-      backdrop-filter: blur(16px);
+      background: rgba(247, 243, 235, 0.96);
+      backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--camino-border);
     }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    details[open] { border-color: rgba(30, 77, 59, 0.35); background-color: #FAF7F0; }
     details > summary { list-style: none; cursor: pointer; }
     details > summary::-webkit-details-marker { display: none; }
   </style>
@@ -210,10 +214,11 @@
 
   <!-- HEADER + 5 TABS (SIN ENLACES A APPS WEB) -->
   <header class="glass-nav sticky top-0 z-40">
+    <div class="h-1 w-full bg-gradient-to-r from-[#1E4D3B] via-[#D48B28] to-[#1E4D3B]"></div>
     <div class="max-w-5xl mx-auto px-4 pt-3 pb-2 space-y-2.5">
       <div class="flex items-center justify-between gap-3">
-        <button onclick="switchWebTab('inicio')" class="flex items-center gap-2.5 text-left">
-          <span class="w-9 h-9 rounded-xl bg-[#1E4D3B] text-[#F7F3EB] flex items-center justify-center text-lg shadow-sm">🐚</span>
+        <button onclick="switchWebTab('inicio')" class="flex items-center gap-2.5 text-left group">
+          <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1E4D3B] to-[#2A6B53] text-[#F7F3EB] flex items-center justify-center text-lg shadow-sm ring-1 ring-[#D48B28]/30 group-hover:scale-105 transition-transform">🐚</span>
           <div>
             <span class="serif-title font-bold text-lg text-[#1C2826] block leading-none">SmartVieira</span>
             <span class="text-[10px] text-[#D48B28] font-bold tracking-widest uppercase">Guía del Camino de Santiago</span>
@@ -232,7 +237,7 @@
         </select>
       </div>
 
-      <nav class="flex items-center gap-1.5 overflow-x-auto pb-1" aria-label="Secciones de la guía">
+      <nav class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1" aria-label="Secciones de la guía">
         <button id="tabBtn-caminos" onclick="switchWebTab('caminos')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-[#1E4D3B] text-white" data-i18n="tab_caminos">
           🧭 Los Caminos
         </button>
@@ -261,6 +266,25 @@
     <!-- TAB 0: LOS CAMINOS (MAPA INTERACTIVO + FICHAS ESTILO GRONZE)          -->
     <!-- ===================================================================== -->
     <section id="tabPanel-caminos" class="space-y-6">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-[#EBF3EE] text-[#1E4D3B] flex items-center justify-center text-sm shrink-0">🧭</span>
+          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight">9 Rutas</div><div class="text-[10px] text-[#5F6C65]">Caminos oficiales</div></div>
+        </div>
+        <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-[#EFE9DC] text-[#D48B28] flex items-center justify-center text-sm shrink-0">🏠</span>
+          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight">691 Albergues</div><div class="text-[10px] text-[#5F6C65]">Públicos y privados</div></div>
+        </div>
+        <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-[#003580]/10 text-[#003580] flex items-center justify-center text-sm shrink-0">🏨</span>
+          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight">531 Reservas</div><div class="text-[10px] text-[#5F6C65]">Enlace Booking</div></div>
+        </div>
+        <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-[#EBF3EE] text-[#1E4D3B] flex items-center justify-center text-sm shrink-0">🌍</span>
+          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight">8 Idiomas</div><div class="text-[10px] text-[#5F6C65]">Guía internacional</div></div>
+        </div>
+      </div>
+
       <div class="glass-card rounded-3xl p-6 sm:p-7 space-y-5">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -627,6 +651,32 @@
               <p><strong>Verano (julio–agosto):</strong> Muy seco y caluroso en Navarra, La Rioja, Meseta y Vía de la Plata (sal al amanecer sobre las 06:00h). En Galicia y Costa da Morte refresca por la noche; reserva alojamiento con antelación.</p>
               <p><strong>Invierno (noviembre–marzo):</strong> Etapas solitarias y días cortos (~8–9h de luz). Muchos albergues privados cierran, por lo que conviene confirmar apertura por teléfono y evitar puertos nevados (Valcarlos en lugar de Napoleón; Pola de Allande en lugar de Hospitales).</p>
               <p><strong>⏱️ Ritmos medios orientativos:</strong> A pie: <strong>4–4,5 km/h</strong> (etapas de 20–25 km en 5–6 horas con descansos). En bicicleta: <strong>12–16 km/h</strong> (50–70 km/día).</p>
+            </div>
+          </details>
+
+          <!-- 9. Botiquín del Peregrino y Cuidado de Pies / Farmacias -->
+          <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
+            <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
+              <span>🩹 Botiquín del Peregrino (&lt; 300 g) y cuidado de pies</span>
+              <span class="text-[#1E4D3B]">▾</span>
+            </summary>
+            <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
+              <p><strong>Pies sin ampollas (lo más importante):</strong> aplica <strong>vaselina</strong> en dedos y planta antes de ponerte los calcetines técnicos (sin costuras) y usa crema solar todo el año. Lleva <strong>apósitos hidrocoloides</strong> (tipo Compeed), tiritas, gasas, esparadrapo y aguja e hilo esterilizados.</p>
+              <p><strong>Desinfección y medicación básica:</strong> clorhexidina o povidona yodada (evita alcohol o agua oxigenada en heridas abiertas), ibuprofeno/paracetamol, sobres de <strong>suero oral</strong>, antihistamínico y <strong>tapones para los oídos</strong> (imprescindibles en albergues compartidos).</p>
+              <p><strong>Farmacias en ruta:</strong> en casi cada localidad de etapa dispones de farmacias con consejo de fisioterapia y “Kits del Peregrino” listos para reponer sin cargar peso extra desde casa.</p>
+            </div>
+          </details>
+
+          <!-- 10. Oficina del Peregrino, Certificado de Distancia, Fisterrana y Muxiana -->
+          <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
+            <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
+              <span>🏛️ Oficina del Peregrino (Santiago), Certificado de Distancia, Fisterrana y Muxiana</span>
+              <span class="text-[#1E4D3B]">▾</span>
+            </summary>
+            <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
+              <p><strong>Centro Internacional de Acogida al Peregrino:</strong> <strong>Rúa das Carretas, 33</strong> (acceso peatonal habitual por <em>Rúa de García Sabell</em>, a 2 min del Obradoiro). Abre todos los días de <strong>10:00 a 19:00h</strong> (cierra 25 dic y 1 ene, entregándose entonces en la Sacristía de la Catedral). Al llegar coges turno con <strong>código QR</strong> para seguir la cola desde el móvil.</p>
+              <p><strong>La Compostela y Certificado de Distancia:</strong> la <em>Compostela</em> en latín es gratuita (mín. 100 km a pie / 200 km en bici). Opcionalmente puedes pedir el <strong>Certificado de Distancia</strong> (~3 €), un pergamino del Códice Calixtino con tu ruta exacta, inicio y kilómetros recorridos.</p>
+              <p><strong>La Fisterrana y la Muxiana:</strong> no se expiden en Santiago; la <strong>Fisterrana</strong> se recoge en el <em>Albergue Público de Fisterra / Ayuntamiento</em> y la <strong>Muxiana</strong> en la <em>Oficina de Turismo de Muxía</em>.</p>
             </div>
           </details>
         </div>
@@ -1767,6 +1817,16 @@
           </div>
         </div>
         ` : ''}
+
+        <div class="rounded-2xl bg-gradient-to-r from-[#1E4D3B] to-[#2A6B53] text-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
+          <div class="space-y-0.5">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-amber-300">🐚 Servicio SmartVieira en el ${r.name}</div>
+            <div class="text-sm font-bold">¿Prefieres disfrutar las etapas sin cargar 8–10 kg en la espalda?</div>
+          </div>
+          <button type="button" onclick="switchWebTab('ligero')" class="px-4 py-2 rounded-xl bg-[#D48B28] text-white text-xs font-bold hover:opacity-95 transition-all shrink-0">
+            🎒 Caminar sin peso desde 7€/etapa →
+          </button>
+        </div>
       `;
     }
 
