@@ -200,51 +200,85 @@
     <!-- ===================================================================== -->
     <!-- TAB 2: RUTAS, COMPARATIVA, ÚLTIMOS 100 KM Y ALBERGUES                 -->
     <!-- ===================================================================== -->
-    <section id="tabPanel-rutas" class="hidden space-y-6">
-      <!-- ¿Qué Camino elegir? Comparativa rápida -->
-      <div class="glass-card rounded-3xl p-6 space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
-          <div>
-            <h2 class="text-xl font-bold text-[#1C2826]" data-i18n="choose_title">🧭 ¿Qué Camino elegir según tus días?</h2>
-            <p class="text-xs text-[#5F6C65] mt-0.5" data-i18n="choose_sub">Filtra por duración para ver qué ruta y punto de inicio te conviene más.</p>
-          </div>
-          <div class="flex gap-1.5 flex-wrap">
-            <button onclick="filterDuration('all')" id="durBtn-all" class="dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#1E4D3B] text-white" data-i18n="dur_all">Todas</button>
-            <button onclick="filterDuration('week')" id="durBtn-week" class="dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9]" data-i18n="dur_week">5–7 días (100 km)</button>
-            <button onclick="filterDuration('fortnight')" id="durBtn-fortnight" class="dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9]" data-i18n="dur_fortnight">10–15 días</button>
-            <button onclick="filterDuration('month')" id="durBtn-month" class="dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9]" data-i18n="dur_month">~1 mes completo</button>
-          </div>
+    <section id="tabPanel-rutas" class="hidden space-y-5">
+      <!-- Barra de progreso / Migas de pan del asistente de rutas -->
+      <div class="glass-card rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap items-center gap-1.5 text-xs">
+          <button onclick="goToRouteStep(1)" id="stepCrumb-1" class="px-2.5 py-1 rounded-lg font-bold bg-[#1E4D3B] text-white transition-all">1. Tus días</button>
+          <span class="text-[#D48B28] font-bold">›</span>
+          <button onclick="goToRouteStep(2)" id="stepCrumb-2" class="px-2.5 py-1 rounded-lg font-bold bg-[#F7F3EB] text-[#5F6C65] border border-[#E5DEC9] transition-all disabled:opacity-45" disabled>2. Camino</button>
+          <span class="text-[#D48B28] font-bold">›</span>
+          <button onclick="goToRouteStep(3)" id="stepCrumb-3" class="px-2.5 py-1 rounded-lg font-bold bg-[#F7F3EB] text-[#5F6C65] border border-[#E5DEC9] transition-all disabled:opacity-45" disabled>3. Puntos y Albergues</button>
         </div>
-        <div id="durationCompareGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+        <button onclick="switchWebTab('ligero')" class="text-[11px] font-bold text-[#1E4D3B] hover:text-[#D48B28] transition-colors" data-i18n="subtle_hook_routes">
+          🪶 ¿Prefieres hacer estas etapas sin peso? →
+        </button>
       </div>
 
-      <!-- Explorador por ruta, localidades y albergues -->
-      <div class="glass-card rounded-3xl p-6 space-y-5">
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-[#E5DEC9] pb-4">
-          <div>
-            <h2 class="text-2xl font-bold text-[#1C2826]" data-i18n="routes_title">Localidades, Etapas y Albergues</h2>
-            <p class="text-xs text-[#5F6C65] mt-1" data-i18n="routes_subtitle">Pulsa una ruta para consultar sus etapas habituales de los últimos 100 km y su listado de albergues.</p>
-          </div>
-          <button onclick="switchWebTab('ligero')" class="text-xs font-bold text-[#1E4D3B] hover:text-[#D48B28] transition-colors text-left sm:text-right" data-i18n="subtle_hook_routes">
-            🪶 ¿Prefieres hacer estas etapas sin peso? →
+      <!-- PASO 1: Elegir días disponibles -->
+      <div id="rutasStep1" class="glass-card rounded-3xl p-6 space-y-4">
+        <div>
+          <h2 class="text-xl font-bold text-[#1C2826]" data-i18n="choose_title">🧭 ¿Qué Camino elegir según tus días?</h2>
+          <p class="text-xs text-[#5F6C65] mt-1" data-i18n="choose_sub">Selecciona el tiempo que tienes y te mostraremos únicamente las mejores rutas para ti.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <button onclick="filterDuration('week')" id="durBtn-week" class="dur-btn text-left p-4 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] transition-all space-y-1">
+            <div class="text-lg">🥾</div>
+            <div class="font-bold text-sm text-[#1C2826]" data-i18n="dur_week">5–7 días (100 km)</div>
+            <p class="text-[11px] text-[#5F6C65]">Últimos 100 km oficiales para obtener la Compostela.</p>
+          </button>
+          <button onclick="filterDuration('fortnight')" id="durBtn-fortnight" class="dur-btn text-left p-4 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] transition-all space-y-1">
+            <div class="text-lg">⛰️</div>
+            <div class="font-bold text-sm text-[#1C2826]" data-i18n="dur_fortnight">10–15 días</div>
+            <p class="text-[11px] text-[#5F6C65]">Rutas completas medias o grandes tramos históricos.</p>
+          </button>
+          <button onclick="filterDuration('month')" id="durBtn-month" class="dur-btn text-left p-4 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] transition-all space-y-1">
+            <div class="text-lg">🌍</div>
+            <div class="font-bold text-sm text-[#1C2826]" data-i18n="dur_month">~1 mes completo</div>
+            <p class="text-[11px] text-[#5F6C65]">La gran travesía clásica desde la frontera o el sur.</p>
+          </button>
+          <button onclick="filterDuration('all')" id="durBtn-all" class="dur-btn text-left p-4 rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] transition-all space-y-1">
+            <div class="text-lg">🗺️</div>
+            <div class="font-bold text-sm text-[#1C2826]" data-i18n="dur_all">Ver todos los Caminos</div>
+            <p class="text-[11px] text-[#5F6C65]">Explora todas las rutas disponibles sin filtro de días.</p>
           </button>
         </div>
+      </div>
 
-        <div id="routePillsBar" class="flex flex-wrap gap-2"></div>
-        <div id="activeRouteSummary" class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4 space-y-2"></div>
+      <!-- PASO 2: Mejores caminos según los días elegidos -->
+      <div id="rutasStep2" class="hidden glass-card rounded-3xl p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#E5DEC9] pb-3">
+          <div>
+            <span id="selectedDurBadge" class="inline-block px-2.5 py-0.5 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[10px] font-bold border border-[#1E4D3B]/15 mb-1"></span>
+            <h2 class="text-lg font-bold text-[#1C2826]">Elige tu Camino</h2>
+            <p class="text-xs text-[#5F6C65]">Pulsa una opción para ver sus localidades de paso y albergues.</p>
+          </div>
+          <button onclick="goToRouteStep(1)" class="px-3 py-1.5 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] text-xs font-bold text-[#1C2826] hover:border-[#1E4D3B] transition-all">← Cambiar días</button>
+        </div>
+        <div id="durationCompareGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+      </div>
 
-        <div class="space-y-4">
-          <input type="text" id="expSearchInput" oninput="renderExplorerHostels()" placeholder="Buscar localidad o nombre de albergue..." class="w-full px-4 py-2.5 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] text-sm text-[#1C2826] placeholder-[#5F6C65]/60 focus:border-[#1E4D3B] focus:outline-none">
+      <!-- PASO 3: Puntos del camino elegido + Albergues del punto seleccionado -->
+      <div id="rutasStep3" class="hidden glass-card rounded-3xl p-6 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#E5DEC9] pb-3">
+          <div id="activeRouteSummary" class="space-y-1.5 flex-1"></div>
+          <button onclick="goToRouteStep(2)" class="shrink-0 px-3 py-1.5 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] text-xs font-bold text-[#1C2826] hover:border-[#1E4D3B] transition-all">← Cambiar camino</button>
+        </div>
 
-          <details open class="rounded-2xl border border-[#E5DEC9] bg-[#F7F3EB]/60 p-4">
-            <summary class="text-xs font-bold text-[#1C2826] flex items-center justify-between">
-              <span data-i18n="exp_towns_label">📍 Localidades de paso en orden de etapa (pulsa para filtrar)</span>
-              <span class="text-[#D48B28]">▾</span>
-            </summary>
-            <div id="expTownsContainer" class="flex flex-wrap gap-1.5 pt-3"></div>
-          </details>
+        <div class="space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#5F6C65]" data-i18n="exp_towns_label">📍 1. Selecciona un punto / localidad de esta ruta</h3>
+            <span id="routeTownCount" class="text-[11px] font-semibold text-[#D48B28]"></span>
+          </div>
+          <div id="expTownsContainer" class="flex flex-wrap gap-1.5"></div>
+        </div>
 
-          <div id="expHostelsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[380px] overflow-y-auto pr-1"></div>
+        <div id="rutasHostelsWrap" class="hidden pt-4 border-t border-[#E5DEC9] space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 id="selectedTownTitle" class="text-sm font-bold text-[#1C2826]"></h3>
+            <span id="selectedTownHostelCount" class="px-2.5 py-0.5 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold"></span>
+          </div>
+          <div id="expHostelsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[420px] overflow-y-auto pr-1"></div>
         </div>
       </div>
     </section>
@@ -904,21 +938,78 @@
     };
 
     const CAMINO_ROUTES = [
-      { id: 'camino-frances', name: 'Camino Francés', dur: 'month', start: 'Saint-Jean-Pied-de-Port / Sarria (100 km)', km: '780 km', stages: '32-35', diff: 'Media', last100: 'Sarria → Portomarín → Palas de Rei → Arzúa → O Pedrouzo → Santiago (5 etapas)', desc: 'La ruta más emblemática y con mayor red de albergues y servicios del mundo.' },
-      { id: 'camino-ingles', name: 'Camino Inglés', dur: 'week', start: 'Ferrol (118 km)', km: '118 km', stages: '5-6', diff: 'Baja-Media', last100: 'Ferrol → Neda → Pontedeume → Betanzos → Hospital de Bruma → Sigüeiro → Santiago (5-6 etapas)', desc: 'Ideal para hacer el Camino completo oficial en una semana.' },
-      { id: 'camino-portugues-interior', name: 'Camino Portugués', dur: 'week', start: 'Lisboa / Porto / Tui (119 km)', km: '620 / 119 km', stages: '6-26', diff: 'Baja-Media', last100: 'Tui → O Porriño → Redondela → Pontevedra → Caldas de Reis → Padrón → Santiago (6 etapas)', desc: 'Segunda ruta más popular; desde Tui ofrece etapas verdes y muy accesibles.' },
-      { id: 'camino-del-norte', name: 'Camino del Norte', dur: 'month', start: 'Irún / Vilalba (100 km)', km: '825 km', stages: '32-35', diff: 'Media-Alta', last100: 'Vilalba → Baamonde → Sobrado dos Monxes → Arzúa → O Pedrouzo → Santiago (5 etapas)', desc: 'Recorre la costa cantábrica entre acantilados, playas y villas marineras.' },
-      { id: 'camino-primitivo', name: 'Camino Primitivo', dur: 'fortnight', start: 'Oviedo / Lugo (100 km)', km: '320 km', stages: '13-14', diff: 'Alta', last100: 'Lugo → San Romão da Retorta → Melide → Arzúa → O Pedrouzo → Santiago (4-5 etapas)', desc: 'El trazado histórico original de Alfonso II, montañoso y espectacular.' },
-      { id: 'camino-sanabres', name: 'Camino Sanabrés / Vía Plata', dur: 'fortnight', start: 'Sevilla / Ourense (108 km)', km: '360-1000 km', stages: '14-38', diff: 'Media', last100: 'Ourense → Cea → Dozón → Lalín/Silleda → Ponte Ulla → Santiago (5 etapas)', desc: 'Itinerario tranquilo de gran riqueza patrimonial desde el sur y Zamora.' },
-      { id: 'camino-invierno', name: 'Camino de Invierno', dur: 'fortnight', start: 'Ponferrada / Monforte', km: '260 km', stages: '10-12', diff: 'Media', last100: 'Chantada → Rodeiro → Lalín → Silleda → A Estrada/Vedra → Santiago (5 etapas)', desc: 'Alternativa histórica por la Ribeira Sacra evitando las cumbres nevadas.' },
-      { id: 'camino-fisterra-muxia', name: 'Fisterra y Muxía', dur: 'week', start: 'Santiago de Compostela', km: '90-115 km', stages: '3-5', diff: 'Baja-Media', last100: 'Santiago → Negreira → Olveiroa → Cee/Fisterra → Muxía (4-5 etapas)', desc: 'Prolongación desde Santiago hasta el fin del mundo atlántico en Galicia.' }
+      {
+        id: 'camino-frances', name: 'Camino Francés',
+        durs: ['week', 'month'], topFor: ['week', 'month'],
+        start: 'Saint-Jean-Pied-de-Port / Sarria (100 km)', km: '780 km', stages: '32-35', diff: 'Media',
+        tipByDur: { week: 'Desde Sarria (115 km • 5 etapas)', month: 'Completo desde Saint-Jean (780 km • 32-35 etapas)' },
+        last100: 'Sarria → Portomarín → Palas de Rei → Arzúa → O Pedrouzo → Santiago (5 etapas)',
+        desc: 'La ruta más emblemática y con mayor red de albergues y servicios del mundo.'
+      },
+      {
+        id: 'camino-portugues-interior', name: 'Camino Portugués',
+        durs: ['week', 'fortnight', 'month'], topFor: ['week', 'fortnight'],
+        start: 'Lisboa / Porto / Tui (119 km)', km: '620 / 119 km', stages: '6-26', diff: 'Baja-Media',
+        tipByDur: { week: 'Desde Tui (119 km • 6 etapas)', fortnight: 'Desde Oporto (240 km • 10-12 etapas)', month: 'Completo desde Lisboa (620 km • 26 etapas)' },
+        last100: 'Tui → O Porriño → Redondela → Pontevedra → Caldas de Reis → Padrón → Santiago (6 etapas)',
+        desc: 'Segunda ruta más popular; etapas verdes, suaves y muy bien señalizadas.'
+      },
+      {
+        id: 'camino-ingles', name: 'Camino Inglés',
+        durs: ['week'], topFor: ['week'],
+        start: 'Ferrol (118 km)', km: '118 km', stages: '5-6', diff: 'Baja-Media',
+        tipByDur: { week: 'Completo desde Ferrol (118 km • 5-6 etapas)' },
+        last100: 'Ferrol → Neda → Pontedeume → Betanzos → Hospital de Bruma → Sigüeiro → Santiago (5-6 etapas)',
+        desc: 'Ideal para hacer un Camino completo oficial en una sola semana.'
+      },
+      {
+        id: 'camino-fisterra-muxia', name: 'Fisterra y Muxía',
+        durs: ['week'], topFor: [],
+        start: 'Santiago de Compostela', km: '90-115 km', stages: '3-5', diff: 'Baja-Media',
+        tipByDur: { week: 'Desde Santiago hasta el Atlántico (90-115 km • 3-5 etapas)' },
+        last100: 'Santiago → Negreira → Olveiroa → Cee/Fisterra → Muxía (4-5 etapas)',
+        desc: 'Prolongación desde Santiago hasta el fin del mundo atlántico en Galicia.'
+      },
+      {
+        id: 'camino-primitivo', name: 'Camino Primitivo',
+        durs: ['week', 'fortnight'], topFor: ['fortnight'],
+        start: 'Oviedo / Lugo (100 km)', km: '320 km', stages: '13-14', diff: 'Alta',
+        tipByDur: { week: 'Últimos 100 km desde Lugo (4-5 etapas)', fortnight: 'Completo desde Oviedo (320 km • 13-14 etapas)' },
+        last100: 'Lugo → San Romão da Retorta → Melide → Arzúa → O Pedrouzo → Santiago (4-5 etapas)',
+        desc: 'El trazado histórico original de Alfonso II, montañoso y espectacular.'
+      },
+      {
+        id: 'camino-sanabres', name: 'Camino Sanabrés / Vía Plata',
+        durs: ['week', 'fortnight', 'month'], topFor: ['fortnight'],
+        start: 'Sevilla / Zamora / Ourense (108 km)', km: '360-1000 km', stages: '14-38', diff: 'Media',
+        tipByDur: { week: 'Desde Ourense (108 km • 5 etapas)', fortnight: 'Desde Zamora / Puebla de Sanabria (14-16 etapas)', month: 'Vía de la Plata completa desde Sevilla (1000 km)' },
+        last100: 'Ourense → Cea → Dozón → Lalín/Silleda → Ponte Ulla → Santiago (5 etapas)',
+        desc: 'Itinerario tranquilo de gran riqueza patrimonial desde el sur y Zamora.'
+      },
+      {
+        id: 'camino-invierno', name: 'Camino de Invierno',
+        durs: ['week', 'fortnight'], topFor: ['fortnight'],
+        start: 'Ponferrada / Monforte', km: '260 km', stages: '10-12', diff: 'Media',
+        tipByDur: { week: 'Últimos 100 km desde Chantada (5 etapas)', fortnight: 'Completo desde Ponferrada (260 km • 10-12 etapas)' },
+        last100: 'Chantada → Rodeiro → Lalín → Silleda → A Estrada/Vedra → Santiago (5 etapas)',
+        desc: 'Alternativa histórica por la Ribeira Sacra evitando las cumbres nevadas.'
+      },
+      {
+        id: 'camino-del-norte', name: 'Camino del Norte',
+        durs: ['week', 'month'], topFor: ['month'],
+        start: 'Irún / Vilalba (100 km)', km: '825 km', stages: '32-35', diff: 'Media-Alta',
+        tipByDur: { week: 'Últimos 100 km desde Vilalba (5 etapas)', month: 'Completo desde Irún (825 km • 32-35 etapas)' },
+        last100: 'Vilalba → Baamonde → Sobrado dos Monxes → Arzúa → O Pedrouzo → Santiago (5 etapas)',
+        desc: 'Recorre la costa cantábrica entre acantilados, playas y villas marineras.'
+      }
     ];
 
     let currentWebLang = 'ES';
     let activeTab = 'inicio';
-    let selectedRouteId = 'camino-frances';
+    let currentRouteStep = 1;
+    let selectedRouteId = '';
     let selectedExplorerTown = '';
-    let activeDurFilter = 'all';
+    let activeDurFilter = '';
 
     function switchWebTab(tab) {
       activeTab = ['inicio', 'rutas', 'guia', 'ligero', 'descargas'].includes(tab) ? tab : 'inicio';
@@ -945,41 +1036,83 @@
         const key = el.getAttribute('data-i18n');
         if (dict[key]) el.textContent = dict[key];
       });
-      renderDurationCompare();
-      renderRoutePills();
-      renderActiveRouteSummary();
-      renderExplorerTowns();
-      renderExplorerHostels();
+      if (currentRouteStep >= 2) renderDurationCompare();
+      if (currentRouteStep >= 3 && selectedRouteId) {
+        renderActiveRouteSummary();
+        renderExplorerTowns();
+        if (selectedExplorerTown) renderExplorerHostels();
+      }
       updateOrderTotals();
+    }
+
+    function goToRouteStep(step) {
+      currentRouteStep = step;
+      const s1 = document.getElementById('rutasStep1');
+      const s2 = document.getElementById('rutasStep2');
+      const s3 = document.getElementById('rutasStep3');
+      if (s1) s1.classList.toggle('hidden', step !== 1);
+      if (s2) s2.classList.toggle('hidden', step !== 2);
+      if (s3) s3.classList.toggle('hidden', step !== 3);
+
+      const c2 = document.getElementById('stepCrumb-2');
+      const c3 = document.getElementById('stepCrumb-3');
+      if (c2) c2.disabled = !activeDurFilter;
+      if (c3) c3.disabled = !selectedRouteId;
+
+      [1, 2, 3].forEach(n => {
+        const c = document.getElementById('stepCrumb-' + n);
+        if (!c) return;
+        const active = n === step;
+        c.className = active
+          ? 'px-2.5 py-1 rounded-lg font-bold bg-[#1E4D3B] text-white transition-all'
+          : 'px-2.5 py-1 rounded-lg font-bold bg-[#F7F3EB] text-[#5F6C65] border border-[#E5DEC9] hover:border-[#1E4D3B] transition-all disabled:opacity-45';
+      });
     }
 
     function filterDuration(dur) {
       activeDurFilter = dur;
-      ['all', 'week', 'fortnight', 'month'].forEach(d => {
-        const b = document.getElementById('durBtn-' + d);
-        if (b) {
-          b.className = (d === dur)
-            ? 'dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#1E4D3B] text-white'
-            : 'dur-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9]';
-        }
-      });
+      selectedRouteId = '';
+      selectedExplorerTown = '';
+      const dict = WEB_I18N[currentWebLang] || WEB_I18N.ES;
+      const durLabels = {
+        week: dict.dur_week || '5–7 días (100 km)',
+        fortnight: dict.dur_fortnight || '10–15 días',
+        month: dict.dur_month || '~1 mes completo',
+        all: dict.dur_all || 'Todos los Caminos'
+      };
+      const badge = document.getElementById('selectedDurBadge');
+      if (badge) badge.textContent = '📅 ' + (durLabels[dur] || dur);
       renderDurationCompare();
+      goToRouteStep(2);
     }
 
     function renderDurationCompare() {
       const grid = document.getElementById('durationCompareGrid');
       if (!grid) return;
-      const list = activeDurFilter === 'all' ? CAMINO_ROUTES : CAMINO_ROUTES.filter(r => r.dur === activeDurFilter);
-      grid.innerHTML = list.map(r => `
-        <button onclick="selectRoute('${r.id}')" class="text-left p-3.5 rounded-2xl border transition-all ${r.id === selectedRouteId ? 'bg-[#EBF3EE] border-[#1E4D3B]' : 'bg-[#F7F3EB] border-[#E5DEC9] hover:border-[#1E4D3B]'}">
-          <div class="flex items-center justify-between text-[10px] font-bold text-[#1E4D3B]">
-            <span>${r.km}</span>
-            <span class="text-[#5F6C65]">${r.diff}</span>
-          </div>
-          <div class="font-bold text-sm text-[#1C2826] mt-1">${r.name}</div>
-          <div class="text-[11px] text-[#5F6C65] mt-0.5 truncate">📍 ${r.start}</div>
-        </button>
-      `).join('');
+      const list = (!activeDurFilter || activeDurFilter === 'all')
+        ? CAMINO_ROUTES
+        : CAMINO_ROUTES
+            .filter(r => r.durs.includes(activeDurFilter))
+            .sort((a, b) => (b.topFor.includes(activeDurFilter) ? 1 : 0) - (a.topFor.includes(activeDurFilter) ? 1 : 0));
+
+      grid.innerHTML = list.map(r => {
+        const isTop = activeDurFilter && activeDurFilter !== 'all' && r.topFor.includes(activeDurFilter);
+        const startHint = (r.tipByDur && r.tipByDur[activeDurFilter]) ? r.tipByDur[activeDurFilter] : r.start;
+        return `
+          <button onclick="selectRoute('${r.id}')" class="text-left p-4 rounded-2xl border transition-all flex flex-col justify-between gap-2 ${r.id === selectedRouteId ? 'bg-[#EBF3EE] border-[#1E4D3B]' : 'bg-[#F7F3EB] border-[#E5DEC9] hover:border-[#1E4D3B]'}">
+            <div>
+              <div class="flex items-center justify-between gap-2 text-[10px] font-bold">
+                <span class="text-[#1E4D3B]">${isTop ? '⭐ Muy recomendado' : r.diff}</span>
+                <span class="text-[#5F6C65]">${r.km}</span>
+              </div>
+              <div class="font-bold text-base text-[#1C2826] mt-1">${r.name}</div>
+              <div class="text-[11px] font-semibold text-[#D48B28] mt-1">📍 ${startHint}</div>
+              <p class="text-[11px] text-[#5F6C65] mt-1.5 leading-relaxed">${r.desc}</p>
+            </div>
+            <div class="text-[11px] font-bold text-[#1E4D3B] pt-1">Ver puntos y albergues →</div>
+          </button>
+        `;
+      }).join('');
     }
 
     async function loadWeeklyNews() {
@@ -1018,69 +1151,62 @@
     function selectRoute(routeId) {
       selectedRouteId = routeId;
       selectedExplorerTown = '';
+      const wrap = document.getElementById('rutasHostelsWrap');
+      if (wrap) wrap.classList.add('hidden');
       renderDurationCompare();
-      renderRoutePills();
       renderActiveRouteSummary();
       renderExplorerTowns();
-      renderExplorerHostels();
-    }
-
-    function renderRoutePills() {
-      const container = document.getElementById('routePillsBar');
-      if (!container) return;
-      container.innerHTML = CAMINO_ROUTES.map(r => {
-        const active = r.id === selectedRouteId;
-        return `<button onclick="selectRoute('${r.id}')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${active ? 'bg-[#1E4D3B] text-white shadow-sm' : 'bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9] hover:border-[#1E4D3B]'}">${r.name}</button>`;
-      }).join('');
+      goToRouteStep(3);
     }
 
     function renderActiveRouteSummary() {
       const dict = WEB_I18N[currentWebLang] || WEB_I18N.ES;
-      const r = CAMINO_ROUTES.find(x => x.id === selectedRouteId) || CAMINO_ROUTES[0];
+      const r = CAMINO_ROUTES.find(x => x.id === selectedRouteId);
       const box = document.getElementById('activeRouteSummary');
-      if (!box) return;
+      if (!box || !r) return;
+      const startHint = (r.tipByDur && r.tipByDur[activeDurFilter]) ? r.tipByDur[activeDurFilter] : r.start;
       box.innerHTML = `
         <div class="flex flex-wrap items-center gap-2">
-          <h3 class="serif-title text-lg font-bold text-[#1C2826]">${r.name}</h3>
-          <span class="px-2 py-0.5 rounded-full bg-white border border-[#E5DEC9] text-[10px] font-bold text-[#1E4D3B]">${r.km}</span>
-          <span class="px-2 py-0.5 rounded-full bg-white border border-[#E5DEC9] text-[10px] font-bold text-[#5F6C65]">${r.stages} ${dict.stages_word} • ${r.diff}</span>
+          <h3 class="serif-title text-xl font-bold text-[#1C2826]">${r.name}</h3>
+          <span class="px-2 py-0.5 rounded-full bg-[#F7F3EB] border border-[#E5DEC9] text-[10px] font-bold text-[#1E4D3B]">${r.km}</span>
+          <span class="px-2 py-0.5 rounded-full bg-[#F7F3EB] border border-[#E5DEC9] text-[10px] font-bold text-[#5F6C65]">${r.stages} ${dict.stages_word} • ${r.diff}</span>
         </div>
-        <p class="text-xs text-[#5F6C65]">📍 <strong>${r.start}</strong> — ${r.desc}</p>
-        <p class="text-xs text-[#1E4D3B] bg-white/80 rounded-xl px-3 py-2 border border-[#E5DEC9]">🥾 <strong>Últimos 100 km habituales:</strong> ${r.last100}</p>
+        <p class="text-xs text-[#5F6C65]">📍 <strong>${startHint}</strong> — ${r.desc}</p>
+        <p class="text-xs text-[#1E4D3B] bg-[#F7F3EB] rounded-xl px-3 py-2 border border-[#E5DEC9]">🥾 <strong>Últimos 100 km habituales:</strong> ${r.last100}</p>
       `;
     }
 
     function renderExplorerTowns() {
-      const dict = WEB_I18N[currentWebLang] || WEB_I18N.ES;
       const towns = (typeof PUEBLOS_POR_ORDEN !== 'undefined' && PUEBLOS_POR_ORDEN[selectedRouteId]) ? PUEBLOS_POR_ORDEN[selectedRouteId] : [];
       const container = document.getElementById('expTownsContainer');
+      const countEl = document.getElementById('routeTownCount');
+      if (countEl) countEl.textContent = towns.length + ' puntos de paso';
       if (!container) return;
-      const allBtn = `<button onclick="selectExplorerTown('')" class="px-2.5 py-1 rounded-full text-[11px] font-bold transition-all ${selectedExplorerTown === '' ? 'bg-[#1E4D3B] text-white' : 'bg-white text-[#1C2826] border border-[#E5DEC9] hover:border-[#1E4D3B]'}">${dict.all_towns}</button>`;
-      const townBtns = towns.map(t => {
+      container.innerHTML = towns.map((t, idx) => {
         const active = selectedExplorerTown.toLowerCase() === t.toLowerCase();
-        return `<button onclick="selectExplorerTown('${t.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-full text-[11px] font-bold capitalize transition-all ${active ? 'bg-[#1E4D3B] text-white' : 'bg-white text-[#1C2826] border border-[#E5DEC9] hover:border-[#1E4D3B]'}">${t}</button>`;
+        return `<button onclick="selectExplorerTown('${t.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-full text-xs font-bold capitalize transition-all ${active ? 'bg-[#1E4D3B] text-white shadow-sm' : 'bg-[#F7F3EB] text-[#1C2826] border border-[#E5DEC9] hover:border-[#1E4D3B]'}">${idx + 1}. ${t}</button>`;
       }).join('');
-      container.innerHTML = allBtn + townBtns;
     }
 
     function selectExplorerTown(town) {
       selectedExplorerTown = town;
       renderExplorerTowns();
       renderExplorerHostels();
+      const wrap = document.getElementById('rutasHostelsWrap');
+      if (wrap) wrap.classList.remove('hidden');
     }
 
     function renderExplorerHostels() {
       const dict = WEB_I18N[currentWebLang] || WEB_I18N.ES;
-      const q = (document.getElementById('expSearchInput').value || '').trim().toLowerCase();
       const list = (typeof ALBERGUES_Y_HOTELES !== 'undefined' && ALBERGUES_Y_HOTELES[selectedRouteId]) ? ALBERGUES_Y_HOTELES[selectedRouteId] : [];
       const grid = document.getElementById('expHostelsGrid');
-      if (!grid) return;
+      const titleEl = document.getElementById('selectedTownTitle');
+      const countEl = document.getElementById('selectedTownHostelCount');
+      if (!grid || !selectedExplorerTown) return;
 
-      const filtered = list.filter(item => {
-        const matchTown = !selectedExplorerTown || (item.town || '').toLowerCase() === selectedExplorerTown.toLowerCase();
-        const matchQuery = !q || (item.name || '').toLowerCase().includes(q) || (item.town || '').toLowerCase().includes(q);
-        return matchTown && matchQuery;
-      });
+      const filtered = list.filter(item => (item.town || '').toLowerCase() === selectedExplorerTown.toLowerCase());
+      if (titleEl) titleEl.textContent = `🏠 2. Albergues y alojamientos en ${selectedExplorerTown}`;
+      if (countEl) countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}`;
 
       if (filtered.length === 0) {
         grid.innerHTML = `<div class="col-span-full text-center py-8 text-xs text-[#5F6C65]">${dict.no_hostels}</div>`;
