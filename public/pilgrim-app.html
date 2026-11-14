@@ -4260,7 +4260,6 @@
       applyGlobalTranslations(lang);
       if (typeof currentUser !== 'undefined' && currentUser) {
         currentUser.lang = currentAppLang;
-        if (data.token) localStorage.setItem('vieira_pilgrim_jwt', data.token);
         localStorage.setItem('vieira_current_user', JSON.stringify(currentUser));
         if (typeof renderHomeBookings === 'function') {
           renderHomeBookings();
