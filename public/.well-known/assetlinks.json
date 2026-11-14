@@ -1,0 +1,22 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.smartvieira.peregrino",
+      "sha256_cert_fingerprints": [
+        "C2:21:DA:09:A3:16:7E:92:A5:63:75:77:9F:A0:8C:77:FA:4B:B8:03:5D:E5:3D:36:7A:16:E2:47:68:6E:48:CA"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.smartvieira.repartidor",
+      "sha256_cert_fingerprints": [
+        "C2:21:DA:09:A3:16:7E:92:A5:63:75:77:9F:A0:8C:77:FA:4B:B8:03:5D:E5:3D:36:7A:16:E2:47:68:6E:48:CA"
+      ]
+    }
+  }
+]
