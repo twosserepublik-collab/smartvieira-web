@@ -1887,11 +1887,28 @@ const server = http.createServer(async (req, res) => {
   // =========================================================================
   // STATIC FILE SERVING
   // =========================================================================
-  let staticUrl = reqPath;
+  const seoRoutes = {
+    '/camino-frances': '/caminos/camino-frances.html',
+    '/camino-portugues': '/caminos/camino-portugues.html',
+    '/camino-portugues-costa': '/caminos/camino-portugues-costa.html',
+    '/camino-del-norte': '/caminos/camino-del-norte.html',
+    '/camino-primitivo': '/caminos/camino-primitivo.html',
+    '/camino-ingles': '/caminos/camino-ingles.html',
+    '/camino-sanabres': '/caminos/camino-sanabres.html',
+    '/camino-invierno': '/caminos/camino-invierno.html',
+    '/camino-fisterra-muxia': '/caminos/camino-fisterra-muxia.html',
+    '/transporte-mochilas-camino-santiago': '/transporte-mochilas-camino-santiago.html'
+  };
+
+  let staticUrl = reqPath.length > 1 && reqPath.endsWith('/') ? reqPath.slice(0, -1) : reqPath;
+  let isSeoPage = false;
   if (staticUrl === '/') {
     staticUrl = '/index.html';
   } else if (staticUrl === '/downloads.html') {
     staticUrl = '/descargar.html';
+  } else if (seoRoutes[staticUrl]) {
+    staticUrl = seoRoutes[staticUrl];
+    isSeoPage = true;
   }
 
   let filePath = path.join(PUBLIC_DIR, staticUrl);
@@ -1904,6 +1921,7 @@ const server = http.createServer(async (req, res) => {
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
       filePath = path.join(PUBLIC_DIR, 'index.html');
+      isSeoPage = false;
     }
 
     const ext = path.extname(filePath).toLowerCase();
@@ -1917,9 +1935,11 @@ const server = http.createServer(async (req, res) => {
         const isImage = ['.jpg', '.jpeg', '.png', '.webp', '.svg', '.ico'].includes(ext);
         const headers = {
           'Content-Type': contentType,
-          'Cache-Control': isImage ? 'public, max-age=604800, immutable' : 'no-cache, no-store, must-revalidate'
+          'Cache-Control': isImage
+            ? 'public, max-age=604800, immutable'
+            : (isSeoPage ? 'public, max-age=3600' : 'no-cache, no-store, must-revalidate')
         };
-        if (!isImage) {
+        if (!isImage && !isSeoPage) {
           headers['Pragma'] = 'no-cache';
           headers['Expires'] = '0';
         }

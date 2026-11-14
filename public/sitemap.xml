@@ -16,45 +16,105 @@
     <xhtml:link rel="alternate" hreflang="ko" href="https://www.smartvieira.com/" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://www.smartvieira.com/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.smartvieira.com/" />
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/camino-frances</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://www.smartvieira.com/images/caminos/frances-hero.jpg</image:loc>
-      <image:title>Catedral de Santiago de Compostela - Meta del Camino de Santiago</image:title>
+      <image:title>Camino Francés - Guía de etapas y albergues SmartVieira</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/camino-portugues</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://www.smartvieira.com/images/caminos/portugues-hero.jpg</image:loc>
-      <image:title>Puente medieval de Ponte de Lima - Camino Portugués</image:title>
+      <image:title>Camino Portugués - Guía de etapas y albergues SmartVieira</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/camino-portugues-costa</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://www.smartvieira.com/images/caminos/costa-hero.jpg</image:loc>
-      <image:title>Monasterio de Santa María de Oia - Camino Portugués por la Costa</image:title>
+      <image:title>Camino Portugués por la Costa - Guía de etapas y albergues SmartVieira</image:title>
     </image:image>
-    <image:image>
-      <image:loc>https://www.smartvieira.com/images/caminos/norte-hero.jpg</image:loc>
-      <image:title>Playa de As Catedrais - Camino del Norte</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.smartvieira.com/images/caminos/primitivo-hero.jpg</image:loc>
-      <image:title>Muralla Romana de Lugo - Camino Primitivo</image:title>
-    </image:image>
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/camino-ingles</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://www.smartvieira.com/images/caminos/ingles-hero.jpg</image:loc>
-      <image:title>Ría de Ferrol y Castillo de San Felipe - Camino Inglés</image:title>
+      <image:title>Camino Inglés - Guía de etapas y albergues SmartVieira</image:title>
     </image:image>
-    <image:image>
-      <image:loc>https://www.smartvieira.com/images/caminos/sanabres-hero.jpg</image:loc>
-      <image:title>Puebla de Sanabria - Camino Sanabrés y Vía de la Plata</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.smartvieira.com/images/caminos/invierno-hero.jpg</image:loc>
-      <image:title>Las Médulas - Camino de Invierno</image:title>
-    </image:image>
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/camino-fisterra-muxia</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://www.smartvieira.com/images/caminos/fisterra-hero.jpg</image:loc>
-      <image:title>Faro de Fisterra - Camino de Fisterra y Muxía</image:title>
+      <image:title>Fisterra y Muxía - Guía de etapas y albergues SmartVieira</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/camino-primitivo</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/primitivo-hero.jpg</image:loc>
+      <image:title>Camino Primitivo - Guía de etapas y albergues SmartVieira</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/camino-sanabres</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/sanabres-hero.jpg</image:loc>
+      <image:title>Camino Sanabrés / Vía Plata - Guía de etapas y albergues SmartVieira</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/camino-invierno</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/invierno-hero.jpg</image:loc>
+      <image:title>Camino de Invierno - Guía de etapas y albergues SmartVieira</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/camino-del-norte</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/norte-hero.jpg</image:loc>
+      <image:title>Camino del Norte - Guía de etapas y albergues SmartVieira</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.smartvieira.com/transporte-mochilas-camino-santiago</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://www.smartvieira.com/images/smartvieira-product.jpg</image:loc>
-      <image:title>Concha Inteligente SmartVieira para transporte de mochilas en el Camino de Santiago</image:title>
+      <image:title>Transporte de mochilas en el Camino de Santiago SmartVieira</image:title>
     </image:image>
   </url>
   <url>

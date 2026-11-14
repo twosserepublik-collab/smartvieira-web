@@ -886,16 +886,30 @@
 
   <!-- FOOTER DISCRETO (SIN ENLACES A APPS WEB NI A ADMIN) -->
   <footer class="border-t border-[#E5DEC9] bg-[#EFE9DC]/60 py-6 px-4">
-    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#5F6C65]">
-      <div>
-        <strong class="text-[#1C2826]">SmartVieira</strong> • Santiago de Compostela • <span data-i18n="footer_rights">Todos los derechos reservados</span>
+    <div class="max-w-5xl mx-auto flex flex-col gap-4 text-xs text-[#5F6C65]">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div>
+          <strong class="text-[#1C2826]">SmartVieira</strong> • Santiago de Compostela • <span data-i18n="footer_rights">Todos los derechos reservados</span>
+        </div>
+        <div class="flex items-center gap-5">
+          <button onclick="switchWebTab('rutas')" class="hover:text-[#1E4D3B] transition-colors" data-i18n="tab_routes">🗺️ Rutas y Albergues</button>
+          <button onclick="switchWebTab('guia')" class="hover:text-[#1E4D3B] transition-colors" data-i18n="tab_guide">📖 Guía del Peregrino</button>
+          <a href="/privacidad.html" class="text-[#5F6C65]/80 hover:text-[#1C2826] transition-colors">Privacidad</a>
+          <a href="/descargar.html" class="text-[#5F6C65]/80 hover:text-[#1C2826] transition-colors" data-i18n="footer_apk">Centro de Descargas</a>
+        </div>
       </div>
-      <div class="flex items-center gap-5">
-        <button onclick="switchWebTab('rutas')" class="hover:text-[#1E4D3B] transition-colors" data-i18n="tab_routes">🗺️ Rutas y Albergues</button>
-        <button onclick="switchWebTab('guia')" class="hover:text-[#1E4D3B] transition-colors" data-i18n="tab_guide">📖 Guía del Peregrino</button>
-        <a href="/privacidad.html" class="text-[#5F6C65]/80 hover:text-[#1C2826] transition-colors">Privacidad</a>
-        <a href="/descargar.html" class="text-[#5F6C65]/80 hover:text-[#1C2826] transition-colors" data-i18n="footer_apk">Centro de Descargas</a>
-      </div>
+      <nav aria-label="Guías SEO de rutas y servicios del Camino de Santiago" class="border-t border-[#E5DEC9]/70 pt-3 flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 text-[11px] text-[#5F6C65]/90">
+        <a href="/camino-frances" class="hover:text-[#1E4D3B] transition-colors">Camino Francés</a>
+        <a href="/camino-portugues" class="hover:text-[#1E4D3B] transition-colors">Camino Portugués</a>
+        <a href="/camino-portugues-costa" class="hover:text-[#1E4D3B] transition-colors">Portugués por la Costa</a>
+        <a href="/camino-del-norte" class="hover:text-[#1E4D3B] transition-colors">Camino del Norte</a>
+        <a href="/camino-primitivo" class="hover:text-[#1E4D3B] transition-colors">Camino Primitivo</a>
+        <a href="/camino-ingles" class="hover:text-[#1E4D3B] transition-colors">Camino Inglés</a>
+        <a href="/camino-sanabres" class="hover:text-[#1E4D3B] transition-colors">Camino Sanabrés</a>
+        <a href="/camino-invierno" class="hover:text-[#1E4D3B] transition-colors">Camino de Invierno</a>
+        <a href="/camino-fisterra-muxia" class="hover:text-[#1E4D3B] transition-colors">Fisterra y Muxía</a>
+        <a href="/transporte-mochilas-camino-santiago" class="font-semibold text-[#1E4D3B] hover:underline">Transporte de Mochilas</a>
+      </nav>
     </div>
   </footer>
 
