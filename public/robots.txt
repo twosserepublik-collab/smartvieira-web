@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /descargar.html
+Allow: /pilgrim-app.html
+Allow: /courier-app.html
+Disallow: /admin.html
+Disallow: /api/
+
+Sitemap: https://www.smartvieira.com/sitemap.xml

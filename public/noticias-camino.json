@@ -1,0 +1,26 @@
+{
+  "updatedAt": "2026-11-14",
+  "weekLabel": "Actualización Semanal • Noviembre 2026",
+  "news": [
+    {
+      "id": "news-2026-w46-1",
+      "date": "14 Nov 2026",
+      "route": "Camino Francés",
+      "badge": "Albergues y Afluencia",
+      "title": "Nuevos albergues tradicionales para caminantes de larga distancia antes del Año Santo 2027",
+      "summary": "La Camino Francés Federación impulsa modelos de acogida tradicional centrados en proteger al peregrino de larga distancia frente a la saturación en los últimos 100 km desde Sarria. Los albergues públicos mantienen precios en torno a los 10 €, mientras los privados oscilan entre 15 € y 27 €.",
+      "tip": "Consejo SmartVieira: Si caminas en temporada media o alta en los últimos 100 km, reserva tu alojamiento y el transporte de mochila con antelación para evitar cuellos de botella.",
+      "source": "Camino Francés Federación / Red de Albergues"
+    },
+    {
+      "id": "news-2026-w46-2",
+      "date": "12 Nov 2026",
+      "route": "Rutas de Galicia",
+      "badge": "Nuevas Aperturas",
+      "title": "Refuerzo de la acogida tradicional en Galicia: Albergue Portus Apostoli en Noia y mejoras en rutas secundarias",
+      "summary": "La red de acogida jacobea continúa ampliándose en itinerarios alternativos menos masificados, destacando el Albergue Municipal de Noia (Portus Apostoli) en la ría de Muros-Noia bajo modelo de hospitalidad voluntaria, además de actualizaciones de refugios en el Primitivo y Portugués.",
+      "tip": "Consejo SmartVieira: Las rutas secundarias ofrecen etapas más tranquilas antes de confluir en Santiago; lleva siempre tu credencial con 2 sellos diarios en los últimos 100 km.",
+      "source": "Gronze / Asociaciones de Amigos del Camino"
+    }
+  ]
+}
