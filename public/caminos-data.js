@@ -58,17 +58,7 @@ const PUEBLOS_POR_ORDEN = {
     "pontevedra",
     "caldas de reis",
     "padrón",
-    "santiago",
-    "vila do conde",
-    "póvoa de varzim",
-    "esposende",
-    "viana do castelo",
-    "caminha",
-    "vila nova de cerveira",
-    "a guarda",
-    "oia",
-    "baiona",
-    "vigo"
+    "santiago"
   ],
   "camino-portugues-costa": [
     "porto",
@@ -97,11 +87,10 @@ const PUEBLOS_POR_ORDEN = {
     "miño",
     "betanzos",
     "presedo",
-    "hospital de bruma",
-    "sigüeiro",
-    "santiago de compostela",
     "a coruña",
     "sergude",
+    "hospital de bruma",
+    "sigüeiro",
     "santiago"
   ],
   "camino-del-norte": [
@@ -151,6 +140,7 @@ const PUEBLOS_POR_ORDEN = {
     "tineo",
     "pola de allande",
     "berducedo",
+    "grandas de salime",
     "a fonsagrada",
     "o cádavo",
     "castroverde",
@@ -159,8 +149,7 @@ const PUEBLOS_POR_ORDEN = {
     "melide",
     "arzúa",
     "o pedrouzo",
-    "santiago",
-    "grandas de salime"
+    "santiago"
   ],
   "camino-sanabres": [
     "sevilla",
@@ -186,28 +175,25 @@ const PUEBLOS_POR_ORDEN = {
     "santiago"
   ],
   "camino-invierno": [
-    "león",
     "ponferrada",
-    "ourense",
+    "villavieja",
+    "las médulas",
+    "puente de domingo flórez",
+    "sobradelo",
     "o barco de valdeorras",
+    "vilamartín de valdeorras",
     "a rúa",
     "quiroga",
+    "a pobra do brollón",
     "monforte de lemos",
+    "diomondi",
     "chantada",
-    "pontevedra",
     "rodeiro",
     "lalín",
     "silleda",
     "a estrada",
     "vedra",
     "boqueixón",
-    "villavieja",
-    "las médulas",
-    "puente de domingo flórez",
-    "sobradelo",
-    "vilamartín de valdeorras",
-    "a pobra do brollón",
-    "diomondi",
     "santiago"
   ],
   "camino-fisterra-muxia": [
@@ -216,11 +202,10 @@ const PUEBLOS_POR_ORDEN = {
     "a pena",
     "olveiroa",
     "o logoso",
-    "xaviña",
     "hospital",
-    "fisterra",
-    "corcubión",
     "cee",
+    "corcubión",
+    "fisterra",
     "lires",
     "muxía"
   ]
@@ -1303,126 +1288,6 @@ const ALBERGUES_Y_HOTELES = {
       "town": "Santiago"
     },
     {
-      "name": "Albergue de Peregrinos de Vila do Conde (Vila do Conde)",
-      "town": "Vila do Conde"
-    },
-    {
-      "name": "HI Vila do Conde (Vila do Conde)",
-      "town": "Vila do Conde"
-    },
-    {
-      "name": "Bellamar Hostel (Vila do Conde)",
-      "town": "Vila do Conde"
-    },
-    {
-      "name": "Albergue de Peregrinos de Póvoa de Varzim (Póvoa de Varzim)",
-      "town": "Póvoa de Varzim"
-    },
-    {
-      "name": "Póvoa de Varzim Guest House (Póvoa de Varzim)",
-      "town": "Póvoa de Varzim"
-    },
-    {
-      "name": "Big House (Póvoa de Varzim)",
-      "town": "Póvoa de Varzim"
-    },
-    {
-      "name": "Albergue de Peregrinos de Esposende (Esposende)",
-      "town": "Esposende"
-    },
-    {
-      "name": "Hostel do Rio (Esposende)",
-      "town": "Esposende"
-    },
-    {
-      "name": "Hi Esposende (Esposende)",
-      "town": "Esposende"
-    },
-    {
-      "name": "Albergue de Peregrinos de Viana (Viana do Castelo)",
-      "town": "Viana do Castelo"
-    },
-    {
-      "name": "HI Viana do Castelo (Viana do Castelo)",
-      "town": "Viana do Castelo"
-    },
-    {
-      "name": "Hostel Maçã de Eva (Viana do Castelo)",
-      "town": "Viana do Castelo"
-    },
-    {
-      "name": "Albergue de Peregrinos de Caminha (Caminha)",
-      "town": "Caminha"
-    },
-    {
-      "name": "Arca Nova Guest House (Caminha)",
-      "town": "Caminha"
-    },
-    {
-      "name": "Bom Caminha (Caminha)",
-      "town": "Caminha"
-    },
-    {
-      "name": "Albergue de Peregrinos de Vila Nova de Cerveira (Vila Nova de Cerveira)",
-      "town": "Vila Nova de Cerveira"
-    },
-    {
-      "name": "Albergue de Peregrinos de A Guarda (A Guarda)",
-      "town": "A Guarda"
-    },
-    {
-      "name": "O Peirao (A Guarda)",
-      "town": "A Guarda"
-    },
-    {
-      "name": "A Gaviota (A Guarda)",
-      "town": "A Guarda"
-    },
-    {
-      "name": "O Cruceiro (A Guarda)",
-      "town": "A Guarda"
-    },
-    {
-      "name": "A Cabeciña (Oia)",
-      "town": "Oia"
-    },
-    {
-      "name": "Aguncheiro (Oia)",
-      "town": "Oia"
-    },
-    {
-      "name": "O Acivro (Oia)",
-      "town": "Oia"
-    },
-    {
-      "name": "Albergue de Peregrinos de Baiona (Baiona)",
-      "town": "Baiona"
-    },
-    {
-      "name": "Santa Marta (Baiona)",
-      "town": "Baiona"
-    },
-    {
-      "name": "Estela do Mar (Baiona)",
-      "town": "Baiona"
-    },
-    {
-      "name": "Albergue de Peregrinos de Vigo (Vigo)",
-      "town": "Vigo"
-    },
-    {
-      "name": "Albergue Estación (Vigo)",
-      "town": "Vigo"
-    },
-    {
-      "name": "The Last Stamp (Vigo)",
-      "town": "Vigo"
-    },
-    {
-      "name": "Vigosmile (Vigo)",
-      "town": "Vigo"
-    },
-    {
       "name": "Santiago Apóstol (Redondela)",
       "town": "Redondela"
     },
@@ -1904,7 +1769,7 @@ const ALBERGUES_Y_HOTELES = {
     },
     {
       "name": "Seminario Menor / Albergue Monte do Gozo (Santiago de Compostela)",
-      "town": "Santiago de Compostela"
+      "town": "Santiago"
     },
     {
       "name": "Albergue de Peregrinos de Ferrol (Ferrol)",
@@ -2032,19 +1897,19 @@ const ALBERGUES_Y_HOTELES = {
     },
     {
       "name": "Albergue San Lázaro / Monte do Gozo (Santiago)",
-      "town": "Santiago de Compostela"
+      "town": "Santiago"
     },
     {
       "name": "Albergue Fin del Camino (Santiago)",
-      "town": "Santiago de Compostela"
+      "town": "Santiago"
     },
     {
       "name": "Albergue Roots & Boots (Santiago)",
-      "town": "Santiago de Compostela"
+      "town": "Santiago"
     },
     {
       "name": "Albergue La Estación (Santiago)",
-      "town": "Santiago de Compostela"
+      "town": "Santiago"
     }
   ],
   "camino-del-norte": [
