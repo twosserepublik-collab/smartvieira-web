@@ -269,36 +269,36 @@
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2.5">
           <span class="w-8 h-8 rounded-xl bg-[#EBF3EE] text-[#1E4D3B] flex items-center justify-center text-sm shrink-0">🧭</span>
-          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight">9 Rutas</div><div class="text-[10px] text-[#5F6C65]">Caminos oficiales</div></div>
+          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight" data-i18n="kpi_routes">9 Rutas</div><div class="text-[10px] text-[#5F6C65]" data-i18n="kpi_routes_sub">Caminos oficiales</div></div>
         </div>
         <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2.5">
           <span class="w-8 h-8 rounded-xl bg-[#EFE9DC] text-[#D48B28] flex items-center justify-center text-sm shrink-0">🏠</span>
-          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight">691 Albergues</div><div class="text-[10px] text-[#5F6C65]">Públicos y privados</div></div>
+          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight" data-i18n="kpi_hostels">691 Albergues</div><div class="text-[10px] text-[#5F6C65]" data-i18n="kpi_hostels_sub">Públicos y privados</div></div>
         </div>
         <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2.5">
           <span class="w-8 h-8 rounded-xl bg-[#003580]/10 text-[#003580] flex items-center justify-center text-sm shrink-0">🏨</span>
-          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight">531 Reservas</div><div class="text-[10px] text-[#5F6C65]">Enlace Booking</div></div>
+          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight" data-i18n="kpi_booking">531 Reservas</div><div class="text-[10px] text-[#5F6C65]" data-i18n="kpi_booking_sub">Enlace Booking</div></div>
         </div>
         <div class="glass-card rounded-2xl px-4 py-3 flex items-center gap-2.5">
           <span class="w-8 h-8 rounded-xl bg-[#EBF3EE] text-[#1E4D3B] flex items-center justify-center text-sm shrink-0">🌍</span>
-          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight">8 Idiomas</div><div class="text-[10px] text-[#5F6C65]">Guía internacional</div></div>
+          <div><div class="text-sm font-extrabold text-[#1C2826] leading-tight" data-i18n="kpi_langs">8 Idiomas</div><div class="text-[10px] text-[#5F6C65]" data-i18n="kpi_langs_sub">Guía internacional</div></div>
         </div>
       </div>
 
       <div class="glass-card rounded-3xl p-6 sm:p-7 space-y-5">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <span class="px-3 py-1 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold uppercase tracking-wider border border-[#1E4D3B]/15">
+            <span class="px-3 py-1 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold uppercase tracking-wider border border-[#1E4D3B]/15" data-i18n="caminos_badge">
               🧭 Mapa y Rutas Jacobeas
             </span>
-            <h1 class="text-2xl sm:text-3xl font-bold text-[#1C2826] mt-2 leading-tight">
+            <h1 class="text-2xl sm:text-3xl font-bold text-[#1C2826] mt-2 leading-tight" data-i18n="caminos_title">
               Los Caminos de Santiago: mapas, variantes y etapas
             </h1>
-            <p class="text-xs sm:text-sm text-[#5F6C65] mt-1 max-w-2xl">
+            <p class="text-xs sm:text-sm text-[#5F6C65] mt-1 max-w-2xl" data-i18n="caminos_sub">
               Pulsa cualquier trazado en el mapa o elige una ruta abajo para consultar sus variantes de inicio, kilometraje, dificultad y tabla de etapas habituales.
             </p>
           </div>
-          <button onclick="resetMapSelection()" id="btnShowAllMap" class="hidden shrink-0 px-3 py-1.5 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] text-xs font-bold text-[#1C2826] hover:border-[#1E4D3B] transition-all">
+          <button onclick="resetMapSelection()" id="btnShowAllMap" class="hidden shrink-0 px-3 py-1.5 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] text-xs font-bold text-[#1C2826] hover:border-[#1E4D3B] transition-all" data-i18n="caminos_show_all">
             🗺️ Ver todos en el mapa
           </button>
         </div>
@@ -354,7 +354,7 @@
 
           <!-- Lista rápida de Caminos para elegir -->
           <div class="lg:col-span-5 space-y-2.5">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-[#5F6C65]">Elige un Camino para ver su guía completa</h2>
+            <h2 class="text-xs font-bold uppercase tracking-wider text-[#5F6C65]" data-i18n="caminos_pick_title">Elige un Camino para ver su guía completa</h2>
             <div id="mapCaminoList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2"></div>
           </div>
         </div>
@@ -579,49 +579,43 @@
           <!-- 5. Viaje interior, Espiritualidad y Xacobeo 2027 -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span>🕊️ Camino Interior, Espiritualidad, Fe y Año Santo Xacobeo 2027</span>
+              <span data-i18n="tip5_title">🕊️ Camino Interior, Espiritualidad, Fe y Año Santo Xacobeo 2027</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
             <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
-              <p><strong>Encontrarse con uno mismo:</strong> Más allá de un viaje apasionante de senderismo y cultura, caminar cada mañana sin prisas ni pantallas regala claridad mental, silencio interior y una profunda sensación de renovación personal.</p>
-              <p><strong>Dimensión religiosa y Xacobeo 2027:</strong> Desde el siglo IX los peregrinos acuden ante la tumba del Apóstol Santiago. En los albergues parroquiales se mantiene la acogida fraterna tradicional, la oración vespertina y las bendiciones al peregrino, culminando en la Misa del Peregrino en la Catedral y el Año Santo Compostelano 2027.</p>
+              <p data-i18n-html="tip5_p1"><strong>Encontrarse con uno mismo:</strong> Más allá de un viaje apasionante de senderismo y cultura, caminar cada mañana sin prisas ni pantallas regala claridad mental, silencio interior y una profunda sensación de renovación personal.</p>
+              <p data-i18n-html="tip5_p2"><strong>Dimensión religiosa y Xacobeo 2027:</strong> Desde el siglo IX los peregrinos acuden ante la tumba del Apóstol Santiago. En los albergues parroquiales se mantiene la acogida fraterna tradicional, la oración vespertina y las bendiciones al peregrino, culminando en la Misa del Peregrino en la Catedral y el Año Santo Compostelano 2027.</p>
             </div>
           </details>
 
           <!-- 6. Cómo llegar al inicio y volver desde Santiago -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span>🚆 Cómo llegar al punto de inicio y volver desde Santiago</span>
+              <span data-i18n="tip6_title">🚆 Cómo llegar al punto de inicio y volver desde Santiago</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
             <div class="text-xs text-[#5F6C65] leading-relaxed pt-3 space-y-3">
               <div class="grid sm:grid-cols-2 gap-2.5">
                 <div class="bg-white rounded-xl border border-[#E5DEC9] p-3 space-y-1">
                   <div class="font-bold text-[#1E4D3B]">🏔️ Saint-Jean-Pied-de-Port / Roncesvalles</div>
-                  <p><strong>Tren:</strong> SNCF TER desde Bayona a SJPP (~1h). A Bayona llegan TGV desde París/Hendaya.</p>
-                  <p><strong>Bus:</strong> ALSA Pamplona ↔ Roncesvalles / SJPP (temporada abr–oct). Desde Pamplona taxis compartidos disponibles todo el año.</p>
+                  <p data-i18n-html="tip6_r1"><strong>Tren:</strong> SNCF TER desde Bayona a SJPP (~1h). <strong>Bus:</strong> ALSA Pamplona ↔ Roncesvalles / SJPP (abr–oct) y taxis compartidos desde Pamplona todo el año.</p>
                 </div>
                 <div class="bg-white rounded-xl border border-[#E5DEC9] p-3 space-y-1">
-                  <div class="font-bold text-[#1E4D3B]">🥾 Sarria y Ponferrada (Últimos 100–200 km)</div>
-                  <p><strong>Tren:</strong> Renfe AVE/Alvia directo desde Madrid, Barcelona, León y Ourense a Sarria y Ponferrada.</p>
-                  <p><strong>Bus:</strong> Monbus / ALSA directos desde Lugo, Santiago y Aeropuerto de Santiago (SCQ).</p>
+                  <div class="font-bold text-[#1E4D3B]">🥾 Sarria &amp; Ponferrada (100–200 km)</div>
+                  <p data-i18n-html="tip6_r2"><strong>Tren:</strong> Renfe AVE/Alvia directo desde Madrid, Barcelona, León y Ourense. <strong>Bus:</strong> Monbus / ALSA desde Lugo, Santiago y aeropuerto SCQ.</p>
                 </div>
                 <div class="bg-white rounded-xl border border-[#E5DEC9] p-3 space-y-1">
-                  <div class="font-bold text-[#1E4D3B]">🇵🇹 Oporto, Tui y Vigo (Portugués / Costa)</div>
-                  <p><strong>Avión + Tren:</strong> Aeropuerto de Oporto (OPO) conectado por Metro (línea E) al centro y tren CP Celta Porto-Campanhã ↔ Valença/Vigo.</p>
-                  <p><strong>Bus:</strong> FlixBus y ALSA conectan Oporto, Valença, Tui y Vigo diariamente.</p>
+                  <div class="font-bold text-[#1E4D3B]">🇵🇹 Porto, Tui &amp; Vigo</div>
+                  <p data-i18n-html="tip6_r3"><strong>Avión + Tren:</strong> Metro E desde Aeropuerto de Oporto (OPO) y tren CP Celta Porto ↔ Valença/Vigo. <strong>Bus:</strong> FlixBus y ALSA diarios.</p>
                 </div>
                 <div class="bg-white rounded-xl border border-[#E5DEC9] p-3 space-y-1">
-                  <div class="font-bold text-[#1E4D3B]">🌊 Ferrol, Oviedo, Irún y Sevilla/Ourense</div>
-                  <p><strong>Norte / Primitivo:</strong> ALSA/Renfe desde Bilbao/San Sebastián (Irún) y Oviedo. Ferrol tiene tren directo desde A Coruña (FGC/Renfe).</p>
-                  <p><strong>Vía de la Plata / Sanabrés:</strong> AVE directo a Ourense y Puebla de Sanabria desde Madrid en ~2h15m.</p>
+                  <div class="font-bold text-[#1E4D3B]">🌊 Ferrol, Oviedo, Irún &amp; Ourense</div>
+                  <p data-i18n-html="tip6_r4"><strong>Norte / Primitivo:</strong> ALSA/Renfe desde Bilbao, San Sebastián y Oviedo; tren a Ferrol desde A Coruña. <strong>Sanabrés:</strong> AVE directo a Ourense y Puebla de Sanabria.</p>
                 </div>
               </div>
               <div class="bg-[#EBF3EE]/70 border border-[#1E4D3B]/15 rounded-xl p-3 space-y-1">
-                <div class="font-bold text-[#1E4D3B]">✈️ Regreso desde Santiago, Fisterra y Muxía</div>
-                <p><strong>Aeropuerto Santiago-Rosalía de Castro (SCQ):</strong> Autobús Freire cada 20–30 min desde la Estación Intermodal y centro (~20 min).</p>
-                <p><strong>Tren AVE / Larga Distancia:</strong> Conexiones directas Renfe desde la Estación Intermodal a Madrid (~3h), A Coruña, Vigo, León y Zaragoza.</p>
-                <p><strong>Desde Fisterra y Muxía:</strong> Autobuses diarios de Monbus de vuelta a la Estación Intermodal de Santiago (~2h30m Fisterra / ~2h10m Muxía).</p>
+                <div class="font-bold text-[#1E4D3B]" data-i18n="tip6_ret_t">✈️ Regreso desde Santiago, Fisterra y Muxía</div>
+                <p data-i18n-html="tip6_ret_d"><strong>Aeropuerto SCQ:</strong> bus Freire cada 20–30 min (~20 min). <strong>AVE Renfe:</strong> conexiones directas a Madrid (~3h), A Coruña, Vigo y León. <strong>Fisterra / Muxía:</strong> buses diarios Monbus a Santiago (~2h10m–2h30m).</p>
               </div>
             </div>
           </details>
@@ -629,54 +623,54 @@
           <!-- 7. Credencial, 2 sellos diarios, Compostela y Bicigrinos -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span>🪪 Credencial, Norma de los 2 Sellos Diarios, Compostela y Bicigrinos</span>
+              <span data-i18n="tip7_title">🪪 Credencial, Norma de los 2 Sellos Diarios, Compostela y Bicigrinos</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
             <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
-              <p><strong>Distancia mínima oficial:</strong> Para obtener la <em>Compostela</em> debes recorrer al menos los <strong>últimos 100 km continuos a pie</strong> (o <strong>200 km en bicicleta</strong>) hasta Santiago.</p>
-              <p><strong>Norma obligatoria de los 2 sellos diarios:</strong> Dentro de los últimos 100 km (o últimos 200 km en bici) la Oficina del Peregrino exige <strong>al menos 2 sellos por día con fecha</strong> en la Credencial (sella al salir/desayunar y a mitad o al llegar). Antes de los últimos 100 km basta con 1 sello diario.</p>
-              <p><strong>Dónde conseguir la Credencial:</strong> En Asociaciones de Amigos del Camino, catedrales, parroquias, albergues de inicio (SJPP, Sarria, Tui, Ferrol, Ourense) o por correo postal oficial.</p>
-              <p><strong>🚲 Bicigrinos:</strong> Los albergues públicos priorizan plaza al caminante a pie hasta última hora de la tarde; conviene reservar albergues privados con aparcabicis cerrado y usar envío de alforjas o bicicleta.</p>
+              <p data-i18n-html="tip7_p1"><strong>Distancia mínima oficial:</strong> Para obtener la <em>Compostela</em> debes recorrer al menos los <strong>últimos 100 km continuos a pie</strong> (o <strong>200 km en bicicleta</strong>) hasta Santiago.</p>
+              <p data-i18n-html="tip7_p2"><strong>Norma obligatoria de los 2 sellos diarios:</strong> Dentro de los últimos 100 km (o 200 km en bici) la Oficina del Peregrino exige <strong>al menos 2 sellos por día con fecha</strong> en la Credencial.</p>
+              <p data-i18n-html="tip7_p3"><strong>Dónde conseguir la Credencial:</strong> En Asociaciones de Amigos del Camino, catedrales, parroquias o albergues de inicio (SJPP, Sarria, Tui, Ferrol, Ourense).</p>
+              <p data-i18n-html="tip7_p4"><strong>🚲 Bicigrinos:</strong> Los albergues públicos priorizan al caminante a pie hasta última hora; conviene reservar albergues privados con aparcabicis.</p>
             </div>
           </details>
 
           <!-- 8. Clima por estación, ropa recomendada y ritmos a pie/bici -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span>🌦️ Clima por estación, qué ropa llevar y ritmos (a pie vs bicicleta)</span>
+              <span data-i18n="tip8_title">🌦️ Clima por estación, qué ropa llevar y ritmos (a pie vs bicicleta)</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
             <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
-              <p><strong>Primavera (abril–junio) y Otoño (septiembre–octubre):</strong> Las mejores épocas. Temperaturas suaves (12–24 °C) con lluvias probables en Galicia y Pirineos; lleva siempre capa de lluvia/poncho transpirable y vestimenta por capas.</p>
-              <p><strong>Verano (julio–agosto):</strong> Muy seco y caluroso en Navarra, La Rioja, Meseta y Vía de la Plata (sal al amanecer sobre las 06:00h). En Galicia y Costa da Morte refresca por la noche; reserva alojamiento con antelación.</p>
-              <p><strong>Invierno (noviembre–marzo):</strong> Etapas solitarias y días cortos (~8–9h de luz). Muchos albergues privados cierran, por lo que conviene confirmar apertura por teléfono y evitar puertos nevados (Valcarlos en lugar de Napoleón; Pola de Allande en lugar de Hospitales).</p>
-              <p><strong>⏱️ Ritmos medios orientativos:</strong> A pie: <strong>4–4,5 km/h</strong> (etapas de 20–25 km en 5–6 horas con descansos). En bicicleta: <strong>12–16 km/h</strong> (50–70 km/día).</p>
+              <p data-i18n-html="tip8_p1"><strong>Primavera (abr–jun) y Otoño (sep–oct):</strong> Las mejores épocas (12–24 °C), con lluvias probables en Galicia y Pirineos; lleva siempre capa impermeable y ropa por capas.</p>
+              <p data-i18n-html="tip8_p2"><strong>Verano (jul–ago):</strong> Seco y caluroso en el interior (sal al amanecer sobre las 06:00h). En Galicia refresca por la noche; reserva cama con antelación.</p>
+              <p data-i18n-html="tip8_p3"><strong>Invierno (nov–mar):</strong> Etapas tranquilas y días cortos (~8–9h de luz). Confirma apertura de albergues por teléfono y evita puertos nevados.</p>
+              <p data-i18n-html="tip8_p4"><strong>⏱️ Ritmos medios:</strong> A pie: <strong>4–4,5 km/h</strong> (20–25 km en 5–6h). En bicicleta: <strong>12–16 km/h</strong> (50–70 km/día).</p>
             </div>
           </details>
 
           <!-- 9. Botiquín del Peregrino y Cuidado de Pies / Farmacias -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span>🩹 Botiquín del Peregrino (&lt; 300 g) y cuidado de pies</span>
+              <span data-i18n="tip9_title">🩹 Botiquín del Peregrino (&lt; 300 g) y cuidado de pies</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
             <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
-              <p><strong>Pies sin ampollas (lo más importante):</strong> aplica <strong>vaselina</strong> en dedos y planta antes de ponerte los calcetines técnicos (sin costuras) y usa crema solar todo el año. Lleva <strong>apósitos hidrocoloides</strong> (tipo Compeed), tiritas, gasas, esparadrapo y aguja e hilo esterilizados.</p>
-              <p><strong>Desinfección y medicación básica:</strong> clorhexidina o povidona yodada (evita alcohol o agua oxigenada en heridas abiertas), ibuprofeno/paracetamol, sobres de <strong>suero oral</strong>, antihistamínico y <strong>tapones para los oídos</strong> (imprescindibles en albergues compartidos).</p>
-              <p><strong>Farmacias en ruta:</strong> en casi cada localidad de etapa dispones de farmacias con consejo de fisioterapia y “Kits del Peregrino” listos para reponer sin cargar peso extra desde casa.</p>
+              <p data-i18n-html="tip9_p1"><strong>Pies sin ampollas:</strong> aplica <strong>vaselina</strong> antes de ponerte calcetines técnicos sin costuras y usa crema solar. Lleva <strong>apósitos hidrocoloides</strong>, gasas, esparadrapo y aguja e hilo esterilizados.</p>
+              <p data-i18n-html="tip9_p2"><strong>Desinfección y básicos:</strong> clorhexidina o povidona yodada, ibuprofeno/paracetamol, <strong>suero oral</strong>, antihistamínico y <strong>tapones para los oídos</strong>.</p>
+              <p data-i18n-html="tip9_p3"><strong>Farmacias en ruta:</strong> en casi cada localidad de etapa dispones de farmacias con “Kits del Peregrino” listos para reponer sin cargar peso extra.</p>
             </div>
           </details>
 
           <!-- 10. Oficina del Peregrino, Certificado de Distancia, Fisterrana y Muxiana -->
           <details class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
             <summary class="font-bold text-sm text-[#1C2826] flex items-center justify-between">
-              <span>🏛️ Oficina del Peregrino (Santiago), Certificado de Distancia, Fisterrana y Muxiana</span>
+              <span data-i18n="tip10_title">🏛️ Oficina del Peregrino (Santiago), Certificado de Distancia, Fisterrana y Muxiana</span>
               <span class="text-[#1E4D3B]">▾</span>
             </summary>
             <div class="text-xs text-[#5F6C65] leading-relaxed pt-2.5 space-y-2">
-              <p><strong>Centro Internacional de Acogida al Peregrino:</strong> <strong>Rúa das Carretas, 33</strong> (acceso peatonal habitual por <em>Rúa de García Sabell</em>, a 2 min del Obradoiro). Abre todos los días de <strong>10:00 a 19:00h</strong> (cierra 25 dic y 1 ene, entregándose entonces en la Sacristía de la Catedral). Al llegar coges turno con <strong>código QR</strong> para seguir la cola desde el móvil.</p>
-              <p><strong>La Compostela y Certificado de Distancia:</strong> la <em>Compostela</em> en latín es gratuita (mín. 100 km a pie / 200 km en bici). Opcionalmente puedes pedir el <strong>Certificado de Distancia</strong> (~3 €), un pergamino del Códice Calixtino con tu ruta exacta, inicio y kilómetros recorridos.</p>
-              <p><strong>La Fisterrana y la Muxiana:</strong> no se expiden en Santiago; la <strong>Fisterrana</strong> se recoge en el <em>Albergue Público de Fisterra / Ayuntamiento</em> y la <strong>Muxiana</strong> en la <em>Oficina de Turismo de Muxía</em>.</p>
+              <p data-i18n-html="tip10_p1"><strong>Centro Internacional de Acogida al Peregrino:</strong> <strong>Rúa das Carretas, 33</strong> (a 2 min del Obradoiro). Abre de <strong>10:00 a 19:00h</strong> (cierra 25 dic y 1 ene). Turno con <strong>código QR</strong> al llegar.</p>
+              <p data-i18n-html="tip10_p2"><strong>La Compostela y Certificado de Distancia:</strong> la <em>Compostela</em> es gratuita (100 km a pie / 200 km en bici). El <strong>Certificado de Distancia</strong> (~3 €) detalla tu ruta y kilómetros.</p>
+              <p data-i18n-html="tip10_p3"><strong>La Fisterrana y la Muxiana:</strong> se recogen respectivamente en el <em>Albergue Público de Fisterra / Ayuntamiento</em> y en la <em>Oficina de Turismo de Muxía</em>.</p>
             </div>
           </details>
         </div>
@@ -685,40 +679,40 @@
         <div class="rounded-2xl bg-[#EBF3EE]/70 border border-[#1E4D3B]/20 p-5 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h3 class="text-sm font-bold text-[#1E4D3B]">🧮 Calculadora rápida de Presupuesto del Peregrino</h3>
-              <p class="text-[11px] text-[#5F6C65]">Estima cuánto te costará tu Camino según los días, alojamiento y si prefieres caminar sin peso.</p>
+              <h3 class="text-sm font-bold text-[#1E4D3B]" data-i18n="calc_title">🧮 Calculadora rápida de Presupuesto del Peregrino</h3>
+              <p class="text-[11px] text-[#5F6C65]" data-i18n="calc_sub">Estima cuánto te costará tu Camino según los días, alojamiento y si prefieres caminar sin peso.</p>
             </div>
             <span id="calcTotalBadge" class="px-3 py-1 rounded-full bg-[#1E4D3B] text-white text-xs font-bold">Total estimado: 280 €</span>
           </div>
           <div class="grid sm:grid-cols-3 gap-3 text-xs">
             <label class="block space-y-1">
-              <span class="font-bold text-[#1C2826]">Etapas / días de Camino</span>
+              <span class="font-bold text-[#1C2826]" data-i18n="calc_days_lbl">Etapas / días de Camino</span>
               <select id="calcDays" onchange="updatePilgrimBudget()" class="w-full px-3 py-2 rounded-xl bg-white border border-[#E5DEC9] text-[#1C2826] font-semibold">
-                <option value="5" selected>5 días (Últimos 100 km)</option>
-                <option value="7">7 días (Camino Inglés / Oporto)</option>
-                <option value="14">14 días (Primitivo / Invierno / Costa)</option>
-                <option value="32">32 días (Camino Francés / Norte)</option>
+                <option value="5" selected data-i18n="calc_d5">5 días (Últimos 100 km)</option>
+                <option value="7" data-i18n="calc_d7">7 días (Camino Inglés / Oporto)</option>
+                <option value="14" data-i18n="calc_d14">14 días (Primitivo / Invierno / Costa)</option>
+                <option value="32" data-i18n="calc_d32">32 días (Camino Francés / Norte)</option>
               </select>
             </label>
             <label class="block space-y-1">
-              <span class="font-bold text-[#1C2826]">Tipo de alojamiento</span>
+              <span class="font-bold text-[#1C2826]" data-i18n="calc_lodg_lbl">Tipo de alojamiento</span>
               <select id="calcLodging" onchange="updatePilgrimBudget()" class="w-full px-3 py-2 rounded-xl bg-white border border-[#E5DEC9] text-[#1C2826] font-semibold">
-                <option value="10" selected>Albergues Públicos (~10 €/noche)</option>
-                <option value="18">Albergues Privados (~18 €/noche)</option>
-                <option value="55">Hostales / Hoteles (~55 €/noche)</option>
+                <option value="10" selected data-i18n="calc_l10">Albergues Públicos (~10 €/noche)</option>
+                <option value="18" data-i18n="calc_l18">Albergues Privados (~18 €/noche)</option>
+                <option value="55" data-i18n="calc_l55">Hostales / Hoteles (~55 €/noche)</option>
               </select>
             </label>
             <label class="block space-y-1">
-              <span class="font-bold text-[#1C2826]">Transporte de mochila</span>
+              <span class="font-bold text-[#1C2826]" data-i18n="calc_tr_lbl">Transporte de mochila</span>
               <select id="calcTransport" onchange="updatePilgrimBudget()" class="w-full px-3 py-2 rounded-xl bg-white border border-[#E5DEC9] text-[#1C2826] font-semibold">
-                <option value="7" selected>Con SmartVieira (7 €/etapa • Sin peso)</option>
-                <option value="0">Cargar mi mochila (0 €)</option>
+                <option value="7" selected data-i18n="calc_t7">Con SmartVieira (7 €/etapa • Sin peso)</option>
+                <option value="0" data-i18n="calc_t0">Cargar mi mochila (0 €)</option>
               </select>
             </label>
           </div>
           <div class="flex flex-wrap items-center justify-between gap-3 pt-1 text-[11px] text-[#5F6C65]">
             <span id="calcBreakdownText">Incluye alojamiento, menú del peregrino + desayuno/agua (~32 €/día) y envío diario de mochila sin lesionarte.</span>
-            <button type="button" onclick="switchWebTab('ligero')" class="px-3.5 py-2 rounded-xl bg-[#D48B28] text-white text-xs font-bold hover:opacity-95 transition-all shrink-0">
+            <button type="button" onclick="switchWebTab('ligero')" class="px-3.5 py-2 rounded-xl bg-[#D48B28] text-white text-xs font-bold hover:opacity-95 transition-all shrink-0" data-i18n="calc_cta">
               🎒 Caminar sin peso desde 7€/etapa →
             </button>
           </div>
@@ -1522,6 +1516,548 @@
       }
     };
 
+    const WEB_I18N_EXTRA = {
+      ES: {
+        kpi_routes: '9 Rutas', kpi_routes_sub: 'Caminos oficiales',
+        kpi_hostels: '691 Albergues', kpi_hostels_sub: 'Públicos y privados',
+        kpi_booking: '531 Reservas', kpi_booking_sub: 'Enlace Booking',
+        kpi_langs: '8 Idiomas', kpi_langs_sub: 'Guía internacional',
+        caminos_badge: '🧭 Mapa y Rutas Jacobeas',
+        caminos_title: 'Los Caminos de Santiago: mapas, variantes y etapas',
+        caminos_sub: 'Pulsa cualquier trazado en el mapa o elige una ruta abajo para consultar sus variantes de inicio, kilometraje, dificultad y tabla de etapas habituales.',
+        caminos_show_all: '🗺️ Ver todos en el mapa',
+        caminos_pick_title: 'Elige un Camino para ver su guía completa',
+        etapas_word: 'etapas',
+        gr_hero_badge: '📸 Lugar emblemático de esta ruta',
+        gr_view_btn: '🏠 Ver puntos y {n} albergues →',
+        gr_dist: 'Distancia', gr_diff: 'Dificultad', gr_season: 'Mejor época', gr_bike: 'En bicicleta',
+        gr_variants: '🔀 Posibilidades de inicio y variantes',
+        gr_stages: '🥾 Etapas y bloques habituales',
+        gr_best: '✨ Lo mejor y red de albergues:',
+        gr_monuments: '🏛️ Monumentos e hitos imprescindibles',
+        gr_food: '🍽️ Gastronomía típica en ruta',
+        gr_detailed_stages: '📈 Etapas detalladas, perfil de desnivel y servicios',
+        gr_detailed_count: '{n} etapas clave con altimetría y servicios',
+        gr_stage_word: 'Etapa', gr_diff_short: 'Dif',
+        gr_places_see: '📷 Lugares dignos de ver en el',
+        gr_sv_service: '🐚 Servicio SmartVieira en el',
+        gr_sv_q: '¿Prefieres disfrutar las etapas sin cargar 8–10 kg en la espalda?',
+        gr_sv_cta: '🎒 Caminar sin peso desde 7€/etapa →',
+        tip5_title: '🕊️ Camino Interior, Espiritualidad, Fe y Año Santo Xacobeo 2027',
+        tip5_p1: '<strong>Encontrarse con uno mismo:</strong> Más allá de un viaje apasionante de senderismo y cultura, caminar cada mañana sin prisas ni pantallas regala claridad mental, silencio interior y una profunda sensación de renovación personal.',
+        tip5_p2: '<strong>Dimensión religiosa y Xacobeo 2027:</strong> Desde el siglo IX los peregrinos acuden ante la tumba del Apóstol Santiago. En los albergues parroquiales se mantiene la acogida fraterna tradicional, culminando en la Misa del Peregrino y el Año Santo 2027.',
+        tip6_title: '🚆 Cómo llegar al punto de inicio y volver desde Santiago',
+        tip6_r1: '<strong>Tren:</strong> SNCF TER desde Bayona a SJPP (~1h). <strong>Bus:</strong> ALSA Pamplona ↔ Roncesvalles / SJPP (abr–oct) y taxis compartidos desde Pamplona todo el año.',
+        tip6_r2: '<strong>Tren:</strong> Renfe AVE/Alvia directo desde Madrid, Barcelona, León y Ourense. <strong>Bus:</strong> Monbus / ALSA desde Lugo, Santiago y aeropuerto SCQ.',
+        tip6_r3: '<strong>Avión + Tren:</strong> Metro E desde Aeropuerto de Oporto (OPO) y tren CP Celta Porto ↔ Valença/Vigo. <strong>Bus:</strong> FlixBus y ALSA diarios.',
+        tip6_r4: '<strong>Norte / Primitivo:</strong> ALSA/Renfe desde Bilbao, San Sebastián y Oviedo; tren a Ferrol desde A Coruña. <strong>Sanabrés:</strong> AVE directo a Ourense y Puebla de Sanabria.',
+        tip6_ret_t: '✈️ Regreso desde Santiago, Fisterra y Muxía',
+        tip6_ret_d: '<strong>Aeropuerto SCQ:</strong> bus Freire cada 20–30 min (~20 min). <strong>AVE Renfe:</strong> conexiones directas a Madrid (~3h), A Coruña, Vigo y León. <strong>Fisterra / Muxía:</strong> buses diarios Monbus a Santiago (~2h10m–2h30m).',
+        tip7_title: '🪪 Credencial, Norma de los 2 Sellos Diarios, Compostela y Bicigrinos',
+        tip7_p1: '<strong>Distancia mínima oficial:</strong> Para obtener la <em>Compostela</em> debes recorrer al menos los <strong>últimos 100 km continuos a pie</strong> (o <strong>200 km en bicicleta</strong>) hasta Santiago.',
+        tip7_p2: '<strong>Norma obligatoria de los 2 sellos diarios:</strong> Dentro de los últimos 100 km (o 200 km en bici) la Oficina del Peregrino exige <strong>al menos 2 sellos por día con fecha</strong> en la Credencial.',
+        tip7_p3: '<strong>Dónde conseguir la Credencial:</strong> En Asociaciones de Amigos del Camino, catedrales, parroquias o albergues de inicio (SJPP, Sarria, Tui, Ferrol, Ourense).',
+        tip7_p4: '<strong>🚲 Bicigrinos:</strong> Los albergues públicos priorizan al caminante a pie hasta última hora; conviene reservar albergues privados con aparcabicis.',
+        tip8_title: '🌦️ Clima por estación, qué ropa llevar y ritmos (a pie vs bicicleta)',
+        tip8_p1: '<strong>Primavera (abr–jun) y Otoño (sep–oct):</strong> Las mejores épocas (12–24 °C), con lluvias probables en Galicia y Pirineos; lleva siempre capa impermeable y ropa por capas.',
+        tip8_p2: '<strong>Verano (jul–ago):</strong> Seco y caluroso en el interior (sal al amanecer sobre las 06:00h). En Galicia refresca por la noche; reserva cama con antelación.',
+        tip8_p3: '<strong>Invierno (nov–mar):</strong> Etapas tranquilas y días cortos (~8–9h de luz). Confirma apertura de albergues por teléfono y evita puertos nevados.',
+        tip8_p4: '<strong>⏱️ Ritmos medios:</strong> A pie: <strong>4–4,5 km/h</strong> (20–25 km en 5–6h). En bicicleta: <strong>12–16 km/h</strong> (50–70 km/día).',
+        tip9_title: '🩹 Botiquín del Peregrino (< 300 g) y cuidado de pies',
+        tip9_p1: '<strong>Pies sin ampollas:</strong> aplica <strong>vaselina</strong> antes de ponerte calcetines técnicos sin costuras y usa crema solar. Lleva <strong>apósitos hidrocoloides</strong>, gasas, esparadrapo y aguja e hilo esterilizados.',
+        tip9_p2: '<strong>Desinfección y básicos:</strong> clorhexidina o povidona yodada, ibuprofeno/paracetamol, <strong>suero oral</strong>, antihistamínico y <strong>tapones para los oídos</strong>.',
+        tip9_p3: '<strong>Farmacias en ruta:</strong> en casi cada localidad de etapa dispones de farmacias con “Kits del Peregrino” listos para reponer sin cargar peso extra.',
+        tip10_title: '🏛️ Oficina del Peregrino (Santiago), Certificado de Distancia, Fisterrana y Muxiana',
+        tip10_p1: '<strong>Centro Internacional de Acogida al Peregrino:</strong> <strong>Rúa das Carretas, 33</strong> (a 2 min del Obradoiro). Abre de <strong>10:00 a 19:00h</strong> (cierra 25 dic y 1 ene). Turno con <strong>código QR</strong> al llegar.',
+        tip10_p2: '<strong>La Compostela y Certificado de Distancia:</strong> la <em>Compostela</em> es gratuita (100 km a pie / 200 km en bici). El <strong>Certificado de Distancia</strong> (~3 €) detalla tu ruta y kilómetros.',
+        tip10_p3: '<strong>La Fisterrana y la Muxiana:</strong> se recogen respectivamente en el <em>Albergue Público de Fisterra / Ayuntamiento</em> y en la <em>Oficina de Turismo de Muxía</em>.',
+        calc_title: '🧮 Calculadora rápida de Presupuesto del Peregrino',
+        calc_sub: 'Estima cuánto te costará tu Camino según los días, alojamiento y si prefieres caminar sin peso.',
+        calc_days_lbl: 'Etapas / días de Camino',
+        calc_d5: '5 días (Últimos 100 km)', calc_d7: '7 días (Camino Inglés / Oporto)', calc_d14: '14 días (Primitivo / Invierno / Costa)', calc_d32: '32 días (Camino Francés / Norte)',
+        calc_lodg_lbl: 'Tipo de alojamiento',
+        calc_l10: 'Albergues Públicos (~10 €/noche)', calc_l18: 'Albergues Privados (~18 €/noche)', calc_l55: 'Hostales / Hoteles (~55 €/noche)',
+        calc_tr_lbl: 'Transporte de mochila',
+        calc_t7: 'Con SmartVieira (7 €/etapa • Sin peso)', calc_t0: 'Cargar mi mochila (0 €)',
+        calc_cta: '🎒 Caminar sin peso desde 7€/etapa →',
+        calc_total_prefix: 'Total estimado:',
+        calc_breakdown_with: 'Alojamiento ({lodg} €) + comidas (~{food} €) + transporte mochila ({tr} €) para {days} días sin cargar peso.',
+        calc_breakdown_without: 'Alojamiento ({lodg} €) + comidas (~{food} €) para {days} días cargando tu propia mochila.'
+      },
+      EN: {
+        kpi_routes: '9 Routes', kpi_routes_sub: 'Official Caminos',
+        kpi_hostels: '691 Hostels', kpi_hostels_sub: 'Public & private',
+        kpi_booking: '531 Bookings', kpi_booking_sub: 'Booking.com links',
+        kpi_langs: '8 Languages', kpi_langs_sub: 'International guide',
+        caminos_badge: '🧭 Jacobean Map & Routes',
+        caminos_title: 'The Caminos de Santiago: maps, variants & stages',
+        caminos_sub: 'Click any route on the map or choose one below to check starting variants, distance, difficulty and typical stage tables.',
+        caminos_show_all: '🗺️ Show all on map',
+        caminos_pick_title: 'Choose a Camino to view its full guide',
+        etapas_word: 'stages',
+        gr_hero_badge: '📸 Iconic landmark on this route',
+        gr_view_btn: '🏠 View towns & {n} hostels →',
+        gr_dist: 'Distance', gr_diff: 'Difficulty', gr_season: 'Best season', gr_bike: 'By bicycle',
+        gr_variants: '🔀 Starting points & variants',
+        gr_stages: '🥾 Typical stages & sections',
+        gr_best: '✨ Highlights & hostel network:',
+        gr_monuments: '🏛️ Must-see monuments & landmarks',
+        gr_food: '🍽️ Local gastronomy along the route',
+        gr_detailed_stages: '📈 Detailed stages, elevation profile & services',
+        gr_detailed_count: '{n} key stages with elevation & services',
+        gr_stage_word: 'Stage', gr_diff_short: 'Diff',
+        gr_places_see: '📷 Places worth seeing on',
+        gr_sv_service: '🐚 SmartVieira service on',
+        gr_sv_q: 'Prefer to enjoy every stage without carrying 8–10 kg on your back?',
+        gr_sv_cta: '🎒 Walk bag-free from €7/stage →',
+        tip5_title: '🕊️ Inner Journey, Spirituality, Faith & Xacobeo Holy Year 2027',
+        tip5_p1: '<strong>Reconnect with yourself:</strong> Beyond hiking and culture, walking each morning without rush or screens brings mental clarity, inner silence and personal renewal.',
+        tip5_p2: '<strong>Religious dimension & Xacobeo 2027:</strong> Since the 9th century pilgrims have walked to the tomb of Saint James, culminating in the Pilgrim Mass at Santiago Cathedral and Holy Year 2027.',
+        tip6_title: '🚆 How to reach your starting point and return from Santiago',
+        tip6_r1: '<strong>Train:</strong> SNCF TER from Bayonne to SJPP (~1h). <strong>Bus:</strong> ALSA Pamplona ↔ Roncesvalles / SJPP (Apr–Oct) & shared taxis year-round.',
+        tip6_r2: '<strong>Train:</strong> Direct Renfe AVE/Alvia from Madrid, Barcelona, León & Ourense. <strong>Bus:</strong> Monbus / ALSA from Lugo, Santiago & SCQ airport.',
+        tip6_r3: '<strong>Flight + Train:</strong> Porto Airport (OPO) Metro E & CP Celta train Porto ↔ Valença/Vigo. <strong>Bus:</strong> Daily FlixBus & ALSA.',
+        tip6_r4: '<strong>North / Primitive:</strong> ALSA/Renfe from Bilbao, San Sebastián & Oviedo; train to Ferrol from A Coruña. <strong>Sanabrés:</strong> High-speed AVE to Ourense & Puebla de Sanabria.',
+        tip6_ret_t: '✈️ Returning from Santiago, Fisterra & Muxía',
+        tip6_ret_d: '<strong>SCQ Airport:</strong> Freire bus every 20–30 min (~20 min). <strong>Renfe AVE:</strong> Direct trains to Madrid (~3h), A Coruña, Vigo & León. <strong>Fisterra / Muxía:</strong> Daily Monbus buses back to Santiago.',
+        tip7_title: '🪪 Credential, 2-Stamps-a-Day Rule, Compostela & Cyclists',
+        tip7_p1: '<strong>Official minimum distance:</strong> Walk at least the <strong>final 100 km</strong> (or cycle <strong>200 km</strong>) continuously to Santiago to earn the <em>Compostela</em>.',
+        tip7_p2: '<strong>2-stamps-a-day rule:</strong> Within the last 100 km (or 200 km by bike), the Pilgrim Office requires <strong>at least 2 dated stamps per day</strong> on your Credential.',
+        tip7_p3: '<strong>Where to get the Credential:</strong> Pilgrim Associations, cathedrals, parishes or starting hostels (SJPP, Sarria, Tui, Ferrol, Ourense).',
+        tip7_p4: '<strong>🚲 Cyclists (Bicigrinos):</strong> Public hostels prioritize walkers until late afternoon; book private hostels with bike storage.',
+        tip8_title: '🌦️ Weather by season, packing & pace (walking vs cycling)',
+        tip8_p1: '<strong>Spring (Apr–Jun) & Autumn (Sep–Oct):</strong> Best seasons (12–24 °C), with likely rain in Galicia & Pyrenees; pack a breathable poncho and layers.',
+        tip8_p2: '<strong>Summer (Jul–Aug):</strong> Dry and hot inland (start at dawn ~06:00). Cool nights in Galicia; book beds ahead.',
+        tip8_p3: '<strong>Winter (Nov–Mar):</strong> Quiet stages and short days (~8–9h daylight). Call hostels ahead to confirm opening and avoid snowed mountain passes.',
+        tip8_p4: '<strong>⏱️ Average pace:</strong> Walking: <strong>4–4.5 km/h</strong> (20–25 km in 5–6h). Cycling: <strong>12–16 km/h</strong> (50–70 km/day).',
+        tip9_title: '🩹 Pilgrim First-Aid Kit (< 300 g) & Foot Care',
+        tip9_p1: '<strong>Blister prevention:</strong> apply <strong>petroleum jelly</strong> before putting on seamless technical socks and wear sunscreen. Pack <strong>hydrocolloid dressings</strong>, gauze, tape and sterile needle/thread.',
+        tip9_p2: '<strong>Basics:</strong> chlorhexidine/povidone-iodine, ibuprofen/paracetamol, <strong>oral rehydration salts</strong>, antihistamine and <strong>earplugs</strong>.',
+        tip9_p3: '<strong>Pharmacies on route:</strong> almost every stage town has pharmacies stocking ready-made Pilgrim Kits.',
+        tip10_title: '🏛️ Pilgrim Office (Santiago), Distance Certificate, Fisterrana & Muxiana',
+        tip10_p1: '<strong>Pilgrim Reception Office:</strong> <strong>Rúa das Carretas, 33</strong> (2 min from Obradoiro). Open <strong>10:00–19:00</strong> daily (closed Dec 25 & Jan 1). Take a <strong>QR queue ticket</strong> on arrival.',
+        tip10_p2: '<strong>Compostela & Distance Certificate:</strong> the Latin <em>Compostela</em> is free (100 km walk / 200 km bike). The <strong>Distance Certificate</strong> (~€3) lists your route & exact km.',
+        tip10_p3: '<strong>Fisterrana & Muxiana:</strong> issued respectively at the <em>Fisterra Public Hostel / Town Hall</em> and the <em>Muxía Tourist Office</em>.',
+        calc_title: '🧮 Quick Pilgrim Budget Calculator',
+        calc_sub: 'Estimate your total Camino cost based on days, accommodation and bag transfer.',
+        calc_days_lbl: 'Camino stages / days',
+        calc_d5: '5 days (Last 100 km)', calc_d7: '7 days (English Way / Porto)', calc_d14: '14 days (Primitive / Winter / Coast)', calc_d32: '32 days (Full French / North Way)',
+        calc_lodg_lbl: 'Accommodation type',
+        calc_l10: 'Public Hostels (~€10/night)', calc_l18: 'Private Hostels (~€18/night)', calc_l55: 'Guesthouses / Hotels (~€55/night)',
+        calc_tr_lbl: 'Backpack transfer',
+        calc_t7: 'With SmartVieira (€7/stage • Bag-free)', calc_t0: 'Carry my own bag (€0)',
+        calc_cta: '🎒 Walk bag-free from €7/stage →',
+        calc_total_prefix: 'Estimated total:',
+        calc_breakdown_with: 'Lodging (€{lodg}) + meals (~€{food}) + bag transfer (€{tr}) for {days} bag-free days.',
+        calc_breakdown_without: 'Lodging (€{lodg}) + meals (~€{food}) for {days} days carrying your own backpack.'
+      },
+      FR: {
+        kpi_routes: '9 Routes', kpi_routes_sub: 'Chemins officiels',
+        kpi_hostels: '691 Auberges', kpi_hostels_sub: 'Publiques et privées',
+        kpi_booking: '531 Réservations', kpi_booking_sub: 'Liens Booking',
+        kpi_langs: '8 Langues', kpi_langs_sub: 'Guide international',
+        caminos_badge: '🧭 Carte et Chemins de Compostelle',
+        caminos_title: 'Les Chemins de Saint-Jacques : cartes, variantes et étapes',
+        caminos_sub: 'Cliquez sur un tracé ou choisissez un itinéraire ci-dessous pour consulter les points de départ, distances, difficultés et étapes.',
+        caminos_show_all: '🗺️ Tout afficher sur la carte',
+        caminos_pick_title: 'Choisissez un Chemin pour voir son guide complet',
+        etapas_word: 'étapes',
+        gr_hero_badge: '📸 Lieu emblématique de cette route',
+        gr_view_btn: '🏠 Voir localités et {n} auberges →',
+        gr_dist: 'Distance', gr_diff: 'Difficulté', gr_season: 'Meilleure saison', gr_bike: 'À vélo',
+        gr_variants: '🔀 Points de départ et variantes',
+        gr_stages: '🥾 Étapes et sections habituelles',
+        gr_best: '✨ Points forts et réseau d’auberges :',
+        gr_monuments: '🏛️ Monuments et sites incontournables',
+        gr_food: '🍽️ Gastronomie locale sur la route',
+        gr_detailed_stages: '📈 Étapes détaillées, dénivelé et services',
+        gr_detailed_count: '{n} étapes clés avec profil et services',
+        gr_stage_word: 'Étape', gr_diff_short: 'Diff',
+        gr_places_see: '📷 Lieux à découvrir sur',
+        gr_sv_service: '🐚 Service SmartVieira sur',
+        gr_sv_q: 'Vous préférez marcher sans porter 8–10 kg sur le dos ?',
+        gr_sv_cta: '🎒 Marcher léger dès 7€/étape →',
+        tip5_title: '🕊️ Chemin intérieur, Spiritualité, Foi et Année Sainte Xacobeo 2027',
+        tip5_p1: '<strong>Se retrouver soi-même :</strong> Marcher chaque matin sans hâte ni écrans offre clarté mentale et renouveau personnel.',
+        tip5_p2: '<strong>Dimension religieuse et Xacobeo 2027 :</strong> Accueil fraternel dans les auberges paroissiales, Messe du Pèlerin et Année Sainte 2027.',
+        tip6_title: '🚆 Comment rejoindre le départ et revenir de Saint-Jacques',
+        tip6_r1: '<strong>Train :</strong> SNCF TER Bayonne → SJPP (~1h). <strong>Bus :</strong> ALSA Pampelune ↔ Roncesvalles / SJPP (avr–oct).',
+        tip6_r2: '<strong>Train :</strong> Renfe AVE/Alvia depuis Madrid, Barcelone, León et Ourense. <strong>Bus :</strong> Monbus / ALSA depuis Lugo et Saint-Jacques.',
+        tip6_r3: '<strong>Avion + Train :</strong> Métro E depuis l’aéroport de Porto (OPO) et train CP Celta Porto ↔ Valença/Vigo.',
+        tip6_r4: '<strong>Nord / Primitif :</strong> ALSA/Renfe depuis Bilbao, San Sebastián et Oviedo. <strong>Sanabrés :</strong> AVE direct vers Ourense.',
+        tip6_ret_t: '✈️ Retour depuis Saint-Jacques, Fisterra et Muxía',
+        tip6_ret_d: '<strong>Aéroport SCQ :</strong> bus Freire toutes les 20–30 min. <strong>AVE Renfe :</strong> trains vers Madrid (~3h), La Corogne et Vigo. <strong>Fisterra / Muxía :</strong> bus quotidiens Monbus.',
+        tip7_title: '🪪 Crédencial, règle des 2 tampons par jour, Compostela et Cyclistes',
+        tip7_p1: '<strong>Distance minimale :</strong> au moins les <strong>100 derniers km à pied</strong> (ou <strong>200 km à vélo</strong>) jusqu’à Saint-Jacques.',
+        tip7_p2: '<strong>Règle des 2 tampons :</strong> dans les 100 derniers km, au moins <strong>2 tampons datés par jour</strong> sont exigés.',
+        tip7_p3: '<strong>Où obtenir la Crédencial :</strong> Associations jacquaires, cathédrales, paroisses ou auberges de départ.',
+        tip7_p4: '<strong>🚲 Cyclistes :</strong> priorité aux marcheurs en auberge publique ; réservez les auberges privées.',
+        tip8_title: '🌦️ Météo par saison, équipement et rythme (à pied vs vélo)',
+        tip8_p1: '<strong>Printemps et Automne :</strong> meilleures saisons (12–24 °C), prévoyez un poncho imperméable.',
+        tip8_p2: '<strong>Été :</strong> chaud et sec à l’intérieur ; partez tôt vers 06h00 et réservez en Galice.',
+        tip8_p3: '<strong>Hiver :</strong> calme et journées courtes ; vérifiez l’ouverture des auberges par téléphone.',
+        tip8_p4: '<strong>⏱️ Rythme moyen :</strong> À pied : <strong>4–4,5 km/h</strong>. À vélo : <strong>12–16 km/h</strong>.',
+        tip9_title: '🩹 Trousse de secours (< 300 g) et soin des pieds',
+        tip9_p1: '<strong>Prévenir les ampoules :</strong> vaseline avant de mettre des chaussettes sans couture, pansements hydrocolloïdes et crème solaire.',
+        tip9_p2: '<strong>Essentiels :</strong> antiseptique, ibuprofène, <strong>sels de réhydratation</strong> et <strong>boules Quies</strong>.',
+        tip9_p3: '<strong>Pharmacies :</strong> disponibles dans presque chaque ville-étape.',
+        tip10_title: '🏛️ Bureau du Pèlerin, Certificat de Distance, Fisterrana et Muxiana',
+        tip10_p1: '<strong>Accueil des Pèlerins :</strong> <strong>Rúa das Carretas, 33</strong> (10h00–19h00, ticket QR à l’arrivée).',
+        tip10_p2: '<strong>Compostela et Certificat :</strong> la <em>Compostela</em> est gratuite ; le <strong>Certificat de Distance</strong> coûte ~3 €.',
+        tip10_p3: '<strong>Fisterrana et Muxiana :</strong> délivrées à Fisterra et à l’Office de Tourisme de Muxía.',
+        calc_title: '🧮 Calculateur rapide de budget du pèlerin',
+        calc_sub: 'Estimez le coût de votre Chemin selon les jours, l’hébergement et le transport de sac.',
+        calc_days_lbl: 'Étapes / jours de marche',
+        calc_d5: '5 jours (100 derniers km)', calc_d7: '7 jours (Chemin Anglais / Porto)', calc_d14: '14 jours (Primitif / Hiver / Côte)', calc_d32: '32 jours (Français / Nord complet)',
+        calc_lodg_lbl: 'Type d’hébergement',
+        calc_l10: 'Auberges publiques (~10 €/nuit)', calc_l18: 'Auberges privées (~18 €/nuit)', calc_l55: 'Pensions / Hôtels (~55 €/nuit)',
+        calc_tr_lbl: 'Transport de sac',
+        calc_t7: 'Avec SmartVieira (7 €/étape • Sans poids)', calc_t0: 'Porter mon sac (0 €)',
+        calc_cta: '🎒 Marcher léger dès 7€/étape →',
+        calc_total_prefix: 'Total estimé :',
+        calc_breakdown_with: 'Hébergement ({lodg} €) + repas (~{food} €) + transport sac ({tr} €) pour {days} jours sans poids.',
+        calc_breakdown_without: 'Hébergement ({lodg} €) + repas (~{food} €) pour {days} jours en portant votre sac.'
+      },
+      DE: {
+        kpi_routes: '9 Routen', kpi_routes_sub: 'Offizielle Jakobswege',
+        kpi_hostels: '691 Herbergen', kpi_hostels_sub: 'Öffentlich & privat',
+        kpi_booking: '531 Buchungen', kpi_booking_sub: 'Booking-Links',
+        kpi_langs: '8 Sprachen', kpi_langs_sub: 'Internationaler Guide',
+        caminos_badge: '🧭 Karte & Jakobswege',
+        caminos_title: 'Die Jakobswege: Karten, Varianten & Etappen',
+        caminos_sub: 'Klicke auf eine Route auf der Karte oder wähle unten einen Weg für Startpunkte, Distanz, Schwierigkeit und Etappen.',
+        caminos_show_all: '🗺️ Alle auf der Karte zeigen',
+        caminos_pick_title: 'Wähle einen Jakobsweg für den vollständigen Guide',
+        etapas_word: 'Etappen',
+        gr_hero_badge: '📸 Wahrzeichen dieser Route',
+        gr_view_btn: '🏠 Orte & {n} Herbergen ansehen →',
+        gr_dist: 'Distanz', gr_diff: 'Schwierigkeit', gr_season: 'Beste Reisezeit', gr_bike: 'Mit dem Rad',
+        gr_variants: '🔀 Startpunkte & Varianten',
+        gr_stages: '🥾 Übliche Etappen & Abschnitte',
+        gr_best: '✨ Highlights & Herbergsnetz:',
+        gr_monuments: '🏛️ Sehenswürdigkeiten & Denkmäler',
+        gr_food: '🍽️ Regionale Gastronomie unterwegs',
+        gr_detailed_stages: '📈 Detaillierte Etappen, Höhenprofil & Services',
+        gr_detailed_count: '{n} Schlüsseletappen mit Höhenprofil & Services',
+        gr_stage_word: 'Etappe', gr_diff_short: 'Schw',
+        gr_places_see: '📷 Sehenswerte Orte auf',
+        gr_sv_service: '🐚 SmartVieira-Service auf',
+        gr_sv_q: 'Lieber ohne 8–10 kg Rucksack auf dem Rücken wandern?',
+        gr_sv_cta: '🎒 Ohne Gepäck ab 7€/Etappe →',
+        tip5_title: '🕊️ Innere Reise, Spiritualität & Heiliges Jahr Xacobeo 2027',
+        tip5_p1: '<strong>Zu sich selbst finden:</strong> Jeden Morgen ohne Hektik zu gehen schenkt geistige Klarheit und innere Ruhe.',
+        tip5_p2: '<strong>Spirituelle Tradition & Xacobeo 2027:</strong> Pilgermesse in Santiago und das Heilige Jahr 2027.',
+        tip6_title: '🚆 Anreise zum Startpunkt & Rückreise ab Santiago',
+        tip6_r1: '<strong>Zug:</strong> SNCF TER Bayonne → SJPP (~1h). <strong>Bus:</strong> ALSA Pamplona ↔ Roncesvalles / SJPP.',
+        tip6_r2: '<strong>Zug:</strong> Renfe AVE/Alvia ab Madrid, Barcelona, León. <strong>Bus:</strong> Monbus / ALSA ab Santiago.',
+        tip6_r3: '<strong>Flug + Zug:</strong> Metro E ab Flughafen Porto (OPO) & Zug CP Celta Porto ↔ Valença/Vigo.',
+        tip6_r4: '<strong>Nord / Primitivo:</strong> ALSA/Renfe ab Bilbao & Oviedo. <strong>Sanabrés:</strong> AVE nach Ourense.',
+        tip6_ret_t: '✈️ Rückreise ab Santiago, Fisterra & Muxía',
+        tip6_ret_d: '<strong>Flughafen SCQ:</strong> Freire-Bus alle 20–30 Min. <strong>AVE Renfe:</strong> Direktzüge nach Madrid (~3h). <strong>Fisterra / Muxía:</strong> tägliche Monbus-Busse.',
+        tip7_title: '🪪 Pilgerausweis, 2-Stempel-Regel, Compostela & Radpilger',
+        tip7_p1: '<strong>Mindestdistanz:</strong> mindestens die <strong>letzten 100 km zu Fuß</strong> (oder <strong>200 km per Rad</strong>) bis Santiago.',
+        tip7_p2: '<strong>2-Stempel-Regel:</strong> Auf den letzten 100 km sind mindestens <strong>2 datierte Stempel pro Tag</strong> Pflicht.',
+        tip7_p3: '<strong>Wo erhältlich:</strong> Jakobsgesellschaften, Kathedralen oder Startherbergen.',
+        tip7_p4: '<strong>🚲 Radpilger:</strong> Öffentliche Herbergen bevorzugen Fußpilger; private Herbergen vorab buchen.',
+        tip8_title: '🌦️ Wetter nach Jahreszeit, Kleidung & Tempo',
+        tip8_p1: '<strong>Frühling & Herbst:</strong> Beste Zeit (12–24 °C), Regenschutz einpacken.',
+        tip8_p2: '<strong>Sommer:</strong> Heiß im Landesinneren; früh starten (~06:00) und in Galicien vorbuchen.',
+        tip8_p3: '<strong>Winter:</strong> Ruhig, kurze Tage; Öffnungszeiten telefonisch prüfen.',
+        tip8_p4: '<strong>⏱️ Durchschnittstempo:</strong> Zu Fuß: <strong>4–4,5 km/h</strong>. Per Rad: <strong>12–16 km/h</strong>.',
+        tip9_title: '🩹 Reiseapotheke (< 300 g) & Fußpflege',
+        tip9_p1: '<strong>Blasen vorbeugen:</strong> Vaseline vor nahtlosen Wandersocken, Blasenpflaster und Sonnenschutz.',
+        tip9_p2: '<strong>Grundausstattung:</strong> Desinfektionsmittel, Schmerzmittel, Elektrolyte & <strong>Ohrstöpsel</strong>.',
+        tip9_p3: '<strong>Apotheken:</strong> In fast jedem Etappenort mit fertigen Pilger-Kits.',
+        tip10_title: '🏛️ Pilgerbüro (Santiago), Entfernungsurkunde, Fisterrana & Muxiana',
+        tip10_p1: '<strong>Pilgerbüro:</strong> <strong>Rúa das Carretas, 33</strong> (10:00–19:00 Uhr, QR-Wartenummer).',
+        tip10_p2: '<strong>Compostela & Urkunde:</strong> Die <em>Compostela</em> ist kostenlos; Entfernungsurkunde ~3 €.',
+        tip10_p3: '<strong>Fisterrana & Muxiana:</strong> Erhältlich in Fisterra und im Tourismusbüro Muxía.',
+        calc_title: '🧮 Schneller Pilger-Budgetrechner',
+        calc_sub: 'Berechne deine Camino-Kosten nach Tagen, Unterkunft und Gepäcktransport.',
+        calc_days_lbl: 'Etappen / Pilgertage',
+        calc_d5: '5 Tage (Letzte 100 km)', calc_d7: '7 Tage (Englischer Weg / Porto)', calc_d14: '14 Tage (Primitivo / Winter / Küste)', calc_d32: '32 Tage (Französischer / Nordweg)',
+        calc_lodg_lbl: 'Unterkunftsart',
+        calc_l10: 'Öffentliche Herbergen (~10 €/Nacht)', calc_l18: 'Private Herbergen (~18 €/Nacht)', calc_l55: 'Pensionen / Hotels (~55 €/Nacht)',
+        calc_tr_lbl: 'Gepäcktransport',
+        calc_t7: 'Mit SmartVieira (7 €/Etappe • Ohne Gepäck)', calc_t0: 'Selbst tragen (0 €)',
+        calc_cta: '🎒 Ohne Gepäck ab 7€/Etappe →',
+        calc_total_prefix: 'Geschätzte Gesamtkosten:',
+        calc_breakdown_with: 'Unterkunft ({lodg} €) + Verpflegung (~{food} €) + Gepäcktransport ({tr} €) für {days} Tage ohne Gewicht.',
+        calc_breakdown_without: 'Unterkunft ({lodg} €) + Verpflegung (~{food} €) für {days} Tage mit eigenem Rucksack.'
+      },
+      IT: {
+        kpi_routes: '9 Percorsi', kpi_routes_sub: 'Cammini ufficiali',
+        kpi_hostels: '691 Ostelli', kpi_hostels_sub: 'Pubblici e privati',
+        kpi_booking: '531 Prenotazioni', kpi_booking_sub: 'Link Booking',
+        kpi_langs: '8 Lingue', kpi_langs_sub: 'Guida internazionale',
+        caminos_badge: '🧭 Mappa e Cammini Giacobei',
+        caminos_title: 'I Cammini di Santiago: mappe, varianti e tappe',
+        caminos_sub: 'Tocca un percorso sulla mappa o sceglilo qui sotto per vedere varianti di partenza, km, difficoltà e tappe.',
+        caminos_show_all: '🗺️ Mostra tutti sulla mappa',
+        caminos_pick_title: 'Scegli un Cammino per la guida completa',
+        etapas_word: 'tappe',
+        gr_hero_badge: '📸 Luogo simbolo di questo percorso',
+        gr_view_btn: '🏠 Vedi località e {n} ostelli →',
+        gr_dist: 'Distanza', gr_diff: 'Difficoltà', gr_season: 'Stagione migliore', gr_bike: 'In bicicletta',
+        gr_variants: '🔀 Punti di partenza e varianti',
+        gr_stages: '🥾 Tappe e tratte abituali',
+        gr_best: '✨ Punti forti e rete di ostelli:',
+        gr_monuments: '🏛️ Monumenti e tappe imperdibili',
+        gr_food: '🍽️ Gastronomia tipica lungo il percorso',
+        gr_detailed_stages: '📈 Tappe dettagliate, altimetria e servizi',
+        gr_detailed_count: '{n} tappe chiave con profilo altimetrico e servizi',
+        gr_stage_word: 'Tappa', gr_diff_short: 'Diff',
+        gr_places_see: '📷 Luoghi da vedere su',
+        gr_sv_service: '🐚 Servizio SmartVieira su',
+        gr_sv_q: 'Preferisci camminare senza portare 8–10 kg sulle spalle?',
+        gr_sv_cta: '🎒 Cammina leggero da 7€/tappa →',
+        tip5_title: '🕊️ Cammino Interiore, Spiritualità e Anno Santo Xacobeo 2027',
+        tip5_p1: '<strong>Ritrovare sé stessi:</strong> Camminare ogni mattina senza fretta regala chiarezza mentale e rinnovamento.',
+        tip5_p2: '<strong>Dimensione religiosa e Xacobeo 2027:</strong> Messa del Pellegrino a Santiago e Anno Santo 2027.',
+        tip6_title: '🚆 Come arrivare alla partenza e tornare da Santiago',
+        tip6_r1: '<strong>Treno:</strong> SNCF TER Bayonne → SJPP (~1h). <strong>Bus:</strong> ALSA Pamplona ↔ Roncesvalles / SJPP.',
+        tip6_r2: '<strong>Treno:</strong> Renfe AVE/Alvia da Madrid, Barcellona, León. <strong>Bus:</strong> Monbus / ALSA da Santiago.',
+        tip6_r3: '<strong>Aereo + Treno:</strong> Metro E dall’aeroporto di Porto (OPO) e treno CP Celta Porto ↔ Valença/Vigo.',
+        tip6_r4: '<strong>Nord / Primitivo:</strong> ALSA/Renfe da Bilbao e Oviedo. <strong>Sanabrés:</strong> AVE diretto per Ourense.',
+        tip6_ret_t: '✈️ Ritorno da Santiago, Fisterra e Muxía',
+        tip6_ret_d: '<strong>Aeroporto SCQ:</strong> bus Freire ogni 20–30 min. <strong>AVE Renfe:</strong> treni per Madrid (~3h). <strong>Fisterra / Muxía:</strong> bus giornalieri Monbus.',
+        tip7_title: '🪪 Credenziale, regola dei 2 timbri al giorno, Compostela e Ciclisti',
+        tip7_p1: '<strong>Distanza minima:</strong> almeno gli <strong>ultimi 100 km a piedi</strong> (o <strong>200 km in bici</strong>) fino a Santiago.',
+        tip7_p2: '<strong>Regola dei 2 timbri:</strong> negli ultimi 100 km servono almeno <strong>2 timbri datati al giorno</strong>.',
+        tip7_p3: '<strong>Dove ottenerla:</strong> Associazioni del Cammino, cattedrali, parrocchie o ostelli iniziali.',
+        tip7_p4: '<strong>🚲 Ciclisti:</strong> gli ostelli pubblici danno priorità ai camminatori; prenota ostelli privati.',
+        tip8_title: '🌦️ Clima per stagione, abbigliamento e ritmo',
+        tip8_p1: '<strong>Primavera e Autunno:</strong> Stagioni migliori (12–24 °C), porta sempre mantella impermeabile.',
+        tip8_p2: '<strong>Estate:</strong> Caldo all’interno; parti all’alba (~06:00) e prenota in Galizia.',
+        tip8_p3: '<strong>Inverno:</strong> Poca folla e giorni brevi; verifica l’apertura degli ostelli.',
+        tip8_p4: '<strong>⏱️ Ritmo medio:</strong> A piedi: <strong>4–4,5 km/h</strong>. In bici: <strong>12–16 km/h</strong>.',
+        tip9_title: '🩹 Kit di pronto soccorso (< 300 g) e cura dei piedi',
+        tip9_p1: '<strong>Prevenire le vesciche:</strong> vaselina prima delle calze tecniche senza cuciture e cerotti idrocolloidali.',
+        tip9_p2: '<strong>Essenziali:</strong> disinfettante, ibuprofene, sali reidratanti e <strong>tappi per le orecchie</strong>.',
+        tip9_p3: '<strong>Farmacie:</strong> presenti in quasi ogni paese di tappa.',
+        tip10_title: '🏛️ Ufficio del Pellegrino, Certificato di Distanza, Fisterrana e Muxiana',
+        tip10_p1: '<strong>Ufficio del Pellegrino:</strong> <strong>Rúa das Carretas, 33</strong> (10:00–19:00, turno QR all’arrivo).',
+        tip10_p2: '<strong>Compostela e Certificato:</strong> la <em>Compostela</em> è gratuita; il Certificato di Distanza costa ~3 €.',
+        tip10_p3: '<strong>Fisterrana e Muxiana:</strong> rilasciate a Fisterra e all’Ufficio del Turismo di Muxía.',
+        calc_title: '🧮 Calcolatore rapido del budget del pellegrino',
+        calc_sub: 'Stima quanto spenderai in base a giorni, alloggio e trasporto zaino.',
+        calc_days_lbl: 'Tappe / giorni di Cammino',
+        calc_d5: '5 giorni (Ultimi 100 km)', calc_d7: '7 giorni (Cammino Inglese / Porto)', calc_d14: '14 giorni (Primitivo / Inverno / Costa)', calc_d32: '32 giorni (Francese / Nord completo)',
+        calc_lodg_lbl: 'Tipo di alloggio',
+        calc_l10: 'Ostelli Pubblici (~10 €/notte)', calc_l18: 'Ostelli Privati (~18 €/notte)', calc_l55: 'Pensioni / Hotel (~55 €/notte)',
+        calc_tr_lbl: 'Trasporto zaino',
+        calc_t7: 'Con SmartVieira (7 €/tappa • Senza peso)', calc_t0: 'Porto il mio zaino (0 €)',
+        calc_cta: '🎒 Cammina leggero da 7€/tappa →',
+        calc_total_prefix: 'Totale stimato:',
+        calc_breakdown_with: 'Alloggio ({lodg} €) + pasti (~{food} €) + trasporto zaino ({tr} €) per {days} giorni senza peso.',
+        calc_breakdown_without: 'Alloggio ({lodg} €) + pasti (~{food} €) per {days} giorni portando il tuo zaino.'
+      },
+      PT: {
+        kpi_routes: '9 Rotas', kpi_routes_sub: 'Caminhos oficiais',
+        kpi_hostels: '691 Albergues', kpi_hostels_sub: 'Públicos e privados',
+        kpi_booking: '531 Reservas', kpi_booking_sub: 'Links Booking',
+        kpi_langs: '8 Idiomas', kpi_langs_sub: 'Guia internacional',
+        caminos_badge: '🧭 Mapa e Caminhos de Santiago',
+        caminos_title: 'Os Caminhos de Santiago: mapas, variantes e etapas',
+        caminos_sub: 'Clica em qualquer rota no mapa ou escolhe abaixo para ver variantes de início, distância, dificuldade e etapas.',
+        caminos_show_all: '🗺️ Ver todos no mapa',
+        caminos_pick_title: 'Escolhe um Caminho para ver o guia completo',
+        etapas_word: 'etapas',
+        gr_hero_badge: '📸 Local emblemático desta rota',
+        gr_view_btn: '🏠 Ver pontos e {n} albergues →',
+        gr_dist: 'Distância', gr_diff: 'Dificuldade', gr_season: 'Melhor época', gr_bike: 'De bicicleta',
+        gr_variants: '🔀 Pontos de início e variantes',
+        gr_stages: '🥾 Etapas e troços habituais',
+        gr_best: '✨ Destaques e rede de albergues:',
+        gr_monuments: '🏛️ Monumentos e marcos imperdíveis',
+        gr_food: '🍽️ Gastronomia típica na rota',
+        gr_detailed_stages: '📈 Etapas detalhadas, altimetria e serviços',
+        gr_detailed_count: '{n} etapas-chave com altimetria e serviços',
+        gr_stage_word: 'Etapa', gr_diff_short: 'Dif',
+        gr_places_see: '📷 Locais a visitar em',
+        gr_sv_service: '🐚 Serviço SmartVieira em',
+        gr_sv_q: 'Preferes fazer as etapas sem carregar 8–10 kg às costas?',
+        gr_sv_cta: '🎒 Caminhar sem peso desde 7€/etapa →',
+        tip5_title: '🕊️ Caminho Interior, Espiritualidade e Ano Santo Xacobeo 2027',
+        tip5_p1: '<strong>Encontrar-se consigo mesmo:</strong> Caminhar sem pressas oferece clareza mental e renovação.',
+        tip5_p2: '<strong>Dimensão religiosa e Xacobeo 2027:</strong> Missa do Peregrino em Santiago e Ano Santo 2027.',
+        tip6_title: '🚆 Como chegar ao início e regressar de Santiago',
+        tip6_r1: '<strong>Comboio:</strong> SNCF TER Bayonne → SJPP (~1h). <strong>Autocarro:</strong> ALSA Pamplona ↔ Roncesvalles / SJPP.',
+        tip6_r2: '<strong>Comboio:</strong> Renfe AVE/Alvia desde Madrid, Barcelona e León. <strong>Autocarro:</strong> Monbus / ALSA.',
+        tip6_r3: '<strong>Avião + Comboio:</strong> Metro E do Aeroporto do Porto (OPO) e comboio CP Celta Porto ↔ Valença/Vigo.',
+        tip6_r4: '<strong>Norte / Primitivo:</strong> ALSA/Renfe desde Bilbau e Oviedo. <strong>Sanabrés:</strong> AVE direto para Ourense.',
+        tip6_ret_t: '✈️ Regresso desde Santiago, Fisterra e Muxía',
+        tip6_ret_d: '<strong>Aeroporto SCQ:</strong> autocarro Freire a cada 20–30 min. <strong>AVE Renfe:</strong> ligações a Madrid (~3h). <strong>Fisterra / Muxía:</strong> autocarros Monbus.',
+        tip7_title: '🪪 Credencial, Regra dos 2 Carimbos Diários, Compostela e Ciclistas',
+        tip7_p1: '<strong>Distância mínima oficial:</strong> pelo menos os <strong>últimos 100 km a pé</strong> (ou <strong>200 km de bicicleta</strong>).',
+        tip7_p2: '<strong>Regra dos 2 carimbos:</strong> nos últimos 100 km são obrigatórios <strong>2 carimbos datados por dia</strong>.',
+        tip7_p3: '<strong>Onde obter:</strong> Associações de Amigos do Caminho, catedrais, paróquias ou albergues iniciais.',
+        tip7_p4: '<strong>🚲 Bicigrinos:</strong> albergues públicos dão prioridade a caminhantes; reserva albergues privados.',
+        tip8_title: '🌦️ Clima por estação, roupa e ritmos',
+        tip8_p1: '<strong>Primavera e Outono:</strong> Melhores épocas (12–24 °C); leva sempre capa impermeável.',
+        tip8_p2: '<strong>Verão:</strong> Seco e quente no interior; sai cedo (~06:00) e reserva na Galiza.',
+        tip8_p3: '<strong>Inverno:</strong> Dias curtos; confirma abertura de albergues por telefone.',
+        tip8_p4: '<strong>⏱️ Ritmo médio:</strong> A pé: <strong>4–4,5 km/h</strong>. De bicicleta: <strong>12–16 km/h</strong>.',
+        tip9_title: '🩹 Kit de primeiros socorros (< 300 g) e cuidado dos pés',
+        tip9_p1: '<strong>Sem bolhas:</strong> vaselina antes de meias técnicas sem costuras e pensos hidrocoloides.',
+        tip9_p2: '<strong>Básicos:</strong> antisséptico, ibuprofeno, soro oral e <strong>tampões para os ouvidos</strong>.',
+        tip9_p3: '<strong>Farmácias:</strong> disponíveis em quase todas as localidades de etapa.',
+        tip10_title: '🏛️ Gabinete do Peregrino, Certificado de Distância, Fisterrana e Muxiana',
+        tip10_p1: '<strong>Gabinete do Peregrino:</strong> <strong>Rúa das Carretas, 33</strong> (10:00–19:00, senha por código QR).',
+        tip10_p2: '<strong>Compostela e Certificado:</strong> a <em>Compostela</em> é gratuita; Certificado de Distância ~3 €.',
+        tip10_p3: '<strong>Fisterrana e Muxiana:</strong> emitidas em Fisterra e no Posto de Turismo de Muxía.',
+        calc_title: '🧮 Calculadora rápida de Orçamento do Peregrino',
+        calc_sub: 'Estima o custo total do teu Caminho consoante os dias, alojamento e transporte de mochila.',
+        calc_days_lbl: 'Etapas / dias de Caminho',
+        calc_d5: '5 dias (Últimos 100 km)', calc_d7: '7 dias (Caminho Inglês / Porto)', calc_d14: '14 dias (Primitivo / Inverno / Costa)', calc_d32: '32 dias (Francês / Norte completo)',
+        calc_lodg_lbl: 'Tipo de alojamento',
+        calc_l10: 'Albergues Públicos (~10 €/noite)', calc_l18: 'Albergues Privados (~18 €/noite)', calc_l55: 'Pensões / Hotéis (~55 €/noite)',
+        calc_tr_lbl: 'Transporte de mochila',
+        calc_t7: 'Com SmartVieira (7 €/etapa • Sem peso)', calc_t0: 'Levar a minha mochila (0 €)',
+        calc_cta: '🎒 Caminhar sem peso desde 7€/etapa →',
+        calc_total_prefix: 'Total estimado:',
+        calc_breakdown_with: 'Alojamento ({lodg} €) + refeições (~{food} €) + transporte mochila ({tr} €) para {days} dias sem peso.',
+        calc_breakdown_without: 'Alojamento ({lodg} €) + refeições (~{food} €) para {days} dias a carregar a tua mochila.'
+      },
+      KO: {
+        kpi_routes: '9개 루트', kpi_routes_sub: '공식 순례길',
+        kpi_hostels: '691개 숙소', kpi_hostels_sub: '공립 및 사립 알베르게',
+        kpi_booking: '531개 예약', kpi_booking_sub: 'Booking.com 연동',
+        kpi_langs: '8개 언어', kpi_langs_sub: '글로벌 가이드',
+        caminos_badge: '🧭 순례길 지도 및 루트',
+        caminos_title: '산티아고 순례길: 지도, 코스 및 구간 안내',
+        caminos_sub: '지도에서 루트를 누르거나 아래에서 선택하여 출발지, 거리, 난이도 및 구간표를 확인하세요.',
+        caminos_show_all: '🗺️ 지도에서 모두 보기',
+        caminos_pick_title: '전체 가이드를 볼 순례길 선택',
+        etapas_word: '구간',
+        gr_hero_badge: '📸 이 루트의 대표 명소',
+        gr_view_btn: '🏠 마을 및 {n}개 알베르게 보기 →',
+        gr_dist: '총 거리', gr_diff: '난이도', gr_season: '추천 시기', gr_bike: '자전거',
+        gr_variants: '🔀 출발지 및 변형 루트',
+        gr_stages: '🥾 주요 구간 및 일정',
+        gr_best: '✨ 하이라이트 및 알베르게:',
+        gr_monuments: '🏛️ 필수 방문 유적지',
+        gr_food: '🍽️ 지역 대표 음식',
+        gr_detailed_stages: '📈 상세 구간, 고도 프로필 및 편의시설',
+        gr_detailed_count: '고도 및 시설 포함 핵심 {n}개 구간',
+        gr_stage_word: '구간', gr_diff_short: '난이도',
+        gr_places_see: '📷 둘러볼 명소:',
+        gr_sv_service: '🐚 SmartVieira 배낭 운송:',
+        gr_sv_q: '무거운 8~10kg 배낭 없이 가볍게 걸어보시겠어요?',
+        gr_sv_cta: '🎒 구간당 7€부터 가볍게 걷기 →',
+        tip5_title: '🕊️ 내면의 여정, 영성 및 2027 성년(Xacobeo)',
+        tip5_p1: '<strong>나를 만나는 시간:</strong> 매일 아침 천천히 걸으며 마음의 평온과 맑은 정신을 얻을 수 있습니다.',
+        tip5_p2: '<strong>신앙과 2027 성년:</strong> 산티아고 대성당 순례자 미사와 2027년 성년을 맞이합니다.',
+        tip6_title: '🚆 출발지 이동 및 산티아고 귀환 교통편',
+        tip6_r1: '<strong>기차:</strong> 바욘→생장(SJPP) SNCF TER(~1시간). <strong>버스:</strong> 팜플로나↔론세스바예스 ALSA.',
+        tip6_r2: '<strong>기차:</strong> 마드리드·바르셀로나·레온발 Renfe AVE. <strong>버스:</strong> Monbus / ALSA.',
+        tip6_r3: '<strong>항공+기차:</strong> 포르투 공항(OPO) 메트로 E & 포르투↔비고 CP 셀타 열차.',
+        tip6_r4: '<strong>북부/원시길:</strong> 빌바오·오비에도발 ALSA/Renfe. <strong>사나브레스:</strong> 오우렌세 AVE.',
+        tip6_ret_t: '✈️ 산티아고·피스테라·무시아에서 돌아오기',
+        tip6_ret_d: '<strong>SCQ 공항:</strong> Freire 버스 20~30분 간격. <strong>Renfe AVE:</strong> 마드리드 직행(~3시간).',
+        tip7_title: '🪪 순례자 여권, 하루 2회 스탬프, 콤포스텔라 및 자전거',
+        tip7_p1: '<strong>최소 거리:</strong> 도보 <strong>마지막 100km</strong> (자전거 <strong>200km</strong>) 연속 완주 시 콤포스텔라 발급.',
+        tip7_p2: '<strong>스탬프 규정:</strong> 마지막 100km 구간에서는 <strong>하루 최소 2개 스탬프(날짜 포함)</strong> 필수.',
+        tip7_p3: '<strong>발급처:</strong> 순례자 협회, 성당 또는 출발지 주요 알베르게.',
+        tip7_p4: '<strong>🚲 자전거 순례:</strong> 공립 알베르게는 도보자 우선이므로 사립 알베르게 예약을 권장합니다.',
+        tip8_title: '🌦️ 계절별 날씨, 복장 및 평균 속도',
+        tip8_p1: '<strong>봄(4~6월) & 가을(9~10월):</strong> 최적의 시기(12~24°C), 우비(판초) 필수.',
+        tip8_p2: '<strong>여름(7~8월):</strong> 내륙은 덥고 건조함(오전 6시 출발 권장). 갈리시아 숙소 사전 예약 필수.',
+        tip8_p3: '<strong>겨울(11~3월):</strong> 한적하지만 일조 시간이 짧음. 알베르게 운영 여부 전화 확인.',
+        tip8_p4: '<strong>⏱️ 평균 속도:</strong> 도보 <strong>4~4.5 km/h</strong>, 자전거 <strong>12~16 km/h</strong>.',
+        tip9_title: '🩹 비상 구급약(< 300g) & 발 관리',
+        tip9_p1: '<strong>물집 예방:</strong> 바셀린, 무봉제 등산 양말, 하이드로콜로이드 밴드(컴피드) 지참.',
+        tip9_p2: '<strong>상비약:</strong> 소독약, 진통제, 경구 수분 보충제, <strong>귀마개</strong>.',
+        tip9_p3: '<strong>약국:</strong> 거의 모든 주요 마을에서 순례자 키트 구매 가능.',
+        tip10_title: '🏛️ 순례자 사무소, 거리 증명서, 피스테라나 & 무시아나',
+        tip10_p1: '<strong>순례자 사무소:</strong> <strong>Rúa das Carretas, 33</strong> (10:00~19:00, 도착 시 QR 대기표 발급).',
+        tip10_p2: '<strong>콤포스텔라 & 거리 증명서:</strong> 콤포스텔라는 무료, 거리 증명서는 약 3€.',
+        tip10_p3: '<strong>피스테라나 & 무시아나:</strong> 각각 피스테라 알베르게 및 무시아 관광안내소에서 발급.',
+        calc_title: '🧮 순례길 예산 빠른 계산기',
+        calc_sub: '일정, 숙소 유형 및 배낭 운송 여부에 따른 예상 비용을 계산해 보세요.',
+        calc_days_lbl: '일정 / 순례 일수',
+        calc_d5: '5일 (마지막 100km)', calc_d7: '7일 (영국길 / 포르투)', calc_d14: '14일 (원시길 / 동계 / 해안)', calc_d32: '32일 (프랑스길 / 북부길 완주)',
+        calc_lodg_lbl: '숙소 유형',
+        calc_l10: '공립 알베르게 (~10€/박)', calc_l18: '사립 알베르게 (~18€/박)', calc_l55: '게스트하우스 / 호텔 (~55€/박)',
+        calc_tr_lbl: '배낭 운송',
+        calc_t7: 'SmartVieira 이용 (7€/구간 • 빈손)', calc_t0: '직접 메고 걷기 (0€)',
+        calc_cta: '🎒 구간당 7€부터 가볍게 걷기 →',
+        calc_total_prefix: '예상 총액:',
+        calc_breakdown_with: '{days}일 일정: 숙소({lodg}€) + 식비(~{food}€) + 배낭 운송({tr}€) 포함.',
+        calc_breakdown_without: '{days}일 일정: 숙소({lodg}€) + 식비(~{food}€) (배낭 직접 휴대).'
+      },
+      ZH: {
+        kpi_routes: '9条路线', kpi_routes_sub: '官方朝圣之路',
+        kpi_hostels: '691家庇护所', kpi_hostels_sub: '公立与私立',
+        kpi_booking: '531个预订', kpi_booking_sub: 'Booking直连',
+        kpi_langs: '8种语言', kpi_langs_sub: '国际向导',
+        caminos_badge: '🧭 朝圣之路地图与路线',
+        caminos_title: '圣地亚哥朝圣之路：地图、起点与分段',
+        caminos_sub: '点击地图上的任意路线或下方列表，查看起点方案、里程、难度与典型分段表。',
+        caminos_show_all: '🗺️ 在地图上显示全部',
+        caminos_pick_title: '选择一条路线查看完整攻略',
+        etapas_word: '段',
+        gr_hero_badge: '📸 本路线标志性景点',
+        gr_view_btn: '🏠 查看城镇与 {n} 家庇护所 →',
+        gr_dist: '总里程', gr_diff: '难度', gr_season: '最佳季节', gr_bike: '骑行适用',
+        gr_variants: '🔀 起点选择与支线',
+        gr_stages: '🥾 常见分段与日程',
+        gr_best: '✨ 亮点与庇护所网络：',
+        gr_monuments: '🏛️ 必看古迹与地标',
+        gr_food: '🍽️ 沿途特色美食',
+        gr_detailed_stages: '📈 详细分段、海拔剖面与服务设施',
+        gr_detailed_count: '{n} 个关键分段（含海拔与服务）',
+        gr_stage_word: '第', gr_diff_short: '难度',
+        gr_places_see: '📷 沿途必看景点：',
+        gr_sv_service: '🐚 SmartVieira 行李托运：',
+        gr_sv_q: '不想背负 8–10 公斤重包？轻松享受每段旅程',
+        gr_sv_cta: '🎒 每段7€起轻装徒步 →',
+        tip5_title: '🕊️ 内心之旅、灵性与 2027 圣年 (Xacobeo)',
+        tip5_p1: '<strong>与自己相遇：</strong> 清晨无拘无束地徒步带来内心宁静与精神焕新。',
+        tip5_p2: '<strong>宗教传统与 2027 圣年：</strong> 圣地亚哥大教堂朝圣者弥撒与 2027 圣年庆典。',
+        tip6_title: '🚆 如何前往起点及从圣地亚哥返程',
+        tip6_r1: '<strong>火车：</strong> 巴约讷至SJPP SNCF TER（约1小时）。<strong>巴士：</strong> ALSA 潘普洛纳往返。',
+        tip6_r2: '<strong>火车：</strong> 马德里/巴塞罗那/莱昂直达 Renfe AVE。<strong>巴士：</strong> Monbus / ALSA。',
+        tip6_r3: '<strong>飞机+火车：</strong> 波尔图机场(OPO)地铁E线换乘 CP Celta 火车至瓦伦萨/维戈。',
+        tip6_r4: '<strong>北线/原始线：</strong> 毕尔巴鄂与奥维耶多巴士/火车；奥伦塞高铁直达。',
+        tip6_ret_t: '✈️ 从圣地亚哥、菲斯特拉与穆希亚返程',
+        tip6_ret_d: '<strong>SCQ 机场：</strong> Freire 巴士每20–30分钟一班。<strong>AVE 高铁：</strong> 直达马德里（约3小时）。',
+        tip7_title: '🪪 朝圣者护照、每日2章规则、朝圣证书与骑行',
+        tip7_p1: '<strong>最低里程：</strong> 徒步至少<strong>最后100公里</strong>（骑行<strong>200公里</strong>）抵达圣地亚哥。',
+        tip7_p2: '<strong>每日2章规则：</strong> 最后100公里内须<strong>每天至少盖2个带日期印章</strong>。',
+        tip7_p3: '<strong>获取地点：</strong> 朝圣者协会、主教堂或起点庇护所。',
+        tip7_p4: '<strong>🚲 骑行者：</strong> 公立庇护所优先徒步者，建议提前预订私立庇护所。',
+        tip8_title: '🌦️ 四季气候、穿衣指南与配速',
+        tip8_p1: '<strong>春秋季：</strong> 最佳季节（12–24°C），加利西亚多雨请备透气雨衣。',
+        tip8_p2: '<strong>夏季：</strong> 内陆炎热干燥（建议清晨6点出发），加利西亚需提前订房。',
+        tip8_p3: '<strong>冬季：</strong> 游客少、日照短，出发前电话确认庇护所开放情况。',
+        tip8_p4: '<strong>⏱️ 平均配速：</strong> 徒步 <strong>4–4.5 km/h</strong>；骑行 <strong>12–16 km/h</strong>。',
+        tip9_title: '🩹 轻便急救包（< 300g）与护足指南',
+        tip9_p1: '<strong>防水泡：</strong> 出发前涂抹凡士林，穿无缝徒步袜并备好水胶体护足贴。',
+        tip9_p2: '<strong>常备品：</strong> 消毒液、布洛芬、口服补液盐与<strong>耳塞</strong>。',
+        tip9_p3: '<strong>药房：</strong> 几乎每个分段城镇均有药房售卖朝圣者护理包。',
+        tip10_title: '🏛️ 朝圣者办公室、里程证书、Fisterrana 与 Muxiana',
+        tip10_p1: '<strong>朝圣者办公室：</strong> <strong>Rúa das Carretas, 33</strong>（10:00–19:00，到场扫码取号）。',
+        tip10_p2: '<strong>证书费用：</strong> 朝圣证书免费；里程证书约 3€。',
+        tip10_p3: '<strong>世界尽头证书：</strong> 分别在菲斯特拉与穆希亚旅游局领取。',
+        calc_title: '🧮 朝圣之路预算快速计算器',
+        calc_sub: '根据天数、住宿类型和行李托运估算总花费。',
+        calc_days_lbl: '徒步分段 / 天数',
+        calc_d5: '5天（最后100公里）', calc_d7: '7天（英国之路 / 波尔图）', calc_d14: '14天（原始 / 冬季 / 海岸）', calc_d32: '32天（法国 / 北方全程）',
+        calc_lodg_lbl: '住宿类型',
+        calc_l10: '公立庇护所（~10€/晚）', calc_l18: '私立庇护所（~18€/晚）', calc_l55: '旅馆 / 酒店（~55€/晚）',
+        calc_tr_lbl: '行李托运',
+        calc_t7: '使用 SmartVieira（7€/段 • 轻装）', calc_t0: '自己背负背包（0€）',
+        calc_cta: '🎒 每段7€起轻装徒步 →',
+        calc_total_prefix: '预计总费用：',
+        calc_breakdown_with: '{days}天：住宿({lodg}€) + 餐饮(~{food}€) + 行李托运({tr}€)，全程轻装。',
+        calc_breakdown_without: '{days}天：住宿({lodg}€) + 餐饮(~{food}€)，全程自背背包。'
+      }
+    };
+    Object.keys(WEB_I18N_EXTRA).forEach(lang => {
+      if (WEB_I18N[lang]) Object.assign(WEB_I18N[lang], WEB_I18N_EXTRA[lang]);
+    });
+
     let currentWebLang = 'ES';
     let activeTab = 'caminos';
     let activeMapCaminoId = '';
@@ -1548,6 +2084,8 @@
     function renderMapCaminoList() {
       const container = document.getElementById('mapCaminoList');
       if (!container) return;
+      const dict = WEB_I18N[currentWebLang] || WEB_I18N.ES;
+      const etapasWord = dict.etapas_word || 'etapas';
       container.innerHTML = CAMINO_ROUTES.map(r => {
         const g = CAMINO_GRONZE_DETAILS[r.id] || {};
         const selected = r.id === activeMapCaminoId;
@@ -1557,7 +2095,7 @@
               <span class="w-3 h-3 rounded-full shrink-0" style="background:${g.color || '#1E4D3B'}"></span>
               <div class="min-w-0">
                 <div class="text-xs font-bold text-[#1C2826] truncate">${r.name}</div>
-                <div class="text-[10px] text-[#5F6C65] truncate">${r.km} • ${r.stages} etapas</div>
+                <div class="text-[10px] text-[#5F6C65] truncate">${r.km} • ${r.stages} ${etapasWord}</div>
               </div>
             </div>
             <span class="text-xs font-bold text-[#1E4D3B] shrink-0">→</span>
@@ -1675,6 +2213,7 @@
       const g = CAMINO_GRONZE_DETAILS[r.id];
       const ph = CAMINO_PHOTOS[r.id];
       if (!box || !g) return;
+      const dict = WEB_I18N[currentWebLang] || WEB_I18N.ES;
       const hostelCount = (typeof ALBERGUES_Y_HOTELES !== 'undefined' && ALBERGUES_Y_HOTELES[r.id]) ? ALBERGUES_Y_HOTELES[r.id].length : 0;
 
       box.innerHTML = `
@@ -1682,7 +2221,7 @@
         <div class="relative rounded-2xl overflow-hidden h-52 sm:h-64 bg-[#EFE9DC] border border-[#E5DEC9]">
           <img src="${ph.hero.img}" alt="${ph.hero.title}" class="w-full h-full object-cover">
           <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent flex flex-col justify-end p-5 text-white">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">📸 Lugar emblemático de esta ruta</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">${dict.gr_hero_badge || '📸 Lugar emblemático de esta ruta'}</span>
             <div class="serif-title text-xl sm:text-2xl font-bold leading-tight">${ph.hero.title}</div>
             <div class="text-xs text-white/85">📍 ${ph.hero.place}</div>
           </div>
@@ -1698,32 +2237,32 @@
             <p class="text-xs text-[#5F6C65] max-w-2xl">${r.desc}</p>
           </div>
           <button onclick="openCaminoFromMapInPlanner('${r.id}')" class="px-4 py-2.5 rounded-xl bg-[#1E4D3B] text-white text-xs font-bold hover:opacity-95 transition-all shrink-0">
-            🏠 Ver puntos y ${hostelCount} albergues →
+            ${(dict.gr_view_btn || '🏠 Ver puntos y {n} albergues →').replace('{n}', hostelCount)}
           </button>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
-            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">Distancia</div>
+            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">${dict.gr_dist || 'Distancia'}</div>
             <div class="font-bold text-[#1C2826] mt-0.5">${r.km}</div>
           </div>
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
-            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">Dificultad</div>
+            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">${dict.gr_diff || 'Dificultad'}</div>
             <div class="font-bold text-[#1C2826] mt-0.5">${r.diff}</div>
           </div>
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
-            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">Mejor época</div>
+            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">${dict.gr_season || 'Mejor época'}</div>
             <div class="font-bold text-[#1C2826] mt-0.5">${g.season}</div>
           </div>
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
-            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">En bicicleta</div>
+            <div class="text-[10px] font-bold uppercase text-[#5F6C65]">${dict.gr_bike || 'En bicicleta'}</div>
             <div class="font-bold text-[#1C2826] mt-0.5">${g.bike}</div>
           </div>
         </div>
 
         <div class="grid md:grid-cols-2 gap-5">
           <div class="space-y-2.5">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">🔀 Posibilidades de inicio y variantes</h3>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">${dict.gr_variants || '🔀 Posibilidades de inicio y variantes'}</h3>
             <div class="space-y-2">
               ${g.variants.map(v => `
                 <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3">
@@ -1738,7 +2277,7 @@
           </div>
 
           <div class="space-y-2.5">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">🥾 Etapas y bloques habituales</h3>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">${dict.gr_stages || '🥾 Etapas y bloques habituales'}</h3>
             <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] divide-y divide-[#E5DEC9]">
               ${g.stagesSample.map(st => `
                 <div class="px-3.5 py-2 flex items-center justify-between gap-2 text-xs">
@@ -1748,7 +2287,7 @@
               `).join('')}
             </div>
             <p class="text-[11px] text-[#5F6C65] bg-[#EBF3EE]/70 border border-[#1E4D3B]/15 rounded-xl p-3">
-              <strong class="text-[#1E4D3B]">✨ Lo mejor y red de albergues:</strong> ${g.highlights} (${g.infra}).
+              <strong class="text-[#1E4D3B]">${dict.gr_best || '✨ Lo mejor y red de albergues:'}</strong> ${g.highlights} (${g.infra}).
             </p>
           </div>
         </div>
@@ -1756,11 +2295,11 @@
         ${(typeof CAMINO_EXTRA_CULTURA !== 'undefined' && CAMINO_EXTRA_CULTURA[r.id]) ? `
         <div class="grid md:grid-cols-2 gap-3 text-xs">
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3.5 space-y-1">
-            <div class="font-bold text-[#1E4D3B]">🏛️ Monumentos e hitos imprescindibles</div>
+            <div class="font-bold text-[#1E4D3B]">${dict.gr_monuments || '🏛️ Monumentos e hitos imprescindibles'}</div>
             <p class="text-[11px] text-[#5F6C65] leading-relaxed">${CAMINO_EXTRA_CULTURA[r.id].see}</p>
           </div>
           <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3.5 space-y-1">
-            <div class="font-bold text-[#D48B28]">🍽️ Gastronomía típica en ruta</div>
+            <div class="font-bold text-[#D48B28]">${dict.gr_food || '🍽️ Gastronomía típica en ruta'}</div>
             <p class="text-[11px] text-[#5F6C65] leading-relaxed">${CAMINO_EXTRA_CULTURA[r.id].food}</p>
           </div>
         </div>
@@ -1775,8 +2314,8 @@
         ${(typeof CAMINO_ETAPAS !== 'undefined' && CAMINO_ETAPAS[r.id]) ? `
         <div class="space-y-3 pt-2 border-t border-[#E5DEC9]">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">📈 Etapas detalladas, perfil de desnivel y servicios</h3>
-            <span class="text-[11px] text-[#5F6C65]">${CAMINO_ETAPAS[r.id].length} etapas clave con altimetría y servicios</span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">${dict.gr_detailed_stages || '📈 Etapas detalladas, perfil de desnivel y servicios'}</h3>
+            <span class="text-[11px] text-[#5F6C65]">${(dict.gr_detailed_count || '{n} etapas clave con altimetría y servicios').replace('{n}', CAMINO_ETAPAS[r.id].length)}</span>
           </div>
           <div class="grid md:grid-cols-2 gap-3">
             ${CAMINO_ETAPAS[r.id].map(st => {
@@ -1792,7 +2331,7 @@
                 <div class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-3.5 space-y-2">
                   <div class="flex items-start justify-between gap-2">
                     <div>
-                      <span class="text-[10px] font-bold uppercase tracking-wider text-[#D48B28]">Etapa ${st.n}</span>
+                      <span class="text-[10px] font-bold uppercase tracking-wider text-[#D48B28]">${dict.gr_stage_word || 'Etapa'} ${st.n}</span>
                       <div class="text-xs font-bold text-[#1C2826] leading-snug">${st.route}</div>
                     </div>
                     <span class="text-xs font-extrabold text-[#1E4D3B] bg-white border border-[#E5DEC9] px-2 py-0.5 rounded-lg shrink-0">${st.km}</span>
@@ -1800,10 +2339,10 @@
                   <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#5F6C65]">
                     <span>⏱️ ${st.time}</span>
                     <span>⛰️ ${st.up} / ${st.down}</span>
-                    <span title="Dificultad ${st.diff}/5" class="text-[#1E4D3B] font-semibold">Dif: ${stars}</span>
+                    <span title="${st.diff}/5" class="text-[#1E4D3B] font-semibold">${dict.gr_diff_short || 'Dif'}: ${stars}</span>
                   </div>
                   <div class="bg-white rounded-xl border border-[#E5DEC9] px-2 pt-1.5 pb-0.5">
-                    <svg viewBox="0 0 100 36" class="w-full h-9 overflow-visible" preserveAspectRatio="none" aria-label="Perfil de desnivel">
+                    <svg viewBox="0 0 100 36" class="w-full h-9 overflow-visible" preserveAspectRatio="none" aria-label="Elevation profile">
                       <polygon points="${areaPts}" fill="#EBF3EE"></polygon>
                       <polyline points="${pts}" fill="none" stroke="#1E4D3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
                     </svg>
@@ -1819,7 +2358,7 @@
 
         ${ph ? `
         <div class="space-y-2.5 pt-2 border-t border-[#E5DEC9]">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">📷 Lugares dignos de ver en el ${r.name}</h3>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E4D3B]">${dict.gr_places_see || '📷 Lugares dignos de ver en el'} ${r.name}</h3>
           <div class="grid sm:grid-cols-3 gap-3">
             ${ph.gallery.map(item => `
               <figure class="rounded-2xl overflow-hidden bg-[#F7F3EB] border border-[#E5DEC9]">
@@ -1838,11 +2377,11 @@
 
         <div class="rounded-2xl bg-gradient-to-r from-[#1E4D3B] to-[#2A6B53] text-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
           <div class="space-y-0.5">
-            <div class="text-[10px] font-bold uppercase tracking-wider text-amber-300">🐚 Servicio SmartVieira en el ${r.name}</div>
-            <div class="text-sm font-bold">¿Prefieres disfrutar las etapas sin cargar 8–10 kg en la espalda?</div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-amber-300">${dict.gr_sv_service || '🐚 Servicio SmartVieira en el'} ${r.name}</div>
+            <div class="text-sm font-bold">${dict.gr_sv_q || '¿Prefieres disfrutar las etapas sin cargar 8–10 kg en la espalda?'}</div>
           </div>
           <button type="button" onclick="switchWebTab('ligero')" class="px-4 py-2 rounded-xl bg-[#D48B28] text-white text-xs font-bold hover:opacity-95 transition-all shrink-0">
-            🎒 Caminar sin peso desde 7€/etapa →
+            ${dict.gr_sv_cta || '🎒 Caminar sin peso desde 7€/etapa →'}
           </button>
         </div>
       `;
@@ -1857,6 +2396,7 @@
     function setWebLang(lang) {
       currentWebLang = WEB_I18N[lang] ? lang : 'ES';
       localStorage.setItem('vieira_lang', currentWebLang);
+      document.documentElement.lang = currentWebLang.toLowerCase();
       const sel = document.getElementById('webLangSelect');
       if (sel) sel.value = currentWebLang;
       const dict = WEB_I18N[currentWebLang];
@@ -1864,6 +2404,13 @@
         const key = el.getAttribute('data-i18n');
         if (dict[key]) el.textContent = dict[key];
       });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (dict[key]) el.innerHTML = dict[key];
+      });
+      renderMapCaminoList();
+      renderGronzeCaminoDetail(activeMapCaminoId || 'camino-frances');
+      updatePilgrimBudget();
       if (currentRouteStep >= 2) renderDurationCompare();
       if (currentRouteStep >= 3 && selectedRouteId) {
         renderActiveRouteSummary();
@@ -2384,13 +2931,19 @@
       const foodPerDay = 32; // desayuno, avituallamiento y menú del peregrino
       const total = days * (lodging + foodPerDay + transport);
       const transportTotal = days * transport;
+      const dict = WEB_I18N[currentWebLang] || WEB_I18N.ES;
       const badge = document.getElementById('calcTotalBadge');
       const txt = document.getElementById('calcBreakdownText');
-      if (badge) badge.textContent = `Total estimado: ${total.toLocaleString('es-ES')} €`;
+      if (badge) badge.textContent = `${dict.calc_total_prefix || 'Total estimado:'} ${total.toLocaleString('es-ES')} €`;
       if (txt) {
-        txt.textContent = transport > 0
-          ? `Alojamiento (${days * lodging} €) + comidas (~${days * foodPerDay} €) + transporte mochila (${transportTotal} €) para ${days} días sin cargar peso.`
-          : `Alojamiento (${days * lodging} €) + comidas (~${days * foodPerDay} €) para ${days} días cargando tu propia mochila.`;
+        const tpl = transport > 0
+          ? (dict.calc_breakdown_with || 'Alojamiento ({lodg} €) + comidas (~{food} €) + transporte mochila ({tr} €) para {days} días sin cargar peso.')
+          : (dict.calc_breakdown_without || 'Alojamiento ({lodg} €) + comidas (~{food} €) para {days} días cargando tu propia mochila.');
+        txt.textContent = tpl
+          .replace('{lodg}', days * lodging)
+          .replace('{food}', days * foodPerDay)
+          .replace('{tr}', transportTotal)
+          .replace('{days}', days);
       }
     }
 
