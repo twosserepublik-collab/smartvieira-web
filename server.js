@@ -1897,7 +1897,11 @@ const server = http.createServer(async (req, res) => {
     '/camino-sanabres': '/caminos/camino-sanabres.html',
     '/camino-invierno': '/caminos/camino-invierno.html',
     '/camino-fisterra-muxia': '/caminos/camino-fisterra-muxia.html',
-    '/transporte-mochilas-camino-santiago': '/transporte-mochilas-camino-santiago.html'
+    '/transporte-mochilas-camino-santiago': '/transporte-mochilas-camino-santiago.html',
+    '/como-conseguir-la-compostela': '/guias/como-conseguir-la-compostela.html',
+    '/que-llevar-mochila-camino-santiago': '/guias/que-llevar-mochila-camino-santiago.html',
+    '/cuanto-cuesta-hacer-el-camino-de-santiago': '/guias/cuanto-cuesta-hacer-el-camino-de-santiago.html',
+    '/que-camino-de-santiago-elegir': '/guias/que-camino-de-santiago-elegir.html'
   };
 
   let staticUrl = reqPath.length > 1 && reqPath.endsWith('/') ? reqPath.slice(0, -1) : reqPath;
