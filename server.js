@@ -352,11 +352,16 @@ function parseRequestBody(req, maxBytes = 102400) {
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
-  '.js': 'text/javascript',
-  '.css': 'text/css',
-  '.json': 'application/json',
+  '.js': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.ico': 'image/x-icon',
   '.svg': 'image/svg+xml',
   '.apk': 'application/vnd.android.package-archive'
 };
@@ -1812,12 +1817,19 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(500);
         res.end('Error loading file');
       } else {
-        res.writeHead(200, { 
+        const isImage = ['.jpg', '.jpeg', '.png', '.webp', '.svg', '.ico'].includes(ext);
+        const headers = {
           'Content-Type': contentType,
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        });
+          'Cache-Control': isImage ? 'public, max-age=604800, immutable' : 'no-cache, no-store, must-revalidate'
+        };
+        if (!isImage) {
+          headers['Pragma'] = 'no-cache';
+          headers['Expires'] = '0';
+        }
+        if (filePath.endsWith('admin.html')) {
+          headers['X-Robots-Tag'] = 'noindex, nofollow';
+        }
+        res.writeHead(200, headers);
         res.end(content);
       }
     });

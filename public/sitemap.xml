@@ -1,23 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.smartvieira.com/</loc>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://www.smartvieira.com/pilgrim-app.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.smartvieira.com/courier-app.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.smartvieira.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.smartvieira.com/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.smartvieira.com/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.smartvieira.com/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.smartvieira.com/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.smartvieira.com/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.smartvieira.com/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.smartvieira.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.smartvieira.com/" />
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/frances-hero.jpg</image:loc>
+      <image:title>Catedral de Santiago de Compostela - Meta del Camino de Santiago</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/portugues-hero.jpg</image:loc>
+      <image:title>Puente medieval de Ponte de Lima - Camino Portugués</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/costa-hero.jpg</image:loc>
+      <image:title>Monasterio de Santa María de Oia - Camino Portugués por la Costa</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/norte-hero.jpg</image:loc>
+      <image:title>Playa de As Catedrais - Camino del Norte</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/primitivo-hero.jpg</image:loc>
+      <image:title>Muralla Romana de Lugo - Camino Primitivo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/ingles-hero.jpg</image:loc>
+      <image:title>Ría de Ferrol y Castillo de San Felipe - Camino Inglés</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/sanabres-hero.jpg</image:loc>
+      <image:title>Puebla de Sanabria - Camino Sanabrés y Vía de la Plata</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/invierno-hero.jpg</image:loc>
+      <image:title>Las Médulas - Camino de Invierno</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/caminos/fisterra-hero.jpg</image:loc>
+      <image:title>Faro de Fisterra - Camino de Fisterra y Muxía</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.smartvieira.com/images/smartvieira-product.jpg</image:loc>
+      <image:title>Concha Inteligente SmartVieira para transporte de mochilas en el Camino de Santiago</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.smartvieira.com/descargar.html</loc>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
 </urlset>
