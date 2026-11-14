@@ -518,6 +518,29 @@
           <p class="text-xs text-[#5F6C65] mt-1" data-i18n="guide_sub">Despliega cada apartado para resolver las dudas más habituales antes y durante el Camino.</p>
         </div>
 
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <a href="/como-conseguir-la-compostela" class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] p-4 space-y-1 transition-all group">
+            <div class="text-xl">📜</div>
+            <div class="text-xs font-extrabold text-[#1C2826] group-hover:text-[#1E4D3B]" data-i18n="guide_card1_t">Cómo conseguir la Compostela</div>
+            <p class="text-[11px] text-[#5F6C65]" data-i18n="guide_card1_d">Credencial, 100 km y norma de 2 sellos diarios →</p>
+          </a>
+          <a href="/que-llevar-mochila-camino-santiago" class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] p-4 space-y-1 transition-all group">
+            <div class="text-xl">🎒</div>
+            <div class="text-xs font-extrabold text-[#1C2826] group-hover:text-[#1E4D3B]" data-i18n="guide_card2_t">Qué llevar en la mochila</div>
+            <p class="text-[11px] text-[#5F6C65]" data-i18n="guide_card2_d">Lista definitiva, regla del 10% y botiquín →</p>
+          </a>
+          <a href="/cuanto-cuesta-hacer-el-camino-de-santiago" class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] p-4 space-y-1 transition-all group">
+            <div class="text-xl">💶</div>
+            <div class="text-xs font-extrabold text-[#1C2826] group-hover:text-[#1E4D3B]" data-i18n="guide_card3_t">Cuánto cuesta el Camino</div>
+            <p class="text-[11px] text-[#5F6C65]" data-i18n="guide_card3_d">Presupuesto diario real y tarifas 2026 →</p>
+          </a>
+          <a href="/que-camino-de-santiago-elegir" class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] p-4 space-y-1 transition-all group">
+            <div class="text-xl">🧭</div>
+            <div class="text-xs font-extrabold text-[#1C2826] group-hover:text-[#1E4D3B]" data-i18n="guide_card4_t">Qué Camino elegir</div>
+            <p class="text-[11px] text-[#5F6C65]" data-i18n="guide_card4_d">Comparativa según 5, 7, 15 o 30 días →</p>
+          </a>
+        </div>
+
         <div class="space-y-2.5">
           <!-- 1. Credencial, Compostela y Misa -->
           <details open class="rounded-2xl bg-[#F7F3EB] border border-[#E5DEC9] p-4">
@@ -733,6 +756,11 @@
           <p class="text-sm text-[#5F6C65] leading-relaxed" data-i18n="light_desc">
             Quien ha hecho el Camino lo sabe: las charlas, los amaneceres y la entrada al Obradoiro se viven de otra manera cuando tus rodillas y tu espalda no sufren. Por eso creamos SmartVieira: una concha pensada para que mover tu mochila entre albergues sea tan sencillo como colgarla en tu equipaje.
           </p>
+          <div class="pt-1">
+            <a href="/transporte-mochilas-camino-santiago" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBF3EE] border border-[#1E4D3B]/20 text-xs font-bold text-[#1E4D3B] hover:border-[#1E4D3B] transition-all" data-i18n="light_guide_link">
+              🎒 Guía completa del transporte de mochilas etapa a etapa →
+            </a>
+          </div>
         </div>
 
         <div class="grid lg:grid-cols-12 gap-8 items-start pt-2">
@@ -1518,6 +1546,12 @@
 
     const WEB_I18N_EXTRA = {
       ES: {
+        guide_card1_t: 'Cómo conseguir la Compostela', guide_card1_d: 'Credencial, 100 km y norma de 2 sellos diarios →',
+        guide_card2_t: 'Qué llevar en la mochila', guide_card2_d: 'Lista definitiva, regla del 10% y botiquín →',
+        guide_card3_t: 'Cuánto cuesta el Camino', guide_card3_d: 'Presupuesto diario real y tarifas 2026 →',
+        guide_card4_t: 'Qué Camino elegir', guide_card4_d: 'Comparativa según 5, 7, 15 o 30 días →',
+        light_guide_link: '🎒 Guía completa del transporte de mochilas etapa a etapa →',
+        gr_full_guide: '📖 Ficha completa →',
         kpi_routes: '9 Rutas', kpi_routes_sub: 'Caminos oficiales',
         kpi_hostels: '691 Albergues', kpi_hostels_sub: 'Públicos y privados',
         kpi_booking: '531 Reservas', kpi_booking_sub: 'Enlace Booking',
@@ -1585,6 +1619,12 @@
         calc_breakdown_without: 'Alojamiento ({lodg} €) + comidas (~{food} €) para {days} días cargando tu propia mochila.'
       },
       EN: {
+        guide_card1_t: 'How to get the Compostela', guide_card1_d: 'Credential, 100 km & 2-stamps-a-day rule →',
+        guide_card2_t: 'What to pack in your bag', guide_card2_d: 'Full checklist, 10% rule & first-aid kit →',
+        guide_card3_t: 'How much the Camino costs', guide_card3_d: 'Real daily budget & 2026 prices →',
+        guide_card4_t: 'Which Camino to choose', guide_card4_d: 'Compare routes by 5, 7, 15 or 30 days →',
+        light_guide_link: '🎒 Full stage-by-stage bag transfer guide →',
+        gr_full_guide: '📖 Full guide →',
         kpi_routes: '9 Routes', kpi_routes_sub: 'Official Caminos',
         kpi_hostels: '691 Hostels', kpi_hostels_sub: 'Public & private',
         kpi_booking: '531 Bookings', kpi_booking_sub: 'Booking.com links',
@@ -1652,6 +1692,12 @@
         calc_breakdown_without: 'Lodging (€{lodg}) + meals (~€{food}) for {days} days carrying your own backpack.'
       },
       FR: {
+        guide_card1_t: 'Obtenir la Compostela', guide_card1_d: 'Crédencial, 100 km et règle des 2 tampons →',
+        guide_card2_t: 'Quoi mettre dans son sac', guide_card2_d: 'Liste complète, règle des 10% et trousse →',
+        guide_card3_t: 'Combien coûte le Chemin', guide_card3_d: 'Budget quotidien réel et tarifs 2026 →',
+        guide_card4_t: 'Quel Chemin choisir', guide_card4_d: 'Comparatif selon 5, 7, 15 ou 30 jours →',
+        light_guide_link: '🎒 Guide complet du transport de sacs étape par étape →',
+        gr_full_guide: '📖 Fiche complète →',
         kpi_routes: '9 Routes', kpi_routes_sub: 'Chemins officiels',
         kpi_hostels: '691 Auberges', kpi_hostels_sub: 'Publiques et privées',
         kpi_booking: '531 Réservations', kpi_booking_sub: 'Liens Booking',
@@ -1719,6 +1765,12 @@
         calc_breakdown_without: 'Hébergement ({lodg} €) + repas (~{food} €) pour {days} jours en portant votre sac.'
       },
       DE: {
+        guide_card1_t: 'Compostela erhalten', guide_card1_d: 'Pilgerausweis, 100 km & 2-Stempel-Regel →',
+        guide_card2_t: 'Packliste Rucksack', guide_card2_d: 'Komplette Liste, 10%-Regel & Apotheke →',
+        guide_card3_t: 'Was kostet der Camino', guide_card3_d: 'Echtes Tagesbudget & Preise 2026 →',
+        guide_card4_t: 'Welchen Weg wählen', guide_card4_d: 'Vergleich für 5, 7, 15 oder 30 Tage →',
+        light_guide_link: '🎒 Kompletter Guide für Gepäcktransport Etappe für Etappe →',
+        gr_full_guide: '📖 Kompletter Guide →',
         kpi_routes: '9 Routen', kpi_routes_sub: 'Offizielle Jakobswege',
         kpi_hostels: '691 Herbergen', kpi_hostels_sub: 'Öffentlich & privat',
         kpi_booking: '531 Buchungen', kpi_booking_sub: 'Booking-Links',
@@ -1786,6 +1838,12 @@
         calc_breakdown_without: 'Unterkunft ({lodg} €) + Verpflegung (~{food} €) für {days} Tage mit eigenem Rucksack.'
       },
       IT: {
+        guide_card1_t: 'Come ottenere la Compostela', guide_card1_d: 'Credenziale, 100 km e regola dei 2 timbri →',
+        guide_card2_t: 'Cosa mettere nello zaino', guide_card2_d: 'Lista completa, regola del 10% e kit →',
+        guide_card3_t: 'Quanto costa il Cammino', guide_card3_d: 'Budget giornaliero reale e prezzi 2026 →',
+        guide_card4_t: 'Quale Cammino scegliere', guide_card4_d: 'Confronto per 5, 7, 15 o 30 giorni →',
+        light_guide_link: '🎒 Guida completa al trasporto zaini tappa per tappa →',
+        gr_full_guide: '📖 Scheda completa →',
         kpi_routes: '9 Percorsi', kpi_routes_sub: 'Cammini ufficiali',
         kpi_hostels: '691 Ostelli', kpi_hostels_sub: 'Pubblici e privati',
         kpi_booking: '531 Prenotazioni', kpi_booking_sub: 'Link Booking',
@@ -1853,6 +1911,12 @@
         calc_breakdown_without: 'Alloggio ({lodg} €) + pasti (~{food} €) per {days} giorni portando il tuo zaino.'
       },
       PT: {
+        guide_card1_t: 'Como obter a Compostela', guide_card1_d: 'Credencial, 100 km e 2 carimbos por dia →',
+        guide_card2_t: 'O que levar na mochila', guide_card2_d: 'Lista completa, regra dos 10% e kit →',
+        guide_card3_t: 'Quanto custa o Caminho', guide_card3_d: 'Orçamento diário real e preços 2026 →',
+        guide_card4_t: 'Que Caminho escolher', guide_card4_d: 'Comparativo por 5, 7, 15 ou 30 dias →',
+        light_guide_link: '🎒 Guia completo de transporte de mochilas etapa a etapa →',
+        gr_full_guide: '📖 Guia completo →',
         kpi_routes: '9 Rotas', kpi_routes_sub: 'Caminhos oficiais',
         kpi_hostels: '691 Albergues', kpi_hostels_sub: 'Públicos e privados',
         kpi_booking: '531 Reservas', kpi_booking_sub: 'Links Booking',
@@ -1920,6 +1984,12 @@
         calc_breakdown_without: 'Alojamento ({lodg} €) + refeições (~{food} €) para {days} dias a carregar a tua mochila.'
       },
       KO: {
+        guide_card1_t: '콤포스텔라 받는 법', guide_card1_d: '순례자 여권, 100km 및 하루 2도장 규정 →',
+        guide_card2_t: '배낭 준비물 리스트', guide_card2_d: '체중 10% 법칙 및 구급약 체크리스트 →',
+        guide_card3_t: '순례길 예상 비용', guide_card3_d: '하루 실제 예산 및 2026년 요금 안내 →',
+        guide_card4_t: '나에게 맞는 순례길 선택', guide_card4_d: '5·7·15·30일 일정별 루트 비교 →',
+        light_guide_link: '🎒 구간별 배낭 운송 서비스 상세 안내 →',
+        gr_full_guide: '📖 상세 가이드 →',
         kpi_routes: '9개 루트', kpi_routes_sub: '공식 순례길',
         kpi_hostels: '691개 숙소', kpi_hostels_sub: '공립 및 사립 알베르게',
         kpi_booking: '531개 예약', kpi_booking_sub: 'Booking.com 연동',
@@ -1987,6 +2057,12 @@
         calc_breakdown_without: '{days}일 일정: 숙소({lodg}€) + 식비(~{food}€) (배낭 직접 휴대).'
       },
       ZH: {
+        guide_card1_t: '如何获取朝圣证书', guide_card1_d: '朝圣者护照、100公里与每日2章规则 →',
+        guide_card2_t: '背包打包清单', guide_card2_d: '体重10%法则与急救护理指南 →',
+        guide_card3_t: '朝圣之路费用预算', guide_card3_d: '每日真实开销与2026年参考价 →',
+        guide_card4_t: '如何选择朝圣路线', guide_card4_d: '按5、7、15或30天假期对比路线 →',
+        light_guide_link: '🎒 分段行李托运服务完整指南 →',
+        gr_full_guide: '📖 完整攻略 →',
         kpi_routes: '9条路线', kpi_routes_sub: '官方朝圣之路',
         kpi_hostels: '691家庇护所', kpi_hostels_sub: '公立与私立',
         kpi_booking: '531个预订', kpi_booking_sub: 'Booking直连',
@@ -2256,9 +2332,14 @@
             </div>
             <p class="text-xs text-[#5F6C65] max-w-2xl">${tData(r.desc)}</p>
           </div>
-          <button onclick="openCaminoFromMapInPlanner('${r.id}')" class="px-4 py-2.5 rounded-xl bg-[#1E4D3B] text-white text-xs font-bold hover:opacity-95 transition-all shrink-0">
-            ${(dict.gr_view_btn || '🏠 Ver puntos y {n} albergues →').replace('{n}', hostelCount)}
-          </button>
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <a href="/${r.id === 'camino-portugues-interior' ? 'camino-portugues' : r.id}" class="px-3.5 py-2.5 rounded-xl bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] text-[#1E4D3B] text-xs font-bold transition-all">
+              ${dict.gr_full_guide || '📖 Ficha completa →'}
+            </a>
+            <button onclick="openCaminoFromMapInPlanner('${r.id}')" class="px-4 py-2.5 rounded-xl bg-[#1E4D3B] text-white text-xs font-bold hover:opacity-95 transition-all">
+              ${(dict.gr_view_btn || '🏠 Ver puntos y {n} albergues →').replace('{n}', hostelCount)}
+            </button>
+          </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
