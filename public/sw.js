@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vieira-app-FINAL-v13.24.0';
+const CACHE_NAME = 'vieira-app-FINAL-v13.25.0';
 const urlsToCache = [
   '/',
   '/caminos-data.js',

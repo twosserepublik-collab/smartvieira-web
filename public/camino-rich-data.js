@@ -1,7 +1,7 @@
-// Datos detallados propios de Etapas, Desniveles, Servicios por Localidad y Fichas de Albergues
+// Datos detallados propios de Etapas, Desniveles, Alertas de Tramos, Servicios por Localidad y Fichas de Albergues
 const CAMINO_ETAPAS = {
   'camino-frances': [
-    { n: 'Etapa 1–5', route: 'Saint-Jean-Pied-de-Port → Pamplona', km: '65,2 km', time: '3–4 días', up: '+1.850 m', down: '-1.580 m', diff: 4, profile: [20, 95, 65, 55, 45], town: 'Pamplona', desc: 'Cruce mítico de los Pirineos por la Ruta de Napoleón (o Valcarlos en invierno) hasta Roncesvalles, bosques de Zubiri y llegada a Pamplona.' },
+    { n: 'Etapa 1–5', route: 'Saint-Jean-Pied-de-Port → Pamplona', km: '65,2 km', time: '3–4 días', up: '+1.850 m', down: '-1.580 m', diff: 4, profile: [20, 95, 65, 55, 45], town: 'Pamplona', desc: 'Cruce mítico de los Pirineos por la Ruta de Napoleón (24,2 km; o Valcarlos 23,4 km en invierno) hasta Roncesvalles, bosques de Zubiri y Pamplona.' },
     { n: 'Etapa 6–12', route: 'Pamplona → Logroño → Burgos', km: '216 km', time: '8–9 días', up: '+2.420 m', down: '-2.010 m', diff: 3, profile: [45, 75, 40, 50, 70, 55], town: 'Burgos', desc: 'Alto del Perdón, puente románico de Puente la Reina, viñedos de La Rioja, Montes de Oca y Catedral gótica de Burgos.' },
     { n: 'Etapa 13–21', route: 'Burgos → Sahagún → León → Astorga', km: '229 km', time: '9–10 días', up: '+1.380 m', down: '-1.390 m', diff: 2, profile: [55, 50, 48, 52, 50, 55], town: 'Astorga', desc: 'La Meseta castellana: cielos inmensos, Canal de Castilla en Frómista, Catedral de León y Palacio de Gaudí en Astorga.' },
     { n: 'Etapa 22–28', route: 'Astorga → Cruz de Ferro → O Cebreiro → Sarria', km: '155 km', time: '6–7 días', up: '+2.650 m', down: '-3.040 m', diff: 4, profile: [55, 92, 35, 32, 95, 45], town: 'Sarria', desc: 'Subida a Foncebadón y Cruz de Ferro (1.504 m), descenso vertiginoso a Ponferrada y gran ascenso gallego a O Cebreiro.' },
@@ -14,26 +14,26 @@ const CAMINO_ETAPAS = {
   'camino-portugues-interior': [
     { n: 'Tramo 1–2', route: 'Lisboa → Coimbra → Oporto', km: '337 km', time: '14 días', up: '+3.100 m', down: '-3.080 m', diff: 3, profile: [15, 45, 30, 60, 40, 25], town: 'Porto', desc: 'Trazado tranquilo por el valle del Tajo, Tomar (Convento de Cristo), Coimbra y la vibrante ciudad de Oporto.' },
     { n: 'Tramo 3', route: 'Oporto → Barcelos → Ponte de Lima → Tui', km: '125 km', time: '5–6 días', up: '+1.640 m', down: '-1.610 m', diff: 3, profile: [25, 42, 35, 88, 30], town: 'Tui', desc: 'Puente medieval de Ponte de Lima, exigente subida a Labruja, fortaleza de Valença y cruce del río Miño hacia Galicia.' },
-    { n: 'Etapa Tui–Porriño', route: 'Tui → O Porriño', km: '16,1 km', time: '3 h 45 m', up: '+210 m', down: '-220 m', diff: 1, profile: [30, 45, 35, 48, 28], town: 'O Porriño', desc: 'Catedral de Tui, Puente das Febres y senderos boscosos hasta O Porriño (recomendado el desvío fluvial).' },
-    { n: 'Etapa Porriño–Redondela', route: 'O Porriño → Redondela', km: '15,5 km', time: '3 h 40 m', up: '+260 m', down: '-275 m', diff: 2, profile: [28, 65, 40, 20], town: 'Redondela', desc: 'Subida a Santiaguiño de Antas y vistas de la ría de Vigo al descender a Redondela (confluencia con la Costa).' },
-    { n: 'Etapa Redondela–Pontevedra', route: 'Redondela → Pontevedra', km: '19,6 km', time: '4 h 30 m', up: '+390 m', down: '-375 m', diff: 2, profile: [20, 68, 25, 65, 22], town: 'Pontevedra', desc: 'Puente medieval de Pontesampaio, antiguo camino de piedra en A Canicouva y casco monumental de Pontevedra.' },
-    { n: 'Etapa Pontevedra–Caldas', route: 'Pontevedra → Caldas de Reis', km: '21,1 km', time: '5 h', up: '+280 m', down: '-270 m', diff: 2, profile: [22, 48, 35, 52, 24], town: 'Caldas de Reis', desc: 'Viñedos de Albariño, cascadas de Barosa (desvío muy recomendado) y fuentes termales de Caldas de Reis.' },
+    { n: 'Etapa Tui–Porriño', route: 'Tui → O Porriño', km: '13,1 / 16,1 km', time: '3 h 30 m', up: '+190 m', down: '-200 m', diff: 1, profile: [30, 45, 35, 48, 28], town: 'O Porriño', desc: 'Catedral de Tui y Puente das Febres. 13,1 km por trazado clásico o 16,1 km por la preciosa senda fluvial del río Louro (recomendada).' },
+    { n: 'Etapa Porriño–Redondela', route: 'O Porriño → Redondela', km: '15,8 km', time: '3 h 45 m', up: '+260 m', down: '-275 m', diff: 2, profile: [28, 65, 40, 20], town: 'Redondela', desc: 'Subida a Santiaguiño de Antas y vistas de la ría de Vigo al descender a Redondela (confluencia con el Camino de la Costa).' },
+    { n: 'Etapa Redondela–Pontevedra', route: 'Redondela → Pontevedra', km: '19,4 km', time: '4 h 30 m', up: '+390 m', down: '-375 m', diff: 2, profile: [20, 68, 25, 65, 22], town: 'Pontevedra', desc: 'Puente medieval de Pontesampaio, antiguo camino de piedra en A Canicouva y casco monumental de Pontevedra.' },
+    { n: 'Etapa Pontevedra–Caldas', route: 'Pontevedra → Caldas de Reis', km: '22,1 km', time: '5 h', up: '+280 m', down: '-270 m', diff: 2, profile: [22, 48, 35, 52, 24], town: 'Caldas de Reis', desc: 'Viñedos de Albariño, cascadas de Barosa (desvío muy recomendado) y fuentes termales de Caldas de Reis.' },
     { n: 'Etapa Caldas–Padrón', route: 'Caldas de Reis → Padrón', km: '18,6 km', time: '4 h 20 m', up: '+240 m', down: '-250 m', diff: 2, profile: [24, 52, 32, 45, 18], town: 'Padrón', desc: 'Bosques de Carracedo, cruceiro de Pontecesures sobre el río Ulla y llegada a Padrón (el Pedrón romano).' },
-    { n: 'Etapa Final', route: 'Padrón → Santiago de Compostela', km: '24,2 km', time: '5 h 45 m', up: '+430 m', down: '-190 m', diff: 2, profile: [18, 40, 58, 72, 65], town: 'Santiago', desc: 'Colegiata de Iria Flavia, santuario de A Esclavitude y ascenso gradual por Milladoiro hasta el Obradoiro.' }
+    { n: 'Etapa Final', route: 'Padrón → Santiago de Compostela', km: '24,4 km', time: '5 h 45 m', up: '+430 m', down: '-190 m', diff: 2, profile: [18, 40, 58, 72, 65], town: 'Santiago', desc: 'Colegiata de Iria Flavia, santuario de A Esclavitude y ascenso gradual por Milladoiro hasta el Obradoiro.' }
   ],
   'camino-portugues-costa': [
     { n: 'Etapa 1–3', route: 'Oporto → Vila do Conde → Esposende → Viana do Castelo', km: '82 km', time: '3–4 días', up: '+480 m', down: '-475 m', diff: 2, profile: [12, 18, 15, 22, 14], town: 'Viana do Castelo', desc: 'Pasarelas de madera sobre dunas atlánticas, villas marineras y santuario de Santa Luzia en Viana.' },
     { n: 'Etapa 4–5', route: 'Viana → Caminha → A Guarda → Oia → Baiona', km: '62 km', time: '2–3 días', up: '+790 m', down: '-775 m', diff: 2, profile: [14, 18, 35, 25, 28], town: 'Baiona', desc: 'Cruce en barca por el Miño hasta Galicia, castro de Santa Trega, Monasterio de Oia junto al mar y fortaleza de Baiona.' },
     { n: 'Etapa 6–7', route: 'Baiona → Vigo → Redondela', km: '41 km', time: '2 días', up: '+620 m', down: '-610 m', diff: 2, profile: [28, 45, 20, 52, 22], town: 'Redondela', desc: 'Playas de Nigrán, travesía por Vigo con vistas a las Islas Cíes y senda da Auga hasta Redondela.' },
-    { n: 'Tramo Final', route: 'Redondela → Pontevedra → Caldas → Padrón → Santiago', km: '83,5 km', time: '4 días', up: '+1.340 m', down: '-1.085 m', diff: 2, profile: [22, 60, 35, 50, 68], town: 'Santiago', desc: 'Se une al trazado Central en Redondela hasta la Catedral de Santiago.' }
+    { n: 'Tramo Final', route: 'Redondela → Pontevedra → Caldas → Padrón → Santiago', km: '84,5 km', time: '4 días', up: '+1.340 m', down: '-1.085 m', diff: 2, profile: [22, 60, 35, 50, 68], town: 'Santiago', desc: 'Se une al trazado Central en Redondela hasta la Catedral de Santiago (o Variante Espiritual desde Pontevedra).' }
   ],
   'camino-ingles': [
-    { n: 'Etapa 1', route: 'Ferrol → Neda → Pontedeume', km: '29,5 km', time: '6 h 45 m', up: '+460 m', down: '-455 m', diff: 2, profile: [10, 28, 18, 52, 15], town: 'Pontedeume', desc: 'Se puede dividir durmiendo en Neda (14,5 km). Bordea la ría de Ferrol, Fene, playa de Cabanas y puente medieval de Pontedeume.' },
-    { n: 'Etapa 2', route: 'Pontedeume → Miño → Betanzos', km: '20,5 km', time: '5 h', up: '+510 m', down: '-490 m', diff: 3, profile: [15, 72, 22, 68, 25], town: 'Betanzos', desc: 'Fuerte subida inicial saliendo de Pontedeume, playa de Miño y casco gótico monumental de Betanzos.' },
-    { n: 'Etapa 3', route: 'Betanzos → Hospital de Bruma', km: '24,2 km', time: '6 h', up: '+690 m', down: '-350 m', diff: 4, profile: [25, 48, 65, 92, 85], town: 'Hospital de Bruma', desc: 'Etapa reina y más exigente del Camino Inglés. Se puede partir en Presedo (12 km) o continuar hasta Bruma (enclave solitario).' },
-    { n: 'Ramal Coruña', route: 'A Coruña → Sergude → Hospital de Bruma', km: '32 km', time: '1–2 días', up: '+540 m', down: '-210 m', diff: 2, profile: [10, 38, 62, 85], town: 'Hospital de Bruma', desc: 'Alternativa histórica para peregrinos marítimos que confluye con Ferrol en As Travesas / Bruma.' },
+    { n: 'Etapa 1', route: 'Ferrol → Neda → Pontedeume', km: '27,7 km', time: '6 h 30 m', up: '+440 m', down: '-435 m', diff: 2, profile: [10, 28, 18, 52, 15], town: 'Pontedeume', desc: 'Divisible en Neda (14,5 km + 13,2 km). Bordea la ría de Ferrol, Fene, playa de Cabanas y puente medieval de Pontedeume.' },
+    { n: 'Etapa 2', route: 'Pontedeume → Miño → Betanzos', km: '19,7 km', time: '4 h 50 m', up: '+500 m', down: '-480 m', diff: 3, profile: [15, 72, 22, 68, 25], town: 'Betanzos', desc: 'Fuerte subida inicial saliendo de Pontedeume, playa de Miño y casco gótico monumental de Betanzos.' },
+    { n: 'Etapa 3', route: 'Betanzos → Hospital de Bruma', km: '24,0 km', time: '6 h', up: '+690 m', down: '-350 m', diff: 4, profile: [25, 48, 65, 92, 85], town: 'Hospital de Bruma', desc: 'Etapa reina y más exigente del Camino Inglés. Se puede partir en Presedo (12 km) antes de subir hacia Bruma.' },
+    { n: 'Ramal Coruña', route: 'A Coruña → Sergude (19,7 km) → Bruma (12,6 km)', km: '32,3 km', time: '1–2 días', up: '+540 m', down: '-210 m', diff: 2, profile: [10, 38, 62, 85], town: 'Hospital de Bruma', desc: 'Alternativa histórica para peregrinos marítimos (73 km totales hasta Santiago; requiere acreditar 25 km previos para Compostela).' },
     { n: 'Etapa 4', route: 'Hospital de Bruma → Sigüeiro', km: '24,4 km', time: '5 h 45 m', up: '+260 m', down: '-410 m', diff: 2, profile: [85, 62, 48, 35, 30], town: 'Sigüeiro', desc: 'Terreno muy cómodo de bosque gallego y aldeas rurales hasta la villa de Sigüeiro (todos los servicios).' },
-    { n: 'Etapa 5', route: 'Sigüeiro → Santiago de Compostela', km: '16,5 km', time: '3 h 45 m', up: '+290 m', down: '-260 m', diff: 2, profile: [30, 52, 45, 60, 62], town: 'Santiago', desc: 'Puente medieval sobre el río Tambre, bosque encantado y entrada urbana norte hacia la Catedral.' }
+    { n: 'Etapa 5', route: 'Sigüeiro → Santiago de Compostela', km: '15,7 km', time: '3 h 40 m', up: '+280 m', down: '-250 m', diff: 2, profile: [30, 52, 45, 60, 62], town: 'Santiago', desc: 'Puente medieval sobre el río Tambre, bosque encantado y entrada urbana norte hacia la Catedral.' }
   ],
   'camino-del-norte': [
     { n: 'Tramo Vasco', route: 'Irún → San Sebastián → Markina → Bilbao → Portugalete', km: '175 km', time: '7–8 días', up: '+4.100 m', down: '-4.080 m', diff: 4, profile: [20, 82, 35, 90, 28, 75], town: 'Bilbao', desc: 'Montes junto al Cantábrico (Jaizkibel, Flysch de Zumaia), bahía de La Concha y paso por Bilbao.' },
@@ -42,27 +42,46 @@ const CAMINO_ETAPAS = {
     { n: 'Tramo Gallego', route: 'Ribadeo → Mondoñedo → Vilalba → Sobrado → Arzúa → Santiago', km: '192 km', time: '8 días', up: '+3.150 m', down: '-2.920 m', diff: 3, profile: [20, 72, 85, 58, 70, 52], town: 'Santiago', desc: 'Playa de As Catedrais, catedral de Mondoñedo, subida a A Xesta, monasterio cisterciense de Sobrado y enlace en Arzúa.' }
   ],
   'camino-primitivo': [
-    { n: 'Etapas 1–3', route: 'Oviedo → Grado → Salas → Tineo', km: '73 km', time: '3 días', up: '+1.920 m', down: '-1.510 m', diff: 3, profile: [30, 55, 40, 72, 80], town: 'Tineo', desc: 'Inicio ante la Catedral de Oviedo; valles verdes asturianos, monasterio de Cornellana y subida a La Espina.' },
-    { n: 'Etapa Reina', route: 'Tineo → Hospitales (o Pola de Allande) → Berducedo', km: '52 km', time: '2 días', up: '+1.650 m', down: '-1.420 m', diff: 5, profile: [75, 98, 92, 65], town: 'Berducedo', desc: 'La famosa Ruta de los Hospitales por cordal de alta montaña (1.200 m, sin servicios; llevar agua/comida). Con niebla usar Pola de Allande.' },
-    { n: 'Etapas 6–9', route: 'Berducedo → Grandas → A Fonsagrada → O Cádavo → Lugo', km: '104 km', time: '4 días', up: '+2.340 m', down: '-2.580 m', diff: 4, profile: [65, 35, 95, 78, 52], town: 'Lugo', desc: 'Descenso espectacular al embalse de Grandas de Salime, puerto del Acebo hacia Galicia y Muralla Romana de Lugo.' },
-    { n: 'Últimos 100 km', route: 'Lugo → San Romão → Melide → Arzúa → Santiago', km: '101 km', time: '4–5 días', up: '+1.480 m', down: '-1.660 m', diff: 2, profile: [52, 60, 48, 62, 50], town: 'Santiago', desc: 'Etapa solitaria por San Romão da Retorta y enlace en Melide con el Camino Francés hasta Santiago.' }
+    { n: 'Etapa 1', route: 'Oviedo → Grado', km: '25,2 km', time: '6 h', up: '+580 m', down: '-710 m', diff: 3, profile: [45, 68, 40, 62, 22], town: 'Grado', desc: 'Salida desde la Catedral de San Salvador de Oviedo por verdes valles fluviales hasta Grado.' },
+    { n: 'Etapa 2–3', route: 'Grado → Salas (22,3 km) → Tineo (19,8 km)', km: '42,1 km', time: '2 días', up: '+1.280 m', down: '-840 m', diff: 3, profile: [22, 65, 42, 78, 82], town: 'Tineo', desc: 'Monasterio de Cornellana, villa medieval de Salas y fuerte ascenso a La Espina hasta Tineo.' },
+    { n: 'Etapa 4', route: 'Tineo → Borres', km: '15,9 km', time: '4 h', up: '+460 m', down: '-420 m', diff: 3, profile: [75, 55, 82, 68], town: 'Borres', desc: 'Etapa puente ideal para descansar antes de afrontar la alta montaña de Hospitales.' },
+    { n: 'Etapa 5 (Reina)', route: 'Borres → Hospitales → Berducedo (o Pola de Allande)', km: '24,1 / 28,6 km', time: '6 h 30 m', up: '+890 m', down: '-760 m', diff: 5, profile: [68, 98, 94, 65], town: 'Berducedo', desc: 'Mítica Ruta de los Hospitales por cordal de 1.200 m (sin fuentes ni bares en 24 km). Con niebla o nieve usar Pola de Allande.' },
+    { n: 'Etapa 6–7', route: 'Berducedo → Grandas (20,4 km) → A Fonsagrada (25,2 km)', km: '45,6 km', time: '2 días', up: '+1.450 m', down: '-1.380 m', diff: 4, profile: [65, 22, 78, 95], town: 'A Fonsagrada', desc: 'Descenso espectacular al embalse de Grandas de Salime y subida al Puerto del Acebo (1.030 m) entrando en Galicia.' },
+    { n: 'Etapa 8–9', route: 'A Fonsagrada → O Cádavo (24,3 km) → Lugo (29,5 km)', km: '53,8 km', time: '2 días', up: '+890 m', down: '-1.200 m', diff: 3, profile: [95, 72, 80, 52], town: 'Lugo', desc: 'Corredoiras de montaña, Castroverde y entrada por la Puerta de San Pedro de la Muralla Romana de Lugo.' },
+    { n: 'Etapa 10–11', route: 'Lugo → A Ponte Ferreira (26,5 km) → Melide (20 km)', km: '46,5 km', time: '2 días', up: '+690 m', down: '-720 m', diff: 2, profile: [52, 62, 48, 58, 52], town: 'Melide', desc: 'Últimos 100 km desde Lugo por aldeas solitarias de San Romão da Retorta hasta enlazar con el Francés en Melide.' },
+    { n: 'Etapa 12–13', route: 'Melide → Arzúa → O Pedrouzo → Santiago', km: '53 km', time: '2–3 días', up: '+850 m', down: '-990 m', diff: 2, profile: [52, 60, 42, 65, 25], town: 'Santiago', desc: 'Comparte trazado final del Camino Francés hasta la Praza do Obradoiro.' }
   ],
   'camino-sanabres': [
     { n: 'Vía de la Plata', route: 'Sevilla → Mérida → Cáceres → Salamanca → Zamora', km: '555 km', time: '20 días', up: '+4.800 m', down: '-4.250 m', diff: 3, profile: [12, 35, 48, 42, 68, 55], town: 'Zamora', desc: 'Calzada romana milenaria por dehesas extremeñas, teatros romanos y ciudades Patrimonio. Ideal en primavera u otoño.' },
-    { n: 'Sanabrés Puro', route: 'Zamora → Puebla de Sanabria → A Gudiña → Laza → Ourense', km: '240 km', time: '9–10 días', up: '+4.100 m', down: '-4.520 m', diff: 4, profile: [55, 82, 95, 65, 30], town: 'Ourense', desc: 'Desvío verde en Granja de Moreruela hacia los puertos de Padornelo y A Canda entrando a Galicia hasta las termas de Ourense.' },
-    { n: 'Últimos 100 km', route: 'Ourense → Cea → Dozón → Lalín → Silleda → Santiago', km: '108 km', time: '5 días', up: '+1.850 m', down: '-1.710 m', diff: 3, profile: [30, 80, 68, 52, 60], town: 'Santiago', desc: 'Exigente cuesta inicial de Costiña de Canedo, pan de Cea, Monasterio de Oseira y tranquila campiña pontevedresa.' }
+    { n: 'Sanabrés Puro', route: 'Zamora → Puebla de Sanabria → A Gudiña → Laza → Ourense', km: '258 km', time: '9–10 días', up: '+4.100 m', down: '-4.520 m', diff: 4, profile: [55, 82, 95, 65, 30], town: 'Ourense', desc: 'Desvío en Granja de Moreruela hacia los puertos de Padornelo y A Canda entrando a Galicia hasta las termas de Ourense.' },
+    { n: 'Últimos 100 km', route: 'Ourense → Cea → Dozón → Silleda → Ponte Ulla → Santiago', km: '108 km', time: '5 días', up: '+1.850 m', down: '-1.710 m', diff: 3, profile: [30, 80, 68, 52, 60], town: 'Santiago', desc: 'Exigente cuesta inicial de Costiña de Canedo, pan de Cea, Monasterio de Oseira y tranquila campiña pontevedresa.' }
   ],
   'camino-invierno': [
-    { n: 'Etapas 1–3', route: 'Ponferrada → Las Médulas → O Barco → A Rúa → Quiroga', km: '84 km', time: '4 días', up: '+1.620 m', down: '-1.880 m', diff: 3, profile: [50, 78, 35, 32, 34], town: 'Quiroga', desc: 'Alternativa sin nieve al Cebreiro: minas romanas de Las Médulas y valle del río Sil hacia Valdeorras.' },
-    { n: 'Ribeira Sacra', route: 'Quiroga → Monforte de Lemos → Diomondi → Chantada → Rodeiro', km: '90 km', time: '3–4 días', up: '+2.120 m', down: '-1.720 m', diff: 4, profile: [34, 48, 32, 85, 76], town: 'Rodeiro', desc: 'Paso por los viñedos heroicos en bancales de Belesar y los cañones de la Ribeira Sacra.' },
-    { n: 'Últimos 100 km', route: 'Chantada / Rodeiro → Lalín → Silleda → Puente Ulla → Santiago', km: '105 km', time: '4–5 días', up: '+1.540 m', down: '-1.860 m', diff: 2, profile: [76, 58, 45, 30, 60], town: 'Santiago', desc: 'Desde A Laxe / Lalín comparte trazado con el Camino Sanabrés por Boqueixón y el Pico Sacro.' }
+    { n: 'Etapas 1–2', route: 'Ponferrada → Las Médulas (27,8 km) → O Barco (27,2 km)', km: '55,0 km', time: '2 días', up: '+1.180 m', down: '-1.390 m', diff: 3, profile: [52, 85, 42, 32], town: 'O Barco de Valdeorras', desc: 'Alternativa sin nieve al Cebreiro por el castillo de Cornatel y las minas romanas de oro de Las Médulas hasta el río Sil.' },
+    { n: 'Etapas 3–4', route: 'O Barco → A Rúa (12,9 km) → Quiroga (28,2 km)', km: '41,1 km', time: '2 días', up: '+790 m', down: '-840 m', diff: 3, profile: [32, 30, 62, 34], town: 'Quiroga', desc: 'Viñedos de Valdeorras, túnel romano de Montefurado y entrada en tierras lucenses de Quiroga.' },
+    { n: 'Etapas 5–6', route: 'Quiroga → A Pobra do Brollón (23,5 km) → Monforte (12,5 km)', km: '36,0 km', time: '1–2 días', up: '+810 m', down: '-770 m', diff: 3, profile: [34, 72, 48, 38], town: 'Monforte de Lemos', desc: 'Subida rural por Barxa de Lor y descenso a la capital histórica de la Ribeira Sacra: Monforte de Lemos.' },
+    { n: 'Etapas 7–8', route: 'Monforte → Chantada (30,4 km) → Rodeiro (25,4 km)', km: '55,8 km', time: '2 días', up: '+1.490 m', down: '-1.020 m', diff: 4, profile: [38, 25, 88, 76], town: 'Rodeiro', desc: 'Cañón del Miño en Belesar (bancales heroicos), iglesia románica de Diomondi y exigente subida a la Serra do Faro.' },
+    { n: 'Etapas 9–12', route: 'Rodeiro → Lalín (21,9 km) → Silleda → Ponte Ulla → Santiago', km: '77,4 km', time: '3–4 días', up: '+1.140 m', down: '-1.460 m', diff: 2, profile: [76, 58, 45, 30, 60], town: 'Santiago', desc: 'Desde Lalín comparte trazado con el Camino Sanabrés cruzando Silleda, Puente Ulla y el Pico Sacro hasta el Obradoiro.' }
   ],
   'camino-fisterra-muxia': [
     { n: 'Etapa 1', route: 'Santiago → Negreira', km: '20,6 km', time: '5 h', up: '+420 m', down: '-530 m', diff: 2, profile: [60, 48, 65, 28, 38], town: 'Negreira', desc: 'Salida por Carballeira de San Lourenzo, aldea medieval de Ponte Maceira sobre el río Tambre y llegada a Negreira.' },
-    { n: 'Etapa 2', route: 'Negreira → Olveiroa', km: '33,6 km', time: '7 h 45 m', up: '+690 m', down: '-560 m', diff: 3, profile: [38, 72, 60, 78, 55], town: 'Olveiroa', desc: 'Etapa larga (divisible en A Pena / Santa Mariña) entre bosques y prados de la comarca de Xallas.' },
-    { n: 'Ramal Fisterra', route: 'Olveiroa → Cee → Corcubión → Cabo Fisterra', km: '34 km', time: '7 h 30 m', up: '+460 m', down: '-750 m', diff: 2, profile: [55, 62, 12, 18, 25], town: 'Fisterra', desc: 'Primera vista del océano al descender a Cee y llegada emocionante al Faro del Fin del Mundo (Km 0).' },
-    { n: 'Ramal / Conexión Muxía', route: 'Olveiroa → Muxía / Fisterra ↔ Lires ↔ Muxía', km: '32 / 27,6 km', time: '6–7 h', up: '+520 m', down: '-530 m', diff: 2, profile: [55, 68, 25, 48, 12], town: 'Muxía', desc: 'Acantilados de la Costa da Morte hasta el Santuario da Virxe da Barca frente a las olas del Atlántico.' }
+    { n: 'Etapa 2', route: 'Negreira → Olveiroa', km: '33,6 km', time: '7 h 45 m', up: '+690 m', down: '-560 m', diff: 3, profile: [38, 72, 60, 78, 55], town: 'Olveiroa', desc: 'Etapa larga (divisible durmiendo en A Pena o Santa Mariña) entre bosques, hórreos y prados de la comarca de Xallas.' },
+    { n: 'Ramal Fisterra', route: 'Olveiroa → Cee / Corcubión → Cabo Fisterra', km: '34,0 km', time: '7 h 30 m', up: '+460 m', down: '-750 m', diff: 2, profile: [55, 62, 12, 18, 25], town: 'Fisterra', desc: 'Primera vista del Atlántico en el Cruceiro da Armada, playas de Cee/Langosteira y el Faro del Fin del Mundo (Km 0).' },
+    { n: 'Ramal / Conexión Muxía', route: 'Olveiroa → Muxía (32,5 km) / Fisterra ↔ Lires ↔ Muxía (27,6 km)', km: '32,5 / 27,6 km', time: '6–7 h', up: '+520 m', down: '-530 m', diff: 2, profile: [55, 68, 25, 48, 12], town: 'Muxía', desc: 'Acantilados salvajes de la Costa da Morte hasta el Santuario da Virxe da Barca frente a las olas del océano.' }
   ]
+};
+
+// Tramos críticos sin servicios ni fuentes de agua (clave para planificación del peregrino)
+const CAMINO_ALERTAS_TRAMOS = {
+  'camino-frances': '⚠️ Tramos largos sin servicios: Orisson → Roncesvalles (16,6 km de alta montaña), Carrión de los Condes → Calzadilla de la Cueza (17,2 km sin agua ni bares en plena Meseta), Villamayor → Los Arcos (12,2 km) y Villafranca Montes de Oca → San Juan de Ortega (12 km).',
+  'camino-portugues-interior': '💧 Tramos más solitarios: Rubiães → Valença/Tui (subida de Labruja, 9 km de bosque) y Pontevedra → Briallos (lleva agua si hace calor antes de las cascadas de Barosa).',
+  'camino-portugues-costa': '💨 Tramo marítimo expuesto: Viana do Castelo → Caminha y Oia → Baiona cuentan con largos paseos sin sombra junto al mar; lleva protección solar y reserva alojamiento en verano.',
+  'camino-del-norte': '⛰️ Atención: En País Vasco y Cantabria hay subidas exigentes sin bares entre etapas (ej. Deba → Markina, 24 km). En verano los albergues costeros se llenan pronto por el turismo.',
+  'camino-primitivo': '🚨 ALERTA CRÍTICA: La Ruta de los Hospitales (Borres → Berducedo, 24,1 km) NO tiene pueblos, bares ni fuentes potables garantizadas. Lleva mínimo 2L de agua y comida; con niebla o mal tiempo ve por Pola de Allande.',
+  'camino-ingles': '💧 Tramos largos sin bares: Salida de Pontedeume hacia Miño y el tramo de Presedo → Hospital de Bruma (12 km en ascenso). En Bruma hay pocas plazas: reserva o madruga.',
+  'camino-sanabres': '☀️ Tramos solitarios: En Extremadura/Zamora hay tramos de más de 15–20 km sin servicios (ej. Embalse de Alcántara, Granja → Tábara, Santa Marta → Mombuey). Lleva agua extra.',
+  'camino-invierno': '🎒 Red espaciada: Entre Las Médulas, A Rúa, Quiroga y Monforte hay menos bares intermedios que en el Francés y albergues más pequeños; confirma plaza el día anterior.',
+  'camino-fisterra-muxia': '🌊 Etapa Negreira → Olveiroa (33,6 km): Pocos servicios entre A Pena y Santa Mariña; conviene fraccionar si hace calor o viento fuerte.'
 };
 
 // Servicios verificados disponibles en las principales localidades de paso
@@ -76,6 +95,7 @@ const SERVICIOS_PUEBLO = {
   'astorga': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Centro Salud', '🚂 Tren/Bus'],
   'ponferrada': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 Tren/Bus'],
   'o cebreiro': ['🛒 Tienda básica', '🍽️ Mesones', '⛪ Santuario'],
+  'triacastela': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes', '🚌 Bus'],
   'sarria': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Centro Salud', '🚂 Tren/Bus'],
   'portomarín': ['💊 Farmacia', '🏧 Cajero', '🛒 Tienda', '🍽️ Bares/Menú', '🩺 Consultorio'],
   'palas de rei': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes', '🏥 Centro Salud'],
@@ -106,9 +126,30 @@ const SERVICIOS_PUEBLO = {
   'sigüeiro': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes', '🚌 Bus'],
   'a coruña': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 AVE/Avión'],
   'oviedo': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 AVE/Bus'],
+  'grado': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes', '🚂 Tren/Bus'],
+  'salas': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes', '🚌 Bus'],
+  'tineo': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Centro Salud', '🚌 Bus'],
+  'borres': ['🛏️ Albergue municipal', '🍽️ Bar/Tienda básica'],
+  'berducedo': ['🛒 Tienda básica', '🍽️ Bares/Menú', '🛏️ Albergues'],
+  'grandas de salime': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes', '🚌 Bus'],
+  'a fonsagrada': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Centro Salud', '🚌 Bus'],
+  'o cádavo': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Bares/Menú'],
   'lugo': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 Tren/Bus'],
+  'bilbao': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 Tren/Avión'],
+  'santander': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 Tren/Avión'],
+  'ribadeo': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Centro Salud', '🚂 Tren/Bus'],
+  'zamora': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 AVE/Bus'],
+  'puebla de sanabria': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Centro Salud', '🚂 AVE/Bus'],
+  'a gudiña': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🚂 AVE/Bus'],
+  'laza': ['💊 Farmacia', '🛒 Tienda', '🍽️ Bares/Menú', '🩺 Consultorio'],
   'ourense': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 AVE/Bus'],
+  'o barco de valdeorras': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 Tren/Bus'],
+  'quiroga': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes', '🚌 Bus'],
   'monforte de lemos': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚂 Tren/Bus'],
+  'chantada': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Centro Salud', '🚌 Bus'],
+  'rodeiro': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes'],
+  'lalín': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Centro Salud', '🚌 Bus'],
+  'silleda': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes', '🚌 Bus'],
   'negreira': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🍽️ Restaurantes', '🚌 Bus'],
   'olveiroa': ['🛏️ Albergues Xunta/Privados', '🍽️ Bares/Menú'],
   'cee': ['💊 Farmacia', '🏧 Cajero', '🛒 Supermercado', '🏥 Hospital', '🚌 Bus'],
@@ -119,11 +160,18 @@ const SERVICIOS_PUEBLO = {
 
 // Fichas reales verificadas (plazas, precios, teléfonos, apertura y servicios concretos)
 const ALBERGUES_DETALLE = {
+  'roncesvalles': { plazas: '183 plazas', price: '14 €', phone: '+34 948 76 00 00', open: 'Todo el año (14:00 – 22:00h)', reserve: 'Admite reserva online anticipada', services: 'Colegiata histórica, taquillas individuales, secadoras, cocina, misa y bendición del peregrino' },
+  'jesús y maría': { plazas: '112 plazas', price: '10 – 12 €', phone: '+34 948 22 26 44', open: 'Todo el año (12:00 – 23:00h)', reserve: 'Sin reserva previa (municipal)', services: 'Iglesia rehabilitada en pleno casco antiguo de Pamplona, cocina, lavandería, wifi, taquillas' },
+  'casa del cubo': { plazas: '72 plazas', price: '10 €', phone: '+34 947 46 09 22', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (municipal)', services: 'A pocos metros de la Catedral de Burgos, cocina, lavadora/secadora, wifi, guarda-bicis' },
+  'san antonio el real': { plazas: '44 plazas', price: '15 – 18 €', phone: '+34 987 21 50 60', open: 'Todo el año', reserve: 'Admite reserva previa', services: 'Céntrico en León, cocina equipada, jardín, lavandería, habitaciones y literas' },
+  'o cebreiro': { plazas: '104 plazas', price: '10 €', phone: '+34 982 36 70 86', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (Xunta)', services: 'Albergue de montaña en la entrada de Galicia, calefacción, microondas, lavadora, wifi' },
   'albergue de peregrinos de sarria': { plazas: '40 plazas', price: '10 €', phone: '+34 660 39 68 13', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (orden de llegada)', services: 'Cocina básica, microondas, lavadero, wifi, sábanas desechables, guarda-bicis' },
   'albergue de peregrinos de portomarín': { plazas: '114 plazas', price: '10 €', phone: '+34 660 39 68 16', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (orden de llegada)', services: 'Dormitorios amplios, cocina/microondas, lavadora, secadora, wifi, bicis' },
   'albergue de peregrinos de palas de rei': { plazas: '60 plazas', price: '10 €', phone: '+34 660 39 68 20', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (orden de llegada)', services: 'Céntrico, cocina, lavadora/secadora, wifi, espacio bicicletas, adaptado PMR' },
+  'albergue de peregrinos de melide': { plazas: '134 plazas', price: '10 €', phone: '+34 660 39 68 22', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (Xunta)', services: 'Gran capacidad, cocina/microondas, lavandería, wifi, guarda-bicis' },
   'albergue de peregrinos de arzúa': { plazas: '56 plazas', price: '10 €', phone: '+34 660 39 68 24', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (orden de llegada)', services: 'Edificio histórico rehabilitado, microondas, lavadora, secadora, wifi' },
   'albergue de peregrinos de o pedrouzo': { plazas: '+100 plazas', price: '10 €', phone: '+34 660 39 68 26', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (orden de llegada)', services: 'Alta capacidad, cocina/nevera, lavandería, wifi, guarda-bicis' },
+  'seminario menor': { plazas: '+200 plazas', price: '16 – 30 €', phone: '+34 881 03 17 68', open: 'Marzo – Noviembre', reserve: 'Admite reserva online/teléfono', services: 'Habitaciones individuales y literas en Santiago, vistas al casco histórico, cocina, lavandería' },
   'albergue de peregrinos de tui': { plazas: '36 plazas', price: '10 €', phone: '+34 638 27 68 55', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (orden de llegada)', services: 'Junto a la Catedral, cocina equipada, lavadora, secadora, wifi, bicis' },
   'albergue de peregrinos de o porriño': { plazas: '48 plazas', price: '10 €', phone: '+34 986 33 54 28', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (orden de llegada)', services: 'Junto al río Louro, cocina, lavadora/secadora, wifi, guarda-bicis' },
   'casa da torre': { plazas: '36–42 plazas', price: '10 €', phone: '+34 618 33 80 45', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (orden de llegada)', services: 'Casona del s. XVI, microondas, nevera, lavadora/secadora, patio, bicis' },
@@ -134,5 +182,12 @@ const ALBERGUES_DETALLE = {
   'albergue de peregrinos de pontedeume': { plazas: '20 plazas', price: '8 €', phone: '+34 682 46 90 04', open: 'Todo el año', reserve: 'Sin reserva previa (municipal)', services: 'Junto al muelle y puente medieval, literas, duchas, wifi' },
   'hospital de bruma': { plazas: '22 plazas', price: '10 €', phone: '+34 649 58 03 09', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (orden de llegada)', services: '3 dormitorios, microondas, lavadora, mantas, zona de descanso' },
   'camiño real': { plazas: '23 plazas', price: '19 – 22 € (desayuno incl.)', phone: '+34 648 74 60 23', open: 'Marzo – Noviembre (privadas todo el año)', reserve: 'Admite reserva telefónica/online', services: 'Literas con cortina, desayuno incluido, wifi, lavandería, taquillas' },
-  'mirás': { plazas: '14 plazas', price: '15 €', phone: '+34 619 26 56 93', open: 'Semana Santa – 15 Octubre', reserve: 'Admite reserva previa', services: 'Familiar y céntrico, cocina, lavadora/secadora, wifi' }
+  'mirás': { plazas: '14 plazas', price: '15 €', phone: '+34 619 26 56 93', open: 'Semana Santa – 15 Octubre', reserve: 'Admite reserva previa', services: 'Familiar y céntrico, cocina, lavadora/secadora, wifi' },
+  'el salvador': { plazas: '52 plazas', price: '8 – 10 €', phone: '+34 985 22 85 25', open: 'Todo el año', reserve: 'Sin reserva previa (municipal Oviedo)', services: 'Albergue inicio del Camino Primitivo, cocina, lavadora/secadora, wifi, bicis' },
+  'albergue de peregrinos de lugo': { plazas: '44 plazas', price: '10 €', phone: '+34 660 39 68 38', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (Xunta)', services: 'Dentro de la Muralla Romana de Lugo, microondas, lavadero, wifi, bicis' },
+  'albergue de peregrinos de ourense': { plazas: '50 plazas', price: '10 €', phone: '+34 660 39 68 41', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (Xunta)', services: 'Junto a las fuentes termales de As Burgas, cocina, lavadora/secadora, wifi' },
+  'albergue de peregrinos de negreira': { plazas: '24 plazas', price: '10 €', phone: '+34 660 39 68 45', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (Xunta)', services: 'Primera etapa a Fisterra, cocina/microondas, lavadero, wifi, bicis' },
+  'albergue de peregrinos de olveiroa': { plazas: '38 plazas', price: '10 €', phone: '+34 660 39 68 47', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (Xunta)', services: 'Conjunto etnográfico de hórreos, cocina, lavadero, wifi' },
+  'albergue de peregrinos de fisterra': { plazas: '36 plazas', price: '10 €', phone: '+34 660 39 68 50', open: 'Todo el año (13:00 – 22:00h)', reserve: 'Sin reserva previa (Xunta)', services: 'Centro de Fisterra (entrega Fisterrana al lado), cocina, lavadora/secadora, wifi' },
+  'bela muxía': { plazas: '38 plazas', price: '16 – 19 €', phone: '+34 689 35 12 87', open: 'Todo el año', reserve: 'Admite reserva online/teléfono', services: 'Albergue moderno junto a la playa, cocina completa, desayuno, lavandería, jardín' }
 };
