@@ -4688,7 +4688,6 @@
       if (window.AndroidBleBridge && window.AndroidBleBridge.connectBle) {
         localStorage.setItem('vieira_ble_paired_' + boundDeviceId, 'true');
         window.AndroidBleBridge.connectBle(boundDeviceId);
-        updateBleStatusUI(true);
         return true;
       }
 
@@ -4730,8 +4729,6 @@
       if (window.AndroidBleBridge && window.AndroidBleBridge.connectBle) {
         try {
           window.AndroidBleBridge.connectBle(boundDeviceId);
-          updateBleStatusUI(true);
-          showOnScreenBleFeedback(`🟢 Vieira (${boundDeviceId}) reconectada automáticamente.`);
         } catch (e) {
           console.warn("Auto-reconnect AndroidBleBridge:", e);
         }
@@ -4769,7 +4766,10 @@
       showOnScreenBleFeedback("⚠️ Conexión Bluetooth finalizada.");
     }
 
+    let bleConnected = false;
+    if (!window._bleWatchdog) { window._bleWatchdog = setInterval(() => { if (bleConnected && window.AndroidBleBridge && typeof window.AndroidBleBridge.isBleConnected === "function" && !window.AndroidBleBridge.isBleConnected()) { onGattDisconnected(); } }, 2000); }
     function updateBleStatusUI(connected) {
+      bleConnected = !!connected;
       const badge = document.getElementById('bleRealBadge');
       const btn = document.getElementById('btnConnectRealBle');
       const boundDeviceId = currentUser ? currentUser.deviceId : 'VIEIRA-SMARTSHELL-S3-9982';
@@ -4816,14 +4816,20 @@
 
     // QUEUED SAFE GATT WRITE TO PREVENT "GATT OPERATION ALREADY IN PROGRESS"
     async function sendBleColorCommand(payloadStr, label) {
-      document.getElementById('homeLedStatus').innerText = label;
-
       if (window.AndroidBleBridge && window.AndroidBleBridge.sendBleCommand) {
+        const isNativeConn = (typeof window.AndroidBleBridge.isBleConnected === "function") ? window.AndroidBleBridge.isBleConnected() : bleConnected;
+        if (!isNativeConn) {
+          updateBleStatusUI(false);
+          showOnScreenBleFeedback("⚠️ SmartVieira desconectada. Conéctala por Bluetooth BLE primero.");
+          return;
+        }
+        document.getElementById("homeLedStatus").innerText = label;
         window.AndroidBleBridge.sendBleCommand(payloadStr);
         showOnScreenBleFeedback(`⚡ Enviado a la Vieira física (ESP32): ${payloadStr}`);
         if (payloadStr !== "OFF") start30SecAutoOffTimer();
         return;
       }
+      document.getElementById("homeLedStatus").innerText = label;
 
       if (!gattCharacteristicInstance) {
         showOnScreenBleFeedback(`⚠️ Recuerda pulsar "Conectar por Bluetooth BLE" arriba. (Comando: ${payloadStr})`);
