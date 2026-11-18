@@ -384,7 +384,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 2. Set CORS & Security Headers
-  const ALLOWED_ORIGINS = ['https://www.smartvieira.com', 'https://smartvieira.com', 'capacitor://localhost', 'http://localhost', 'http://127.0.0.1:3000', 'http://localhost:3000'];
+  const ALLOWED_ORIGINS = ['https://www.smartvieira.com', 'https://smartvieira.com', 'https://app.smartvieira.com', 'https://app.local', 'http://app.local', 'https://localhost', 'capacitor://localhost', 'http://localhost', 'http://127.0.0.1:3000', 'http://localhost:3000'];
   const reqOrigin = req.headers.origin;
   if (reqOrigin && (ALLOWED_ORIGINS.includes(reqOrigin) || reqOrigin.startsWith('http://localhost:') || reqOrigin.startsWith('http://127.0.0.1:'))) {
     res.setHeader('Access-Control-Allow-Origin', reqOrigin);
