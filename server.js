@@ -591,15 +591,48 @@ const server = http.createServer(async (req, res) => {
       const demoPath = path.join(PUBLIC_DIR, 'demo-database.json');
       const demoData = JSON.parse(fs.readFileSync(demoPath, 'utf8'));
       const currentDb = loadDb();
-      if (currentDb.smtpConfig) {
-        demoData.smtpConfig = currentDb.smtpConfig;
-      }
-      saveDb(demoData);
+
+      const existingPilgrimEmails = new Set((currentDb.pilgrims || []).map(p => (p.email || '').toLowerCase().trim()));
+      const existingCourierEmails = new Set((currentDb.couriers || []).map(c => (c.email || '').toLowerCase().trim()));
+      const existingResIds = new Set((currentDb.reservations || []).map(r => r.id));
+
+      let addedPilgrims = 0;
+      (demoData.pilgrims || []).forEach(p => {
+        const em = (p.email || '').toLowerCase().trim();
+        if (em && !existingPilgrimEmails.has(em)) {
+          currentDb.pilgrims.push(p);
+          existingPilgrimEmails.add(em);
+          addedPilgrims++;
+        }
+      });
+
+      let addedCouriers = 0;
+      (demoData.couriers || []).forEach(c => {
+        const em = (c.email || '').toLowerCase().trim();
+        if (em && !existingCourierEmails.has(em)) {
+          currentDb.couriers.push(c);
+          existingCourierEmails.add(em);
+          addedCouriers++;
+        }
+      });
+
+      (demoData.reservations || []).forEach(r => {
+        if (r.id && !existingResIds.has(r.id)) {
+          currentDb.reservations.push(r);
+          existingResIds.add(r.id);
+        }
+      });
+
+      saveDb(currentDb);
+      loadDb(); // Sync any new shell IDs into db.shells
       res.writeHead(200, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({
         success: true,
-        couriersCount: (demoData.couriers || []).length,
-        pilgrimsCount: (demoData.pilgrims || []).length
+        merged: true,
+        addedCouriers,
+        addedPilgrims,
+        couriersCount: (currentDb.couriers || []).length,
+        pilgrimsCount: (currentDb.pilgrims || []).length
       }));
     } catch (e) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
