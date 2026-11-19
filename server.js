@@ -17,6 +17,7 @@ const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
 
 const DEFAULT_COURIER_ACCESS_CODE = process.env.COURIER_ACCESS_CODE || 'VIEIRA-COURIER-2026';
+const STRICT_SHELL_VALIDATION = process.env.STRICT_SHELL_VALIDATION === 'true';
 const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
 if (!process.env.JWT_SECRET) {
   console.warn('[SECURITY WARN] JWT_SECRET no definido en env; usando secreto efimero aleatorio.');
@@ -675,12 +676,17 @@ const server = http.createServer(async (req, res) => {
 
       const db = loadDb();
       const cleanShellId = String(smartVieiraId).trim().toUpperCase();
-      const shellRecord = (db.shells || []).find(s => (s.id || '').trim().toUpperCase() === cleanShellId);
+      let shellRecord = (db.shells || []).find(s => (s.id || '').trim().toUpperCase() === cleanShellId);
       if (!shellRecord) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ success: false, message: `El ID "${cleanShellId}" no corresponde a ninguna concha SmartVieira vendida.` }));
+        if (STRICT_SHELL_VALIDATION) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({ success: false, message: `El ID "${cleanShellId}" no corresponde a ninguna concha SmartVieira vendida.` }));
+        }
+        db.shells = db.shells || [];
+        shellRecord = { id: cleanShellId, status: 'available', linkedEmail: null, batch: 'Prueba Cerrada', createdAt: new Date().toISOString() };
+        db.shells.push(shellRecord);
       }
-      if (shellRecord.status === 'linked' && shellRecord.linkedEmail && shellRecord.linkedEmail.toLowerCase() !== email.toLowerCase().trim()) {
+      if (STRICT_SHELL_VALIDATION && shellRecord.status === 'linked' && shellRecord.linkedEmail && shellRecord.linkedEmail.toLowerCase() !== email.toLowerCase().trim()) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ success: false, message: `La concha "${cleanShellId}" ya está vinculada a otra cuenta.` }));
       }
@@ -2020,6 +2026,15 @@ const server = http.createServer(async (req, res) => {
       }
       const db = loadDb();
       const shell = (db.shells || []).find(s => (s.id || '').trim().toUpperCase() === cleanId);
+      if (!STRICT_SHELL_VALIDATION) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+          success: true,
+          valid: true,
+          status: shell ? (shell.status || 'available') : 'available',
+          smartVieiraId: shell ? shell.id : cleanId
+        }));
+      }
       if (!shell) {
         res.writeHead(404, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({
