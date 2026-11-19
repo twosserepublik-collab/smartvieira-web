@@ -4429,12 +4429,34 @@
       if (video) video.classList.add('hidden');
     }
 
-    function simulateQrDetection(deviceId) {
+    async function verifyAndProceedWithShellId(rawId, sourceLabel) {
+      const cleanId = String(rawId || '').trim().toUpperCase();
+      if (!cleanId) return alert('Introduce un ID válido (ej. VIEIRA-SMARTSHELL-S3-9982)');
+      try {
+        const res = await fetch(getApiUrl('/api/shells/verify'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ smartVieiraId: cleanId })
+        });
+        const data = await res.json();
+        if (!data.valid) {
+          alert('⚠️ ' + (data.message || 'ID de SmartVieira no válido o ya vinculado.'));
+          return false;
+        }
+        document.getElementById('regDeviceId').value = data.smartVieiraId || cleanId;
+        alert(`${sourceLabel}\nID Concha: "${data.smartVieiraId || cleanId}"\nProcede a registrarte para asociar este dispositivo en BD.`);
+        goToAuthScreen();
+        setAuthTab('register');
+        return true;
+      } catch (err) {
+        alert('⚠️ Error de conexión verificando el ID de tu SmartVieira.');
+        return false;
+      }
+    }
+
+    async function simulateQrDetection(deviceId) {
       closeQrScannerModal();
-      document.getElementById('regDeviceId').value = deviceId;
-      alert(`📷 ¡CÓDIGO QR DETECTADO!\nID Concha: "${deviceId}"\nProcede a registrarte para asociar este dispositivo en BD.`);
-      goToAuthScreen();
-      setAuthTab('register');
+      await verifyAndProceedWithShellId(deviceId, '📷 ¡CÓDIGO QR VÁLIDO!');
     }
 
     function handleHeaderBadgeClick() {
@@ -4445,14 +4467,9 @@
       }
     }
 
-    function handleManualDeviceSubmit() {
+    async function handleManualDeviceSubmit() {
       const val = document.getElementById('manualDeviceId').value.trim();
-      if (!val) return alert('Introduce un ID válido (ej. VIEIRA-SMARTSHELL-S3-9982)');
-      
-      document.getElementById('regDeviceId').value = val;
-      alert(`ID Manual "${val}" fijado correctamente.\nProcede al alta de tu cuenta para asociarlo en BD.`);
-      goToAuthScreen();
-      setAuthTab('register');
+      await verifyAndProceedWithShellId(val, '🐚 ID SmartVieira verificado correctamente.');
     }
 
     function goToAuthScreen() {

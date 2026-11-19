@@ -137,6 +137,38 @@ function loadDb() {
 
     db.customHostels = db.customHostels || [];
     db.productOrders = db.productOrders || [];
+    if (!Array.isArray(db.shells)) {
+      const defaultBatch = [
+        'VIEIRA-SMARTSHELL-S3-9982',
+        'VIEIRA-SMARTSHELL-S3-9983',
+        'VIEIRA-SMARTSHELL-S3-1001',
+        'VIEIRA-SMARTSHELL-S3-1002',
+        'VIEIRA-SMARTSHELL-S3-1003',
+        'VIEIRA-SMARTSHELL-S3-1004',
+        'VIEIRA-SMARTSHELL-S3-1005',
+        'VIEIRA-SMARTSHELL-S3-1006',
+        'VIEIRA-SMARTSHELL-S3-1007',
+        'VIEIRA-SMARTSHELL-S3-1008',
+        'VIEIRA-SMARTSHELL-S3-1009',
+        'VIEIRA-SMARTSHELL-S3-1010'
+      ];
+      db.shells = defaultBatch.map(id => ({ id, status: 'available', linkedEmail: null, batch: 'Inicial', createdAt: new Date().toISOString() }));
+      migrated = true;
+    }
+    // Ensure any already-registered pilgrim shell IDs are tracked in db.shells
+    (db.pilgrims || []).forEach(p => {
+      const sid = (p.smartVieiraId || '').trim().toUpperCase();
+      if (!sid) return;
+      const found = db.shells.find(s => (s.id || '').toUpperCase() === sid);
+      if (!found) {
+        db.shells.push({ id: sid, status: 'linked', linkedEmail: p.email, batch: 'Migrada', createdAt: p.createdAt || new Date().toISOString() });
+        migrated = true;
+      } else if (found.status !== 'linked') {
+        found.status = 'linked';
+        found.linkedEmail = p.email;
+        migrated = true;
+      }
+    });
     if (migrated) saveDb(db);
     return db;
   } catch (err) {
@@ -203,6 +235,39 @@ function callStripeApi(endpoint, postData) {
 function sendSmtpEmail({ host, port = 465, user, pass, to, subject, bodyText }) {
   return new Promise((resolve, reject) => {
     const smtpHost = (host || 'smtp.gmail.com').trim();
+    const cleanPass = (pass || '').trim();
+    const resendKey = process.env.RESEND_API_KEY || (cleanPass.startsWith('re_') ? cleanPass : '');
+
+    // 0. Resend HTTPS API Mode (Port 443 - works reliably on Render Free)
+    if (resendKey && (smtpHost.toLowerCase() === 'resend' || cleanPass.startsWith('re_') || process.env.RESEND_API_KEY)) {
+      const fromAddr = (user && user.includes('@')) ? user.trim() : 'SmartVieira <onboarding@resend.dev>';
+      const payload = JSON.stringify({ from: fromAddr, to: [to], subject, text: bodyText });
+      const req = https.request({
+        hostname: 'api.resend.com',
+        port: 443,
+        path: '/emails',
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + resendKey,
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(payload)
+        }
+      }, (res) => {
+        let respBody = '';
+        res.on('data', c => respBody += c);
+        res.on('end', () => {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            resolve(true);
+          } else {
+            reject(new Error('Resend HTTP ' + res.statusCode + ': ' + respBody.slice(0, 180)));
+          }
+        });
+      });
+      req.on('error', err => reject(err));
+      req.write(payload);
+      req.end();
+      return;
+    }
 
     // 1. HTTPS Port 443 Bridge Mode (Google Apps Script / Webhook - bypasses Render Free SMTP port block)
     if (smtpHost.startsWith('https://')) {
@@ -570,12 +635,23 @@ const server = http.createServer(async (req, res) => {
       const body = await parseRequestBody(req);
       const { name, surname, language, email, password, smartVieiraId } = body;
 
-      if (!name || !email || !password) {
+      if (!name || !email || !password || !smartVieiraId) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ success: false, message: 'Faltan campos obligatorios (nombre, email, contraseña)' }));
+        return res.end(JSON.stringify({ success: false, message: 'Faltan campos obligatorios (nombre, email, contraseña, ID de concha)' }));
       }
 
       const db = loadDb();
+      const cleanShellId = String(smartVieiraId).trim().toUpperCase();
+      const shellRecord = (db.shells || []).find(s => (s.id || '').trim().toUpperCase() === cleanShellId);
+      if (!shellRecord) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: `El ID "${cleanShellId}" no corresponde a ninguna concha SmartVieira vendida.` }));
+      }
+      if (shellRecord.status === 'linked' && shellRecord.linkedEmail && shellRecord.linkedEmail.toLowerCase() !== email.toLowerCase().trim()) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: `La concha "${cleanShellId}" ya está vinculada a otra cuenta.` }));
+      }
+
       const existing = db.pilgrims.find(p => p.email.toLowerCase() === email.toLowerCase());
       if (existing) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -592,11 +668,14 @@ const server = http.createServer(async (req, res) => {
         email: email.toLowerCase().trim(),
         passwordHash: hash,
         salt: salt,
-        smartVieiraId: (smartVieiraId || 'VIEIRA-SMARTSHELL-S3-9982').trim(),
+        smartVieiraId: cleanShellId,
         createdAt: new Date().toISOString()
       };
 
       db.pilgrims.push(newPilgrim);
+      shellRecord.status = 'linked';
+      shellRecord.linkedEmail = newPilgrim.email;
+      shellRecord.linkedAt = new Date().toISOString();
       saveDb(db);
 
       const token = generateToken({ role: 'pilgrim', email: newPilgrim.email, id: newPilgrim.id });
@@ -836,21 +915,23 @@ const server = http.createServer(async (req, res) => {
         }
       }
 
-      // If user exists, generate a temporary secure password and update PBKDF2 hash
+      // Only overwrite password if email transport is actually configured and succeeds
       if (targetUser) {
-        const tempPassword = 'Vieira-' + crypto.randomBytes(4).toString('hex').toUpperCase();
-        const { hash, salt } = hashPassword(tempPassword);
-        targetUser.passwordHash = hash;
-        targetUser.salt = salt;
-        delete targetUser.passwordPlain; // Securely delete plaintext password
-        targetUser.lastPasswordRecoveryAt = new Date().toISOString();
-        saveDb(db);
-
         const smtpCfg = db.smtpConfig || {};
         const smtpUser = process.env.SMTP_USER || smtpCfg.user || '';
         const smtpPass = process.env.SMTP_PASS || smtpCfg.pass || '';
         const smtpHost = process.env.SMTP_HOST || smtpCfg.host || 'smtp.gmail.com';
+        const hasMailTransport = Boolean(process.env.RESEND_API_KEY || (smtpPass && smtpPass.startsWith('re_')) || smtpHost.startsWith('https://') || (smtpUser && smtpPass));
 
+        if (!hasMailTransport) {
+          res.writeHead(503, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            success: false,
+            message: 'El envío automático de correo aún no está configurado en el servidor. Configúralo en el Panel Admin (Resend / Google Script) o contacta soporte.'
+          }));
+        }
+
+        const tempPassword = 'Vieira-' + crypto.randomBytes(4).toString('hex').toUpperCase();
         const displayName = targetUser.name || targetUser.driverName || targetUser.companyName || 'Usuario';
         const subject = 'Nueva Contraseña Temporal - SmartVieira (' + userTypeLabel + ')';
         const bodyText = [
@@ -866,31 +947,38 @@ const server = http.createServer(async (req, res) => {
           'Equipo SmartVieira'
         ].join('\r\n');
 
-        if ((smtpUser && smtpPass) || smtpHost.startsWith('https://')) {
-          try {
-            await sendSmtpEmail({
-              host: smtpHost,
-              port: 465,
-              user: smtpUser,
-              pass: smtpPass,
-              to: targetUser.email,
-              subject,
-              bodyText
-            });
-            console.log(`[AUTH] Email de recuperación enviado a: ${targetUser.email}`);
-          } catch (errSmtp) {
-            console.error('[AUTH SMTP ERROR]', errSmtp.message);
-          }
-        } else {
-          console.log(`[AUTH OFFLINE] Recuperación iniciada para ${targetUser.email} (SMTP no configurado en servidor).`);
+        try {
+          await sendSmtpEmail({
+            host: smtpHost,
+            port: 465,
+            user: smtpUser,
+            pass: smtpPass,
+            to: targetUser.email,
+            subject,
+            bodyText
+          });
+          // Email delivered successfully -> now persist the new temporary password hash
+          const { hash, salt } = hashPassword(tempPassword);
+          targetUser.passwordHash = hash;
+          targetUser.salt = salt;
+          delete targetUser.passwordPlain;
+          targetUser.lastPasswordRecoveryAt = new Date().toISOString();
+          saveDb(db);
+          console.log(`[AUTH] Email de recuperación enviado a: ${targetUser.email}`);
+        } catch (errSmtp) {
+          console.error('[AUTH SMTP ERROR]', errSmtp.message);
+          res.writeHead(502, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            success: false,
+            message: 'No se pudo enviar el correo de recuperación (' + errSmtp.message + '). Tu contraseña actual sigue intacta.'
+          }));
         }
       }
 
-      // Generic response: Never leak plaintext password or disclose user existence
       res.writeHead(200, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({
         success: true,
-        message: '✅ Si el correo está registrado en SmartVieira, recibirás instrucciones de acceso por email. Revisa tu carpeta de Spam.'
+        message: '✅ Si el correo está registrado en SmartVieira, te hemos enviado una nueva contraseña temporal. Revisa tu bandeja de entrada y Spam.'
       }));
     } catch (e) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -1881,6 +1969,194 @@ const server = http.createServer(async (req, res) => {
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: false, message: 'Error guardando el pedido' }));
+    }
+  }
+
+  // ── SHELL INVENTORY VERIFICATION & ADMIN MANAGEMENT ───────────────────────
+  if (reqPath === '/api/shells/verify' && (req.method === 'POST' || req.method === 'GET')) {
+    try {
+      let rawId = queryParams.id || queryParams.smartVieiraId || '';
+      if (req.method === 'POST') {
+        const body = await parseRequestBody(req);
+        rawId = body.smartVieiraId || body.id || rawId;
+      }
+      const cleanId = String(rawId || '').trim().toUpperCase();
+      if (!cleanId) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, valid: false, message: 'Introduce un ID de concha SmartVieira.' }));
+      }
+      const db = loadDb();
+      const shell = (db.shells || []).find(s => (s.id || '').trim().toUpperCase() === cleanId);
+      if (!shell) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+          success: false,
+          valid: false,
+          message: `El ID "${cleanId}" no está registrado como una concha SmartVieira vendida.`
+        }));
+      }
+      if (shell.status === 'linked' && shell.linkedEmail) {
+        res.writeHead(409, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+          success: false,
+          valid: false,
+          status: 'linked',
+          message: `La concha "${cleanId}" ya está vinculada a otra cuenta de peregrino.`
+        }));
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({
+        success: true,
+        valid: true,
+        status: shell.status || 'available',
+        smartVieiraId: shell.id
+      }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, valid: false, message: 'Error verificando concha SmartVieira.' }));
+    }
+  }
+
+  if (reqPath === '/api/admin/shells/add' && req.method === 'POST') {
+    if (!verifyAdminAuth(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const rawList = Array.isArray(body.ids) ? body.ids : String(body.ids || body.id || '').split(/[\s,;]+/);
+      const batch = (body.batch || 'Venta').trim();
+      const db = loadDb();
+      db.shells = db.shells || [];
+      let added = 0;
+      let skipped = 0;
+      for (const item of rawList) {
+        const clean = String(item || '').trim().toUpperCase();
+        if (!clean) continue;
+        if (db.shells.some(s => (s.id || '').trim().toUpperCase() === clean)) {
+          skipped++;
+          continue;
+        }
+        db.shells.push({ id: clean, status: 'available', linkedEmail: null, batch, createdAt: new Date().toISOString() });
+        added++;
+      }
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, added, skipped, message: `Añadidas ${added} conchas (${skipped} ya existían).` }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error añadiendo conchas' }));
+    }
+  }
+
+  if (reqPath === '/api/admin/shells/release' && req.method === 'POST') {
+    if (!verifyAdminAuth(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const clean = String(body.id || '').trim().toUpperCase();
+      const db = loadDb();
+      const shell = (db.shells || []).find(s => (s.id || '').trim().toUpperCase() === clean);
+      if (!shell) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Concha no encontrada' }));
+      }
+      shell.status = 'available';
+      shell.linkedEmail = null;
+      delete shell.linkedAt;
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, message: `Concha ${clean} liberada.` }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error liberando concha' }));
+    }
+  }
+
+  if (reqPath === '/api/admin/shells/delete' && req.method === 'POST') {
+    if (!verifyAdminAuth(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const clean = String(body.id || '').trim().toUpperCase();
+      const db = loadDb();
+      const prevLen = (db.shells || []).length;
+      db.shells = (db.shells || []).filter(s => (s.id || '').trim().toUpperCase() !== clean);
+      if (db.shells.length === prevLen) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Concha no encontrada' }));
+      }
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, message: `Concha ${clean} eliminada.` }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error eliminando concha' }));
+    }
+  }
+
+  // ── ADMIN SMTP / EMAIL CONFIG & TEST ──────────────────────────────────────
+  if (reqPath === '/api/admin/smtp-config' && req.method === 'POST') {
+    if (!verifyAdminAuth(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const host = String(body.host || 'smtp.gmail.com').trim();
+      const user = String(body.user || '').trim();
+      const pass = String(body.pass || '').trim();
+      const db = loadDb();
+      db.smtpConfig = {
+        host,
+        user,
+        pass: pass || (db.smtpConfig && db.smtpConfig.pass) || '',
+        updatedAt: new Date().toISOString()
+      };
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, message: 'Configuración de correo guardada.' }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error guardando configuración de correo' }));
+    }
+  }
+
+  if (reqPath === '/api/admin/smtp-test' && req.method === 'POST') {
+    if (!verifyAdminAuth(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'No autorizado' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const db = loadDb();
+      const cfg = db.smtpConfig || {};
+      const host = process.env.SMTP_HOST || cfg.host || 'smtp.gmail.com';
+      const user = process.env.SMTP_USER || cfg.user || '';
+      const pass = process.env.SMTP_PASS || cfg.pass || '';
+      const to = String(body.to || user || '').trim();
+      if (!to) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Indica un correo de destino para la prueba.' }));
+      }
+      await sendSmtpEmail({
+        host,
+        port: 465,
+        user,
+        pass,
+        to,
+        subject: 'Prueba de Correo SmartVieira',
+        bodyText: 'Si lees este mensaje, el sistema de recuperación de contraseñas de SmartVieira funciona correctamente.'
+      });
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, message: `✅ Correo de prueba enviado a ${to}` }));
+    } catch (err) {
+      res.writeHead(502, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error enviando correo de prueba: ' + err.message }));
     }
   }
 
