@@ -619,6 +619,22 @@
           </button>
         </div>
 
+        <details class="glass-card rounded-3xl p-5 border border-slate-200 shadow-sm space-y-3">
+          <summary class="cursor-pointer font-black text-xs text-slate-800 flex items-center justify-between list-none">
+            <span>🔑 Cambiar Contraseña de la Cuenta</span>
+            <span class="text-slate-400">▾</span>
+          </summary>
+          <form onsubmit="handleCourierChangePassword(event)" class="space-y-2.5 pt-3 border-t border-slate-100">
+            <input type="password" id="courierCurPass" required placeholder="Contraseña actual (o temporal)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:border-slate-900 focus:outline-none">
+            <input type="password" id="courierNewPass" required minlength="6" placeholder="Nueva contraseña (mín. 6 caracteres)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:border-slate-900 focus:outline-none">
+            <input type="password" id="courierConfPass" required minlength="6" placeholder="Repite la nueva contraseña" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:border-slate-900 focus:outline-none">
+            <p id="courierChangePwMsg" class="text-[11px] font-bold hidden"></p>
+            <button type="submit" id="btnCourierChangePw" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs transition-all">
+              Guardar Nueva Contraseña
+            </button>
+          </form>
+        </details>
+
         <button type="button" onclick="logoutCourier()" class="w-full py-3.5 rounded-2xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 font-extrabold text-xs mt-4 shadow-sm flex items-center justify-center gap-2 cursor-pointer relative z-10">
             <svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             <span>Cerrar Sesión</span>
@@ -1346,6 +1362,43 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     window.logoutCourier = logoutCourier;
+
+    async function handleCourierChangePassword(e) {
+      e.preventDefault();
+      if (!currentCourier || !currentCourier.email) return alert('Inicia sesión primero.');
+      const cur = document.getElementById('courierCurPass').value;
+      const nw = document.getElementById('courierNewPass').value;
+      const cf = document.getElementById('courierConfPass').value;
+      const msgEl = document.getElementById('courierChangePwMsg');
+      const btn = document.getElementById('btnCourierChangePw');
+      if (nw !== cf) {
+        msgEl.className = 'text-[11px] font-bold text-red-600';
+        msgEl.innerText = '⚠️ Las nuevas contraseñas no coinciden.';
+        msgEl.classList.remove('hidden');
+        return;
+      }
+      btn.disabled = true;
+      btn.innerText = '⏳ Guardando...';
+      try {
+        const res = await fetch(getApiUrl('/api/change-password'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ role: 'courier', email: currentCourier.email, currentPassword: cur, newPassword: nw })
+        });
+        const data = await res.json();
+        msgEl.classList.remove('hidden');
+        msgEl.className = data.success ? 'text-[11px] font-bold text-emerald-600' : 'text-[11px] font-bold text-red-600';
+        msgEl.innerText = data.message || (data.success ? '✅ Actualizada' : 'Error');
+        if (data.success) e.target.reset();
+      } catch (_) {
+        msgEl.classList.remove('hidden');
+        msgEl.className = 'text-[11px] font-bold text-red-600';
+        msgEl.innerText = '⚠️ Error de conexión con el servidor.';
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Guardar Nueva Contraseña';
+      }
+    }
 
     // ── MANUAL REFRESH BUTTON ─────────────────────────────────────
     async function manualRefresh() {

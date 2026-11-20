@@ -976,6 +976,63 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // ── CHANGE PASSWORD (PILGRIM & COURIER) ────────────────────────────────
+  if (reqPath === '/api/change-password' && req.method === 'POST') {
+    if (!checkRateLimit('auth_changepw_' + clientIp, 10, 900000)) {
+      res.writeHead(429, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Demasiados intentos. Espera unos minutos.' }));
+    }
+    try {
+      const body = await parseRequestBody(req);
+      const role = body.role === 'courier' ? 'courier' : 'pilgrim';
+      const email = String(body.email || '').toLowerCase().trim();
+      const currentPassword = String(body.currentPassword || '');
+      const newPassword = String(body.newPassword || '');
+
+      if (!email || !currentPassword || !newPassword) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Completa tu contraseña actual y la nueva contraseña.' }));
+      }
+      if (newPassword.length < 6) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'La nueva contraseña debe tener al menos 6 caracteres.' }));
+      }
+
+      const db = loadDb();
+      const list = role === 'courier' ? (db.couriers || []) : (db.pilgrims || []);
+      const user = list.find(u => (u.email || '').toLowerCase().trim() === email);
+
+      let validCurrent = false;
+      if (user) {
+        if (user.passwordPlain && user.passwordPlain === currentPassword) {
+          validCurrent = true;
+        } else if (user.salt) {
+          validCurrent = verifyPassword(currentPassword, user.passwordHash, user.salt);
+        } else if (user.passwordHash) {
+          validCurrent = user.passwordHash === currentPassword;
+        }
+      }
+
+      if (!validCurrent) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'La contraseña actual no es correcta.' }));
+      }
+
+      const { hash, salt } = hashPassword(newPassword);
+      user.passwordHash = hash;
+      user.salt = salt;
+      delete user.passwordPlain;
+      user.passwordChangedAt = new Date().toISOString();
+      saveDb(db);
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, message: '✅ Contraseña actualizada correctamente.' }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: 'Error actualizando la contraseña.' }));
+    }
+  }
+
   // ── 4. LOGIN COURIER ──────────────────────────────────────────────────
   if (reqPath === '/api/login/courier' && req.method === 'POST') {
     if (!checkRateLimit('auth_courier_' + clientIp, 15, 900000)) {

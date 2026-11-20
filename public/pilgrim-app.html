@@ -1069,6 +1069,22 @@
         </button>
       </div>
 
+            <details class="glass-card rounded-3xl p-5 border border-[#E5DEC9] shadow-sm space-y-3">
+        <summary class="cursor-pointer font-black text-xs text-[#1C2826] flex items-center justify-between list-none">
+          <span>🔑 Cambiar Contraseña de la Cuenta</span>
+          <span class="text-[#1E4D3B]">▾</span>
+        </summary>
+        <form onsubmit="handlePilgrimChangePassword(event)" class="space-y-2.5 pt-3 border-t border-[#E5DEC9]">
+          <input type="password" id="pilgrimCurPass" required placeholder="Contraseña actual (o temporal)" class="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826] focus:border-[#1E4D3B] focus:outline-none">
+          <input type="password" id="pilgrimNewPass" required minlength="6" placeholder="Nueva contraseña (mín. 6 caracteres)" class="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826] focus:border-[#1E4D3B] focus:outline-none">
+          <input type="password" id="pilgrimConfPass" required minlength="6" placeholder="Repite la nueva contraseña" class="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826] focus:border-[#1E4D3B] focus:outline-none">
+          <p id="pilgrimChangePwMsg" class="text-[11px] font-bold hidden"></p>
+          <button type="submit" id="btnPilgrimChangePw" class="w-full py-3 rounded-xl bg-[#1E4D3B] hover:bg-[#16382B] text-white font-black text-xs transition-all">
+            Guardar Nueva Contraseña
+          </button>
+        </form>
+      </details>
+
       <!-- LOGOUT BUTTON (STRICTLY INSIDE TABPROFILE) -->
       <button id="profileLogoutBtn" onclick="handleLogout()" class="w-full py-4 rounded-2xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 font-extrabold text-xs transition-all shadow-sm">
         <span class="flex items-center justify-center gap-1.5"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Cerrar Sesión en esta App</span></span>
@@ -4507,6 +4523,43 @@
       const recEmail = document.getElementById('pilgrimRecoverEmail');
       if (loginEmail && recEmail && loginEmail.value && !recEmail.value) {
         recEmail.value = loginEmail.value;
+      }
+    }
+
+    async function handlePilgrimChangePassword(e) {
+      e.preventDefault();
+      if (!currentUser || !currentUser.email) return alert("Inicia sesión primero.");
+      const cur = document.getElementById("pilgrimCurPass").value;
+      const nw = document.getElementById("pilgrimNewPass").value;
+      const cf = document.getElementById("pilgrimConfPass").value;
+      const msgEl = document.getElementById("pilgrimChangePwMsg");
+      const btn = document.getElementById("btnPilgrimChangePw");
+      if (nw !== cf) {
+        msgEl.className = "text-[11px] font-bold text-red-600";
+        msgEl.innerText = "⚠️ Las nuevas contraseñas no coinciden.";
+        msgEl.classList.remove("hidden");
+        return;
+      }
+      btn.disabled = true;
+      btn.innerText = "⏳ Guardando...";
+      try {
+        const res = await fetch(getApiUrl("/api/change-password"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role: "pilgrim", email: currentUser.email, currentPassword: cur, newPassword: nw })
+        });
+        const data = await res.json();
+        msgEl.classList.remove("hidden");
+        msgEl.className = data.success ? "text-[11px] font-bold text-emerald-600" : "text-[11px] font-bold text-red-600";
+        msgEl.innerText = data.message || (data.success ? "✅ Actualizada" : "Error");
+        if (data.success) e.target.reset();
+      } catch (_) {
+        msgEl.classList.remove("hidden");
+        msgEl.className = "text-[11px] font-bold text-red-600";
+        msgEl.innerText = "⚠️ Error de conexión con el servidor.";
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Guardar Nueva Contraseña";
       }
     }
 
