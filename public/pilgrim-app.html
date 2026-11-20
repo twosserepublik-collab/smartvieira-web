@@ -575,6 +575,11 @@
           <input type="password" id="regPass" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 text-sm text-white focus:border-amber-400 focus:outline-none">
         </div>
 
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Repetir Contraseña *</label>
+          <input type="password" id="regPass2" required minlength="6" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 text-sm text-white focus:border-amber-400 focus:outline-none">
+        </div>
+
         <div class="flex items-center space-x-2 pt-1">
           <input type="checkbox" id="rememberReg" checked class="w-4 h-4 rounded text-amber-500 bg-slate-900 border-slate-700 focus:ring-amber-400">
           <label for="rememberReg" class="text-xs text-slate-300 font-medium">Recordar este dispositivo de forma segura</label>
@@ -4648,6 +4653,10 @@
       hideAuthError();
       const email = document.getElementById('regEmail').value.trim();
       const devId = document.getElementById('regDeviceId').value.trim() || 'VIEIRA-SMARTSHELL-S3-9982';
+      const pass1 = document.getElementById("regPass").value;
+      const pass2 = document.getElementById("regPass2") ? document.getElementById("regPass2").value : pass1;
+      if (pass1.length < 6) { showAuthError("⚠️ La contraseña debe tener al menos 6 caracteres."); return; }
+      if (pass1 !== pass2) { showAuthError("⚠️ Las contraseñas no coinciden."); return; }
 
       try {
         const res = await fetch(getApiUrl('/api/register/pilgrim'), {
