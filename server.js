@@ -11,7 +11,11 @@ const tls = require('tls');
 // =========================================================================
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
-const DB_FILE = path.join(__dirname, 'database.json');
+const DB_FILE = process.env.DB_FILE || path.join(__dirname, 'database.json');
+const GITHUB_GIST_ID = (process.env.GITHUB_GIST_ID || '').trim();
+const GITHUB_TOKEN = (process.env.GITHUB_TOKEN || '').trim();
+const UPSTASH_URL = (process.env.UPSTASH_REDIS_REST_URL || '').trim().replace(/\/$/, '');
+const UPSTASH_TOKEN = (process.env.UPSTASH_REDIS_REST_TOKEN || '').trim();
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
@@ -178,9 +182,116 @@ function loadDb() {
   }
 }
 
+let remoteSyncTimer = null;
+let pendingRemoteJson = null;
+
+function pushRemoteDbNow(jsonStr) {
+  if (UPSTASH_URL && UPSTASH_TOKEN) {
+    try {
+      const u = new URL(UPSTASH_URL + '/set/smartvieira_db');
+      const req = https.request({
+        hostname: u.hostname,
+        port: 443,
+        path: u.pathname + u.search,
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + UPSTASH_TOKEN,
+          'Content-Type': 'text/plain',
+          'Content-Length': Buffer.byteLength(jsonStr)
+        }
+      }, (res) => { res.resume(); });
+      req.on('error', e => console.error('[REMOTE DB UPSTASH SAVE ERR]', e.message));
+      req.write(jsonStr);
+      req.end();
+    } catch (e) {
+      console.error('[REMOTE DB UPSTASH ERR]', e.message);
+    }
+  }
+  if (GITHUB_GIST_ID && GITHUB_TOKEN) {
+    try {
+      const payload = JSON.stringify({ files: { 'database.json': { content: jsonStr } } });
+      const req = https.request({
+        hostname: 'api.github.com',
+        port: 443,
+        path: '/gists/' + GITHUB_GIST_ID,
+        method: 'PATCH',
+        headers: {
+          'Authorization': 'Bearer ' + GITHUB_TOKEN,
+          'User-Agent': 'SmartVieira-Server',
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(payload)
+        }
+      }, (res) => {
+        if (res.statusCode >= 300) console.error('[REMOTE DB GIST HTTP]', res.statusCode);
+        res.resume();
+      });
+      req.on('error', e => console.error('[REMOTE DB GIST SAVE ERR]', e.message));
+      req.write(payload);
+      req.end();
+    } catch (e) {
+      console.error('[REMOTE DB GIST ERR]', e.message);
+    }
+  }
+}
+
+async function syncRemoteDbOnBoot() {
+  if (UPSTASH_URL && UPSTASH_TOKEN) {
+    try {
+      const r = await fetch(UPSTASH_URL + '/get/smartvieira_db', {
+        headers: { 'Authorization': 'Bearer ' + UPSTASH_TOKEN }
+      });
+      if (r.ok) {
+        const j = await r.json();
+        if (j && j.result && typeof j.result === 'string' && j.result.trim().startsWith('{')) {
+          fs.writeFileSync(DB_FILE, j.result, 'utf8');
+          console.log('[REMOTE DB] Restored database.json from Upstash Redis!');
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('[REMOTE DB UPSTASH BOOT ERR]', e.message);
+    }
+  }
+  if (GITHUB_GIST_ID && GITHUB_TOKEN) {
+    try {
+      const r = await fetch('https://api.github.com/gists/' + GITHUB_GIST_ID, {
+        headers: {
+          'Authorization': 'Bearer ' + GITHUB_TOKEN,
+          'User-Agent': 'SmartVieira-Server',
+          'Accept': 'application/vnd.github+json'
+        }
+      });
+      if (r.ok) {
+        const j = await r.json();
+        const fileObj = j && j.files && j.files['database.json'];
+        if (fileObj && fileObj.content && fileObj.content.trim().startsWith('{')) {
+          fs.writeFileSync(DB_FILE, fileObj.content, 'utf8');
+          console.log('[REMOTE DB] Restored database.json from Private GitHub Gist!');
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('[REMOTE DB GIST BOOT ERR]', e.message);
+    }
+  }
+}
+
 function saveDb(data) {
   try {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf8');
+    const jsonStr = JSON.stringify(data, null, 2);
+    fs.writeFileSync(DB_FILE, jsonStr, 'utf8');
+    if ((UPSTASH_URL && UPSTASH_TOKEN) || (GITHUB_GIST_ID && GITHUB_TOKEN)) {
+      pendingRemoteJson = jsonStr;
+      if (remoteSyncTimer) clearTimeout(remoteSyncTimer);
+      remoteSyncTimer = setTimeout(() => {
+        if (pendingRemoteJson) {
+          const toSend = pendingRemoteJson;
+          pendingRemoteJson = null;
+          pushRemoteDbNow(toSend);
+        }
+      }, 300);
+    }
   } catch (err) {
     console.error('[DB SAVE ERROR]', err);
   }
@@ -2286,8 +2397,11 @@ server.headersTimeout = 5000;
 server.requestTimeout = 10000;
 server.keepAliveTimeout = 5000;
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`[VIEIRA HARDENED SERVER] Running at http://0.0.0.0:${PORT}`);
-  console.log(`[VIEIRA DB] Protected Database loaded at ${DB_FILE}`);
-  console.log(`[VIEIRA SECURITY] Anti-DoS Rate Limiting, PBKDF2 Password Hashing & JWT Active.`);
-});
+(async () => {
+  await syncRemoteDbOnBoot();
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`[VIEIRA HARDENED SERVER] Running at http://0.0.0.0:${PORT}`);
+    console.log(`[VIEIRA DB] Protected Database loaded at ${DB_FILE}`);
+    console.log(`[VIEIRA SECURITY] Anti-DoS Rate Limiting, PBKDF2 Password Hashing & JWT Active.`);
+  });
+})();
