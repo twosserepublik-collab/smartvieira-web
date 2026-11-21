@@ -5453,6 +5453,153 @@
         );
       }
 
+
+      // === HOSPITALERO DIGITAL ENRIQUECIDO CON TODA LA GUÍA OFFLINE ===
+      function searchGuideKnowledgeForBot(rawQ, normQ) {
+        const norm = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const routeAliases = [
+          { id: 'camino-frances', name: 'Camino Francés', keys: ['frances', 'sarria', 'portomarin', 'roncesvalles', 'cebrier', 'cebreiro', 'triacastela', 'palas', 'melide', 'arzua', 'pedrouzo'] },
+          { id: 'camino-portugues-costa', name: 'Camino Portugués por la Costa', keys: ['portugues costa', 'por la costa', 'baiona', 'vigo', 'a guarda', 'oia'] },
+          { id: 'camino-portugues-interior', name: 'Camino Portugués', keys: ['portugues', 'tui', 'porrino', 'redondela', 'pontevedra', 'caldas', 'padron'] },
+          { id: 'camino-ingles', name: 'Camino Inglés', keys: ['ingles', 'ferrol', 'neda', 'pontedeume', 'betanzos', 'bruma', 'sigueiro'] },
+          { id: 'camino-del-norte', name: 'Camino del Norte', keys: ['norte', 'ribadeo', 'mondonedo', 'vilalba', 'sobrado', 'baamonde'] },
+          { id: 'camino-primitivo', name: 'Camino Primitivo', keys: ['primitivo', 'oviedo', 'fonsagrada', 'lugo', 'san roman'] },
+          { id: 'camino-sanabres', name: 'Camino Sanabrés / Vía de la Plata', keys: ['sanabres', 'plata', 'ourense', 'cea', 'lalin', 'silleda', 'a gudina'] },
+          { id: 'camino-invierno', name: 'Camino de Invierno', keys: ['invierno', 'ponferrada', 'o barco', 'monforte', 'chantada', 'lalin'] },
+          { id: 'camino-fisterra-muxia', name: 'Epílogo Fisterra y Muxía', keys: ['fisterra', 'finisterre', 'muxia', 'negreira', 'olveiroa', 'cee', 'corcubion'] }
+        ];
+
+        // A. Temas prácticos de la Guía (Compostela, Presupuesto, Peso/Mochila, Botiquín)
+        if (normQ.includes('compostela') || normQ.includes('sello') || normQ.includes('credencial')) {
+          return (
+            "📜 **La Compostela y Norma de los 2 Sellos:**\n\n" +
+            "• Necesitas caminar al menos **100 km continuos a pie** (200 km en bici) hasta Santiago.\n" +
+            "• En los últimos 100 km la Oficina del Peregrino (*Rúa das Carretas, 33*) exige **mínimo 2 sellos con fecha por día** en tu Credencial.\n" +
+            "• Puedes pedirlos en albergues, iglesias, bares, ayuntamientos y oficinas de turismo."
+          );
+        }
+        if (normQ.includes('presupuesto') || normQ.includes('cuanto cuesta') || normQ.includes('dinero') || normQ.includes('gasto')) {
+          return (
+            "🧮 **Presupuesto Estimado del Camino:**\n\n" +
+            "• **Albergue público (Xunta):** ~10 €/noche\n" +
+            "• **Albergue privado:** ~15-20 €/noche\n" +
+            "• **Comida diaria (menú del peregrino + desayunos):** ~20-25 €/día\n" +
+            "• **Transporte de mochila SmartVieira:** ~7 €/etapa\n" +
+            "👉 Total orientativo para **5 días** con mochila: **~280 €** (puedes calcularlo exacto en *Guía → Consejos*)."
+          );
+        }
+        if (normQ.includes('ampolla') || normQ.includes('botiquin') || normQ.includes('pies') || normQ.includes('compeed')) {
+          return (
+            "🩹 **Botiquín Anti-ampollas (< 300 g):**\n\n" +
+            "Aplica vaselina en los pies antes de salir, usa calcetines técnicos sin costuras y lleva siempre: apósitos hidrocoloides (*Compeed*), clorhexidina, ibuprofeno, suero oral y tapones para los oídos."
+          );
+        }
+
+        // B. Búsqueda exacta por localidad / pueblo en Etapas, Servicios y Albergues
+        const etapasMap = (typeof CAMINO_ETAPAS !== 'undefined') ? CAMINO_ETAPAS : {};
+        const alberguesMap = (typeof ALBERGUES_Y_HOTELES !== 'undefined') ? ALBERGUES_Y_HOTELES : {};
+        const serviciosMap = (typeof SERVICIOS_PUEBLO !== 'undefined') ? SERVICIOS_PUEBLO : {};
+        const alertasMap = (typeof CAMINO_ALERTAS_TRAMOS !== 'undefined') ? CAMINO_ALERTAS_TRAMOS : {};
+        const culturaMap = (typeof CAMINO_EXTRA_CULTURA !== 'undefined') ? CAMINO_EXTRA_CULTURA : {};
+
+        const words = normQ.split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !['albergue','albergues','etapa','etapas','camino','donde','dormir','farmacia','cajero','supermercado','pueblo','ciudad','tengo','quiero','sobre','como','esta'].includes(w));
+        let matchedTown = '';
+        for (const tKey of Object.keys(serviciosMap)) {
+          const nt = norm(tKey);
+          if (nt.length >= 4 && normQ.includes(nt)) { matchedTown = tKey; break; }
+        }
+        if (!matchedTown) {
+          for (const rId of Object.keys(etapasMap)) {
+            for (const st of (etapasMap[rId] || [])) {
+              const nt = norm(st.town);
+              if (nt.length >= 4 && normQ.includes(nt)) { matchedTown = st.town; break; }
+            }
+            if (matchedTown) break;
+          }
+        }
+        if (!matchedTown) {
+          for (const rId of Object.keys(alberguesMap)) {
+            for (const h of (alberguesMap[rId] || [])) {
+              const nt = norm(h.town);
+              if (nt.length >= 4 && normQ.includes(nt)) { matchedTown = h.town; break; }
+            }
+            if (matchedTown) break;
+          }
+        }
+
+        if (matchedTown) {
+          const nTown = norm(matchedTown);
+          const stageHits = [];
+          const hostelHits = [];
+          for (const rId of Object.keys(etapasMap)) {
+            for (const st of (etapasMap[rId] || [])) {
+              if (norm(st.town) === nTown || norm(st.route).includes(nTown)) {
+                stageHits.push('• **Etapa ' + st.n + ' (' + st.route + '):** ' + st.km + ', ' + st.time + ' (' + st.up + ' / ' + st.down + '). ' + st.desc);
+              }
+            }
+          }
+          for (const rId of Object.keys(alberguesMap)) {
+            for (const h of (alberguesMap[rId] || [])) {
+              if (norm(h.town) === nTown) {
+                hostelHits.push('• ' + h.name);
+              }
+            }
+          }
+          const svcs = serviciosMap[matchedTown.toLowerCase()] || [];
+          let reply = "📍 **Guía de " + matchedTown + ":**\n\n";
+          if (stageHits.length) reply += "🥾 **Etapa relacionada:**\n" + stageHits.slice(0, 2).join("\n") + "\n\n";
+          if (svcs.length) reply += "🏪 **Servicios disponibles:** " + svcs.join(" • ") + "\n\n";
+          if (hostelHits.length) {
+            reply += "🏨 **Albergues y alojamientos (" + hostelHits.length + "):**\n" + hostelHits.slice(0, 6).join("\n");
+            if (hostelHits.length > 6) reply += "\n*...y " + (hostelHits.length - 6) + " más en la pestaña Guía → Albergues.*";
+          } else {
+            reply += "🏨 Puedes consultar alojamientos cercanos en la pestaña **Guía → Albergues**.";
+          }
+          return reply;
+        }
+
+        // C. Búsqueda por nombre concreto de albergue si escribió palabras clave
+        if (words.length > 0 && (normQ.includes('albergue') || normQ.includes('hotel') || normQ.includes('hostal') || normQ.includes('pension'))) {
+          const found = [];
+          for (const rId of Object.keys(alberguesMap)) {
+            for (const h of (alberguesMap[rId] || [])) {
+              const nh = norm(h.name);
+              if (words.some(w => w.length >= 5 && nh.includes(w))) {
+                found.push('• **' + h.name + '** (' + h.town + ')');
+              }
+            }
+          }
+          if (found.length) {
+            return "🏡 **Alojamientos encontrados en la Guía:**\n\n" + found.slice(0, 6).join("\n") + "\n\nAbre **Guía → Albergues** para ver su mapa y enlace de Booking.";
+          }
+        }
+
+        // D. Búsqueda por Camino / Ruta concreta
+        const matchedRoute = routeAliases.find(r => r.keys.some(k => normQ.includes(k)));
+        if (matchedRoute && (normQ.includes('camino') || normQ.includes('ruta') || normQ.includes('etapa') || normQ.includes('ver') || normQ.includes('alerta') || normQ.includes('gastronom') || normQ.includes('comer') || normQ.includes('monumento'))) {
+          const stages = etapasMap[matchedRoute.id] || [];
+          const alertTxt = alertasMap[matchedRoute.id] || '';
+          const cult = culturaMap[matchedRoute.id] || null;
+          let reply = "🧭 **" + matchedRoute.name + "** (" + stages.length + " etapas en guía):\n\n";
+          if (stages.length) {
+            reply += stages.slice(0, 4).map(s => "• **Etapa " + s.n + ":** " + s.route + " (" + s.km + ")").join("\n") + "\n";
+            if (stages.length > 4) reply += "*...y " + (stages.length - 4) + " etapas más en Guía → Caminos y Etapas.*\n";
+            reply += "\n";
+          }
+          if (cult) {
+            reply += "🏛️ **Qué ver:** " + cult.see + "\n🍽️ **Gastronomía:** " + cult.food + "\n\n";
+          }
+          if (alertTxt) {
+            reply += "⚠️ **Aviso de ruta:** " + alertTxt;
+          }
+          return reply.trim();
+        }
+        return null;
+      }
+
+      const guideReply = searchGuideKnowledgeForBot(rawText || '', q);
+      if (guideReply) return guideReply;
+
       // 9. Qué ver / Etapas / Monumentos
       if (
         q.includes("que ver") ||
@@ -5538,7 +5685,7 @@
         "1. 🎒 **Tu Mochila:** Escribe «¿Dónde está mi mochila?» o «estado de entrega».\n" +
         "2. 🏨 **Imprevistos:** «¿Qué hago si llego tarde?» o «cambio de albergue».\n" +
         "3. 🐚 **Tu Concha:** «¿Cómo funciona la luz LED?» o «batería».\n" +
-        "4. 🏛️ **Cultura Jacobea:** «Historia de la concha» o «qué ver en esta etapa».\n" +
+        "4. 🧭 **Guía del Camino:** Pregunta por cualquier **pueblo, etapa, albergue o ruta** (ej. *«¿Albergues en Portomarín?»*, *«Camino Primitivo»*, *«Presupuesto»*).\n" +
         "5. 🚨 **Seguridad:** «Teléfonos de emergencia 112».\n\n" +
         "Prueba a pulsar uno de los botones de arriba o escribe una de estas palabras clave."
       );
