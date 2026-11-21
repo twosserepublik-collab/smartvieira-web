@@ -39,7 +39,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="manifest" href="/manifest-pilgrim.json">
-  <meta name="theme-color" content="#F7F3EB">
+  <meta name="theme-color" content="#FAF7F0">
   <title>Vieira — Tu Compañero del Camino</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
@@ -262,6 +262,96 @@
     .animate-slide-up {
       animation: slideUpModal 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+
+    /* === V13.47 VERDE EDITORIAL EDITION === */
+    :root {
+      --camino-bg: #FAF7F0;
+      --camino-bg-soft: #EFE9DC;
+      --camino-surface: #FFFFFF;
+      --camino-border: #E5DEC9;
+      --camino-forest: #1E4D3B;
+      --camino-forest-light: #2A6B53;
+      --camino-sage: #E6F0EB;
+      --camino-gold: #D48B28;
+      --camino-ink: #1C2826;
+      --camino-muted: #5F6C65;
+    }
+    body {
+      background-color: #FAF7F0 !important;
+      background-image:
+        radial-gradient(at 10% 0%, rgba(30, 77, 59, 0.05) 0px, transparent 50%),
+        radial-gradient(at 90% 10%, rgba(212, 139, 40, 0.06) 0px, transparent 45%) !important;
+      color: #1C2826 !important;
+    }
+    h1, h2, h3, .serif-title {
+      font-family: 'Fraunces', Georgia, serif !important;
+      letter-spacing: -0.025em !important;
+    }
+    h2, h3 {
+      color: #1E4D3B !important;
+    }
+    .glass-card {
+      background: #FFFFFF !important;
+      border: 1px solid #E5DEC9 !important;
+      box-shadow: 0 10px 28px -12px rgba(28, 40, 38, 0.08), 0 1px 4px rgba(28, 40, 38, 0.03) !important;
+    }
+    /* Header clean ivory look */
+    header.verde-header {
+      background: rgba(250, 247, 240, 0.94) !important;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid #E8E1CF !important;
+      box-shadow: none !important;
+    }
+    /* Crisp white bottom bar with forest green active state & gold dot */
+    #bottomNav {
+      background: rgba(255, 255, 255, 0.97) !important;
+      backdrop-filter: blur(16px) !important;
+      border-top: 1px solid #E5DEC9 !important;
+      box-shadow: 0 -8px 24px -8px rgba(28, 40, 38, 0.09) !important;
+      padding-top: 0.55rem !important;
+      padding-bottom: 0.65rem !important;
+    }
+    #bottomNav .nav-btn {
+      position: relative;
+      color: #6E7A74 !important;
+      transition: color 0.2s ease, transform 0.15s ease;
+    }
+    #bottomNav .nav-btn.text-amber-400,
+    #bottomNav .nav-btn.text-amber-500 {
+      color: #1E4D3B !important;
+    }
+    #bottomNav .nav-btn.text-amber-400 svg,
+    #bottomNav .nav-btn.text-amber-500 svg {
+      stroke: #1E4D3B !important;
+      transform: translateY(-1px);
+    }
+    #bottomNav .nav-btn.text-amber-400::after,
+    #bottomNav .nav-btn.text-amber-500::after {
+      content: '';
+      position: absolute;
+      top: 0px;
+      right: calc(50% - 14px);
+      width: 7px;
+      height: 7px;
+      border-radius: 9999px;
+      background-color: #D48B28;
+      border: 1.5px solid #FFFFFF;
+    }
+    /* Booking pill button */
+    .bg-\[\#003580\] {
+      background-color: #0A2E5C !important;
+      border-radius: 9999px !important;
+      padding-left: 0.9rem !important;
+      padding-right: 0.9rem !important;
+    }
+    /* Soft sand pills */
+    .verde-pill {
+      background-color: #EFE9DC !important;
+      border: 1px solid #E2DAC9 !important;
+      color: #1C2826 !important;
+    }
+
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -287,33 +377,41 @@
     </symbol>
   </svg>
 
-  <!-- Top Header Navigation -->
-  <header class="sticky top-0 z-40 glass-card px-4 py-3 border-b border-amber-500/20 flex items-center justify-between shadow-xl">
+  <!-- Top Header Navigation (Verde Editorial v13.47) -->
+  <header class="sticky top-0 z-40 verde-header px-4 py-3 flex items-center justify-between">
     <div class="flex items-center space-x-2.5">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-300 flex items-center justify-center shadow-lg shadow-amber-500/20">
-        <svg class="w-6 h-6"><use href="#icon-vieira-shell"></use></svg>
+      <div class="w-9 h-9 flex items-center justify-center shrink-0">
+        <svg viewBox="0 0 64 64" class="w-8 h-8">
+          <path d="M32 6 C17 6 6 19 6 35 C6 46 17 55 32 55 C47 55 58 46 58 35 C58 19 47 6 32 6 Z" fill="#E3B341" stroke="#C58F1E" stroke-width="2"/>
+          <path d="M32 10 L32 51 M21 13 L25 50 M43 13 L39 50 M13 22 L19 46 M51 22 L45 46" stroke="#B68016" stroke-width="2" stroke-linecap="round"/>
+          <path d="M26 55 L32 60 L38 55 Z" fill="#C58F1E"/>
+        </svg>
       </div>
-      <div>
-        <h1 class="text-base font-black tracking-tight text-white">Vieira<span class="text-amber-400">.</span> <span class="text-[10px] text-white/50">v13.9.2</span></h1>
-        <p class="text-[9px] text-amber-300/90 font-extrabold uppercase tracking-wider -mt-1">App Oficial del Peregrino</p>
+      <div class="flex items-center gap-2">
+        <h1 class="text-2xl font-bold tracking-tight text-[#1E4D3B] leading-none">Vieira<span class="text-[#1E4D3B]">.</span></h1>
+        <div class="leading-tight border-l border-[#DDD4C0] pl-2">
+          <p class="text-[8.5px] text-[#4A5851] font-bold uppercase tracking-wider">App Oficial</p>
+          <p class="text-[8.5px] text-[#4A5851] font-bold uppercase tracking-wider -mt-0.5">Del Peregrino</p>
+        </div>
       </div>
     </div>
-    
-    <!-- Language Selector + Informative Header Badge -->
-    <div class="flex items-center space-x-2">
-      <select id="headerLangSelect" onchange="changeAppLanguage(this.value)" title="Seleccionar idioma" class="bg-slate-900/95 text-amber-300 border border-amber-500/40 rounded-full px-2.5 py-1.5 text-xs font-extrabold focus:outline-none focus:border-amber-400 cursor-pointer shadow-md">
-        <option value="ES">🇪🇸 ES</option>
-        <option value="EN">🇬🇧 EN</option>
-        <option value="FR">🇫🇷 FR</option>
-        <option value="DE">🇩🇪 DE</option>
-        <option value="IT">🇮🇹 IT</option>
-        <option value="PT">🇵🇹 PT</option>
-        <option value="KO">🇰🇷 KO</option>
-        <option value="ZH">🇨🇳 ZH</option>
+
+    <!-- Language Selector + User Pill -->
+    <div class="flex items-center space-x-1.5">
+      <select id="headerLangSelect" onchange="changeAppLanguage(this.value)" title="Seleccionar idioma" class="verde-pill rounded-full px-2.5 py-1.5 text-xs font-bold focus:outline-none cursor-pointer">
+        <option value="ES">ES</option>
+        <option value="EN">EN</option>
+        <option value="FR">FR</option>
+        <option value="DE">DE</option>
+        <option value="IT">IT</option>
+        <option value="PT">PT</option>
+        <option value="KO">KO</option>
+        <option value="ZH">ZH</option>
       </select>
-      <div id="headerUserStatus" onclick="handleHeaderBadgeClick()" class="flex items-center space-x-2 bg-slate-900/90 px-3 py-1.5 rounded-full border border-amber-500/30 cursor-pointer hover:border-amber-400 transition-all">
-        <span id="sessionStatusDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
-        <span id="navUserName" class="text-xs font-extrabold text-slate-200">Modo Invitado</span>
+      <div id="headerUserStatus" onclick="handleHeaderBadgeClick()" class="verde-pill flex items-center space-x-1.5 px-3 py-1.5 rounded-full cursor-pointer transition-all">
+        <span id="sessionStatusDot" class="w-2 h-2 rounded-full bg-[#1E4D3B]"></span>
+        <span id="navUserName" class="text-xs font-bold text-[#1C2826]">Modo Invitado</span>
+        <svg class="w-3.5 h-3.5 text-[#1E4D3B] fill-current shrink-0" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
       </div>
     </div>
   </header>
@@ -1356,30 +1454,30 @@
   </main>
 
   <!-- Bottom Navigation Bar (ONLY SHOWN TO LOGGED IN USERS) -->
-  <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-[#E5DEC9] px-4 py-2 flex items-center justify-around max-w-md mx-auto">
-    <button onclick="switchTab('tabHome')" class="nav-btn flex flex-col items-center space-y-0.5 text-amber-500" id="navBtnHome">
-      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span class="text-[10px] font-extrabold">Inicio</span>
-    </button>
-    
-    <button onclick="switchTab('tabBook')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnBook">
-      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/><path d="M8 10h8"/></svg>
-      <span class="text-[10px] font-extrabold">Reservar</span>
+  <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-50 px-4 py-2 flex items-center justify-around max-w-md mx-auto">
+    <button onclick="switchTab('tabHome')" class="nav-btn flex flex-col items-center space-y-0.5 text-amber-400" id="navBtnHome">
+      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="text-[10px] font-bold">Inicio</span>
     </button>
 
-    <button onclick="switchTab('tabGuide')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnGuide">
-      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-      <span class="text-[10px] font-extrabold">Guía</span>
+    <button onclick="switchTab('tabBook')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400" id="navBtnBook">
+      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+      <span class="text-[10px] font-bold">Reservar</span>
     </button>
 
-    <button onclick="switchTab('tabShell')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnShell">
-      <svg class="w-5 h-5"><use href="#icon-vieira-shell"></use></svg>
-      <span class="text-[10px] font-extrabold">Vieira</span>
+    <button onclick="switchTab('tabGuide')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400" id="navBtnGuide">
+      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+      <span class="text-[10px] font-bold">Guía</span>
     </button>
 
-    <button onclick="switchTab('tabProfile')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnProfile">
-      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span class="text-[10px] font-extrabold">Perfil</span>
+    <button onclick="switchTab('tabShell')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400" id="navBtnShell">
+      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3C6.5 3 3 8 3 13.5C3 17.8 7 21 12 21C17 21 21 17.8 21 13.5C21 8 17.5 3 12 3Z"/><path d="M12 5v14M8 7l1.5 11M16 7l-1.5 11"/></svg>
+      <span class="text-[10px] font-bold">Vieira</span>
+    </button>
+
+    <button onclick="switchTab('tabProfile')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400" id="navBtnProfile">
+      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="text-[10px] font-bold">Perfil</span>
     </button>
   </nav>
 
