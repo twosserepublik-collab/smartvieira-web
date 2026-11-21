@@ -204,28 +204,27 @@
       box-shadow: 0 0 0 3px rgba(30, 77, 59, 0.12) !important;
     }
 
-    /* Horizontal Rainbow Color Slider Style */
+    /* Discreet Horizontal Color Slider Style */
     .color-slider-bar {
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
-      height: 28px;
-      border-radius: 14px;
-      background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+      height: 10px;
+      border-radius: 9999px;
+      background: linear-gradient(to right, #e5534b 0%, #e5b84b 17%, #43b581 33%, #3bb4c1 50%, #4b7bec 67%, #a55eea 83%, #e5534b 100%);
       outline: none;
-      border: 2px solid #E5DEC9;
+      border: 1px solid #E5DEC9;
       cursor: pointer;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
     }
     .color-slider-bar::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 34px;
-      height: 34px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: #FFFFFF;
-      border: 3px solid #1E4D3B;
-      box-shadow: 0 4px 12px rgba(28, 40, 38, 0.3);
+      border: 2px solid #1E4D3B;
+      box-shadow: 0 2px 6px rgba(28, 40, 38, 0.22);
       cursor: pointer;
     }
 
@@ -1075,46 +1074,38 @@
         </button>
       </div>
 
-      <!-- SINGLE HORIZONTAL COLOR SLIDER + LIVE FEEDBACK & 30s TIMER -->
-      <div class="glass-card rounded-3xl p-5 border border-amber-500/30 space-y-6">
+      <!-- SINGLE HORIZONTAL COLOR SLIDER + COMPACT TIMER -->
+      <div class="glass-card rounded-3xl p-4 border border-[#E5DEC9] space-y-4">
         
         <!-- Live Status & Feedback Box -->
-        <div id="bleFeedbackAlert" class="hidden p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300 font-bold text-center">
+        <div id="bleFeedbackAlert" class="hidden p-2.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300 font-bold text-center">
         </div>
 
-        <!-- Timer Status Display -->
-        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center space-y-1">
-          <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider block">Temporizador de Ahorro de Pila (30s)</span>
-          <div id="timerCountdownBox" class="text-3xl font-black text-white font-mono">00:30</div>
-          <p id="timerStatusText" class="text-xs text-slate-300 font-medium">Desliza la barra de color para encender el LED.</p>
+        <!-- Discreet Compact Timer Row -->
+        <div class="px-3.5 py-2.5 rounded-2xl bg-[#FAF7F0] border border-[#E5DEC9] flex items-center justify-between gap-3">
+          <div class="min-w-0">
+            <span class="text-[10px] font-bold text-[#5F6C65] uppercase tracking-wider block">Temporizador de Ahorro de Pila (30s)</span>
+            <p id="timerStatusText" class="text-[11px] text-[#5F6C65] truncate">Desliza la barra de color para encender el LED.</p>
+          </div>
+          <div id="timerCountdownBox" class="text-sm font-bold text-[#1E4D3B] font-mono px-2.5 py-1 rounded-xl bg-[#EFE9DC] border border-[#E2DAC9] shrink-0">00:30</div>
         </div>
 
-        <!-- SINGLE HORIZONTAL COLOR BAR SLIDER -->
-        <div class="space-y-4">
+        <!-- SLEEK HORIZONTAL COLOR BAR SLIDER -->
+        <div class="space-y-2.5">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-extrabold text-amber-300"><span class="inline-flex items-center gap-1.5 text-amber-900"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg><span>Seleccionar Color de Luz</span></span>:</label>
-            <div class="flex items-center space-x-2">
-              <span id="colorPreviewDot" class="w-4 h-4 rounded-full border border-white/40 bg-red-500 shadow-md"></span>
-              <span id="selectedColorName" class="text-xs font-bold text-white">Rojo</span>
+            <label class="text-xs font-bold text-[#5F6C65]"><span class="inline-flex items-center gap-1.5 text-[#1C2826]"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0 text-[#5F6C65]" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg><span>Seleccionar Color de Luz</span></span></label>
+            <div class="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF7F0] border border-[#E5DEC9]">
+              <span id="colorPreviewDot" class="w-3 h-3 rounded-full border border-black/10 bg-red-500"></span>
+              <span id="selectedColorName" class="text-[11px] font-bold text-[#1C2826]">Rojo</span>
             </div>
           </div>
           
           <input type="range" min="0" max="360" value="0" id="hueColorRange" oninput="handleHueSliderChange(this.value)" class="color-slider-bar">
-          
-          <div class="flex justify-between text-[10px] text-slate-400 font-bold px-1">
-            <span>Rojo</span>
-            <span>Amarillo</span>
-            <span>Verde</span>
-            <span>Cian</span>
-            <span>Azul</span>
-            <span>Violeta</span>
-            <span>Rojo</span>
-          </div>
         </div>
 
-        <div class="pt-2 border-t border-slate-800">
-          <button onclick="turnOffLedManual()" class="w-full py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-extrabold border border-slate-700 flex items-center justify-center space-x-2">
-            <span class="inline-flex items-center justify-center gap-1.5"><svg class="w-4 h-4 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg><span>Apagar Luz Ahora (Standby)</span></span>
+        <div class="pt-2 border-t border-[#E5DEC9]">
+          <button onclick="turnOffLedManual()" class="w-full py-2.5 rounded-xl bg-[#FAF7F0] hover:bg-[#EFE9DC] text-[#5F6C65] text-xs font-bold border border-[#E5DEC9] flex items-center justify-center space-x-2">
+            <span class="inline-flex items-center justify-center gap-1.5"><svg class="w-3.5 h-3.5 stroke-current fill-none shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg><span>Apagar Luz Ahora (Standby)</span></span>
           </button>
         </div>
 
