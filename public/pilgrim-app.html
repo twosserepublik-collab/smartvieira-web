@@ -265,6 +265,8 @@
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/caminos-data.js"></script>
+  <script src="/camino-rich-data.js"></script>
 </head>
 <body class="min-h-screen pb-24 flex flex-col justify-between select-none">
 
@@ -1021,6 +1023,90 @@
     </div>
 
     <!-- ========================================================================= -->
+    <!-- TAB GUIDE: CAMINOS, ETAPAS, ALBERGUES & CONSEJOS -->
+    <!-- ========================================================================= -->
+    <div id="tabGuide" class="tab-content hidden space-y-4">
+      <!-- 3 Clean Segmented Sub-Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1">
+        <button type="button" onclick="switchGuideSubTab('stages')" id="btnGuideSubStages" class="px-3.5 py-2 rounded-full text-xs font-extrabold whitespace-nowrap bg-[#1E4D3B] text-white shadow-sm transition-all">🧭 Caminos y Etapas</button>
+        <button type="button" onclick="switchGuideSubTab('hostels')" id="btnGuideSubHostels" class="px-3.5 py-2 rounded-full text-xs font-extrabold whitespace-nowrap bg-[#EFE9DC] text-[#1C2826] border border-[#E5DEC9] transition-all">🏠 Albergues</button>
+        <button type="button" onclick="switchGuideSubTab('tips')" id="btnGuideSubTips" class="px-3.5 py-2 rounded-full text-xs font-extrabold whitespace-nowrap bg-[#EFE9DC] text-[#1C2826] border border-[#E5DEC9] transition-all">📖 Consejos</button>
+      </div>
+
+      <!-- Route Selector (Shared for Stages & Hostels) -->
+      <div id="guideRoutePickerWrap" class="glass-card rounded-2xl p-3.5 border border-[#E5DEC9] flex items-center justify-between gap-2">
+        <span class="text-[11px] font-extrabold text-[#1E4D3B] uppercase tracking-wider shrink-0">Ruta:</span>
+        <select id="guideRouteSelect" onchange="onGuideRouteChange()" class="flex-1 px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs font-bold text-[#1C2826] focus:border-[#1E4D3B] focus:outline-none">
+          <option value="camino-frances">Camino Francés (780 km)</option>
+          <option value="camino-portugues-interior">Camino Portugués (620 / 119 km)</option>
+          <option value="camino-portugues-costa">Camino Portugués Costa (270 km)</option>
+          <option value="camino-ingles">Camino Inglés (118 km)</option>
+          <option value="camino-del-norte">Camino del Norte (825 km)</option>
+          <option value="camino-primitivo">Camino Primitivo (320 km)</option>
+          <option value="camino-sanabres">Camino Sanabrés / Vía Plata</option>
+          <option value="camino-invierno">Camino de Invierno (260 km)</option>
+          <option value="camino-fisterra-muxia">Fisterra y Muxía (90-115 km)</option>
+        </select>
+      </div>
+
+      <!-- SUB-VIEW 1: STAGES & ELEVATION -->
+      <div id="guideSubStages" class="space-y-3"></div>
+
+      <!-- SUB-VIEW 2: HOSTELS & BOOKING -->
+      <div id="guideSubHostels" class="hidden space-y-3">
+        <div class="glass-card rounded-2xl p-3.5 border border-[#E5DEC9] space-y-2.5">
+          <input type="text" id="guideHostelSearch" oninput="renderAppGuideHostels()" placeholder="🔍 Buscar albergue o localidad..." class="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826] focus:border-[#1E4D3B] focus:outline-none">
+          <div id="guideTownPills" class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto"></div>
+        </div>
+        <div id="guideHostelsList" class="space-y-2.5"></div>
+      </div>
+
+      <!-- SUB-VIEW 3: TIPS & BUDGET CALCULATOR -->
+      <div id="guideSubTips" class="hidden space-y-3">
+        <div class="glass-card rounded-3xl p-4 border border-[#E5DEC9] space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-black text-[#1E4D3B]">🧮 Calculadora de Presupuesto</h3>
+            <span id="appCalcBadge" class="px-2.5 py-1 rounded-full bg-[#1E4D3B] text-white text-[11px] font-bold">280 €</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-[11px]">
+            <select id="appCalcDays" onchange="updateAppGuideBudget()" class="px-2 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] font-bold text-[#1C2826]">
+              <option value="5" selected>5 días</option>
+              <option value="7">7 días</option>
+              <option value="14">14 días</option>
+              <option value="32">32 días</option>
+            </select>
+            <select id="appCalcLodg" onchange="updateAppGuideBudget()" class="px-2 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] font-bold text-[#1C2826]">
+              <option value="10" selected>Público ~10€</option>
+              <option value="18">Privado ~18€</option>
+              <option value="55">Hotel ~55€</option>
+            </select>
+            <select id="appCalcTr" onchange="updateAppGuideBudget()" class="px-2 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] font-bold text-[#1C2826]">
+              <option value="7" selected>Vieira 7€/d</option>
+              <option value="0">Sin envío 0€</option>
+            </select>
+          </div>
+          <p id="appCalcNote" class="text-[11px] text-[#5F6C65]"></p>
+        </div>
+
+        <details open class="glass-card rounded-2xl p-4 border border-[#E5DEC9]">
+          <summary class="font-bold text-xs text-[#1C2826] cursor-pointer">📜 La Compostela y Norma de los 2 Sellos Diarios</summary>
+          <p class="text-[11px] text-[#5F6C65] mt-2 leading-relaxed">Mínimo <strong>100 km continuos a pie</strong> (200 km en bici). Dentro de los últimos 100 km la Oficina del Peregrino (Rúa das Carretas, 33, Santiago) exige <strong>al menos 2 sellos con fecha al día</strong> en tu Credencial.</p>
+        </details>
+        <details class="glass-card rounded-2xl p-4 border border-[#E5DEC9]">
+          <summary class="font-bold text-xs text-[#1C2826] cursor-pointer">🎒 Regla del 10% del Peso y Mochila Ideal</summary>
+          <p class="text-[11px] text-[#5F6C65] mt-2 leading-relaxed">Tu mochila cargada al hombro no debe superar el 10% de tu peso corporal. Si envías tu equipaje etapa a etapa desde la pestaña <strong>Reservar</strong>, caminas solo con agua, chubasquero y botiquín.</p>
+        </details>
+        <details class="glass-card rounded-2xl p-4 border border-[#E5DEC9]">
+          <summary class="font-bold text-xs text-[#1C2826] cursor-pointer">🩹 Botiquín Anti-ampollas (&lt; 300 g)</summary>
+          <p class="text-[11px] text-[#5F6C65] mt-2 leading-relaxed">Vaselina en los pies antes de salir, calcetines técnicos sin costuras, apósitos hidrocoloides (Compeed), clorhexidina, ibuprofeno, suero oral y tapones para los oídos.</p>
+        </details>
+        <details class="glass-card rounded-2xl p-4 border border-[#E5DEC9]">
+          <summary class="font-bold text-xs text-[#1C2826] cursor-pointer">🏛️ Albergues Públicos vs Privados</summary>
+          <p class="text-[11px] text-[#5F6C65] mt-2 leading-relaxed">Los públicos (~10 €) no admiten reserva previa (por orden de llegada desde las 13:00h). Los privados (15–25 €) permiten reservar cama con antelación desde la pestaña <strong>Albergues</strong>.</p>
+        </details>
+      </div>
+    </div>
+
     <!-- TAB 4: PROFILE & SETTINGS -->
     <!-- ========================================================================= -->
     <div id="tabProfile" class="tab-content hidden space-y-5">
@@ -1287,6 +1373,11 @@
     <button onclick="switchTab('tabBook')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnBook">
       <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/><path d="M8 10h8"/></svg>
       <span class="text-[10px] font-extrabold">Reservar</span>
+    </button>
+
+    <button onclick="switchTab('tabGuide')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnGuide">
+      <svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+      <span class="text-[10px] font-extrabold">Guía</span>
     </button>
 
     <button onclick="switchTab('tabShell')" class="nav-btn flex flex-col items-center space-y-0.5 text-slate-400 hover:text-amber-500" id="navBtnShell">
@@ -5461,6 +5552,148 @@
       if (tabId === 'tabBook') document.getElementById('navBtnBook').classList.replace('text-slate-400', 'text-amber-400');
       if (tabId === 'tabShell') document.getElementById('navBtnShell').classList.replace('text-slate-400', 'text-amber-400');
       if (tabId === 'tabProfile') document.getElementById('navBtnProfile').classList.replace('text-slate-400', 'text-amber-400');
+      if (tabId === 'tabGuide') {
+        const gBtn = document.getElementById('navBtnGuide');
+        if (gBtn) gBtn.classList.replace('text-slate-400', 'text-amber-400');
+        renderAppGuide();
+      }
+    }
+
+    let guideSubTab = 'stages';
+    let guideSelectedTown = '';
+    let guideI18nMap = {};
+
+    function gt(str) {
+      if (!str || typeof currentAppLang === 'undefined' || currentAppLang === 'ES') return str;
+      const m = guideI18nMap[currentAppLang];
+      return (m && m[str.trim()]) ? m[str.trim()] : str;
+    }
+
+    async function ensureGuideLangBundle() {
+      if (typeof currentAppLang === 'undefined' || currentAppLang === 'ES' || guideI18nMap[currentAppLang]) return;
+      try {
+        const r = await fetch('/i18n/' + currentAppLang.toLowerCase() + '.json');
+        if (r.ok) guideI18nMap[currentAppLang] = await r.json();
+      } catch (_) {}
+    }
+
+    function switchGuideSubTab(sub) {
+      guideSubTab = sub;
+      document.getElementById('guideSubStages').classList.toggle('hidden', sub !== 'stages');
+      document.getElementById('guideSubHostels').classList.toggle('hidden', sub !== 'hostels');
+      document.getElementById('guideSubTips').classList.toggle('hidden', sub !== 'tips');
+      document.getElementById('guideRoutePickerWrap').classList.toggle('hidden', sub === 'tips');
+      const activeCls = 'px-3.5 py-2 rounded-full text-xs font-extrabold whitespace-nowrap bg-[#1E4D3B] text-white shadow-sm transition-all';
+      const idleCls = 'px-3.5 py-2 rounded-full text-xs font-extrabold whitespace-nowrap bg-[#EFE9DC] text-[#1C2826] border border-[#E5DEC9] transition-all';
+      document.getElementById('btnGuideSubStages').className = sub === 'stages' ? activeCls : idleCls;
+      document.getElementById('btnGuideSubHostels').className = sub === 'hostels' ? activeCls : idleCls;
+      document.getElementById('btnGuideSubTips').className = sub === 'tips' ? activeCls : idleCls;
+      if (sub === 'tips') updateAppGuideBudget();
+      else renderAppGuide();
+    }
+
+    function onGuideRouteChange() {
+      guideSelectedTown = '';
+      renderAppGuide();
+    }
+
+    async function renderAppGuide() {
+      await ensureGuideLangBundle();
+      const routeId = (document.getElementById('guideRouteSelect') || {}).value || 'camino-frances';
+      if (guideSubTab === 'stages') {
+        const box = document.getElementById('guideSubStages');
+        if (!box) return;
+        const stages = (typeof CAMINO_ETAPAS !== 'undefined' && CAMINO_ETAPAS[routeId]) ? CAMINO_ETAPAS[routeId] : [];
+        const alertTxt = (typeof CAMINO_ALERTAS_TRAMOS !== 'undefined' && CAMINO_ALERTAS_TRAMOS[routeId]) ? CAMINO_ALERTAS_TRAMOS[routeId] : '';
+        const cult = (typeof CAMINO_EXTRA_CULTURA !== 'undefined' && CAMINO_EXTRA_CULTURA[routeId]) ? CAMINO_EXTRA_CULTURA[routeId] : null;
+        let html = '';
+        if (alertTxt) {
+          html += `<div class="rounded-2xl bg-amber-50 border border-amber-300 p-3 text-[11px] text-amber-950 leading-relaxed">${gt(alertTxt)}</div>`;
+        }
+        if (cult) {
+          html += `<div class="glass-card rounded-2xl p-3.5 border border-[#E5DEC9] space-y-1.5 text-[11px] text-[#5F6C65]"><div><strong class="text-[#1E4D3B]">🏛️ Monumentos:</strong> ${gt(cult.see)}</div><div><strong class="text-[#D48B28]">🍽️ Gastronomía:</strong> ${gt(cult.food)}</div></div>`;
+        }
+        html += stages.map(st => {
+          const pts = (st.profile || [20, 50, 30]).map((val, idx, arr) => {
+            const x = arr.length > 1 ? Math.round((idx / (arr.length - 1)) * 100) : 50;
+            const y = Math.max(4, Math.min(34, 34 - Math.round((val / 100) * 28)));
+            return x + ',' + y;
+          }).join(' ');
+          const svcs = (typeof SERVICIOS_PUEBLO !== 'undefined' && st.town && SERVICIOS_PUEBLO[st.town.toLowerCase()]) ? SERVICIOS_PUEBLO[st.town.toLowerCase()] : [];
+          return `<div class="glass-card rounded-2xl p-4 border border-[#E5DEC9] space-y-2">
+            <div class="flex items-start justify-between gap-2">
+              <div><span class="text-[10px] font-black uppercase tracking-wider text-[#D48B28]">Etapa ${st.n}</span><div class="text-xs font-extrabold text-[#1C2826]">${st.route}</div></div>
+              <span class="px-2 py-0.5 rounded-lg bg-[#EBF3EE] text-[#1E4D3B] text-xs font-extrabold shrink-0">${st.km}</span>
+            </div>
+            <div class="flex flex-wrap gap-x-3 text-[11px] text-[#5F6C65]"><span>⏱️ ${st.time}</span><span>⛰️ ${st.up} / ${st.down}</span></div>
+            <div class="bg-[#FAF7F0] rounded-xl border border-[#E5DEC9] px-2 pt-1.5 pb-0.5"><svg viewBox="0 0 100 36" class="w-full h-9" preserveAspectRatio="none"><polygon points="0,36 ${pts} 100,36" fill="#EBF3EE"></polygon><polyline points="${pts}" fill="none" stroke="#1E4D3B" stroke-width="2" stroke-linecap="round"></polyline></svg></div>
+            <p class="text-[11px] text-[#5F6C65] leading-snug">${gt(st.desc)}</p>
+            ${svcs.length ? `<div class="flex flex-wrap gap-1">${svcs.map(sv => `<span class="text-[10px] font-semibold bg-[#FAF7F0] border border-[#E5DEC9] text-[#1C2826] px-2 py-0.5 rounded-full">${gt(sv)}</span>`).join('')}</div>` : ''}
+          </div>`;
+        }).join('');
+        box.innerHTML = html || '<div class="text-xs text-center text-[#5F6C65] py-6">Sin etapas cargadas.</div>';
+      } else if (guideSubTab === 'hostels') {
+        renderAppGuideTownPills(routeId);
+        renderAppGuideHostels();
+      } else {
+        updateAppGuideBudget();
+      }
+    }
+
+    function renderAppGuideTownPills(routeId) {
+      const box = document.getElementById('guideTownPills');
+      if (!box) return;
+      const towns = (typeof PUEBLOS_POR_ORDEN !== 'undefined' && PUEBLOS_POR_ORDEN[routeId]) ? PUEBLOS_POR_ORDEN[routeId] : [];
+      let html = `<button type="button" onclick="guideSelectedTown=''; renderAppGuideTownPills('${routeId}'); renderAppGuideHostels();" class="px-2.5 py-1 rounded-full text-[10px] font-bold ${!guideSelectedTown ? 'bg-[#1E4D3B] text-white' : 'bg-[#FAF7F0] text-[#1C2826] border border-[#E5DEC9]'}">Todos (${towns.length})</button>`;
+      html += towns.map(t => {
+        const active = guideSelectedTown.toLowerCase() === t.toLowerCase();
+        return `<button type="button" onclick="guideSelectedTown='${t.replace(/'/g, "\\'")}'; renderAppGuideTownPills('${routeId}'); renderAppGuideHostels();" class="px-2.5 py-1 rounded-full text-[10px] font-bold capitalize ${active ? 'bg-[#1E4D3B] text-white' : 'bg-[#FAF7F0] text-[#1C2826] border border-[#E5DEC9]'}">${t}</button>`;
+      }).join('');
+      box.innerHTML = html;
+    }
+
+    function renderAppGuideHostels() {
+      const box = document.getElementById('guideHostelsList');
+      if (!box) return;
+      const routeId = (document.getElementById('guideRouteSelect') || {}).value || 'camino-frances';
+      const all = (typeof ALBERGUES_Y_HOTELES !== 'undefined' && ALBERGUES_Y_HOTELES[routeId]) ? ALBERGUES_Y_HOTELES[routeId] : [];
+      const q = ((document.getElementById('guideHostelSearch') || {}).value || '').trim().toLowerCase();
+      const filtered = all.filter(h => {
+        if (guideSelectedTown && (h.town || '').toLowerCase() !== guideSelectedTown.toLowerCase()) return false;
+        if (q && !(h.name || '').toLowerCase().includes(q) && !(h.town || '').toLowerCase().includes(q)) return false;
+        return true;
+      }).slice(0, 40);
+      if (filtered.length === 0) {
+        box.innerHTML = '<div class="text-xs text-center text-[#5F6C65] py-6">No se encontraron alojamientos.</div>';
+        return;
+      }
+      box.innerHTML = filtered.map(h => {
+        const cls = (typeof classifyHostel === 'function') ? classifyHostel(h.name) : { label: '🏡 Albergue', bookable: true };
+        const bUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(h.name, h.town) : '';
+        const mUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(h.name + ' ' + h.town + ' Camino de Santiago');
+        return `<div class="glass-card rounded-2xl p-3.5 border border-[#E5DEC9] flex items-center justify-between gap-2.5">
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-[#1E4D3B]">${cls.label}</div>
+            <div class="text-xs font-extrabold text-[#1C2826] truncate">${h.name}</div>
+            <div class="text-[11px] font-semibold text-[#D48B28]">📍 ${h.town}</div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <a href="${mUrl}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-[10px] font-bold text-[#1E4D3B]">📍 Mapa</a>
+            ${bUrl ? `<a href="${bUrl}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-xl bg-[#003580] text-white text-[10px] font-bold">Booking →</a>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function updateAppGuideBudget() {
+      const days = parseInt((document.getElementById('appCalcDays') || {}).value || '5', 10);
+      const lodg = parseInt((document.getElementById('appCalcLodg') || {}).value || '10', 10);
+      const tr = parseInt((document.getElementById('appCalcTr') || {}).value || '7', 10);
+      const total = days * (lodg + 32 + tr);
+      const badge = document.getElementById('appCalcBadge');
+      const note = document.getElementById('appCalcNote');
+      if (badge) badge.textContent = total.toLocaleString('es-ES') + ' €';
+      if (note) note.textContent = `Alojamiento (${days * lodg} €) + comidas (~${days * 32} €)${tr > 0 ? ` + mochila (${days * tr} €)` : ''} para ${days} días.`;
     }
 
     
