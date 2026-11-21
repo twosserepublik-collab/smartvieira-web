@@ -5686,7 +5686,7 @@
         return null;
       }
 
-      const guideReply = searchGuideKnowledgeForBot(rawText || '', q);
+      const guideReply = searchGuideKnowledgeForBot(query || '', q);
       if (guideReply) return guideReply;
 
       // 9. Qué ver / Etapas / Monumentos
