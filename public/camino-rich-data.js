@@ -1,4 +1,5 @@
-// Configuración de Afiliado Booking.com (introduce tu Affiliate ID "aid" cuando lo tengas activo para cobrar comisiones automáticamente)
+// Configuración de Afiliado Booking.com / Stay22 Allez
+const STAY22_AID = 'smartvieira';
 const BOOKING_AFFILIATE_ID = '';
 
 function classifyHostel(name) {
@@ -20,7 +21,11 @@ function getBookingAffiliateUrl(name, town) {
   const cleanName = (name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
   const q = encodeURIComponent((cleanName + ' ' + (town || '')).trim());
   const aidPart = BOOKING_AFFILIATE_ID ? '&aid=' + encodeURIComponent(BOOKING_AFFILIATE_ID) : '';
-  return 'https://www.booking.com/searchresults.es.html?ss=' + q + '&lang=es' + aidPart + '&label=smartvieira-camino';
+  const bookingUrl = 'https://www.booking.com/searchresults.es.html?ss=' + q + '&lang=es' + aidPart + '&label=smartvieira-camino';
+  if (STAY22_AID) {
+    return 'https://www.stay22.com/allez/booking?aid=' + encodeURIComponent(STAY22_AID) + '&link=' + encodeURIComponent(bookingUrl);
+  }
+  return bookingUrl;
 }
 
 const CAMINO_EXTRA_CULTURA = {
