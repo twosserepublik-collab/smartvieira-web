@@ -487,6 +487,25 @@
             <h3 id="selectedTownTitle" class="text-sm font-bold text-[#1C2826]"></h3>
             <span id="selectedTownHostelCount" class="px-2.5 py-0.5 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold"></span>
           </div>
+          <div class="bg-[#FAF7F0] border border-[#E5DEC9] rounded-2xl p-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div>
+              <label for="stay22Checkin" class="block text-[10px] font-bold text-[#1E4D3B] uppercase tracking-wider mb-1">📅 Fecha de entrada</label>
+              <input type="date" id="stay22Checkin" onchange="onStay22DatesChange()" class="w-full px-2.5 py-1.5 rounded-xl bg-white border border-[#E5DEC9] text-xs font-bold text-[#1C2826] focus:border-[#1E4D3B] focus:outline-none">
+            </div>
+            <div>
+              <label for="stay22Checkout" class="block text-[10px] font-bold text-[#1E4D3B] uppercase tracking-wider mb-1">📅 Fecha de salida</label>
+              <input type="date" id="stay22Checkout" onchange="onStay22DatesChange()" class="w-full px-2.5 py-1.5 rounded-xl bg-white border border-[#E5DEC9] text-xs font-bold text-[#1C2826] focus:border-[#1E4D3B] focus:outline-none">
+            </div>
+            <div>
+              <label for="stay22Guests" class="block text-[10px] font-bold text-[#1E4D3B] uppercase tracking-wider mb-1">👤 Personas</label>
+              <select id="stay22Guests" onchange="onStay22DatesChange()" class="w-full px-2.5 py-1.5 rounded-xl bg-white border border-[#E5DEC9] text-xs font-bold text-[#1C2826] focus:border-[#1E4D3B] focus:outline-none">
+                <option value="1" selected>1 peregrino</option>
+                <option value="2">2 personas</option>
+                <option value="3">3 personas</option>
+                <option value="4">4+ personas</option>
+              </select>
+            </div>
+          </div>
           <div id="expHostelsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[420px] overflow-y-auto pr-1"></div>
         </div>
       </div>

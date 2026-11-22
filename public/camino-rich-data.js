@@ -17,19 +17,49 @@ function classifyHostel(name) {
   return { key: 'private', label: '🏡 Albergue Privado', bookable: true };
 }
 
+function getStay22BookingParams() {
+  const ciEl = (typeof document !== 'undefined') ? document.getElementById('stay22Checkin') : null;
+  const coEl = (typeof document !== 'undefined') ? document.getElementById('stay22Checkout') : null;
+  const guEl = (typeof document !== 'undefined') ? document.getElementById('stay22Guests') : null;
+  const checkin = ciEl && ciEl.value ? ciEl.value.trim() : '';
+  const checkout = coEl && coEl.value ? coEl.value.trim() : '';
+  const adults = guEl && guEl.value ? guEl.value.trim() : '';
+  return { checkin, checkout, adults };
+}
+
+function onStay22DatesChange() {
+  const ciEl = document.getElementById('stay22Checkin');
+  const coEl = document.getElementById('stay22Checkout');
+  if (ciEl && ciEl.value && coEl) {
+    if (!coEl.value || coEl.value <= ciEl.value) {
+      const nextDay = new Date(ciEl.value + 'T12:00:00Z');
+      nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+      coEl.value = nextDay.toISOString().slice(0, 10);
+    }
+    coEl.min = ciEl.value;
+  }
+  if (typeof renderAppGuideHostels === 'function') renderAppGuideHostels();
+  if (typeof renderExplorerHostels === 'function') renderExplorerHostels();
+}
+
 function getBookingAffiliateUrl(name, town, directBookingUrl) {
   const cleanName = (name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+  const { checkin, checkout, adults } = getStay22BookingParams();
+  const dateParams =
+    (checkin ? '&checkin=' + encodeURIComponent(checkin) : '') +
+    (checkout ? '&checkout=' + encodeURIComponent(checkout) : '') +
+    (adults ? '&adults=' + encodeURIComponent(adults) : '');
 
   if (directBookingUrl && STAY22_AID) {
-    return 'https://www.stay22.com/allez/booking?aid=' + encodeURIComponent(STAY22_AID) + '&link=' + encodeURIComponent(directBookingUrl);
+    return 'https://www.stay22.com/allez/booking?aid=' + encodeURIComponent(STAY22_AID) + dateParams + '&link=' + encodeURIComponent(directBookingUrl);
   }
   if (STAY22_AID) {
     const addr = [cleanName, town].filter(Boolean).join(', ');
-    return 'https://www.stay22.com/embed/gm?aid=' + encodeURIComponent(STAY22_AID) + '&address=' + encodeURIComponent(addr) + '&maincolor=1E4D3B&viewmode=map&lang=es';
+    return 'https://www.stay22.com/embed/gm?aid=' + encodeURIComponent(STAY22_AID) + '&address=' + encodeURIComponent(addr) + dateParams + '&maincolor=1E4D3B&viewmode=map&lang=es';
   }
   const q = encodeURIComponent((cleanName + ' ' + (town || '')).trim());
   const aidPart = BOOKING_AFFILIATE_ID ? '&aid=' + encodeURIComponent(BOOKING_AFFILIATE_ID) : '';
-  return 'https://www.booking.com/searchresults.es.html?ss=' + q + '&lang=es' + aidPart + '&label=smartvieira-camino';
+  return 'https://www.booking.com/searchresults.es.html?ss=' + q + dateParams + '&lang=es' + aidPart + '&label=smartvieira-camino';
 }
 
 function closeStay22Modal() {
