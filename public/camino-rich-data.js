@@ -27,7 +27,7 @@ function getBookingAffiliateUrl(name, town, directBookingUrl) {
   }
   if (STAY22_AID) {
     const addr = [cleanName, town].filter(Boolean).join(', ');
-    return 'https://www.stay22.com/allez/booking?aid=' + encodeURIComponent(STAY22_AID) + '&checkin=' + d1 + '&checkout=' + d2 + '&address=' + encodeURIComponent(addr);
+    return 'https://www.stay22.com/embed/gm?aid=' + encodeURIComponent(STAY22_AID) + '&address=' + encodeURIComponent(addr) + '&checkin=' + d1 + '&checkout=' + d2 + '&maincolor=1E4D3B&mode=list&lang=es';
   }
   const q = encodeURIComponent((cleanName + ' ' + (town || '')).trim());
   const aidPart = BOOKING_AFFILIATE_ID ? '&aid=' + encodeURIComponent(BOOKING_AFFILIATE_ID) : '';
