@@ -17,15 +17,21 @@ function classifyHostel(name) {
   return { key: 'private', label: '🏡 Albergue Privado', bookable: true };
 }
 
-function getBookingAffiliateUrl(name, town) {
+function getBookingAffiliateUrl(name, town, directBookingUrl) {
   const cleanName = (name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+  const d1 = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+  const d2 = new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10);
+
+  if (directBookingUrl && STAY22_AID) {
+    return 'https://www.stay22.com/allez/booking?aid=' + encodeURIComponent(STAY22_AID) + '&checkin=' + d1 + '&checkout=' + d2 + '&link=' + encodeURIComponent(directBookingUrl);
+  }
+  if (STAY22_AID) {
+    const addr = [cleanName, town].filter(Boolean).join(', ');
+    return 'https://www.stay22.com/allez/booking?aid=' + encodeURIComponent(STAY22_AID) + '&checkin=' + d1 + '&checkout=' + d2 + '&address=' + encodeURIComponent(addr);
+  }
   const q = encodeURIComponent((cleanName + ' ' + (town || '')).trim());
   const aidPart = BOOKING_AFFILIATE_ID ? '&aid=' + encodeURIComponent(BOOKING_AFFILIATE_ID) : '';
-  const bookingUrl = 'https://www.booking.com/searchresults.es.html?ss=' + q + '&lang=es' + aidPart + '&label=smartvieira-camino';
-  if (STAY22_AID) {
-    return 'https://www.stay22.com/allez/booking?aid=' + encodeURIComponent(STAY22_AID) + '&link=' + encodeURIComponent(bookingUrl);
-  }
-  return bookingUrl;
+  return 'https://www.booking.com/searchresults.es.html?ss=' + q + '&checkin=' + d1 + '&checkout=' + d2 + '&lang=es' + aidPart + '&label=smartvieira-camino';
 }
 
 const CAMINO_EXTRA_CULTURA = {
