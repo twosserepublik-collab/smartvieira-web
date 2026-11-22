@@ -2768,7 +2768,7 @@
         const safeName = h.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const safeTown = (h.town || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const cls = (typeof classifyHostel === 'function') ? classifyHostel(h.name) : { label: '🏡 Alojamiento', bookable: false };
-        const bookingUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(h.name, h.town) : '';
+        const bookingUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(h.name, h.town, h.bookingUrl) : '';
         return `
           <div onclick="openHostelDetailModal('${safeName}', '${safeTown}')" class="cursor-pointer bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] rounded-2xl p-3 flex flex-col justify-between gap-2 transition-all">
             <div>
@@ -2830,7 +2830,7 @@
         const safeName = h.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const safeTown = (h.town || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const cls = (typeof classifyHostel === 'function') ? classifyHostel(h.name) : { label: '🏡 Alojamiento', bookable: false };
-        const bookingUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(h.name, h.town) : '';
+        const bookingUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(h.name, h.town, h.bookingUrl) : '';
         return `
           <div onclick="openHostelDetailModal('${safeName}', '${safeTown}')" class="cursor-pointer bg-[#F7F3EB] border border-[#E5DEC9] hover:border-[#1E4D3B] rounded-2xl p-3.5 flex flex-col justify-between gap-2.5 transition-all">
             <div>

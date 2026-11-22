@@ -19,19 +19,17 @@ function classifyHostel(name) {
 
 function getBookingAffiliateUrl(name, town, directBookingUrl) {
   const cleanName = (name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
-  const d1 = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
-  const d2 = new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10);
 
   if (directBookingUrl && STAY22_AID) {
-    return 'https://www.stay22.com/allez/booking?aid=' + encodeURIComponent(STAY22_AID) + '&checkin=' + d1 + '&checkout=' + d2 + '&link=' + encodeURIComponent(directBookingUrl);
+    return 'https://www.stay22.com/allez/booking?aid=' + encodeURIComponent(STAY22_AID) + '&link=' + encodeURIComponent(directBookingUrl);
   }
   if (STAY22_AID) {
     const addr = [cleanName, town].filter(Boolean).join(', ');
-    return 'https://www.stay22.com/embed/gm?aid=' + encodeURIComponent(STAY22_AID) + '&address=' + encodeURIComponent(addr) + '&checkin=' + d1 + '&checkout=' + d2 + '&maincolor=1E4D3B&mode=list&lang=es';
+    return 'https://www.stay22.com/embed/gm?aid=' + encodeURIComponent(STAY22_AID) + '&address=' + encodeURIComponent(addr) + '&maincolor=1E4D3B&mode=list&lang=es';
   }
   const q = encodeURIComponent((cleanName + ' ' + (town || '')).trim());
   const aidPart = BOOKING_AFFILIATE_ID ? '&aid=' + encodeURIComponent(BOOKING_AFFILIATE_ID) : '';
-  return 'https://www.booking.com/searchresults.es.html?ss=' + q + '&checkin=' + d1 + '&checkout=' + d2 + '&lang=es' + aidPart + '&label=smartvieira-camino';
+  return 'https://www.booking.com/searchresults.es.html?ss=' + q + '&lang=es' + aidPart + '&label=smartvieira-camino';
 }
 
 const CAMINO_EXTRA_CULTURA = {

@@ -5908,7 +5908,7 @@
       }
       box.innerHTML = filtered.map(h => {
         const cls = (typeof classifyHostel === 'function') ? classifyHostel(h.name) : { label: '🏡 Albergue', bookable: true };
-        const bUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(h.name, h.town) : '';
+        const bUrl = (cls.bookable && typeof getBookingAffiliateUrl === 'function') ? getBookingAffiliateUrl(h.name, h.town, h.bookingUrl) : '';
         const mUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(h.name + ' ' + h.town + ' Camino de Santiago');
         return `<div class="glass-card rounded-2xl p-3.5 border border-[#E5DEC9] flex items-center justify-between gap-2.5">
           <div class="min-w-0">
