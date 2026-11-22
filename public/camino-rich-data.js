@@ -25,11 +25,56 @@ function getBookingAffiliateUrl(name, town, directBookingUrl) {
   }
   if (STAY22_AID) {
     const addr = [cleanName, town].filter(Boolean).join(', ');
-    return 'https://www.stay22.com/embed/gm?aid=' + encodeURIComponent(STAY22_AID) + '&address=' + encodeURIComponent(addr) + '&maincolor=1E4D3B&mode=list&lang=es';
+    return 'https://www.stay22.com/embed/gm?aid=' + encodeURIComponent(STAY22_AID) + '&address=' + encodeURIComponent(addr) + '&maincolor=1E4D3B&viewmode=listview&lang=es';
   }
   const q = encodeURIComponent((cleanName + ' ' + (town || '')).trim());
   const aidPart = BOOKING_AFFILIATE_ID ? '&aid=' + encodeURIComponent(BOOKING_AFFILIATE_ID) : '';
   return 'https://www.booking.com/searchresults.es.html?ss=' + q + '&lang=es' + aidPart + '&label=smartvieira-camino';
+}
+
+function closeStay22Modal() {
+  const modal = document.getElementById('stay22EmbedModal');
+  const frame = document.getElementById('stay22EmbedIframe');
+  if (frame) frame.src = 'about:blank';
+  if (modal) modal.style.display = 'none';
+}
+
+function openStay22Modal(url, title) {
+  if (!url) return;
+  // Direct Booking URLs (stay22.com/allez) cannot be iframed due to Booking X-Frame-Options -> open externally
+  if (url.indexOf('/embed/') === -1) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+    return;
+  }
+  let modal = document.getElementById('stay22EmbedModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'stay22EmbedModal';
+    modal.setAttribute('style', 'position:fixed;inset:0;z-index:9999;background:rgba(15,23,20,0.72);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;padding:0;');
+    modal.innerHTML =
+      '<div onclick="event.stopPropagation()" style="width:100%;max-width:720px;height:92vh;background:#FAF7F0;border-radius:20px 20px 0 0;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 -12px 40px rgba(0,0,0,0.35);">' +
+        '<div style="background:#1E4D3B;color:#FFFFFF;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0;">' +
+          '<div style="min-width:0;display:flex;align-items:center;gap:8px;">' +
+            '<span style="font-size:15px;">🏨</span>' +
+            '<span id="stay22EmbedTitle" style="font-weight:700;font-size:13px;color:#FFFFFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Alojamientos</span>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">' +
+            '<a id="stay22EmbedExtLink" href="#" target="_blank" rel="noopener noreferrer" style="color:#FFFFFF;font-size:11px;font-weight:700;background:rgba(255,255,255,0.16);padding:5px 10px;border-radius:999px;text-decoration:none;">Abrir ↗</a>' +
+            '<button type="button" onclick="closeStay22Modal()" style="background:rgba(255,255,255,0.18);color:#FFFFFF;border:none;width:30px;height:30px;border-radius:999px;font-size:16px;font-weight:700;cursor:pointer;line-height:1;">✕</button>' +
+          '</div>' +
+        '</div>' +
+        '<iframe id="stay22EmbedIframe" src="about:blank" allow="geolocation" style="flex:1;width:100%;border:0;background:#FAF7F0;"></iframe>' +
+      '</div>';
+    modal.addEventListener('click', closeStay22Modal);
+    document.body.appendChild(modal);
+  }
+  const titleEl = document.getElementById('stay22EmbedTitle');
+  const extEl = document.getElementById('stay22EmbedExtLink');
+  const frame = document.getElementById('stay22EmbedIframe');
+  if (titleEl) titleEl.textContent = title || 'Alojamientos disponibles';
+  if (extEl) extEl.href = url;
+  if (frame) frame.src = url;
+  modal.style.display = 'flex';
 }
 
 const CAMINO_EXTRA_CULTURA = {

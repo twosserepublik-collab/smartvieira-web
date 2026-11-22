@@ -5918,7 +5918,7 @@
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
             <a href="${mUrl}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-[10px] font-bold text-[#1E4D3B]">📍 Mapa</a>
-            ${bUrl ? `<a href="${bUrl}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-xl bg-[#003580] text-white text-[10px] font-bold">Booking →</a>` : ''}
+            ${bUrl ? `<a href="${bUrl}" target="_blank" rel="noopener noreferrer" onclick="if(typeof openStay22Modal==='function'){event.preventDefault();openStay22Modal(this.href, '${h.name.replace(/'/g, "\\'").replace(/"/g, '&quot;')}');}" class="px-2.5 py-1.5 rounded-xl bg-[#003580] text-white text-[10px] font-bold">Booking →</a>` : ''}
           </div>
         </div>`;
       }).join('');

@@ -2781,7 +2781,7 @@
             </div>
             <div class="flex items-center gap-1.5 pt-1">
               <span class="px-2 py-1 rounded-lg bg-white text-[#1E4D3B] border border-[#E5DEC9] text-[10px] font-bold">ℹ️ Ficha</span>
-              ${bookingUrl ? `<a href="${bookingUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="px-2.5 py-1 rounded-lg bg-[#003580] text-white text-[10px] font-bold hover:opacity-90 transition-all">🏨 Booking →</a>` : ''}
+              ${bookingUrl ? `<a href="${bookingUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();if(typeof openStay22Modal==='function'){event.preventDefault();openStay22Modal(this.href,'${safeName}');}" class="px-2.5 py-1 rounded-lg bg-[#003580] text-white text-[10px] font-bold hover:opacity-90 transition-all">🏨 Booking →</a>` : ''}
             </div>
           </div>
         `;
@@ -2840,7 +2840,7 @@
             </div>
             <div class="flex flex-wrap items-center gap-1.5">
               <button type="button" title="Ver ficha, precio, contacto y web" class="px-2.5 py-1 rounded-lg bg-white text-[#1E4D3B] border border-[#E5DEC9] text-[10px] font-bold hover:border-[#1E4D3B] transition-all">ℹ️ Info</button>
-              ${bookingUrl ? `<a href="${bookingUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="px-2.5 py-1 rounded-lg bg-[#003580] text-white text-[10px] font-bold hover:opacity-90 transition-all">🏨 Booking →</a>` : ''}
+              ${bookingUrl ? `<a href="${bookingUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();if(typeof openStay22Modal==='function'){event.preventDefault();openStay22Modal(this.href,'${safeName}');}" class="px-2.5 py-1 rounded-lg bg-[#003580] text-white text-[10px] font-bold hover:opacity-90 transition-all">🏨 Booking →</a>` : ''}
             </div>
           </div>
         `;
@@ -2911,7 +2911,7 @@
       let linksHtml = '';
       if (bookingUrl) {
         linksHtml += `
-          <a href="${bookingUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-[#003580] text-white text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-all">
+          <a href="${bookingUrl}" target="_blank" rel="noopener noreferrer" onclick="if(typeof openStay22Modal==='function'){event.preventDefault();openStay22Modal(this.href,'${name.replace(/'/g, "\\'").replace(/"/g, '&quot;')}');}" class="w-full py-2.5 px-4 rounded-xl bg-[#003580] text-white text-xs font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-all">
             🏨 Ver disponibilidad y reservar en Booking.com →
           </a>
         `;
