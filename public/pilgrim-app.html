@@ -499,6 +499,7 @@
                 Vincular ID
               </button>
             </div>
+            <p class="text-[11px] text-[#5F6C65]">¿Aún no tienes concha? Escribe <strong class="text-[#1E4D3B]">DEMO</strong> para probar la guía y LUME.</p>
           </div>
         </div>
 
@@ -4691,8 +4692,35 @@
       }
     }
 
+    function isDemoModeUser() {
+      return !!(currentUser && (currentUser.deviceId || '').trim().toUpperCase() === 'DEMO');
+    }
+
+    function enterDemoModeDirectly() {
+      currentUser = {
+        id: 'demo-pilgrim',
+        firstName: 'Demo',
+        lastName: 'Peregrino',
+        name: 'Demo Peregrino',
+        email: 'demo@smartvieira.com',
+        deviceId: 'DEMO',
+        language: typeof currentAppLang !== 'undefined' ? currentAppLang : 'ES',
+        isDemo: true
+      };
+      if (typeof showPilgrimDashboard === 'function') {
+        showPilgrimDashboard();
+      } else {
+        document.getElementById('viewGuestLanding').classList.add('hidden');
+        document.getElementById('viewAuth').classList.add('hidden');
+        document.getElementById('viewDashboard').classList.remove('hidden');
+        document.getElementById('bottomNav').classList.remove('hidden');
+      }
+      switchTab('tabGuide');
+    }
+
     async function handleManualDeviceSubmit() {
       const val = document.getElementById('manualDeviceId').value.trim();
+      if (val.toUpperCase() === 'DEMO') { enterDemoModeDirectly(); return; }
       await verifyAndProceedWithShellId(val, '🐚 ID SmartVieira verificado correctamente.');
     }
 
@@ -4965,6 +4993,10 @@
 
     // REAL BLE CONNECT STRICTLY FILTERED BY REGISTERED DEVICE ID WITH AUTO-RECONNECT SUPPORT
     async function connectRealBLEHardware() {
+      if (isDemoModeUser()) {
+        alert('Modo Demo: para conectar una concha por Bluetooth necesitas vincular una SmartVieira física real.');
+        return false;
+      }
       const boundDeviceId = currentUser ? currentUser.deviceId : 'VIEIRA-SMARTSHELL-S3-9982';
 
       if (window.AndroidBleBridge && window.AndroidBleBridge.connectBle) {
@@ -5563,22 +5595,35 @@
       }
 
 
-      // === HOSPITALERO DIGITAL ENRIQUECIDO CON TODA LA GUÍA OFFLINE ===
+      // === LUME ENRIQUECIDO CON TODA LA GUÍA OFFLINE (v2 WHOLE-WORD & ROUTES) ===
       function searchGuideKnowledgeForBot(rawQ, normQ) {
         const norm = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const escRe = (s) => s.replace(/[.*+?^$()|[\]\\]/g, '\\$&');
+        const hasWholeWord = (text, phrase) => {
+          const p = norm(phrase).trim();
+          if (!p) return false;
+          return new RegExp('(?:^|[^a-z0-9])' + escRe(p) + '(?:$|[^a-z0-9])').test(text);
+        };
+
         const routeAliases = [
-          { id: 'camino-frances', name: 'Camino Francés', keys: ['frances', 'sarria', 'portomarin', 'roncesvalles', 'cebrier', 'cebreiro', 'triacastela', 'palas', 'melide', 'arzua', 'pedrouzo'] },
-          { id: 'camino-portugues-costa', name: 'Camino Portugués por la Costa', keys: ['portugues costa', 'por la costa', 'baiona', 'vigo', 'a guarda', 'oia'] },
-          { id: 'camino-portugues-interior', name: 'Camino Portugués', keys: ['portugues', 'tui', 'porrino', 'redondela', 'pontevedra', 'caldas', 'padron'] },
-          { id: 'camino-ingles', name: 'Camino Inglés', keys: ['ingles', 'ferrol', 'neda', 'pontedeume', 'betanzos', 'bruma', 'sigueiro'] },
-          { id: 'camino-del-norte', name: 'Camino del Norte', keys: ['norte', 'ribadeo', 'mondonedo', 'vilalba', 'sobrado', 'baamonde'] },
-          { id: 'camino-primitivo', name: 'Camino Primitivo', keys: ['primitivo', 'oviedo', 'fonsagrada', 'lugo', 'san roman'] },
-          { id: 'camino-sanabres', name: 'Camino Sanabrés / Vía de la Plata', keys: ['sanabres', 'plata', 'ourense', 'cea', 'lalin', 'silleda', 'a gudina'] },
-          { id: 'camino-invierno', name: 'Camino de Invierno', keys: ['invierno', 'ponferrada', 'o barco', 'monforte', 'chantada', 'lalin'] },
-          { id: 'camino-fisterra-muxia', name: 'Epílogo Fisterra y Muxía', keys: ['fisterra', 'finisterre', 'muxia', 'negreira', 'olveiroa', 'cee', 'corcubion'] }
+          { id: 'camino-portugues-costa', name: 'Camino Portugués por la Costa (270 km)', keys: ['portugues por la costa', 'portugues costa', 'camino de la costa'] },
+          { id: 'camino-portugues-interior', name: 'Camino Portugués (620 / 119 km)', keys: ['portugues'] },
+          { id: 'camino-frances', name: 'Camino Francés (780 km)', keys: ['frances'] },
+          { id: 'camino-ingles', name: 'Camino Inglés (118 km)', keys: ['ingles'] },
+          { id: 'camino-del-norte', name: 'Camino del Norte (825 km)', keys: ['del norte', 'camino norte'] },
+          { id: 'camino-primitivo', name: 'Camino Primitivo (320 km)', keys: ['primitivo'] },
+          { id: 'camino-sanabres', name: 'Camino Sanabrés / Vía de la Plata', keys: ['sanabres', 'via de la plata', 'via plata'] },
+          { id: 'camino-invierno', name: 'Camino de Invierno (260 km)', keys: ['de invierno', 'camino invierno', 'invierno'] },
+          { id: 'camino-fisterra-muxia', name: 'Epílogo Fisterra y Muxía (90-115 km)', keys: ['fisterra', 'finisterre', 'muxia'] }
         ];
 
-        // A. Temas prácticos de la Guía (Compostela, Presupuesto, Peso/Mochila, Botiquín)
+        const etapasMap = (typeof CAMINO_ETAPAS !== 'undefined') ? CAMINO_ETAPAS : {};
+        const alberguesMap = (typeof ALBERGUES_Y_HOTELES !== 'undefined') ? ALBERGUES_Y_HOTELES : {};
+        const serviciosMap = (typeof SERVICIOS_PUEBLO !== 'undefined') ? SERVICIOS_PUEBLO : {};
+        const alertasMap = (typeof CAMINO_ALERTAS_TRAMOS !== 'undefined') ? CAMINO_ALERTAS_TRAMOS : {};
+        const culturaMap = (typeof CAMINO_EXTRA_CULTURA !== 'undefined') ? CAMINO_EXTRA_CULTURA : {};
+
+        // A. Temas prácticos de la Guía (Compostela, Presupuesto, Botiquín)
         if (normQ.includes('compostela') || normQ.includes('sello') || normQ.includes('credencial')) {
           return (
             "📜 **La Compostela y Norma de los 2 Sellos:**\n\n" +
@@ -5594,7 +5639,7 @@
             "• **Albergue privado:** ~15-20 €/noche\n" +
             "• **Comida diaria (menú del peregrino + desayunos):** ~20-25 €/día\n" +
             "• **Transporte de mochila SmartVieira:** ~7 €/etapa\n" +
-            "👉 Total orientativo para **5 días** con mochila: **~280 €** (puedes calcularlo exacto en *Guía → Consejos*)."
+            "👉 Total orientativo para **5 días** con mochila: **~280 €** (calcula tu caso exacto en *Guía → Consejos*)."
           );
         }
         if (normQ.includes('ampolla') || normQ.includes('botiquin') || normQ.includes('pies') || normQ.includes('compeed')) {
@@ -5604,35 +5649,52 @@
           );
         }
 
-        // B. Búsqueda exacta por localidad / pueblo en Etapas, Servicios y Albergues
-        const etapasMap = (typeof CAMINO_ETAPAS !== 'undefined') ? CAMINO_ETAPAS : {};
-        const alberguesMap = (typeof ALBERGUES_Y_HOTELES !== 'undefined') ? ALBERGUES_Y_HOTELES : {};
-        const serviciosMap = (typeof SERVICIOS_PUEBLO !== 'undefined') ? SERVICIOS_PUEBLO : {};
-        const alertasMap = (typeof CAMINO_ALERTAS_TRAMOS !== 'undefined') ? CAMINO_ALERTAS_TRAMOS : {};
-        const culturaMap = (typeof CAMINO_EXTRA_CULTURA !== 'undefined') ? CAMINO_EXTRA_CULTURA : {};
-
-        const words = normQ.split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !['albergue','albergues','etapa','etapas','camino','donde','dormir','farmacia','cajero','supermercado','pueblo','ciudad','tengo','quiero','sobre','como','esta'].includes(w));
-        let matchedTown = '';
-        for (const tKey of Object.keys(serviciosMap)) {
-          const nt = norm(tKey);
-          if (nt.length >= 4 && normQ.includes(nt)) { matchedTown = tKey; break; }
+        // B. Búsqueda por Camino / Ruta concreta (sin exigir la palabra "camino")
+        const matchedRoute = routeAliases.find(r => r.keys.some(k => hasWholeWord(normQ, k)));
+        if (matchedRoute) {
+          const stages = etapasMap[matchedRoute.id] || [];
+          const alertTxt = alertasMap[matchedRoute.id] || '';
+          const cult = culturaMap[matchedRoute.id] || null;
+          let reply = "🧭 **" + matchedRoute.name + "** (" + stages.length + " etapas en guía):\n\n";
+          if (stages.length) {
+            reply += stages.slice(0, 5).map(s => {
+              const lbl = /^etapa/i.test(String(s.n)) ? s.n : ('Etapa ' + s.n);
+              return "• **" + lbl + ":** " + s.route + " (" + s.km + ")";
+            }).join("\n") + "\n";
+            if (stages.length > 5) reply += "*...y " + (stages.length - 5) + " etapas más en Guía → Caminos y Etapas.*\n";
+            reply += "\n";
+          }
+          if (cult) {
+            reply += "🏛️ **Qué ver:** " + cult.see + "\n🍽️ **Gastronomía:** " + cult.food + "\n\n";
+          }
+          if (alertTxt) {
+            reply += "⚠️ **Aviso de ruta:** " + alertTxt;
+          }
+          return reply.trim();
         }
-        if (!matchedTown) {
-          for (const rId of Object.keys(etapasMap)) {
-            for (const st of (etapasMap[rId] || [])) {
-              const nt = norm(st.town);
-              if (nt.length >= 4 && normQ.includes(nt)) { matchedTown = st.town; break; }
-            }
-            if (matchedTown) break;
+
+        // C. Búsqueda exacta por localidad / pueblo (PALABRA COMPLETA, más larga primero)
+        const townSet = new Map();
+        for (const tKey of Object.keys(serviciosMap)) townSet.set(norm(tKey), tKey);
+        for (const rId of Object.keys(etapasMap)) {
+          for (const st of (etapasMap[rId] || [])) {
+            if (st.town) townSet.set(norm(st.town), st.town);
           }
         }
-        if (!matchedTown) {
-          for (const rId of Object.keys(alberguesMap)) {
-            for (const h of (alberguesMap[rId] || [])) {
-              const nt = norm(h.town);
-              if (nt.length >= 4 && normQ.includes(nt)) { matchedTown = h.town; break; }
-            }
-            if (matchedTown) break;
+        for (const rId of Object.keys(alberguesMap)) {
+          for (const h of (alberguesMap[rId] || [])) {
+            if (h.town) townSet.set(norm(h.town), h.town);
+          }
+        }
+        const sortedTowns = [...townSet.entries()]
+          .filter(([nt]) => nt.length >= 3)
+          .sort((a, b) => b[0].length - a[0].length);
+
+        let matchedTown = '';
+        for (const [nt, origTown] of sortedTowns) {
+          if (hasWholeWord(normQ, nt)) {
+            matchedTown = origTown;
+            break;
           }
         }
 
@@ -5642,8 +5704,9 @@
           const hostelHits = [];
           for (const rId of Object.keys(etapasMap)) {
             for (const st of (etapasMap[rId] || [])) {
-              if (norm(st.town) === nTown || norm(st.route).includes(nTown)) {
-                stageHits.push('• **Etapa ' + st.n + ' (' + st.route + '):** ' + st.km + ', ' + st.time + ' (' + st.up + ' / ' + st.down + '). ' + st.desc);
+              if (norm(st.town) === nTown || hasWholeWord(norm(st.route), nTown)) {
+                const lbl = /^etapa/i.test(String(st.n)) ? st.n : ('Etapa ' + st.n);
+                stageHits.push('• **' + lbl + ' (' + st.route + '):** ' + st.km + ', ' + st.time + ' (' + st.up + ' / ' + st.down + '). ' + st.desc);
               }
             }
           }
@@ -5667,42 +5730,40 @@
           return reply;
         }
 
-        // C. Búsqueda por nombre concreto de albergue si escribió palabras clave
+        // D. Pregunta general sobre los Caminos / Rutas disponibles
+        if ((normQ.includes('caminos') || normQ.includes('rutas')) && (normQ.includes('informacion') || normQ.includes('que ') || normQ.includes('cuales') || normQ.includes('lista') || normQ.includes('todos') || normQ.includes('hay'))) {
+          return (
+            "🧭 **Los 9 Caminos de Santiago en SmartVieira:**\n\n" +
+            "• **Camino Francés** (780 km) — El más popular y con más servicios.\n" +
+            "• **Camino Portugués** (620 / 119 km desde Tui) — Muy llano y cómodo.\n" +
+            "• **Camino Portugués por la Costa** (270 km) — Junto al Atlántico.\n" +
+            "• **Camino Inglés** (118 km desde Ferrol) — Ideal para 5-6 días.\n" +
+            "• **Camino Primitivo** (320 km desde Oviedo) — El más antiguo y montañoso.\n" +
+            "• **Camino del Norte** (825 km) — Costa cantábrica.\n" +
+            "• **Camino Sanabrés / Vía de la Plata** — Tranquilo y rural.\n" +
+            "• **Camino de Invierno** (260 km) — Ribeira Sacra sin puertos nevados.\n" +
+            "• **Fisterra y Muxía** (90-115 km) — Epílogo hasta el fin del mundo.\n\n" +
+            "Pregúntame por cualquiera (ej. *«Camino Primitivo»*) o míralos todos en **Guía → Caminos y Etapas**."
+          );
+        }
+
+        // E. Búsqueda por nombre concreto de albergue
+        const words = normQ.split(/[^a-z0-9]+/).filter(w => w.length >= 5 && !['albergue','albergues','etapa','etapas','camino','caminos','donde','dormir','farmacia','cajero','supermercado','pueblo','ciudad','tengo','quiero','sobre','hotel','hostal','pension'].includes(w));
         if (words.length > 0 && (normQ.includes('albergue') || normQ.includes('hotel') || normQ.includes('hostal') || normQ.includes('pension'))) {
           const found = [];
           for (const rId of Object.keys(alberguesMap)) {
             for (const h of (alberguesMap[rId] || [])) {
               const nh = norm(h.name);
-              if (words.some(w => w.length >= 5 && nh.includes(w))) {
+              if (words.some(w => nh.includes(w))) {
                 found.push('• **' + h.name + '** (' + h.town + ')');
               }
             }
           }
           if (found.length) {
-            return "🏡 **Alojamientos encontrados en la Guía:**\n\n" + found.slice(0, 6).join("\n") + "\n\nAbre **Guía → Albergues** para ver su mapa y enlace de Booking.";
+            return "🏡 **Alojamientos encontrados en la Guía:**\n\n" + found.slice(0, 6).join("\n") + "\n\nAbre **Guía → Albergues** para ver su mapa y reserva.";
           }
         }
 
-        // D. Búsqueda por Camino / Ruta concreta
-        const matchedRoute = routeAliases.find(r => r.keys.some(k => normQ.includes(k)));
-        if (matchedRoute && (normQ.includes('camino') || normQ.includes('ruta') || normQ.includes('etapa') || normQ.includes('ver') || normQ.includes('alerta') || normQ.includes('gastronom') || normQ.includes('comer') || normQ.includes('monumento'))) {
-          const stages = etapasMap[matchedRoute.id] || [];
-          const alertTxt = alertasMap[matchedRoute.id] || '';
-          const cult = culturaMap[matchedRoute.id] || null;
-          let reply = "🧭 **" + matchedRoute.name + "** (" + stages.length + " etapas en guía):\n\n";
-          if (stages.length) {
-            reply += stages.slice(0, 4).map(s => "• **Etapa " + s.n + ":** " + s.route + " (" + s.km + ")").join("\n") + "\n";
-            if (stages.length > 4) reply += "*...y " + (stages.length - 4) + " etapas más en Guía → Caminos y Etapas.*\n";
-            reply += "\n";
-          }
-          if (cult) {
-            reply += "🏛️ **Qué ver:** " + cult.see + "\n🍽️ **Gastronomía:** " + cult.food + "\n\n";
-          }
-          if (alertTxt) {
-            reply += "⚠️ **Aviso de ruta:** " + alertTxt;
-          }
-          return reply.trim();
-        }
         return null;
       }
 
@@ -5808,7 +5869,27 @@
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.add('text-slate-400'));
 
       if (tabId === 'tabHome') document.getElementById('navBtnHome').classList.replace('text-slate-400', 'text-amber-400');
-      if (tabId === 'tabBook') document.getElementById('navBtnBook').classList.replace('text-slate-400', 'text-amber-400');
+      if (tabId === 'tabBook') {
+        document.getElementById('navBtnBook').classList.replace('text-slate-400', 'text-amber-400');
+        const bookEl = document.getElementById('tabBook');
+        if (bookEl) {
+          let lock = document.getElementById('demoBookLockNotice');
+          if (isDemoModeUser()) {
+            Array.from(bookEl.children).forEach(ch => { if (ch.id !== 'demoBookLockNotice') ch.classList.add('hidden'); });
+            if (!lock) {
+              lock = document.createElement('div');
+              lock.id = 'demoBookLockNotice';
+              lock.className = 'glass-card rounded-3xl p-6 border border-[#E5DEC9] text-center space-y-4';
+              lock.innerHTML = '<div class="text-3xl">🎒</div><h3 class="text-base font-bold text-[#1E4D3B] serif-title">Transporte exclusivo con SmartVieira</h3><p class="text-xs text-[#5F6C65] leading-relaxed">Estás en <strong>Modo Demo</strong>. Puedes usar libremente la Guía del Camino, el mapa de alojamientos y LUME. Para contratar el transporte de mochilas necesitas vincular tu concha física SmartVieira.</p><button type="button" onclick="logoutPilgrim()" class="w-full py-3 rounded-2xl bg-[#1E4D3B] text-white text-xs font-extrabold shadow-sm">Vincular mi Concha SmartVieira →</button>';
+              bookEl.prepend(lock);
+            }
+            lock.classList.remove('hidden');
+          } else {
+            Array.from(bookEl.children).forEach(ch => { if (ch.id !== 'demoBookLockNotice') ch.classList.remove('hidden'); });
+            if (lock) lock.classList.add('hidden');
+          }
+        }
+      }
       if (tabId === 'tabShell') document.getElementById('navBtnShell').classList.replace('text-slate-400', 'text-amber-400');
       if (tabId === 'tabProfile') document.getElementById('navBtnProfile').classList.replace('text-slate-400', 'text-amber-400');
       if (tabId === 'tabGuide') {
