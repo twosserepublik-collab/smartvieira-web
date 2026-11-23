@@ -1836,8 +1836,11 @@
     }
 
     function sendBleToAllDevices(ids, command) {
-      // 1. Android Native Bridge: Sends valid RGB payload directly to ESP32
-      if (window.AndroidBleBridge && window.AndroidBleBridge.sendBleCommand) {
+      const targetList = Array.isArray(ids) ? ids.filter(Boolean) : [];
+      // 1. Android Native Bridge: Strict target-list BLE command (only assigned SmartVieira IDs)
+      if (window.AndroidBleBridge && window.AndroidBleBridge.sendBleToTargets && targetList.length > 0) {
+        window.AndroidBleBridge.sendBleToTargets(targetList.join(','), command);
+      } else if (window.AndroidBleBridge && window.AndroidBleBridge.sendBleCommand) {
         window.AndroidBleBridge.sendBleCommand(command);
       }
 
