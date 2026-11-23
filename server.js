@@ -158,22 +158,20 @@ function loadDb() {
         'VIEIRA-SMARTSHELL-S3-1010'
       ];
       db.shells = defaultBatch.map(id => ({ id, status: 'available', linkedEmail: null, batch: 'Inicial', createdAt: new Date().toISOString() }));
+      // One-time initial migration of already-registered pilgrim shell IDs into db.shells
+      (db.pilgrims || []).forEach(p => {
+        const sid = (p.smartVieiraId || '').trim().toUpperCase();
+        if (!sid || sid === 'DEMO') return;
+        const found = db.shells.find(s => (s.id || '').toUpperCase() === sid);
+        if (!found) {
+          db.shells.push({ id: sid, status: 'linked', linkedEmail: p.email, batch: 'Migrada', createdAt: p.createdAt || new Date().toISOString() });
+        } else if (found.status !== 'linked') {
+          found.status = 'linked';
+          found.linkedEmail = p.email;
+        }
+      });
       migrated = true;
     }
-    // Ensure any already-registered pilgrim shell IDs are tracked in db.shells
-    (db.pilgrims || []).forEach(p => {
-      const sid = (p.smartVieiraId || '').trim().toUpperCase();
-      if (!sid) return;
-      const found = db.shells.find(s => (s.id || '').toUpperCase() === sid);
-      if (!found) {
-        db.shells.push({ id: sid, status: 'linked', linkedEmail: p.email, batch: 'Migrada', createdAt: p.createdAt || new Date().toISOString() });
-        migrated = true;
-      } else if (found.status !== 'linked') {
-        found.status = 'linked';
-        found.linkedEmail = p.email;
-        migrated = true;
-      }
-    });
     if (migrated) saveDb(db);
     return db;
   } catch (err) {
@@ -2301,17 +2299,23 @@ const server = http.createServer(async (req, res) => {
     }
     try {
       const body = await parseRequestBody(req);
-      const clean = String(body.id || '').trim().toUpperCase();
+      const rawIds = Array.isArray(body.ids) ? body.ids : (body.id ? [body.id] : []);
+      const targetSet = new Set(rawIds.map(x => String(x || '').trim().toUpperCase()).filter(Boolean));
+      if (targetSet.size === 0) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'No se indicaron IDs para eliminar' }));
+      }
       const db = loadDb();
       const prevLen = (db.shells || []).length;
-      db.shells = (db.shells || []).filter(s => (s.id || '').trim().toUpperCase() !== clean);
-      if (db.shells.length === prevLen) {
+      db.shells = (db.shells || []).filter(s => !targetSet.has((s.id || '').trim().toUpperCase()));
+      const removed = prevLen - db.shells.length;
+      if (removed === 0) {
         res.writeHead(404, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ success: false, message: 'Concha no encontrada' }));
+        return res.end(JSON.stringify({ success: false, message: 'Concha(s) no encontrada(s)' }));
       }
       saveDb(db);
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ success: true, message: `Concha ${clean} eliminada.` }));
+      return res.end(JSON.stringify({ success: true, removed, message: `${removed} concha(s) eliminada(s) del inventario.` }));
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: false, message: 'Error eliminando concha' }));

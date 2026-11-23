@@ -159,6 +159,12 @@
           <option value="KO">🇰🇷 한국어 (KO)</option>
         </select>
         <div class="flex gap-2">
+          <select id="filterPilgrimsActivity" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+            <option value="">⚡ Actividad: Todos</option>
+            <option value="active_week">🟢 Activos (última semana)</option>
+            <option value="inactive_week">🟡 Inactivos (&gt; 1 semana)</option>
+            <option value="inactive_month">🔴 Inactivos (&gt; 1 mes)</option>
+          </select>
           <select id="sortPilgrimsSelect" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
             <option value="date_desc">📅 Más recientes primero</option>
             <option value="date_asc">📅 Más antiguos primero</option>
@@ -221,6 +227,12 @@
           <option value="camino-fisterra-muxia">Camino a Fisterra y Muxía</option>
         </select>
         <div class="flex gap-2">
+          <select id="filterCouriersActivity" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
+            <option value="">⚡ Actividad: Todos</option>
+            <option value="active_week">🟢 Activos (última semana)</option>
+            <option value="inactive_week">🟡 Inactivos (&gt; 1 semana)</option>
+            <option value="inactive_month">🔴 Inactivos (&gt; 1 mes)</option>
+          </select>
           <select id="sortCouriersSelect" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-cyan-500/50 text-xs text-cyan-300 font-bold focus:border-cyan-400 focus:outline-none">
             <option value="price_asc">💶 Precio: Menor a Mayor ↑</option>
             <option value="price_desc">💶 Precio: Mayor a Menor ↓</option>
@@ -439,11 +451,13 @@
         <input type="text" id="newShellBatchInput" placeholder="Lote (ej. Lote Mayo)" class="w-36 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
         <button onclick="addShellIdsAdmin()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition-all">➕ Añadir IDs</button>
         <input type="text" id="searchShellsInput" oninput="renderShellsTable()" placeholder="🔍 Filtrar ID o email..." class="w-48 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
+        <button id="btnBulkDeleteShells" onclick="bulkDeleteShellsAdmin()" disabled class="px-3.5 py-2 rounded-xl bg-red-600/80 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition-all">🗑️ Borrar seleccionadas (0)</button>
       </div>
       <div class="overflow-x-auto max-h-60 overflow-y-auto rounded-xl border border-slate-800">
         <table class="w-full text-left text-[11px]">
           <thead class="bg-slate-900 text-slate-400 uppercase sticky top-0">
             <tr>
+              <th class="px-3 py-2 w-8"><input type="checkbox" id="chkAllShells" onchange="toggleAllShells(this.checked)" class="accent-emerald-500 cursor-pointer"></th>
               <th class="px-3 py-2">ID Concha / QR</th>
               <th class="px-3 py-2">Lote</th>
               <th class="px-3 py-2">Estado</th>
@@ -706,6 +720,39 @@
         else alert(data.message || 'Error');
       }
 
+      function toggleAllShells(checked) {
+        document.querySelectorAll('.shell-row-chk').forEach(chk => { chk.checked = checked; });
+        updateSelectedShellsBtn();
+      }
+
+      function updateSelectedShellsBtn() {
+        const checked = Array.from(document.querySelectorAll('.shell-row-chk:checked'));
+        const btn = document.getElementById('btnBulkDeleteShells');
+        if (btn) {
+          btn.disabled = checked.length === 0;
+          btn.innerText = `🗑️ Borrar seleccionadas (${checked.length})`;
+        }
+      }
+
+      async function bulkDeleteShellsAdmin() {
+        const ids = Array.from(document.querySelectorAll('.shell-row-chk:checked')).map(c => c.value);
+        if (ids.length === 0) return;
+        if (!confirm(`¿Eliminar ${ids.length} concha(s) seleccionada(s) del inventario?\n\n${ids.slice(0, 10).join(', ')}${ids.length > 10 ? '...' : ''}`)) return;
+        const res = await fetch('/api/admin/shells/delete', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + adminToken, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ids })
+        });
+        const data = await res.json();
+        if (data.success) {
+          const allChk = document.getElementById('chkAllShells');
+          if (allChk) allChk.checked = false;
+          fetchDatabaseData();
+        } else {
+          alert(data.message || 'Error');
+        }
+      }
+
       function renderShellsTable() {
         const tbody = document.getElementById('tbodyShells');
         const badge = document.getElementById('shellsCountBadge');
@@ -718,6 +765,7 @@
         if (badge) badge.innerText = `${shells.length} conchas (${shells.filter(s => s.status === 'linked').length} vinculadas)`;
         tbody.innerHTML = filtered.map(s => `
           <tr class="hover:bg-slate-900/60">
+            <td class="px-3 py-2"><input type="checkbox" class="shell-row-chk accent-emerald-500 cursor-pointer" value="${s.id}" onchange="updateSelectedShellsBtn()"></td>
             <td class="px-3 py-2 font-mono font-bold text-slate-200">${s.id}</td>
             <td class="px-3 py-2 text-slate-400">${s.batch || '-'}</td>
             <td class="px-3 py-2">${s.status === 'linked' ? '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold">Vinculada</span>' : '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">Disponible</span>'}</td>
@@ -728,6 +776,9 @@
             </td>
           </tr>
         `).join('');
+        const allChk = document.getElementById('chkAllShells');
+        if (allChk) allChk.checked = false;
+        updateSelectedShellsBtn();
       }
 
       async function saveSmtpConfig() {
@@ -874,13 +925,39 @@
           compSelect.value = prevVal;
         }
 
+        // Helper: determine last activity timestamp (lastActiveAt / updatedAt / createdAt / latest reservation)
+        const DAY_MS = 86400000;
+        const nowMs = Date.now();
+        function matchesActivityMode(user, role, mode) {
+          if (!mode) return true;
+          let latest = new Date(user.lastActiveAt || user.updatedAt || user.createdAt || 0).getTime() || 0;
+          (reservations || []).forEach(r => {
+            const match = role === 'pilgrim'
+              ? ((r.pilgrimEmail && user.email && r.pilgrimEmail.toLowerCase() === user.email.toLowerCase()) ||
+                 (r.smartVieiraId && user.smartVieiraId && r.smartVieiraId.toUpperCase() === user.smartVieiraId.toUpperCase()))
+              : ((r.courierId && user.id && r.courierId === user.id) ||
+                 (r.companyName && user.companyName && r.companyName === user.companyName));
+            if (match) {
+              const t = new Date(r.updatedAt || r.createdAt || 0).getTime() || 0;
+              if (t > latest) latest = t;
+            }
+          });
+          const ageDays = (nowMs - latest) / DAY_MS;
+          if (mode === 'active_week') return ageDays <= 7;
+          if (mode === 'inactive_week') return ageDays > 7;
+          if (mode === 'inactive_month') return ageDays > 30;
+          return true;
+        }
+
         // ── 1. FILTER & SORT PILGRIMS ────────────────────────────────────
         const pQuery = (document.getElementById('searchPilgrimsInput')?.value || '').toLowerCase().trim();
         const pLang = (document.getElementById('filterPilgrimsLang')?.value || '').toUpperCase().trim();
+        const pAct = document.getElementById('filterPilgrimsActivity')?.value || '';
         const pSort = document.getElementById('sortPilgrimsSelect')?.value || 'date_desc';
 
         let filteredPilgrims = pilgrims.filter(p => {
           if (pLang && (p.language || 'ES').toUpperCase() !== pLang) return false;
+          if (!matchesActivityMode(p, 'pilgrim', pAct)) return false;
           if (!pQuery) return true;
           const haystack = [p.id, p.name, p.surname, p.phone, p.email, p.smartVieiraId, p.language].join(' ').toLowerCase();
           return haystack.includes(pQuery);
@@ -920,11 +997,13 @@
         const cQuery = (document.getElementById('searchCouriersInput')?.value || '').toLowerCase().trim();
         const cComp = document.getElementById('filterCouriersCompany')?.value || '';
         const cRoute = document.getElementById('filterCouriersRoute')?.value || '';
+        const cAct = document.getElementById('filterCouriersActivity')?.value || '';
         const cSort = document.getElementById('sortCouriersSelect')?.value || 'price_asc';
 
         let filteredCouriers = couriers.filter(c => {
           if (cComp && c.companyName !== cComp) return false;
           if (cRoute && (c.routes || '').toLowerCase() !== cRoute.toLowerCase()) return false;
+          if (!matchesActivityMode(c, 'courier', cAct)) return false;
           if (!cQuery) return true;
           const haystack = [c.id, c.companyName, c.driverName, c.phone, c.vehicle, c.cif, c.routes, c.routeStart, c.routeEnd, c.email, c.pricePerBag].join(' ').toLowerCase();
           return haystack.includes(cQuery);
