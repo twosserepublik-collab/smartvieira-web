@@ -494,7 +494,7 @@
           <div id="manualIdSection" class="hidden pt-3 border-t border-[#E5DEC9] space-y-2 text-left">
             <label class="block text-xs font-bold text-slate-700">Introduce el ID grabado en la concha:</label>
             <div class="flex space-x-2">
-              <input type="text" id="manualDeviceId" placeholder="Ej. VIEIRA-SMARTSHELL-S3-9982" class="w-full px-3 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs font-mono text-slate-900 focus:border-[#1E4D3B] focus:outline-none">
+              <input type="text" id="manualDeviceId" onkeydown="if(event.key==='Enter'){event.preventDefault();handleManualDeviceSubmit();}" placeholder="Ej. VIEIRA-SMARTSHELL-S3-9982" class="w-full px-3 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs font-mono text-slate-900 focus:border-[#1E4D3B] focus:outline-none">
               <button type="button" onclick="handleManualDeviceSubmit()" class="px-4 py-2.5 rounded-xl bg-[#1E4D3B] hover:bg-[#16382B] text-white font-black text-xs whitespace-nowrap shadow-sm">
                 Vincular ID
               </button>
@@ -4655,6 +4655,7 @@
     }
 
     async function verifyAndProceedWithShellId(rawId, sourceLabel) {
+      if (String(rawId || '').trim().toUpperCase() === 'DEMO') { enterDemoModeDirectly(); return; }
       const cleanId = String(rawId || '').trim().toUpperCase();
       if (!cleanId) return alert('Introduce un ID válido (ej. VIEIRA-SMARTSHELL-S3-9982)');
       try {
@@ -4701,32 +4702,18 @@
         id: 'demo-pilgrim',
         firstName: 'Demo',
         lastName: 'Peregrino',
-        name: 'Demo Peregrino',
+        name: 'Demo',
         email: 'demo@smartvieira.com',
         deviceId: 'DEMO',
         smartVieiraId: 'DEMO',
         language: typeof currentAppLang !== 'undefined' ? currentAppLang : 'ES',
         isDemo: true
       };
-      ['viewGuestLanding', 'viewAuth', 'viewTutorial'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
-      });
-      const nav = document.getElementById('bottomNav');
-      if (nav) nav.classList.remove('hidden');
-      const navName = document.getElementById('navUserName');
-      if (navName) navName.innerText = 'Demo';
+      setupUserSession();
       const dot = document.getElementById('sessionStatusDot');
       if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-400';
-      const shellEl = document.getElementById('homeShellId');
-      if (shellEl) shellEl.innerText = 'MODO DEMO';
-      const profName = document.getElementById('profileUserName');
-      if (profName) profName.innerText = 'Peregrino Demo';
-      const profEmail = document.getElementById('profileUserEmail');
-      if (profEmail) profEmail.innerText = 'demo@smartvieira.com';
-      const profShell = document.getElementById('profileShellId');
-      if (profShell) profShell.innerText = 'DEMO';
-      switchTab('tabHome');
+      const welcome = document.getElementById('homeWelcomeName');
+      if (welcome) welcome.innerText = '?Buen Camino! (Modo Demo)';
     }
 
     
@@ -5109,7 +5096,7 @@
 
       // Si el usuario ya había conectado su Vieira anteriormente en este dispositivo, reconectar automáticamente
       setTimeout(() => {
-        tryAutoReconnectBLE();
+        if (!isDemoModeUser()) tryAutoReconnectBLE();
       }, 600);
     }
 
@@ -6074,7 +6061,7 @@
                   <div id="demoOrdSuccessBox" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-xs text-[#1E4D3B] font-bold text-center"></div>
                   <div class="text-center text-[11px] text-[#5F6C65]">Tarjeta • Google Pay • Apple Pay • Envío 24-48h</div>
 
-                  <button type="button" onclick="logoutPilgrim()" class="w-full py-2.5 rounded-xl bg-[#EFE9DC] text-[#1E4D3B] border border-[#E2DAC9] text-xs font-bold">
+                  <button type="button" onclick="handleLogout()" class="w-full py-2.5 rounded-xl bg-[#EFE9DC] text-[#1E4D3B] border border-[#E2DAC9] text-xs font-bold">
                     ¿Ya tienes tu concha física? Vincular QR →
                   </button>
                 </div>
