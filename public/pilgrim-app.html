@@ -4704,18 +4704,152 @@
         name: 'Demo Peregrino',
         email: 'demo@smartvieira.com',
         deviceId: 'DEMO',
+        smartVieiraId: 'DEMO',
         language: typeof currentAppLang !== 'undefined' ? currentAppLang : 'ES',
         isDemo: true
       };
-      if (typeof showPilgrimDashboard === 'function') {
-        showPilgrimDashboard();
-      } else {
-        document.getElementById('viewGuestLanding').classList.add('hidden');
-        document.getElementById('viewAuth').classList.add('hidden');
-        document.getElementById('viewDashboard').classList.remove('hidden');
-        document.getElementById('bottomNav').classList.remove('hidden');
+      ['viewGuestLanding', 'viewAuth', 'viewTutorial'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+      const nav = document.getElementById('bottomNav');
+      if (nav) nav.classList.remove('hidden');
+      const navName = document.getElementById('navUserName');
+      if (navName) navName.innerText = 'Demo';
+      const dot = document.getElementById('sessionStatusDot');
+      if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+      const shellEl = document.getElementById('homeShellId');
+      if (shellEl) shellEl.innerText = 'MODO DEMO';
+      const profName = document.getElementById('profileUserName');
+      if (profName) profName.innerText = 'Peregrino Demo';
+      const profEmail = document.getElementById('profileUserEmail');
+      if (profEmail) profEmail.innerText = 'demo@smartvieira.com';
+      const profShell = document.getElementById('profileShellId');
+      if (profShell) profShell.innerText = 'DEMO';
+      switchTab('tabHome');
+    }
+
+    
+    let demoStripeInst = null;
+    let demoStripeEls = null;
+    let demoOrderPayload = null;
+    let demoPaymentIntentId = null;
+
+    function updateDemoOrdTotal() {
+      const q = Math.max(1, Math.min(20, parseInt((document.getElementById('demoOrdQty') || {}).value || '1', 10)));
+      const total = (q * 15 + 2).toFixed(2).replace('.', ',');
+      const lbl = document.getElementById('demoOrdTotalLbl');
+      const btn = document.getElementById('demoOrdSubmitBtn');
+      if (lbl) lbl.textContent = total + ' €';
+      if (btn) btn.textContent = '🔒 Comprar SmartVieira (' + total + ' €) →';
+    }
+
+    function closeDemoProductStripeModal() {
+      const m = document.getElementById('demoProductStripeModal');
+      if (m) m.classList.add('hidden');
+    }
+
+    async function startDemoProductCheckout(e) {
+      e.preventDefault();
+      const qty = Math.max(1, Math.min(20, parseInt(document.getElementById('demoOrdQty').value, 10) || 1));
+      demoOrderPayload = {
+        quantity: qty,
+        customerName: document.getElementById('demoOrdName').value.trim(),
+        customerEmail: document.getElementById('demoOrdEmail').value.trim(),
+        phone: document.getElementById('demoOrdPhone').value.trim(),
+        country: document.getElementById('demoOrdCountry').value.trim(),
+        address: document.getElementById('demoOrdAddress').value.trim(),
+        postalCode: document.getElementById('demoOrdCP').value.trim(),
+        city: document.getElementById('demoOrdCity').value.trim()
+      };
+      const btn = document.getElementById('demoOrdSubmitBtn');
+      const prev = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = '⏳ Preparando pasarela de pago...';
+      try {
+        const res = await fetch(getApiUrl('/api/product/create-payment-intent'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(demoOrderPayload)
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'No se pudo iniciar el pago');
+
+        if (data.offlineFallback || typeof window.Stripe !== 'function' || !data.publishableKey) {
+          await finalizeDemoProductOrder('ORD_APP_' + Date.now());
+          return;
+        }
+        demoPaymentIntentId = data.paymentIntentId;
+        document.getElementById('demoProductSummary').textContent = 'SmartVieira x' + qty + ' + Envío • ' + Number(data.amountEuros).toFixed(2) + ' €';
+        document.getElementById('demoStripeErr').classList.add('hidden');
+        document.getElementById('demoProductStripeModal').classList.remove('hidden');
+
+        if (!demoStripeInst) demoStripeInst = window.Stripe(data.publishableKey);
+        demoStripeEls = demoStripeInst.elements({
+          clientSecret: data.clientSecret,
+          appearance: {
+            theme: 'stripe',
+            variables: { colorPrimary: '#1E4D3B', colorBackground: '#FAF7F0', colorText: '#1C2826', fontFamily: 'DM Sans, sans-serif' }
+          }
+        });
+        document.getElementById('demoStripeExpressMount').innerHTML = '';
+        document.getElementById('demoStripePaymentMount').innerHTML = '';
+        try {
+          const ex = demoStripeEls.create('expressCheckout', { buttonType: { googlePay: 'buy', applePay: 'buy' } });
+          ex.on('confirm', async () => {
+            const r = await demoStripeInst.confirmPayment({ elements: demoStripeEls, confirmParams: { return_url: window.location.href }, redirect: 'if_required' });
+            if (r.error) showDemoStripeErr(r.error.message);
+            else await finalizeDemoProductOrder((r.paymentIntent && r.paymentIntent.id) || demoPaymentIntentId);
+          });
+          ex.mount('#demoStripeExpressMount');
+        } catch (_) {}
+        const pe = demoStripeEls.create('payment');
+        pe.mount('#demoStripePaymentMount');
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prev;
       }
-      switchTab('tabGuide');
+    }
+
+    function showDemoStripeErr(msg) {
+      const el = document.getElementById('demoStripeErr');
+      if (el) { el.textContent = msg; el.classList.remove('hidden'); }
+    }
+
+    async function confirmDemoProductStripePayment() {
+      const btn = document.getElementById('demoConfirmPayBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Procesando...';
+      try {
+        const r = await demoStripeInst.confirmPayment({ elements: demoStripeEls, confirmParams: { return_url: window.location.href }, redirect: 'if_required' });
+        if (r.error) showDemoStripeErr(r.error.message);
+        else await finalizeDemoProductOrder((r.paymentIntent && r.paymentIntent.id) || demoPaymentIntentId);
+      } catch (e) {
+        showDemoStripeErr(e.message || 'Error procesando el pago');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🔒 Confirmar y Pagar Pedido';
+      }
+    }
+
+    async function finalizeDemoProductOrder(piId) {
+      const res = await fetch(getApiUrl('/api/product/confirm-order'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...demoOrderPayload, paymentIntentId: piId })
+      });
+      const data = await res.json();
+      closeDemoProductStripeModal();
+      const box = document.getElementById('demoOrdSuccessBox');
+      if (box) {
+        box.textContent = '✅ ¡Pedido confirmado! (' + (data.orderId || piId) + '). Recibirás tu SmartVieira en 24-48h.';
+        box.classList.remove('hidden');
+      }
+      const f = document.getElementById('demoProductOrderForm');
+      if (f) f.reset();
+      updateDemoOrdTotal();
     }
 
     async function handleManualDeviceSubmit() {
@@ -5879,8 +6013,89 @@
             if (!lock) {
               lock = document.createElement('div');
               lock.id = 'demoBookLockNotice';
-              lock.className = 'glass-card rounded-3xl p-6 border border-[#E5DEC9] text-center space-y-4';
-              lock.innerHTML = '<div class="text-3xl">🎒</div><h3 class="text-base font-bold text-[#1E4D3B] serif-title">Transporte exclusivo con SmartVieira</h3><p class="text-xs text-[#5F6C65] leading-relaxed">Estás en <strong>Modo Demo</strong>. Puedes usar libremente la Guía del Camino, el mapa de alojamientos y LUME. Para contratar el transporte de mochilas necesitas vincular tu concha física SmartVieira.</p><button type="button" onclick="logoutPilgrim()" class="w-full py-3 rounded-2xl bg-[#1E4D3B] text-white text-xs font-extrabold shadow-sm">Vincular mi Concha SmartVieira →</button>';
+              lock.className = 'space-y-4';
+              lock.innerHTML = `
+                <div class="glass-card rounded-3xl p-4 border border-[#E5DEC9] space-y-3.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="px-2.5 py-1 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold">🎒 Transporte de Mochilas</span>
+                    <span class="px-2.5 py-1 rounded-full bg-[#EFE9DC] text-[#8C5D35] text-[11px] font-bold">Modo Demo</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-[#1E4D3B] serif-title leading-snug">Envía tu mochila etapa a etapa con tu Concha SmartVieira</h3>
+                  <p class="text-xs text-[#5F6C65] leading-relaxed">Para contratar el transporte de mochilas sin sobres, sin efectivo y con seguimiento GPS + baliza luminosa en el albergue, necesitas vincular tu <strong>Concha SmartVieira</strong> física.</p>
+                  <div class="rounded-2xl overflow-hidden border border-[#E5DEC9] bg-[#EFE9DC] aspect-[16/10]">
+                    <img src="/images/smartvieira-product.jpg" alt="Concha SmartVieira" class="w-full h-full object-cover">
+                  </div>
+                  <div class="grid grid-cols-1 gap-2 text-xs">
+                    <div class="p-2.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] flex items-start gap-2">
+                      <span>✨</span><span><strong class="text-[#1E4D3B]">Sin sobres ni llamadas:</strong> reserva en 1 clic con Google Pay, Apple Pay, Bizum o tarjeta.</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] flex items-start gap-2">
+                      <span>📡</span><span><strong class="text-[#1E4D3B]">Baliza BLE + GPS:</strong> el repartidor localiza tu mochila al instante y sigues el reparto en vivo.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="glass-card rounded-3xl p-4 border border-[#E5DEC9] space-y-3.5">
+                  <div class="flex items-center justify-between border-b border-[#E5DEC9] pb-3">
+                    <div>
+                      <div class="text-xs font-bold text-[#5F6C65]">Concha SmartVieira</div>
+                      <div class="serif-title text-xl font-bold text-[#1C2826]">15,00 € <span class="font-sans text-xs font-normal text-[#5F6C65]">+ 2,00 € envío</span></div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-[#EBF3EE] text-[#1E4D3B] text-[11px] font-bold">Disponible</span>
+                  </div>
+
+                  <form id="demoProductOrderForm" onsubmit="startDemoProductCheckout(event)" class="space-y-2.5">
+                    <div class="grid grid-cols-3 gap-2 items-end">
+                      <div>
+                        <label class="block text-[11px] font-bold text-[#1C2826] mb-1">Cantidad</label>
+                        <input id="demoOrdQty" type="number" min="1" max="20" value="1" oninput="updateDemoOrdTotal()" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-sm font-bold text-[#1C2826]">
+                      </div>
+                      <div class="col-span-2 bg-[#FAF7F0] border border-[#E5DEC9] rounded-xl px-3 py-2 flex items-center justify-between">
+                        <span class="text-xs font-bold text-[#5F6C65]">Total:</span>
+                        <span id="demoOrdTotalLbl" class="text-base font-bold text-[#1E4D3B]">17,00 €</span>
+                      </div>
+                    </div>
+                    <input id="demoOrdName" type="text" required placeholder="Nombre completo *" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826]">
+                    <input id="demoOrdEmail" type="email" required placeholder="Correo electrónico *" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826]">
+                    <div class="grid grid-cols-2 gap-2">
+                      <input id="demoOrdPhone" type="tel" required placeholder="Teléfono *" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826]">
+                      <input id="demoOrdCountry" type="text" required value="España" placeholder="País *" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826]">
+                    </div>
+                    <input id="demoOrdAddress" type="text" required placeholder="Dirección completa *" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826]">
+                    <div class="grid grid-cols-2 gap-2">
+                      <input id="demoOrdCP" type="text" required placeholder="Código Postal *" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826]">
+                      <input id="demoOrdCity" type="text" required placeholder="Ciudad *" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#E5DEC9] text-xs text-[#1C2826]">
+                    </div>
+                    <button id="demoOrdSubmitBtn" type="submit" class="w-full py-3.5 rounded-2xl bg-[#1E4D3B] hover:bg-[#2A6B53] text-white font-bold text-xs shadow-md transition-all">
+                      🔒 Comprar SmartVieira (17,00 €) →
+                    </button>
+                  </form>
+
+                  <div id="demoOrdSuccessBox" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-xs text-[#1E4D3B] font-bold text-center"></div>
+                  <div class="text-center text-[11px] text-[#5F6C65]">Tarjeta • Google Pay • Apple Pay • Envío 24-48h</div>
+
+                  <button type="button" onclick="logoutPilgrim()" class="w-full py-2.5 rounded-xl bg-[#EFE9DC] text-[#1E4D3B] border border-[#E2DAC9] text-xs font-bold">
+                    ¿Ya tienes tu concha física? Vincular QR →
+                  </button>
+                </div>
+
+                <!-- Modal Stripe Pago Producto en App -->
+                <div id="demoProductStripeModal" class="hidden fixed inset-0 z-[95] bg-black/65 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div class="w-full max-w-md bg-[#FAF7F0] rounded-3xl p-5 border border-[#E5DEC9] shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between">
+                      <strong class="text-sm text-[#1E4D3B] serif-title">Pago Seguro SmartVieira</strong>
+                      <button type="button" onclick="closeDemoProductStripeModal()" class="w-8 h-8 rounded-full bg-[#EFE9DC] text-[#1C2826] font-bold">✕</button>
+                    </div>
+                    <div id="demoProductSummary" class="text-xs font-bold text-[#1E4D3B] bg-white p-2.5 rounded-xl border border-[#E5DEC9]"></div>
+                    <div id="demoStripeExpressMount"></div>
+                    <div id="demoStripePaymentMount" class="bg-white p-3 rounded-xl border border-[#E5DEC9]"></div>
+                    <div id="demoStripeErr" class="hidden p-2.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-bold"></div>
+                    <button id="demoConfirmPayBtn" type="button" onclick="confirmDemoProductStripePayment()" class="w-full py-3.5 rounded-2xl bg-[#1E4D3B] text-white font-bold text-xs shadow-md">
+                      🔒 Confirmar y Pagar Pedido
+                    </button>
+                  </div>
+                </div>
+              `;
               bookEl.prepend(lock);
             }
             lock.classList.remove('hidden');
