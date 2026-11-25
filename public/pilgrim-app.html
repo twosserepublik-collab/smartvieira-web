@@ -533,7 +533,7 @@
       <!-- Center Viewfinder -->
       <div class="relative flex-1 flex flex-col items-center justify-center my-4 overflow-hidden rounded-3xl">
         <!-- Live Video & Canvas -->
-        <video id="webcamVideo" class="absolute inset-0 w-full h-full object-cover" playsinline></video>
+        <video id="webcamVideo" class="absolute inset-0 w-full h-full object-cover" autoplay muted playsinline></video>
         <canvas id="qrCanvas" class="hidden"></canvas>
 
         <!-- Viewfinder Framing with 4 Amber Corners -->
@@ -4593,43 +4593,76 @@
     }
 
     async function startRealCameraScanner() {
+      stopCameraScanner();
       const video = document.getElementById('webcamVideo');
       const canvas = document.getElementById('qrCanvas');
-      const ctx = canvas ? canvas.getContext('2d') : null;
+      const ctx = canvas ? canvas.getContext('2d', { willReadFrequently: true }) : null;
 
       try {
-        cameraScanStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" }
-        });
-        
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error('C?mara no disponible en este navegador.');
+        }
+
+        try {
+          cameraScanStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
+            audio: false
+          });
+        } catch (envErr) {
+          cameraScanStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false
+          });
+        }
+
         if (video) {
           video.srcObject = cameraScanStream;
-          video.setAttribute("playsinline", true);
+          video.muted = true;
+          video.setAttribute("playsinline", "true");
+          video.setAttribute("autoplay", "true");
           video.classList.remove('hidden');
           await video.play();
         }
 
+        const nativeDetector = (typeof BarcodeDetector !== 'undefined')
+          ? new BarcodeDetector({ formats: ['qr_code'] })
+          : null;
+        let isDetectingNative = false;
+
+        function handleScannedQrValue(rawVal) {
+          if (!rawVal) return;
+          closeQrScannerModal();
+          let extractedId = String(rawVal).trim();
+          if (extractedId.includes('shell=')) {
+            extractedId = extractedId.split('shell=')[1].split('&')[0];
+          }
+          simulateQrDetection(extractedId);
+        }
+
         function tick() {
-          if (video && video.readyState === video.HAVE_ENOUGH_DATA && canvas && ctx) {
+          if (!cameraScanStream) return;
+          if (video && video.readyState >= video.HAVE_CURRENT_DATA && video.videoWidth > 0 && canvas && ctx) {
             canvas.height = video.videoHeight;
             canvas.width = video.videoWidth;
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const code = jsQR(imageData.data, imageData.width, imageData.height, {
-              inversionAttempts: "dontInvert",
-            });
 
-            if (code && code.data) {
-              closeQrScannerModal();
-              
-              let extractedId = code.data;
-              if (extractedId.includes('shell=')) {
-                extractedId = extractedId.split('shell=')[1].split('&')[0];
+            if (typeof jsQR === 'function') {
+              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "attemptBoth",
+              });
+              if (code && code.data) {
+                handleScannedQrValue(code.data);
+                return;
               }
-
-              simulateQrDetection(extractedId);
-              return;
+            } else if (nativeDetector && !isDetectingNative) {
+              isDetectingNative = true;
+              nativeDetector.detect(canvas).then(codes => {
+                isDetectingNative = false;
+                if (cameraScanStream && codes && codes.length > 0 && codes[0].rawValue) {
+                  handleScannedQrValue(codes[0].rawValue);
+                }
+              }).catch(() => { isDetectingNative = false; });
             }
           }
           scanAnimationId = requestAnimationFrame(tick);
@@ -4637,21 +4670,30 @@
 
         scanAnimationId = requestAnimationFrame(tick);
       } catch (err) {
-        alert("⚠️ Error al acceder a la cámara: " + err.message + "\nPuedes introducir el ID de tu SmartVieira a mano.");
+        alert("?? Error al acceder a la c?mara: " + (err && err.message ? err.message : err) + "\nPuedes introducir el ID de tu SmartVieira a mano.");
         closeQrScannerModal();
         toggleManualIdSection(true);
       }
     }
 
     function stopCameraScanner() {
-      if (scanAnimationId) cancelAnimationFrame(scanAnimationId);
+      if (scanAnimationId) {
+        cancelAnimationFrame(scanAnimationId);
+        scanAnimationId = null;
+      }
       if (cameraScanStream) {
-        cameraScanStream.getTracks().forEach(track => track.stop());
+        cameraScanStream.getTracks().forEach(track => {
+          try { track.stop(); } catch (e) {}
+        });
         cameraScanStream = null;
       }
       isTorchActive = false;
       const video = document.getElementById('webcamVideo');
-      if (video) video.classList.add('hidden');
+      if (video) {
+        try { video.pause(); } catch (e) {}
+        video.srcObject = null;
+        video.classList.add('hidden');
+      }
     }
 
     async function verifyAndProceedWithShellId(rawId, sourceLabel) {
