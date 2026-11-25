@@ -458,6 +458,7 @@
           <thead class="bg-slate-900 text-slate-400 uppercase sticky top-0">
             <tr>
               <th class="px-3 py-2 w-8"><input type="checkbox" id="chkAllShells" onchange="toggleAllShells(this.checked)" class="accent-emerald-500 cursor-pointer"></th>
+              <th class="px-3 py-2">QR</th>
               <th class="px-3 py-2">ID Concha / QR</th>
               <th class="px-3 py-2">Lote</th>
               <th class="px-3 py-2">Estado</th>
@@ -763,9 +764,17 @@
           !q || (s.id || '').toLowerCase().includes(q) || (s.linkedEmail || '').toLowerCase().includes(q) || (s.batch || '').toLowerCase().includes(q)
         );
         if (badge) badge.innerText = `${shells.length} conchas (${shells.filter(s => s.status === 'linked').length} vinculadas)`;
-        tbody.innerHTML = filtered.map(s => `
+        tbody.innerHTML = filtered.map(s => {
+          const qrSrc = s.qrImage || ('https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=12&data=' + encodeURIComponent(s.id));
+          return `
           <tr class="hover:bg-slate-900/60">
             <td class="px-3 py-2"><input type="checkbox" class="shell-row-chk accent-emerald-500 cursor-pointer" value="${s.id}" onchange="updateSelectedShellsBtn()"></td>
+            <td class="px-3 py-1.5">
+              <a href="${qrSrc}" download="QR-${s.id}.png" target="_blank" title="Ver o descargar QR-${s.id}.png" class="inline-flex items-center gap-1.5 group">
+                <img src="${qrSrc}" alt="QR ${s.id}" class="w-8 h-8 rounded bg-white p-0.5 border border-slate-700 group-hover:scale-110 transition-transform">
+                <span class="text-[10px] text-emerald-400 font-bold hover:underline">⬇️</span>
+              </a>
+            </td>
             <td class="px-3 py-2 font-mono font-bold text-slate-200">${s.id}</td>
             <td class="px-3 py-2 text-slate-400">${s.batch || '-'}</td>
             <td class="px-3 py-2">${s.status === 'linked' ? '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold">Vinculada</span>' : '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">Disponible</span>'}</td>
@@ -775,7 +784,8 @@
               <button onclick="deleteShellAdmin('${s.id}')" class="px-2 py-1 rounded bg-red-500/20 text-red-300 hover:bg-red-500/30 font-bold">🗑️</button>
             </td>
           </tr>
-        `).join('');
+        `;
+        }).join('');
         const allChk = document.getElementById('chkAllShells');
         if (allChk) allChk.checked = false;
         updateSelectedShellsBtn();

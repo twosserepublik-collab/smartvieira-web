@@ -2243,6 +2243,7 @@ const server = http.createServer(async (req, res) => {
       const body = await parseRequestBody(req);
       const rawList = Array.isArray(body.ids) ? body.ids : String(body.ids || body.id || '').split(/[\s,;]+/);
       const batch = (body.batch || 'Venta').trim();
+      const qrMap = (body.qrs && typeof body.qrs === 'object') ? body.qrs : {};
       const db = loadDb();
       db.shells = db.shells || [];
       let added = 0;
@@ -2250,11 +2251,14 @@ const server = http.createServer(async (req, res) => {
       for (const item of rawList) {
         const clean = String(item || '').trim().toUpperCase();
         if (!clean) continue;
-        if (db.shells.some(s => (s.id || '').trim().toUpperCase() === clean)) {
+        const qrData = qrMap[clean] || qrMap[item] || `https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=12&data=${encodeURIComponent(clean)}`;
+        const existing = db.shells.find(s => (s.id || '').trim().toUpperCase() === clean);
+        if (existing) {
+          if (qrMap[clean] || qrMap[item]) existing.qrImage = qrData;
           skipped++;
           continue;
         }
-        db.shells.push({ id: clean, status: 'available', linkedEmail: null, batch, createdAt: new Date().toISOString() });
+        db.shells.push({ id: clean, status: 'available', linkedEmail: null, batch, qrImage: qrData, createdAt: new Date().toISOString() });
         added++;
       }
       saveDb(db);
