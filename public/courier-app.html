@@ -426,7 +426,7 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Ruta *</label>
-          <select id="courierRoutes" required class="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 font-medium focus:bg-white focus:border-amber-500 shadow-sm">
+          <select id="courierRoutes" onchange="populateCourierRouteTowns()" required class="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 font-medium focus:bg-white focus:border-amber-500 shadow-sm">
             <option value="camino-frances">Camino Francés (Saint-Jean-Pied-de-Port - Santiago)</option>
             <option value="camino-ingles">Camino Inglés (Ferrol - Santiago)</option>
             <option value="camino-portugues-interior">Camino Portugués (Tui - Santiago)</option>
@@ -899,6 +899,39 @@
             "MuxíA"
       ]
 };
+
+    function formatTownLabel(str) {
+      if (!str) return '';
+      return str.replace(/([áéíóúüñãõç])([A-ZÁÉÍÓÚÜÑ])/g, (_, a, b) => a + b.toLowerCase());
+    }
+
+    function populateCourierRouteTowns() {
+      const routeSel = document.getElementById('courierRoutes');
+      const startSel = document.getElementById('courierRouteStart');
+      const endSel = document.getElementById('courierRouteEnd');
+      if (!routeSel || !startSel || !endSel) return;
+
+      const routeId = routeSel.value;
+      const towns = (typeof ROUTE_TOWNS !== 'undefined' && ROUTE_TOWNS[routeId]) ? ROUTE_TOWNS[routeId] : [];
+      if (!towns.length) {
+        startSel.innerHTML = '<option value="">Toda la ruta</option>';
+        endSel.innerHTML = '<option value="">Toda la ruta</option>';
+        return;
+      }
+
+      const optsHtml = towns.map(raw => {
+        const clean = formatTownLabel(raw);
+        return `<option value="${clean.replace(/"/g, '&quot;')}">${clean}</option>`;
+      }).join('');
+      startSel.innerHTML = optsHtml;
+      endSel.innerHTML = optsHtml;
+      startSel.selectedIndex = 0;
+      endSel.selectedIndex = towns.length - 1;
+    }
+
+    document.addEventListener('DOMContentLoaded', populateCourierRouteTowns);
+    if (document.readyState !== 'loading') populateCourierRouteTowns();
+
     let currentAppLang = (localStorage.getItem('vieira_lang') || 'ES').toUpperCase();
 
     function trText(esStr, lang) {
