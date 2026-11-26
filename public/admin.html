@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -25,7 +25,7 @@
     <div class="glass-card rounded-3xl p-8 max-w-sm w-full space-y-6 border border-cyan-500/30 shadow-2xl">
       <div class="text-center">
         <h2 class="text-2xl font-black text-white mb-1">Acceso Seguro</h2>
-        <p class="text-xs text-slate-400">Panel de Administración SmartVieira</p>
+        <p class="text-xs text-slate-400">Panel de AdministraciÃ³n SmartVieira</p>
       </div>
       <div class="space-y-4">
         <div>
@@ -33,8 +33,8 @@
           <input type="text" id="adminUser" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none" placeholder="Ej: admin">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">Contraseña</label>
-          <input type="password" id="adminPass" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none" placeholder="••••••••">
+          <label class="block text-xs font-bold text-slate-300 mb-1">ContraseÃ±a</label>
+          <input type="password" id="adminPass" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-cyan-400 focus:outline-none" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
         </div>
         <button onclick="loginAdmin()" class="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm shadow-lg transition-all">Entrar al Panel</button>
         <p id="loginError" class="text-red-400 text-xs text-center hidden font-bold mt-2"></p>
@@ -47,20 +47,20 @@
   <div class="max-w-6xl mx-auto glass-card rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center shadow-2xl border border-amber-500/40">
     <div class="flex items-center space-x-3">
       <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl">
-        🗄️
+        ðŸ—„ï¸
       </div>
       <div>
         <h1 class="text-2xl font-black text-white">Base de Datos SmartVieira</h1>
-        <p class="text-xs text-amber-300">Panel de Administración de Registros, Empresas y Cobros en Vivo</p>
+        <p class="text-xs text-amber-300">Panel de AdministraciÃ³n de Registros, Empresas y Cobros en Vivo</p>
       </div>
     </div>
 
     <div class="flex items-center space-x-3 pt-4 md:pt-0">
       <button onclick="fetchDatabaseData()" class="px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-black text-xs shadow-lg hover:bg-amber-400 flex items-center space-x-1">
-        <span>🔄 Recargar Datos</span>
+        <span>ðŸ”„ Recargar Datos</span>
       </button>
       <a href="/descargar.html" class="px-4 py-2.5 rounded-xl bg-slate-900 text-slate-300 border border-slate-700 font-bold text-xs">
-        📲 Centro de Descargas
+        ðŸ“² Centro de Descargas
       </a>
     </div>
   </div>
@@ -70,31 +70,31 @@
     
       <div class="flex flex-wrap gap-3 mb-6">
         <button onclick="downloadBackup()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">
-          💾 Descargar Copia de Seguridad
+          ðŸ’¾ Descargar Copia de Seguridad
         </button>
         <div class="relative">
           <input type="file" id="restoreFile" class="hidden" accept=".json" onchange="restoreBackup(event)">
           <button onclick="document.getElementById('restoreFile').click()" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">
-            📂 Restaurar Copia (.json)
+            ðŸ“‚ Restaurar Copia (.json)
           </button>
         </div>
         <button onclick="loadDemoDatabase()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">
-          🧪 Cargar BD de Prueba (Rutas + Peregrinos)
+          ðŸ§ª Cargar BD de Prueba (Rutas + Peregrinos)
         </button>
       </div>
 
       <!-- PLAY STORE AABS (MOBILE DOWNLOAD FOR GOOGLE PLAY CONSOLE) -->
       <div class="glass-card rounded-2xl p-4 border border-purple-500/30 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <span class="text-[10px] font-black text-purple-400 uppercase tracking-widest block">Google Play Console • Descarga Móvil (.aab)</span>
-          <p class="text-xs text-slate-300 mt-0.5">Descarga los App Bundles firmados directamente en el teléfono para subirlos a Play Console.</p>
+          <span class="text-[10px] font-black text-purple-400 uppercase tracking-widest block">Google Play Console â€¢ Descarga MÃ³vil (.aab)</span>
+          <p class="text-xs text-slate-300 mt-0.5">Descarga los App Bundles firmados directamente en el telÃ©fono para subirlos a Play Console.</p>
         </div>
         <div class="flex flex-wrap gap-2">
-          <a href="/aabs/smartvieira-peregrino-v13.53.1-playstore.aab" download="smartvieira-peregrino-v13.53.1-playstore.aab" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-bold transition-all shadow flex items-center gap-1.5">
-            📦 Peregrino v13.53.1 (.aab)
+          <a href="/aabs/smartvieira-peregrino-v13.53.2-playstore.aab" download="smartvieira-peregrino-v13.53.2-playstore.aab" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-bold transition-all shadow flex items-center gap-1.5">
+            ðŸ“¦ Peregrino v13.53.2 (.aab)
           </a>
-          <a href="/aabs/smartvieira-repartidor-v13.53.1-playstore.aab" download="smartvieira-repartidor-v13.53.1-playstore.aab" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition-all shadow flex items-center gap-1.5">
-            🚚 Repartidor v13.53.1 (.aab)
+          <a href="/aabs/smartvieira-repartidor-v13.53.2-playstore.aab" download="smartvieira-repartidor-v13.53.2-playstore.aab" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition-all shadow flex items-center gap-1.5">
+            ðŸšš Repartidor v13.53.2 (.aab)
           </a>
         </div>
       </div>
@@ -118,61 +118,61 @@
     <!-- TAB NAVIGATION FOR DB TABLES -->
     <div class="flex space-x-2 border-b border-slate-800 pb-2">
       <button onclick="showDbTab('tabPilgrims')" id="btnTabPilgrims" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black text-xs">
-        👤 Peregrinos (& SmartVieira IDs)
+        ðŸ‘¤ Peregrinos (& SmartVieira IDs)
       </button>
       <button onclick="showDbTab('tabCouriers')" id="btnTabCouriers" class="px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white">
-        🚚 Empresas Repartidoras
+        ðŸšš Empresas Repartidoras
       </button>
       <button onclick="showDbTab('tabReservations')" id="btnTabReservations" class="px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white">
-        💳 Reservas y Pagos Stripe
+        ðŸ’³ Reservas y Pagos Stripe
       </button>
     
         <button id="btnTabEmergencies" onclick="showDbTab('tabEmergencies')" class="px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white flex items-center gap-1">
-          🚨 Alertas Emergencia <span id="emBadge" class="bg-red-500 text-white px-2 rounded-full hidden">0</span>
+          ðŸš¨ Alertas Emergencia <span id="emBadge" class="bg-red-500 text-white px-2 rounded-full hidden">0</span>
         </button>
         <button id="btnTabTracking" onclick="showDbTab('tabTracking')" class="px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white flex items-center gap-1.5 transition-all">
-          🗺️ Mapa GPS Flota <span id="trackingLiveBadge" class="w-2 h-2 rounded-full bg-cyan-400 animate-ping hidden"></span>
+          ðŸ—ºï¸ Mapa GPS Flota <span id="trackingLiveBadge" class="w-2 h-2 rounded-full bg-cyan-400 animate-ping hidden"></span>
         </button>
         <button id="btnTabCustomPlaces" onclick="showDbTab('tabCustomPlaces')" class="px-4 py-2 rounded-xl bg-slate-900 text-slate-400 font-bold text-xs hover:text-white flex items-center gap-1.5 transition-all">
-          📍 Alojamientos Peregrinos <span id="customPlacesBadge" class="bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 text-[10px] rounded-full hidden">0</span>
+          ðŸ“ Alojamientos Peregrinos <span id="customPlacesBadge" class="bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 text-[10px] rounded-full hidden">0</span>
         </button>
 </div>
 
         <!-- TABLE 1: PILGRIMS -->
     <div id="tabPilgrims" class="glass-card rounded-3xl p-6 border border-amber-500/30 space-y-4 shadow-xl">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <h2 class="text-lg font-black text-white">👤 Registros de Peregrinos</h2>
+        <h2 class="text-lg font-black text-white">ðŸ‘¤ Registros de Peregrinos</h2>
         <span id="pilgrimsFilterCount" class="text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full">0 peregrinos</span>
       </div>
 
       <!-- PILGRIMS FILTER & SORT BAR -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 bg-slate-900/70 p-3.5 rounded-2xl border border-slate-800">
-        <input type="text" id="searchPilgrimsInput" oninput="renderTables()" placeholder="🔍 Buscar nombre, correo, teléfono, SmartVieira ID..." class="md:col-span-2 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
+        <input type="text" id="searchPilgrimsInput" oninput="renderTables()" placeholder="ðŸ” Buscar nombre, correo, telÃ©fono, SmartVieira ID..." class="md:col-span-2 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
         <select id="filterPilgrimsLang" onchange="renderTables()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
-          <option value="">🌐 Todos los idiomas</option>
-          <option value="ES">🇪🇸 Español (ES)</option>
-          <option value="EN">🇬🇧 English (EN)</option>
-          <option value="FR">🇫🇷 Français (FR)</option>
-          <option value="DE">🇩🇪 Deutsch (DE)</option>
-          <option value="IT">🇮🇹 Italiano (IT)</option>
-          <option value="PT">🇵🇹 Português (PT)</option>
-          <option value="KO">🇰🇷 한국어 (KO)</option>
+          <option value="">ðŸŒ Todos los idiomas</option>
+          <option value="ES">ðŸ‡ªðŸ‡¸ EspaÃ±ol (ES)</option>
+          <option value="EN">ðŸ‡¬ðŸ‡§ English (EN)</option>
+          <option value="FR">ðŸ‡«ðŸ‡· FranÃ§ais (FR)</option>
+          <option value="DE">ðŸ‡©ðŸ‡ª Deutsch (DE)</option>
+          <option value="IT">ðŸ‡®ðŸ‡¹ Italiano (IT)</option>
+          <option value="PT">ðŸ‡µðŸ‡¹ PortuguÃªs (PT)</option>
+          <option value="KO">ðŸ‡°ðŸ‡· í•œêµ­ì–´ (KO)</option>
         </select>
         <div class="flex gap-2">
           <select id="filterPilgrimsActivity" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
-            <option value="">⚡ Actividad: Todos</option>
-            <option value="active_week">🟢 Activos (última semana)</option>
-            <option value="inactive_week">🟡 Inactivos (&gt; 1 semana)</option>
-            <option value="inactive_month">🔴 Inactivos (&gt; 1 mes)</option>
+            <option value="">âš¡ Actividad: Todos</option>
+            <option value="active_week">ðŸŸ¢ Activos (Ãºltima semana)</option>
+            <option value="inactive_week">ðŸŸ¡ Inactivos (&gt; 1 semana)</option>
+            <option value="inactive_month">ðŸ”´ Inactivos (&gt; 1 mes)</option>
           </select>
           <select id="sortPilgrimsSelect" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
-            <option value="date_desc">📅 Más recientes primero</option>
-            <option value="date_asc">📅 Más antiguos primero</option>
-            <option value="name_asc">🔤 Nombre (A → Z)</option>
-            <option value="name_desc">🔤 Nombre (Z → A)</option>
-            <option value="vieira_asc">🐚 SmartVieira ID (A → Z)</option>
+            <option value="date_desc">ðŸ“… MÃ¡s recientes primero</option>
+            <option value="date_asc">ðŸ“… MÃ¡s antiguos primero</option>
+            <option value="name_asc">ðŸ”¤ Nombre (A â†’ Z)</option>
+            <option value="name_desc">ðŸ”¤ Nombre (Z â†’ A)</option>
+            <option value="vieira_asc">ðŸš SmartVieira ID (A â†’ Z)</option>
           </select>
-          <button onclick="resetPilgrimsFilters()" title="Limpiar filtros" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕</button>
+          <button onclick="resetPilgrimsFilters()" title="Limpiar filtros" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">âœ•</button>
         </div>
       </div>
 
@@ -183,9 +183,9 @@
               <th>ID User</th>
               <th>Nombre</th>
               <th>Apellidos</th>
-              <th>Teléfono</th>
-              <th>Correo Electrónico</th>
-              <th>Contraseña</th>
+              <th>TelÃ©fono</th>
+              <th>Correo ElectrÃ³nico</th>
+              <th>ContraseÃ±a</th>
               <th>SmartVieira ID</th>
               <th>Idioma</th>
               <th>Fecha Registro</th>
@@ -202,7 +202,7 @@
     <div id="tabCouriers" class="hidden glass-card rounded-3xl p-6 border border-cyan-500/30 space-y-4 shadow-xl">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 class="text-lg font-black text-white">🚚 Empresas Repartidoras y Conductores Autorizados</h2>
+          <h2 class="text-lg font-black text-white">ðŸšš Empresas Repartidoras y Conductores Autorizados</h2>
           <p class="text-[11px] text-slate-400">Filtra por empresa (varios repartidores por empresa), ruta/camino, estado o tramo, y ordena por tarifa/precio.</p>
         </div>
         <span id="couriersFilterCount" class="text-xs font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full">0 repartidores</span>
@@ -210,37 +210,37 @@
 
       <!-- COURIERS FILTER & SORT BAR -->
       <div class="grid grid-cols-1 md:grid-cols-5 gap-2.5 bg-slate-900/70 p-3.5 rounded-2xl border border-slate-800">
-        <input type="text" id="searchCouriersInput" oninput="renderTables()" placeholder="🔍 Buscar empresa, conductor, teléfono, matrícula, CIF, tramo..." class="md:col-span-2 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
+        <input type="text" id="searchCouriersInput" oninput="renderTables()" placeholder="ðŸ” Buscar empresa, conductor, telÃ©fono, matrÃ­cula, CIF, tramo..." class="md:col-span-2 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
         <select id="filterCouriersCompany" onchange="renderTables()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
-          <option value="">🏢 Todas las Empresas</option>
+          <option value="">ðŸ¢ Todas las Empresas</option>
         </select>
         <select id="filterCouriersRoute" onchange="renderTables()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
-          <option value="">🛤️ Todos los Caminos / Rutas</option>
-          <option value="camino-frances">Camino Francés</option>
-          <option value="camino-ingles">Camino Inglés</option>
-          <option value="camino-portugues-interior">Camino Portugués Interior</option>
-          <option value="camino-portugues-costa">Camino Portugués Costa</option>
+          <option value="">ðŸ›¤ï¸ Todos los Caminos / Rutas</option>
+          <option value="camino-frances">Camino FrancÃ©s</option>
+          <option value="camino-ingles">Camino InglÃ©s</option>
+          <option value="camino-portugues-interior">Camino PortuguÃ©s Interior</option>
+          <option value="camino-portugues-costa">Camino PortuguÃ©s Costa</option>
           <option value="camino-del-norte">Camino del Norte</option>
           <option value="camino-primitivo">Camino Primitivo</option>
-          <option value="camino-sanabres">Camino Sanabrés / Vía Plata</option>
+          <option value="camino-sanabres">Camino SanabrÃ©s / VÃ­a Plata</option>
           <option value="camino-invierno">Camino de Invierno</option>
-          <option value="camino-fisterra-muxia">Camino a Fisterra y Muxía</option>
+          <option value="camino-fisterra-muxia">Camino a Fisterra y MuxÃ­a</option>
         </select>
         <div class="flex gap-2">
           <select id="filterCouriersActivity" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-cyan-400 focus:outline-none">
-            <option value="">⚡ Actividad: Todos</option>
-            <option value="active_week">🟢 Activos (última semana)</option>
-            <option value="inactive_week">🟡 Inactivos (&gt; 1 semana)</option>
-            <option value="inactive_month">🔴 Inactivos (&gt; 1 mes)</option>
+            <option value="">âš¡ Actividad: Todos</option>
+            <option value="active_week">ðŸŸ¢ Activos (Ãºltima semana)</option>
+            <option value="inactive_week">ðŸŸ¡ Inactivos (&gt; 1 semana)</option>
+            <option value="inactive_month">ðŸ”´ Inactivos (&gt; 1 mes)</option>
           </select>
           <select id="sortCouriersSelect" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-cyan-500/50 text-xs text-cyan-300 font-bold focus:border-cyan-400 focus:outline-none">
-            <option value="price_asc">💶 Precio: Menor a Mayor ↑</option>
-            <option value="price_desc">💶 Precio: Mayor a Menor ↓</option>
-            <option value="company_asc">🏢 Empresa (A → Z)</option>
-            <option value="driver_asc">👤 Repartidor (A → Z)</option>
-            <option value="route_asc">🛤️ Ruta / Camino (A → Z)</option>
+            <option value="price_asc">ðŸ’¶ Precio: Menor a Mayor â†‘</option>
+            <option value="price_desc">ðŸ’¶ Precio: Mayor a Menor â†“</option>
+            <option value="company_asc">ðŸ¢ Empresa (A â†’ Z)</option>
+            <option value="driver_asc">ðŸ‘¤ Repartidor (A â†’ Z)</option>
+            <option value="route_asc">ðŸ›¤ï¸ Ruta / Camino (A â†’ Z)</option>
           </select>
-          <button onclick="resetCouriersFilters()" title="Limpiar filtros" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕</button>
+          <button onclick="resetCouriersFilters()" title="Limpiar filtros" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">âœ•</button>
         </div>
       </div>
 
@@ -251,16 +251,16 @@
               <th>ID Empresa</th>
               <th>Empresa</th>
               <th>Repartidor / Conductor</th>
-              <th>Teléfono</th>
+              <th>TelÃ©fono</th>
               <th>Estado</th>
-              <th>Vehículo</th>
+              <th>VehÃ­culo</th>
               <th>CIF / NIF</th>
-              <th>Tarifa (€)</th>
+              <th>Tarifa (â‚¬)</th>
               <th>Camino</th>
               <th>Ruta (Tramos)</th>
               <th>Correo</th>
-              <th>Contraseña</th>
-              <th>Código Privado Usado</th>
+              <th>ContraseÃ±a</th>
+              <th>CÃ³digo Privado Usado</th>
             </tr>
           </thead>
           <tbody id="tbodyCouriers">
@@ -273,26 +273,26 @@
     <!-- TABLE 3: RESERVATIONS -->
     <div id="tabReservations" class="hidden glass-card rounded-3xl p-6 border border-emerald-500/30 space-y-4 shadow-xl">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <h2 class="text-lg font-black text-white">💳 Historial de Reservas y Cobros de Stripe</h2>
+        <h2 class="text-lg font-black text-white">ðŸ’³ Historial de Reservas y Cobros de Stripe</h2>
         <span id="reservationsFilterCount" class="text-xs font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">0 reservas</span>
       </div>
 
       <!-- RESERVATIONS FILTER & SORT BAR -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 bg-slate-900/70 p-3.5 rounded-2xl border border-slate-800">
-        <input type="text" id="searchReservationsInput" oninput="renderTables()" placeholder="🔍 Buscar ID reserva, peregrino, SmartVieira ID, albergue, empresa..." class="md:col-span-2 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none">
+        <input type="text" id="searchReservationsInput" oninput="renderTables()" placeholder="ðŸ” Buscar ID reserva, peregrino, SmartVieira ID, albergue, empresa..." class="md:col-span-2 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none">
         <select id="filterReservationsStatus" onchange="renderTables()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none">
-          <option value="">📦 Todos los estados</option>
-          <option value="PAID">🟡 Pendiente de Recogida</option>
-          <option value="EN_CAMINO">🚚 En Camino (GPS Activo)</option>
-          <option value="ENTREGADA">✅ Entregada en Albergue</option>
+          <option value="">ðŸ“¦ Todos los estados</option>
+          <option value="PAID">ðŸŸ¡ Pendiente de Recogida</option>
+          <option value="EN_CAMINO">ðŸšš En Camino (GPS Activo)</option>
+          <option value="ENTREGADA">âœ… Entregada en Albergue</option>
         </select>
         <div class="flex gap-2">
           <select id="sortReservationsSelect" onchange="renderTables()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none">
-            <option value="date_desc">📅 Más recientes primero</option>
-            <option value="price_asc">💶 Importe: Menor a Mayor ↑</option>
-            <option value="price_desc">💶 Importe: Mayor a Menor ↓</option>
+            <option value="date_desc">ðŸ“… MÃ¡s recientes primero</option>
+            <option value="price_asc">ðŸ’¶ Importe: Menor a Mayor â†‘</option>
+            <option value="price_desc">ðŸ’¶ Importe: Mayor a Menor â†“</option>
           </select>
-          <button onclick="resetReservationsFilters()" title="Limpiar filtros" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕</button>
+          <button onclick="resetReservationsFilters()" title="Limpiar filtros" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">âœ•</button>
         </div>
       </div>
 
@@ -306,7 +306,7 @@
               <th>Origen</th>
               <th>Destino</th>
               <th>Empresa / Repartidor</th>
-              <th>Importe (€)</th>
+              <th>Importe (â‚¬)</th>
               <th>Estado</th>
               <th>PaymentIntent Stripe</th>
               <th>Fecha</th>
@@ -320,7 +320,7 @@
 
       <!-- PEDIDOS PRODUCTO WEB -->
       <div class="pt-4 border-t border-slate-700/70 space-y-3">
-        <h3 class="text-sm font-black text-amber-400">🐚 Pedidos de Concha SmartVieira (Web)</h3>
+        <h3 class="text-sm font-black text-amber-400">ðŸš Pedidos de Concha SmartVieira (Web)</h3>
         <div class="table-container rounded-2xl border border-slate-800">
           <table>
             <thead>
@@ -328,7 +328,7 @@
                 <th>ID Pedido</th>
                 <th>Cliente</th>
                 <th>Email / Tel</th>
-                <th>Dirección de Envío</th>
+                <th>DirecciÃ³n de EnvÃ­o</th>
                 <th>Uds</th>
                 <th>Total</th>
                 <th>Estado</th>
@@ -336,7 +336,7 @@
               </tr>
             </thead>
             <tbody id="tbodyProductOrders">
-              <tr><td colspan="8" class="text-center py-5 text-slate-500">Sin pedidos web todavía</td></tr>
+              <tr><td colspan="8" class="text-center py-5 text-slate-500">Sin pedidos web todavÃ­a</td></tr>
             </tbody>
           </table>
         </div>
@@ -346,7 +346,7 @@
     
       <!-- TABLE 4: EMERGENCIES -->
       <div id="tabEmergencies" class="hidden glass-card rounded-3xl p-6 border border-red-500/50 space-y-4 shadow-xl">
-        <h2 class="text-lg font-black text-white flex items-center gap-2">🚨 Panel de Emergencias Activas</h2>
+        <h2 class="text-lg font-black text-white flex items-center gap-2">ðŸš¨ Panel de Emergencias Activas</h2>
         <div class="table-container rounded-2xl border border-red-900">
           <table>
             <thead>
@@ -354,8 +354,8 @@
                 <th>Fecha/Hora</th>
                 <th>Repartidor</th>
                 <th>Empresa</th>
-                <th>Teléfono</th>
-                <th>Acción</th>
+                <th>TelÃ©fono</th>
+                <th>AcciÃ³n</th>
               </tr>
             </thead>
             <tbody id="tbodyEmergencies">
@@ -366,22 +366,22 @@
       </div>
 
       
-    <!-- TABLE 6: ALOJAMIENTOS AÑADIDOS POR PEREGRINOS -->
+    <!-- TABLE 6: ALOJAMIENTOS AÃ‘ADIDOS POR PEREGRINOS -->
     <div id="tabCustomPlaces" class="hidden glass-card rounded-3xl p-6 border border-amber-500/30 space-y-4 shadow-xl">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
           <h3 class="text-sm font-black text-amber-400 flex items-center gap-2">
-            <span>📍</span> Alojamientos Añadidos por Peregrinos
+            <span>ðŸ“</span> Alojamientos AÃ±adidos por Peregrinos
             <span id="customPlacesCount" class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">0 sitios</span>
           </h3>
-          <p class="text-[11px] text-slate-400">Verifica en Google Maps, corrige la ortografía de peregrinos extranjeros o descarta sitios añadidos manualmente.</p>
+          <p class="text-[11px] text-slate-400">Verifica en Google Maps, corrige la ortografÃ­a de peregrinos extranjeros o descarta sitios aÃ±adidos manualmente.</p>
         </div>
         <div class="flex items-center gap-2">
-          <input type="text" id="searchCustomPlacesInput" oninput="renderCustomPlacesTable()" placeholder="🔍 Buscar alojamiento, pueblo, dirección..." class="px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none w-64">
+          <input type="text" id="searchCustomPlacesInput" oninput="renderCustomPlacesTable()" placeholder="ðŸ” Buscar alojamiento, pueblo, direcciÃ³n..." class="px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none w-64">
           <select id="filterCustomPlacesStatus" onchange="renderCustomPlacesTable()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:border-amber-400 focus:outline-none">
             <option value="all" selected>Todos los estados</option>
-            <option value="pending">🟡 Solo Pendientes</option>
-            <option value="verified">🟢 Verificados</option>
+            <option value="pending">ðŸŸ¡ Solo Pendientes</option>
+            <option value="verified">ðŸŸ¢ Verificados</option>
           </select>
         </div>
       </div>
@@ -392,7 +392,7 @@
             <tr>
               <th class="py-3 px-4">Alojamiento / Nombre</th>
               <th class="py-3 px-4">Localidad / Parada</th>
-              <th class="py-3 px-4">Dirección</th>
+              <th class="py-3 px-4">DirecciÃ³n</th>
               <th class="py-3 px-4">Ruta</th>
               <th class="py-3 px-4">Fecha / Peregrino</th>
               <th class="py-3 px-4 text-center">Estado</th>
@@ -400,7 +400,7 @@
             </tr>
           </thead>
           <tbody id="tbodyCustomPlaces" class="divide-y divide-slate-800">
-            <!-- Renderizado dinámicamente -->
+            <!-- Renderizado dinÃ¡micamente -->
           </tbody>
         </table>
       </div>
@@ -410,12 +410,12 @@
     <div id="tabTracking" class="hidden glass-card rounded-3xl p-6 border border-cyan-500/30 space-y-4 shadow-xl">
       <div class="flex justify-between items-center">
         <div>
-          <span class="text-[10px] font-black text-cyan-400 uppercase tracking-widest block">Geolocalización en Tiempo Real</span>
-          <h2 class="text-lg font-black text-white">🛰️ Mapa de Furgones de Reparto y Entregas en Ruta</h2>
-          <p class="text-xs text-slate-400">Coordenadas transmitidas en directo desde los teléfonos de los transportistas al conectar con las SmartVieiras.</p>
+          <span class="text-[10px] font-black text-cyan-400 uppercase tracking-widest block">GeolocalizaciÃ³n en Tiempo Real</span>
+          <h2 class="text-lg font-black text-white">ðŸ›°ï¸ Mapa de Furgones de Reparto y Entregas en Ruta</h2>
+          <p class="text-xs text-slate-400">Coordenadas transmitidas en directo desde los telÃ©fonos de los transportistas al conectar con las SmartVieiras.</p>
         </div>
         <button onclick="refreshAdminMap()" class="px-3.5 py-2 bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 rounded-xl text-xs font-bold hover:bg-cyan-500/30 flex items-center gap-1.5">
-          <span>🔄</span> <span>Centrar / Refrescar Mapa</span>
+          <span>ðŸ”„</span> <span>Centrar / Refrescar Mapa</span>
         </button>
       </div>
 
@@ -437,21 +437,21 @@
       <div id="adminFleetMap" style="height: 480px; width: 100%;" class="rounded-2xl border border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
     </div>
 
-        <!-- INVENTARIO DE CONCHAS VENDIDAS (IDs Y QRs VÁLIDOS) -->
+        <!-- INVENTARIO DE CONCHAS VENDIDAS (IDs Y QRs VÃLIDOS) -->
     <div class="glass-card rounded-2xl p-5 border border-emerald-500/30 text-xs space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <strong class="text-emerald-400 font-bold block text-sm">🐚 Inventario de Conchas SmartVieira Vendidas (IDs / QR Autorizados)</strong>
-          <p class="text-slate-400 text-[11px]">Solo los IDs registrados aquí podrán vincularse y registrarse en la App del Peregrino.</p>
+          <strong class="text-emerald-400 font-bold block text-sm">ðŸš Inventario de Conchas SmartVieira Vendidas (IDs / QR Autorizados)</strong>
+          <p class="text-slate-400 text-[11px]">Solo los IDs registrados aquÃ­ podrÃ¡n vincularse y registrarse en la App del Peregrino.</p>
         </div>
         <span id="shellsCountBadge" class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">0 conchas</span>
       </div>
       <div class="flex flex-wrap gap-2">
         <input type="text" id="newShellIdsInput" placeholder="ID(s) separados por coma o espacio (ej. VIEIRA-SMARTSHELL-S3-1011, VIEIRA-SMARTSHELL-S3-1012)" class="flex-1 min-w-[240px] px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono">
         <input type="text" id="newShellBatchInput" placeholder="Lote (ej. Lote Mayo)" class="w-36 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
-        <button onclick="addShellIdsAdmin()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition-all">➕ Añadir IDs</button>
-        <input type="text" id="searchShellsInput" oninput="renderShellsTable()" placeholder="🔍 Filtrar ID o email..." class="w-48 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
-        <button id="btnBulkDeleteShells" onclick="bulkDeleteShellsAdmin()" disabled class="px-3.5 py-2 rounded-xl bg-red-600/80 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition-all">🗑️ Borrar seleccionadas (0)</button>
+        <button onclick="addShellIdsAdmin()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition-all">âž• AÃ±adir IDs</button>
+        <input type="text" id="searchShellsInput" oninput="renderShellsTable()" placeholder="ðŸ” Filtrar ID o email..." class="w-48 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
+        <button id="btnBulkDeleteShells" onclick="bulkDeleteShellsAdmin()" disabled class="px-3.5 py-2 rounded-xl bg-red-600/80 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition-all">ðŸ—‘ï¸ Borrar seleccionadas (0)</button>
       </div>
       <div class="overflow-x-auto max-h-60 overflow-y-auto rounded-xl border border-slate-800">
         <table class="w-full text-left text-[11px]">
@@ -471,12 +471,12 @@
       </div>
     </div>
 
-        <!-- CONFIGURACIÓN DE CORREO PARA RECUPERACIÓN DE CONTRASEÑAS -->
+        <!-- CONFIGURACIÃ“N DE CORREO PARA RECUPERACIÃ“N DE CONTRASEÃ‘AS -->
     <div class="glass-card rounded-2xl p-5 border border-cyan-500/30 text-xs space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <strong class="text-cyan-400 font-bold block text-sm">✉️ Correo Automático para Recuperación de Contraseñas (Resend HTTPS / Google Script / SMTP)</strong>
-          <p class="text-slate-400 text-[11px]">En Render Free los puertos SMTP (465/587) están bloqueados: usa <strong class="text-cyan-300">resend</strong> + tu API Key (<code class="text-cyan-200">re_...</code>) o una URL de Google Apps Script (<code class="text-cyan-200">https://...</code>).</p>
+          <strong class="text-cyan-400 font-bold block text-sm">âœ‰ï¸ Correo AutomÃ¡tico para RecuperaciÃ³n de ContraseÃ±as (Resend HTTPS / Google Script / SMTP)</strong>
+          <p class="text-slate-400 text-[11px]">En Render Free los puertos SMTP (465/587) estÃ¡n bloqueados: usa <strong class="text-cyan-300">resend</strong> + tu API Key (<code class="text-cyan-200">re_...</code>) o una URL de Google Apps Script (<code class="text-cyan-200">https://...</code>).</p>
         </div>
         <span id="smtpSavedBadge" class="px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px] font-bold">Sin configurar</span>
       </div>
@@ -485,17 +485,17 @@
         <input type="email" id="smtpUserInput" placeholder="Remitente (ej. onboarding@resend.dev)" class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
         <input type="password" id="smtpPassInput" placeholder="API Key (re_...) o Clave App" class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
         <button onclick="saveSmtpConfig()" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs transition-all">
-          💾 Guardar Correo
+          ðŸ’¾ Guardar Correo
         </button>
         <button onclick="testSmtpConfig()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 font-black text-xs transition-all">
-          🧪 Probar Envío
+          ðŸ§ª Probar EnvÃ­o
         </button>
       </div>
     </div>
 
     <!-- DIRECT FILE LINK & API HELP -->
     <div class="glass-card rounded-2xl p-5 border border-slate-800 text-xs leading-relaxed space-y-2 text-slate-400">
-      <strong class="text-amber-400 font-bold block text-sm">📁 Ubicación Física del Archivo de Base de Datos:</strong>
+      <strong class="text-amber-400 font-bold block text-sm">ðŸ“ UbicaciÃ³n FÃ­sica del Archivo de Base de Datos:</strong>
       <p class="font-mono text-[11px] text-slate-300">C:\Users\o0o_t\.gemini\antigravity\scratch\vieira-web\database.json</p>
       <p>Este archivo JSON se guarda de forma permanente en el disco duro del servidor y no se elimina al actualizar las APKs ni al reiniciar el sistema.</p>
     </div>
@@ -523,7 +523,7 @@
     }
 
     async function resolveEmergency(emergencyId) {
-      if (!confirm('¿Marcar emergencia como resuelta y eliminarla?')) return;
+      if (!confirm('Â¿Marcar emergencia como resuelta y eliminarla?')) return;
       try {
         const res = await fetch('/api/admin/emergency/resolve', {
           method: 'POST',
@@ -540,7 +540,7 @@
           alert('Error: ' + data.message);
         }
       } catch (e) {
-        alert('Error de conexión');
+        alert('Error de conexiÃ³n');
       }
     }
 
@@ -600,7 +600,7 @@
 
       async function loadDemoDatabase() {
         if (!adminToken) return;
-        if (!confirm('¿Cargar la Base de Datos de Prueba con 29 repartidores (incluyendo varios conductores de una misma empresa), 14 peregrinos con teléfono y reservas de ejemplo? (Tu configuración de correo SMTP se mantendrá intacta).')) return;
+        if (!confirm('Â¿Cargar la Base de Datos de Prueba con 29 repartidores (incluyendo varios conductores de una misma empresa), 14 peregrinos con telÃ©fono y reservas de ejemplo? (Tu configuraciÃ³n de correo SMTP se mantendrÃ¡ intacta).')) return;
         try {
           const res = await fetch('/api/admin/load-demo-db', {
             method: 'POST',
@@ -608,7 +608,7 @@
           });
           const data = await res.json();
           if (data.success) {
-            alert('✅ Base de datos de prueba cargada con éxito (' + data.couriersCount + ' repartidores y ' + data.pilgrimsCount + ' peregrinos).');
+            alert('âœ… Base de datos de prueba cargada con Ã©xito (' + data.couriersCount + ' repartidores y ' + data.pilgrimsCount + ' peregrinos).');
             fetchDatabaseData();
           } else {
             alert('Error: ' + (data.message || 'No se pudo cargar la BD de prueba'));
@@ -698,7 +698,7 @@
       }
 
       async function releaseShellAdmin(id) {
-        if (!confirm(`¿Liberar la concha ${id} para que pueda volver a vincularse?`)) return;
+        if (!confirm(`Â¿Liberar la concha ${id} para que pueda volver a vincularse?`)) return;
         const res = await fetch('/api/admin/shells/release', {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + adminToken, 'Content-Type': 'application/json' },
@@ -710,7 +710,7 @@
       }
 
       async function deleteShellAdmin(id) {
-        if (!confirm(`¿Eliminar el ID ${id} del inventario de conchas vendidas?`)) return;
+        if (!confirm(`Â¿Eliminar el ID ${id} del inventario de conchas vendidas?`)) return;
         const res = await fetch('/api/admin/shells/delete', {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + adminToken, 'Content-Type': 'application/json' },
@@ -731,14 +731,14 @@
         const btn = document.getElementById('btnBulkDeleteShells');
         if (btn) {
           btn.disabled = checked.length === 0;
-          btn.innerText = `🗑️ Borrar seleccionadas (${checked.length})`;
+          btn.innerText = `ðŸ—‘ï¸ Borrar seleccionadas (${checked.length})`;
         }
       }
 
       async function bulkDeleteShellsAdmin() {
         const ids = Array.from(document.querySelectorAll('.shell-row-chk:checked')).map(c => c.value);
         if (ids.length === 0) return;
-        if (!confirm(`¿Eliminar ${ids.length} concha(s) seleccionada(s) del inventario?\n\n${ids.slice(0, 10).join(', ')}${ids.length > 10 ? '...' : ''}`)) return;
+        if (!confirm(`Â¿Eliminar ${ids.length} concha(s) seleccionada(s) del inventario?\n\n${ids.slice(0, 10).join(', ')}${ids.length > 10 ? '...' : ''}`)) return;
         const res = await fetch('/api/admin/shells/delete', {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + adminToken, 'Content-Type': 'application/json' },
@@ -772,16 +772,16 @@
             <td class="px-3 py-1.5">
               <a href="${qrSrc}" download="QR-${s.id}.png" target="_blank" title="Ver o descargar QR-${s.id}.png" class="inline-flex items-center gap-1.5 group">
                 <img src="${qrSrc}" alt="QR ${s.id}" class="w-8 h-8 rounded bg-white p-0.5 border border-slate-700 group-hover:scale-110 transition-transform">
-                <span class="text-[10px] text-emerald-400 font-bold hover:underline">⬇️</span>
+                <span class="text-[10px] text-emerald-400 font-bold hover:underline">â¬‡ï¸</span>
               </a>
             </td>
             <td class="px-3 py-2 font-mono font-bold text-slate-200">${s.id}</td>
             <td class="px-3 py-2 text-slate-400">${s.batch || '-'}</td>
             <td class="px-3 py-2">${s.status === 'linked' ? '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold">Vinculada</span>' : '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">Disponible</span>'}</td>
-            <td class="px-3 py-2 text-slate-300">${s.linkedEmail || '—'}</td>
+            <td class="px-3 py-2 text-slate-300">${s.linkedEmail || 'â€”'}</td>
             <td class="px-3 py-2 text-right space-x-2">
-              ${s.status === 'linked' ? `<button onclick="releaseShellAdmin('${s.id}')" class="px-2 py-1 rounded bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 font-bold">🔓 Liberar</button>` : ''}
-              <button onclick="deleteShellAdmin('${s.id}')" class="px-2 py-1 rounded bg-red-500/20 text-red-300 hover:bg-red-500/30 font-bold">🗑️</button>
+              ${s.status === 'linked' ? `<button onclick="releaseShellAdmin('${s.id}')" class="px-2 py-1 rounded bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 font-bold">ðŸ”“ Liberar</button>` : ''}
+              <button onclick="deleteShellAdmin('${s.id}')" class="px-2 py-1 rounded bg-red-500/20 text-red-300 hover:bg-red-500/30 font-bold">ðŸ—‘ï¸</button>
             </td>
           </tr>
         `;
@@ -796,7 +796,7 @@
         const user = document.getElementById('smtpUserInput').value.trim();
         const pass = document.getElementById('smtpPassInput').value.trim();
         if (!host.startsWith('https://') && host.toLowerCase() !== 'resend' && !pass.startsWith('re_') && (!user || !pass)) {
-          alert('Introduce "resend" + API Key (re_...), una URL de Google Script (https://...) o bien tu correo y Clave de Aplicación.');
+          alert('Introduce "resend" + API Key (re_...), una URL de Google Script (https://...) o bien tu correo y Clave de AplicaciÃ³n.');
           return;
         }
         try {
@@ -810,13 +810,13 @@
           });
           const data = await res.json();
           if (data.success) {
-            alert('✅ Configuración de correo guardada correctamente.');
+            alert('âœ… ConfiguraciÃ³n de correo guardada correctamente.');
             fetchDatabaseData();
           } else {
             alert('Error: ' + (data.message || 'No se pudo guardar'));
           }
         } catch (e) {
-          alert('Error de conexión guardando correo');
+          alert('Error de conexiÃ³n guardando correo');
         }
       }
 
@@ -889,8 +889,8 @@
                 <td>${escHtml(e.companyName)}</td>
                 <td class="font-mono font-bold text-amber-300">${escHtml(e.phone || 'N/A')}</td>
                 <td class="flex items-center gap-2">
-                  <a href="tel:${escHtml(e.phone)}" class="bg-amber-500 text-slate-900 px-3 py-1 rounded font-bold text-xs">📞 Llamar</a>
-                  <button onclick="resolveEmergency('${escHtml(e.id)}')" class="text-slate-400 hover:text-red-400 text-lg ml-2" title="Marcar como resuelta y eliminar">🗑️</button>
+                  <a href="tel:${escHtml(e.phone)}" class="bg-amber-500 text-slate-900 px-3 py-1 rounded font-bold text-xs">ðŸ“ž Llamar</a>
+                  <button onclick="resolveEmergency('${escHtml(e.id)}')" class="text-slate-400 hover:text-red-400 text-lg ml-2" title="Marcar como resuelta y eliminar">ðŸ—‘ï¸</button>
                 </td>
               </tr>
             `).join('');
@@ -906,8 +906,8 @@
           if (bEl) {
             bEl.className = 'px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold';
             bEl.innerText = (dbState.smtpConfig.host || '').startsWith('https://')
-              ? '✅ Activo por HTTPS (Puerto 443)'
-              : ('✅ Activo: ' + dbState.smtpConfig.user);
+              ? 'âœ… Activo por HTTPS (Puerto 443)'
+              : ('âœ… Activo: ' + dbState.smtpConfig.user);
           }
         }
 
@@ -930,7 +930,7 @@
             compCounts[name] = (compCounts[name] || 0) + 1;
           });
           const sortedCompanies = Object.keys(compCounts).sort((a, b) => a.localeCompare(b));
-          compSelect.innerHTML = '<option value="">🏢 Todas las Empresas (' + sortedCompanies.length + ')</option>' +
+          compSelect.innerHTML = '<option value="">ðŸ¢ Todas las Empresas (' + sortedCompanies.length + ')</option>' +
             sortedCompanies.map(name => `<option value="${name}">${name} (${compCounts[name]} ${compCounts[name] > 1 ? 'repartidores' : 'repartidor'})</option>`).join('');
           compSelect.value = prevVal;
         }
@@ -959,7 +959,7 @@
           return true;
         }
 
-        // ── 1. FILTER & SORT PILGRIMS ────────────────────────────────────
+        // â”€â”€ 1. FILTER & SORT PILGRIMS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         const pQuery = (document.getElementById('searchPilgrimsInput')?.value || '').toLowerCase().trim();
         const pLang = (document.getElementById('filterPilgrimsLang')?.value || '').toUpperCase().trim();
         const pAct = document.getElementById('filterPilgrimsActivity')?.value || '';
@@ -1003,7 +1003,7 @@
           `).join('');
         }
 
-        // ── 2. FILTER & SORT COURIERS ────────────────────────────────────
+        // â”€â”€ 2. FILTER & SORT COURIERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         const cQuery = (document.getElementById('searchCouriersInput')?.value || '').toLowerCase().trim();
         const cComp = document.getElementById('filterCouriersCompany')?.value || '';
         const cRoute = document.getElementById('filterCouriersRoute')?.value || '';
@@ -1051,7 +1051,7 @@
               </td>
               <td>${escHtml(c.vehicle || '-')}</td>
               <td class="font-mono text-amber-300 text-[11px]">${escHtml(c.cif || '-')}</td>
-              <td class="font-bold text-emerald-400">${c.pricePerBag ? Number(c.pricePerBag).toFixed(2) + ' €' : '6.50 €'}</td>
+              <td class="font-bold text-emerald-400">${c.pricePerBag ? Number(c.pricePerBag).toFixed(2) + ' â‚¬' : '6.50 â‚¬'}</td>
               <td>${escHtml(c.routes || '-')}</td>
               <td>${escHtml(c.routeStart || 'Toda')} &rarr; ${escHtml(c.routeEnd || 'Toda')}</td>
               <td class="font-mono text-slate-300">${escHtml(c.email)}</td>
@@ -1061,7 +1061,7 @@
           `).join('');
         }
 
-        // ── 3. FILTER & SORT RESERVATIONS ────────────────────────────────
+        // â”€â”€ 3. FILTER & SORT RESERVATIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         const rQuery = (document.getElementById('searchReservationsInput')?.value || '').toLowerCase().trim();
         const rStatus = document.getElementById('filterReservationsStatus')?.value || '';
         const rSort = document.getElementById('sortReservationsSelect')?.value || 'date_desc';
@@ -1094,17 +1094,17 @@
               <td class="text-white">${escHtml(r.originAlbergue)}</td>
               <td class="text-white">${escHtml(r.destinationAlbergue)}</td>
               <td class="text-cyan-300 font-semibold">${escHtml(r.companyName || '-')}${r.driverName ? ' <span class="text-slate-400 text-[10px]">(' + escHtml(r.driverName) + ')</span>' : ''}</td>
-              <td class="font-bold text-emerald-400">${Number(r.amountEuros || 0).toFixed(2)} €</td>
+              <td class="font-bold text-emerald-400">${Number(r.amountEuros || 0).toFixed(2)} â‚¬</td>
               <td>
                 ${r.status === 'EN_CAMINO'
-                  ? '<span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-black border border-cyan-500/40 animate-pulse">🚚 EN CAMINO</span>'
+                  ? '<span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-black border border-cyan-500/40 animate-pulse">ðŸšš EN CAMINO</span>'
                   : r.status === 'ENTREGADA'
-                    ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/40">✅ ENTREGADA</span>'
-                    : '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">🟡 PENDIENTE</span>'
+                    ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/40">âœ… ENTREGADA</span>'
+                    : '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">ðŸŸ¡ PENDIENTE</span>'
                 }
                 ${r.deliveredLocation
-                  ? `<button onclick="focusReservationOnMap('${escHtml(r.id)}')" class="text-[9px] text-cyan-400 underline block mt-0.5">📍 Coords entrega</button>`
-                  : (r.currentLocation ? `<button onclick="focusReservationOnMap('${escHtml(r.id)}')" class="text-[9px] text-amber-400 underline block mt-0.5">📡 GPS en vivo</button>` : '')
+                  ? `<button onclick="focusReservationOnMap('${escHtml(r.id)}')" class="text-[9px] text-cyan-400 underline block mt-0.5">ðŸ“ Coords entrega</button>`
+                  : (r.currentLocation ? `<button onclick="focusReservationOnMap('${escHtml(r.id)}')" class="text-[9px] text-amber-400 underline block mt-0.5">ðŸ“¡ GPS en vivo</button>` : '')
                 }
               </td>
               <td class="font-mono text-[10px] text-slate-400">${escHtml(r.paymentIntentId)}</td>
@@ -1118,7 +1118,7 @@
         const tbodyPO = document.getElementById('tbodyProductOrders');
         if (tbodyPO) {
           if (productOrders.length === 0) {
-            tbodyPO.innerHTML = '<tr><td colspan="8" class="text-center py-5 text-slate-500">Sin pedidos web todavía</td></tr>';
+            tbodyPO.innerHTML = '<tr><td colspan="8" class="text-center py-5 text-slate-500">Sin pedidos web todavÃ­a</td></tr>';
           } else {
             tbodyPO.innerHTML = productOrders.map(o => `
               <tr>
@@ -1127,7 +1127,7 @@
                 <td class="text-xs text-slate-300">${escHtml(o.customerEmail || '-')}<br><span class="text-slate-400">${escHtml(o.phone || '')}</span></td>
                 <td class="text-xs text-slate-300">${escHtml(o.address || '')}, ${escHtml(o.postalCode || '')} ${escHtml(o.city || '')} (${escHtml(o.country || '')})</td>
                 <td class="font-bold text-white">${escHtml(o.quantity || 1)}</td>
-                <td class="font-bold text-emerald-400">${Number(o.totalEuros || 0).toFixed(2)} €</td>
+                <td class="font-bold text-emerald-400">${Number(o.totalEuros || 0).toFixed(2)} â‚¬</td>
                 <td><span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">${escHtml(o.status || 'Pagado')}</span></td>
                 <td class="text-[11px] text-slate-400">${escHtml(new Date(o.createdAt).toLocaleString())}</td>
               </tr>
@@ -1173,21 +1173,21 @@
 
         tbodyCustomPlaces.innerHTML = filtered.map(h => {
           const dateStr = h.createdAt ? new Date(h.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
-          const queryMaps = encodeURIComponent((h.name || '') + ', ' + (h.town || '') + ', Camino de Santiago, España');
+          const queryMaps = encodeURIComponent((h.name || '') + ', ' + (h.town || '') + ', Camino de Santiago, EspaÃ±a');
           const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + queryMaps;
 
           const statusBadge = h.verified
-            ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black">🟢 Verificado</span>'
-            : '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-black">🟡 Pendiente</span>';
+            ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black">ðŸŸ¢ Verificado</span>'
+            : '<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-black">ðŸŸ¡ Pendiente</span>';
 
           const approveBtn = h.verified
-            ? '<span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">✓ Verificado</span>'
-            : '<button onclick="approveCustomPlace(\'' + h.id + '\')" class="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[10px] font-black shadow-sm transition-all" title="Aprobar para Catálogo Oficial">✓ Aprobar</button>';
+            ? '<span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">âœ“ Verificado</span>'
+            : '<button onclick="approveCustomPlace(\'' + h.id + '\')" class="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[10px] font-black shadow-sm transition-all" title="Aprobar para CatÃ¡logo Oficial">âœ“ Aprobar</button>';
 
           return '<tr class="hover:bg-slate-900/50 transition-colors">' +
             '<td class="py-3 px-4 font-bold text-white">' +
               '<div class="flex items-center gap-1.5">' +
-                '<span>🏨</span>' +
+                '<span>ðŸ¨</span>' +
                 '<span>' + escHtml(h.name || '-') + '</span>' +
               '</div>' +
             '</td>' +
@@ -1200,10 +1200,10 @@
             '</td>' +
             '<td class="py-3 px-4 text-center">' + statusBadge + '</td>' +
             '<td class="py-3 px-4 text-right space-x-1.5 whitespace-nowrap">' +
-              '<a href="' + mapsUrl + '" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Verificar en Google Maps">🗺️ Maps</a>' +
-              '<button onclick="openEditCustomPlaceModal(\'' + escHtml(h.id) + '\')" class="px-2 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Editar / Corregir">✏️</button>' +
+              '<a href="' + mapsUrl + '" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Verificar en Google Maps">ðŸ—ºï¸ Maps</a>' +
+              '<button onclick="openEditCustomPlaceModal(\'' + escHtml(h.id) + '\')" class="px-2 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Editar / Corregir">âœï¸</button>' +
               approveBtn +
-              '<button onclick="deleteCustomPlace(\'' + escHtml(h.id) + '\')" class="px-2 py-1 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Descartar / Eliminar">🗑️</button>' +
+              '<button onclick="deleteCustomPlace(\'' + escHtml(h.id) + '\')" class="px-2 py-1 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold inline-flex items-center gap-1" title="Descartar / Eliminar">ðŸ—‘ï¸</button>' +
             '</td>' +
           '</tr>';
         }).join('');
@@ -1211,9 +1211,9 @@
 
 
     
-    // ════════════════════════════════════════════════════════════════
-    // ACCIONES DE GESTIÓN DE ALOJAMIENTOS PERSONALIZADOS
-    // ════════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ACCIONES DE GESTIÃ“N DE ALOJAMIENTOS PERSONALIZADOS
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     function openEditCustomPlaceModal(hostelId) {
       if (!dbState || !dbState.customHostels) return;
       const h = dbState.customHostels.find(x => x.id === hostelId);
@@ -1283,7 +1283,7 @@
     }
 
     async function deleteCustomPlace(hostelId) {
-      if (!confirm('¿Seguro que deseas eliminar y descartar este alojamiento?')) return;
+      if (!confirm('Â¿Seguro que deseas eliminar y descartar este alojamiento?')) return;
       try {
         const res = await fetch('/api/admin/custom-hostel/delete', {
           method: 'POST',
@@ -1335,9 +1335,9 @@
       }
     }
 
-    // ════════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // ADMIN FLEET MAP LOGIC
-    // ════════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     let adminMapInstance = null;
     let adminMapMarkers = [];
 
@@ -1364,7 +1364,7 @@
         adminMapInstance = L.map('adminFleetMap').setView([42.8805, -8.5456], 11);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
-          attribution: '© OpenStreetMap'
+          attribution: 'Â© OpenStreetMap'
         }).addTo(adminMapInstance);
       } else {
         adminMapInstance.invalidateSize();
@@ -1378,14 +1378,14 @@
       const reservations = (dbState && dbState.reservations) || [];
 
       const truckIcon = L.divIcon({
-        html: '<div style="font-size:28px;filter:drop-shadow(0 2px 5px rgba(0,0,0,0.7));">🚚</div>',
+        html: '<div style="font-size:28px;filter:drop-shadow(0 2px 5px rgba(0,0,0,0.7));">ðŸšš</div>',
         className: 'admin-truck-marker',
         iconSize: [32, 32],
         iconAnchor: [16, 16]
       });
 
       const flagIcon = L.divIcon({
-        html: '<div style="font-size:28px;filter:drop-shadow(0 2px 5px rgba(0,0,0,0.7));">🏁</div>',
+        html: '<div style="font-size:28px;filter:drop-shadow(0 2px 5px rgba(0,0,0,0.7));">ðŸ</div>',
         className: 'admin-flag-marker',
         iconSize: [32, 32],
         iconAnchor: [16, 16]
@@ -1403,10 +1403,10 @@
             .addTo(adminMapInstance)
             .bindPopup(`
               <div style="font-size:12px;line-height:1.4;">
-                <b style="color:#0ea5e9;">🚚 ${c.driverName || 'Conductor'}</b> (${c.companyName})<br>
-                <b>Vehículo:</b> ${c.vehicle || 'Furgón'}<br>
-                <b>Mochilas en furgón:</b> ${inTransit.length}<br>
-                <b>Último reporte:</b> ${new Date(c.currentLocation.updatedAt).toLocaleTimeString()}
+                <b style="color:#0ea5e9;">ðŸšš ${c.driverName || 'Conductor'}</b> (${c.companyName})<br>
+                <b>VehÃ­culo:</b> ${c.vehicle || 'FurgÃ³n'}<br>
+                <b>Mochilas en furgÃ³n:</b> ${inTransit.length}<br>
+                <b>Ãšltimo reporte:</b> ${new Date(c.currentLocation.updatedAt).toLocaleTimeString()}
               </div>
             `);
           adminMapMarkers.push(m);
@@ -1426,7 +1426,7 @@
               .addTo(adminMapInstance)
               .bindPopup(`
                 <div style="font-size:12px;line-height:1.4;">
-                  <b style="color:#10b981;">🏁 Mochila Entregada</b><br>
+                  <b style="color:#10b981;">ðŸ Mochila Entregada</b><br>
                   <b>ID:</b> ${r.smartVieiraId}<br>
                   <b>Peregrino:</b> ${r.pilgrimEmail}<br>
                   <b>Albergue:</b> ${r.deliveredLocation.hostelName || r.destinationAlbergue}<br>
