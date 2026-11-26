@@ -1180,18 +1180,16 @@
           })
         });
         const data = await res.json();
-        if (!data.success) { 
-          // If code check failed, show error
-          if (data.message && data.message.includes('Código')) {
-            showAuthError(data.message);
-            return;
-          }
-        } else {
-          currentCourier = data.courier;
-          if (data.token) localStorage.setItem('vieira_courier_token', data.token);
+        if (!data.success) {
+          showAuthError(data.message || 'No se pudo completar el registro. Revisa los datos.');
+          return;
         }
+        currentCourier = data.courier;
+        if (data.token) localStorage.setItem('vieira_courier_token', data.token);
       } catch (err) {
-        console.log("Network offline fallback for register:", err);
+        console.log("Network error during register:", err);
+        showAuthError('Error de conexi?n con el servidor. Comprueba tu internet e int?ntalo de nuevo.');
+        return;
       }
 
       if (!currentCourier) {
@@ -1685,6 +1683,7 @@
 
           // Populate dropoff hostels (show destinations of backpacks currently EN_CAMINO or hired)
           const dropSelect = document.getElementById('courierDropoffHostelSelect');
+          const prevSelectedHostel = dropSelect ? dropSelect.value : '';
           const activeDropHostels = [...new Set(
             myHired.filter(r => r.status === 'EN_CAMINO').map(r => r.destinationAlbergue).filter(Boolean)
           )];
@@ -1692,12 +1691,16 @@
 
           const hostelsToShow = activeDropHostels.length > 0 ? activeDropHostels : allDropHostels;
           if (hostelsToShow.length === 0) {
-            dropSelect.innerHTML = `<option value="">Sin albergues de destino contratados aún</option>`;
+            dropSelect.innerHTML = `<option value="">Sin albergues de destino contratados a?n</option>`;
           } else {
             dropSelect.innerHTML = hostelsToShow.map(h => {
               const countInTransit = myHired.filter(r => r.destinationAlbergue === h && r.status === 'EN_CAMINO').length;
-              return `<option value="${h}">📍 ${h} (${countInTransit} mochila${countInTransit !== 1 ? 's' : ''} en ruta)</option>`;
+              const safeVal = String(h).replace(/"/g, '&quot;');
+              return `<option value="${safeVal}">?? ${h} (${countInTransit} mochila${countInTransit !== 1 ? 's' : ''} en ruta)</option>`;
             }).join('');
+            if (prevSelectedHostel && hostelsToShow.includes(prevSelectedHostel)) {
+              dropSelect.value = prevSelectedHostel;
+            }
           }
 
           // Populate profile fields
@@ -1709,7 +1712,12 @@
           if (pEmp) pEmp.innerText = currentCourier.companyName;
           if (pCon) pCon.innerText = currentCourier.driverName;
           if (pVeh) pVeh.innerText = currentCourier.vehicle || 'Furgón';
-          if (pRut) pRut.innerText = currentCourier.routes || 'Camino de Santiago';
+          if (pRut) {
+            const tramo = (currentCourier.routeStart && currentCourier.routeEnd)
+              ? ` (${currentCourier.routeStart} ? ${currentCourier.routeEnd})`
+              : '';
+            pRut.innerText = (currentCourier.routes || 'Camino de Santiago') + tramo;
+          }
           if (pCor) pCor.innerText = currentCourier.email;
 
           // Render checklist
@@ -1735,9 +1743,9 @@
 
               let locDetail = '';
               if (r.deliveredLocation) {
-                locDetail = `<div class="text-[9px] text-emerald-300 font-mono">📍 Entregada en ${r.deliveredLocation.hostelName || r.destinationAlbergue} (${r.deliveredLocation.lat.toFixed(4)}, ${r.deliveredLocation.lng.toFixed(4)})</div>`;
+                locDetail = `<div class="text-[9px] text-emerald-700 font-mono font-semibold">📍 Entregada en ${r.deliveredLocation.hostelName || r.destinationAlbergue} (${r.deliveredLocation.lat.toFixed(4)}, ${r.deliveredLocation.lng.toFixed(4)})</div>`;
               } else if (r.currentLocation) {
-                locDetail = `<div class="text-[9px] text-cyan-300 font-mono">📡 GPS En vivo: ${r.currentLocation.lat.toFixed(4)}, ${r.currentLocation.lng.toFixed(4)}</div>`;
+                locDetail = `<div class="text-[9px] text-blue-700 font-mono font-semibold">📡 GPS En vivo: ${r.currentLocation.lat.toFixed(4)}, ${r.currentLocation.lng.toFixed(4)}</div>`;
               }
 
               return `
@@ -1814,71 +1822,126 @@
     }
 
     // ── Connect to ALL ids, update counter live, send command ────────
+    // ?? GLOBO DE NOTIFICACI?N PARA NUEVAS RESERVAS ??????????????????
+    let globoAutoHideTimer = null;
+
+    function updateCourierGloboBadge() {
+      const badge = document.getElementById('courierTabMochilasBadge');
+      if (badge) {
+        if (unreadCourierBookingsCount > 0) {
+          badge.innerText = unreadCourierBookingsCount > 9 ? '9+' : String(unreadCourierBookingsCount);
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
+    function showCourierNewBookingGlobo(booking, count) {
+      const globo = document.getElementById('courierBookingGlobo');
+      if (!globo) return;
+      const routeEl = document.getElementById('globoRoute');
+      const detEl = document.getElementById('globoDetails');
+      const timeEl = document.getElementById('globoTime');
+      if (routeEl && booking) {
+        const orig = booking.originAlbergue || booking.origin || 'Albergue Origen';
+        const dest = booking.destinationAlbergue || booking.destination || 'Albergue Destino';
+        routeEl.innerText = `${orig} ? ${dest}`;
+      }
+      if (detEl) {
+        const idTxt = (booking && booking.smartVieiraId) ? booking.smartVieiraId : 'SmartVieira';
+        detEl.innerText = count > 1
+          ? `${count} nuevas mochilas asignadas ? Pulsa para verlas`
+          : `${idTxt} asignada ? Pulsa para verla`;
+      }
+      if (timeEl) {
+        const d = new Date();
+        timeEl.innerText = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+      }
+      globo.classList.remove('hidden');
+      globo.classList.add('animate-globo');
+      if (globoAutoHideTimer) clearTimeout(globoAutoHideTimer);
+      globoAutoHideTimer = setTimeout(() => dismissCourierGlobo(), 10000);
+    }
+
+    function dismissCourierGlobo() {
+      const globo = document.getElementById('courierBookingGlobo');
+      if (globo) globo.classList.add('hidden');
+      if (globoAutoHideTimer) { clearTimeout(globoAutoHideTimer); globoAutoHideTimer = null; }
+    }
+
+    function handleGloboClick() {
+      unreadCourierBookingsCount = 0;
+      updateCourierGloboBadge();
+      dismissCourierGlobo();
+      if (typeof switchCourierTab === 'function') switchCourierTab('mochilas');
+    }
+
+    // ?? Connect to ALL ids, send single autonomous blink command, show live timer ??
     let blinkIntervalMap = {};
+    let activeBlinkTargetsMap = {};
 
     async function autoBlinkAll(ids, command, btnId, statusId) {
       const btn    = document.getElementById(btnId);
       const status = document.getElementById(statusId);
-      const total  = ids.length;
+      const targetIds = Array.isArray(ids) ? ids.filter(Boolean) : [];
+      const total  = targetIds.length;
 
-      status.classList.remove('hidden');
+      activeBlinkTargetsMap[statusId] = targetIds;
+      if (status) status.classList.remove('hidden');
 
-      // Immediate first BLE send
-      sendBleToAllDevices(ids, command);
+      // Send autonomous blink command ONCE (ESP32-S3 blinks autonomously in STATE_DELIVERY without BLE spam!)
+      sendBleToAllDevices(targetIds, command);
 
-      // Start 2-Minute (120s) Continuous ON/OFF Pulsing Blink Loop
       if (blinkIntervalMap[statusId]) clearInterval(blinkIntervalMap[statusId]);
-      let secondsLeft = 120; // 2 minutes
-      let isStateOn = true;
+      let secondsLeft = 120; // 2 minutes visual timer
 
-      btn.disabled = true;
-      btn.classList.add('blink-active');
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add('blink-active');
+      }
 
-      // 500ms alternating pulse toggle (ON -> OFF -> ON -> OFF) for real physical blinking
+      const renderTimer = () => {
+        if (!status) return;
+        status.innerHTML = `
+          <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold text-center space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+              <span class="text-sm font-black text-slate-900">? PARPADEO ESP32 ACTIVO (2 MIN)</span>
+            </div>
+            <p class="font-mono text-emerald-700 text-sm font-extrabold">?? Restan ${secondsLeft} seg (${total} Vieira${total !== 1 ? 's' : ''} asignada${total !== 1 ? 's' : ''})</p>
+            <button type="button" onclick="stopBlinkCountdown('${btnId}', '${statusId}')" class="px-4 py-1.5 bg-red-100 text-red-700 text-[11px] rounded-xl font-black border border-red-300 hover:bg-red-200 transition-all">
+              ?? Detener Parpadeo
+            </button>
+          </div>
+        `;
+      };
+
+      renderTimer();
       blinkIntervalMap[statusId] = setInterval(() => {
+        secondsLeft--;
         if (secondsLeft > 0) {
-          // Alternate between ON color payload (PICKUP:255,165,0) and OFF payload
-          if (isStateOn) {
-            sendBleToAllDevices(ids, command);
-          } else {
-            sendBleToAllDevices(ids, 'OFF');
-          }
-          isStateOn = !isStateOn;
-
-          // Update UI countdown every 1 second
-          if (secondsLeft % 2 === 0) {
-            const displaySecs = Math.ceil(secondsLeft / 2);
-            status.innerHTML = `
-              <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold text-center space-y-1.5 shadow-sm">
-                <div class="flex items-center justify-center space-x-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-                  <span class="text-sm font-black text-slate-900">✨ PARPADEO CONTINUO ESP32 ACTIVO (2 MIN)</span>
-                </div>
-                <p class="font-mono text-emerald-700 text-sm font-extrabold">⏱️ Restan ${displaySecs} seg (${total}/${total} Vieiras parpadeando)</p>
-                <button onclick="stopBlinkCountdown('${btnId}', '${statusId}')" class="px-4 py-1.5 bg-red-500/30 text-red-300 text-[11px] rounded-xl font-black border border-red-500/50 hover:bg-red-500/50 transition-all">
-                  ⏹️ Detener Parpadeo
-                </button>
-              </div>
-            `;
-          }
-          secondsLeft--;
+          renderTimer();
         } else {
           stopBlinkCountdown(btnId, statusId);
         }
-      }, 500);
+      }, 1000);
     }
 
     function sendBleToAllDevices(ids, command) {
-      const targetList = Array.isArray(ids) ? ids.filter(Boolean) : [];
-      // 1. Android Native Bridge: Strict target-list BLE command (only assigned SmartVieira IDs)
-      if (window.AndroidBleBridge && window.AndroidBleBridge.sendBleToTargets && targetList.length > 0) {
-        window.AndroidBleBridge.sendBleToTargets(targetList.join(','), command);
-      } else if (window.AndroidBleBridge && window.AndroidBleBridge.sendBleCommand) {
-        window.AndroidBleBridge.sendBleCommand(command);
+      const targetList = Array.isArray(ids) ? [...new Set(ids.filter(Boolean))] : [];
+      // 1. Android Native Bridge: Strict target-list BLE command ONLY (never fall through to Web BT on Android!)
+      if (window.AndroidBleBridge) {
+        if (window.AndroidBleBridge.sendBleToTargets && targetList.length > 0) {
+          window.AndroidBleBridge.sendBleToTargets(targetList.join(','), command);
+        } else if (window.AndroidBleBridge.sendBleCommand) {
+          window.AndroidBleBridge.sendBleCommand(command);
+        }
+        return;
       }
 
-      // 2. Web Bluetooth Fallback
-      ids.forEach(async (id) => {
+      // 2. Web Bluetooth Fallback (browser desktop/Android Chrome only)
+      targetList.forEach(async (id) => {
         try {
           const char = await autoConnectToVieira(id);
           if (char) {
@@ -1894,8 +1957,13 @@
         clearInterval(blinkIntervalMap[statusId]);
         delete blinkIntervalMap[statusId];
       }
-      // Send OFF command to stop blinking LEDs on ESP32
-      sendBleToAllDevices(myHiredSmartVieiraIds, 'OFF');
+      const targetsToStop = activeBlinkTargetsMap[statusId] && activeBlinkTargetsMap[statusId].length > 0
+        ? activeBlinkTargetsMap[statusId]
+        : myHiredSmartVieiraIds;
+      delete activeBlinkTargetsMap[statusId];
+
+      // Send OFF command ONCE to stop blinking LEDs on ESP32
+      sendBleToAllDevices(targetsToStop, 'OFF');
 
       const btn = document.getElementById(btnId);
       if (btn) {
@@ -1905,56 +1973,51 @@
       const status = document.getElementById(statusId);
       if (status) {
         status.innerHTML = `
-          <div class="p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold text-center">
-            ✅ Ciclo de parpadeo completado. LEDs apagados.
+          <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold text-center">
+            ? Ciclo de parpadeo completado. LEDs apagados.
           </div>
         `;
       }
     }
 
-    // ── RECOGIDA GENERAL (GOLDEN AMBER RGB BLINK + BLE DETECTION + GPS ACTIVATION) ──
+    // ?? RECOGIDA GENERAL (GOLDEN AMBER RGB BLINK + BLE DETECTION + GPS ACTIVATION) ??
     async function triggerBulkPickupBlink() {
       if (myHiredSmartVieiraIds.length === 0) {
-        alert('⚠️ No tienes mochilas asignadas todavía.\nEspera a que un peregrino contrate tu servicio o pulsa 🔄 para refrescar.');
+        alert('?? No tienes mochilas asignadas todav?a.\nEspera a que un peregrino contrate tu servicio o pulsa ?? para refrescar.');
         return;
       }
 
-      // Filter only backpacks that are not yet delivered
       const pendingReservations = myHiredReservationsObjects.filter(r => r.status !== 'ENTREGADA');
       if (pendingReservations.length === 0) {
-        alert('✅ Todas las mochilas de tu empresa ya han sido entregadas.');
+        alert('? Todas las mochilas de tu empresa ya han sido entregadas.');
         return;
       }
 
-      const pendingIds = pendingReservations.map(r => r.smartVieiraId);
+      const pendingIds = [...new Set(pendingReservations.map(r => r.smartVieiraId).filter(Boolean))];
       const pickupStatusEl = document.getElementById('pickupStatus');
       pickupStatusEl.classList.remove('hidden');
-      pickupStatusEl.innerHTML = '<span class="text-amber-400 font-bold animate-pulse">🔍 Escaneando y conectando con SmartVieiras en este albergue por Bluetooth...</span>';
+      pickupStatusEl.innerHTML = '<span class="text-amber-700 font-bold animate-pulse">?? Buscando y haciendo parpadear tus SmartVieiras por Bluetooth...</span>';
 
-      // Detect which SmartVieiras connect via BLE in this hostel
-      const connectedIds = [];
-      for (const id of pendingIds) {
-        try {
-          // Attempt fast BLE connection test
-          const char = await Promise.race([
-            autoConnectToVieira(id),
-            new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout fuera de rango')), 2500))
-          ]);
-          if (char) {
-            connectedIds.push(id);
+      // On Android Native App, pass all pendingIds directly to NativeBleBridge (multi-shell parallel BLE)
+      let idsToMark = pendingIds;
+      if (!window.AndroidBleBridge) {
+        const connectedIds = [];
+        for (const id of pendingIds) {
+          try {
+            const char = await Promise.race([
+              autoConnectToVieira(id),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout fuera de rango')), 2500))
+            ]);
+            if (char) connectedIds.push(id);
+          } catch (e) {
+            console.log(`[BLE SCAN] Concha ${id} no responde en este albergue (${e.message})`);
           }
-        } catch (e) {
-          console.log(`[BLE SCAN] Concha ${id} no responde en este albergue (${e.message})`);
         }
+        idsToMark = connectedIds.length > 0 ? connectedIds : pendingIds;
       }
 
-      // If in Web Bluetooth simulator / fallback or all connected
-      const idsToMark = connectedIds.length > 0 ? connectedIds : pendingIds;
-
-      pickupStatusEl.innerHTML = `<span class="text-emerald-400 font-bold">✨ ${idsToMark.length} SmartVieira(s) detectadas. Iniciando parpadeo y activando GPS...</span>`;
-
-      // 1. Physically blink ESP32 via BLE
-      await autoBlinkAll(idsToMark, 'PICKUP:255,165,0', 'btnPickup', 'pickupStatus');
+      // 1. Physically blink ESP32 autonomously in Golden Amber via BLE (DELIVERY:255,165,0)
+      await autoBlinkAll(idsToMark, 'DELIVERY:255,165,0', 'btnPickup', 'pickupStatus');
 
       // 2. Call Server to mark these reservations as EN_CAMINO and create Pilgrim Notification 1
       try {
@@ -1968,44 +2031,41 @@
         });
         const resData = await resp.json();
         if (resData.success) {
-          // 3. Immediately start real-time GPS tracking!
           startCourierGpsTracking();
           await loadCourierReservationsFromDb();
-          pickupStatusEl.innerHTML = `<div class="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold text-center">🚚 Recogida iniciada (${idsToMark.length} mochilas). GPS activo transmitiendo en vivo.</div>`;
         }
       } catch (err) {
         console.error('Error registrando recogida en servidor:', err);
       }
     }
 
-    // ── ENTREGA EN ALBERGUE (PURPLE VIOLET RGB BLINK + SAVE COORDINATE + STOP GPS) ──
+    // ?? ENTREGA EN ALBERGUE (PURPLE VIOLET RGB BLINK + SAVE COORDINATE + STOP GPS) ??
     async function triggerHostelDropoffBlink() {
       const selectedHostel = document.getElementById('courierDropoffHostelSelect').value;
       if (!selectedHostel) {
-        alert('⚠️ Selecciona el albergue de destino en el desplegable.');
+        alert('?? Selecciona el albergue de destino en el desplegable.');
         return;
       }
 
-      // Find backpacks currently EN_CAMINO for this destination hostel
       const targetReservations = myHiredReservationsObjects.filter(r =>
         r.destinationAlbergue === selectedHostel && (r.status === 'EN_CAMINO' || r.status === 'PAID')
       );
-      const targetIds = targetReservations.map(r => r.smartVieiraId);
+      const targetIds = [...new Set(targetReservations.map(r => r.smartVieiraId).filter(Boolean))];
 
       if (targetIds.length === 0) {
-        alert(`⚠️ No hay mochilas en ruta pendientes de entrega para "${selectedHostel}".`);
+        alert(`?? No hay mochilas en ruta pendientes de entrega para "${selectedHostel}".`);
         return;
       }
 
       const dropStatusEl = document.getElementById('dropoffStatus');
       dropStatusEl.classList.remove('hidden');
-      dropStatusEl.innerHTML = '<span class="text-cyan-400 font-bold animate-pulse">📍 Fijando coordenadas de entrega y haciendo parpadear vieiras...</span>';
+      dropStatusEl.innerHTML = '<span class="text-blue-700 font-bold animate-pulse">?? Fijando coordenadas de entrega y haciendo parpadear vieiras...</span>';
 
-      // 1. Get exact current GPS coordinates of the delivery
+      // 1. Physically blink ESP32 autonomously in Violet/Purple via BLE immediately!
+      await autoBlinkAll(targetIds, 'DELIVERY:168,85,247', 'btnDropoff', 'dropoffStatus');
+
+      // 2. Get exact current GPS coordinates of the delivery
       const coords = await getCurrentCoordsFast();
-
-      // 2. Physically blink ESP32 via BLE (Violet/Purple)
-      await autoBlinkAll(targetIds, 'PICKUP:168,85,247', 'btnDropoff', 'dropoffStatus');
 
       // 3. Call Server to mark ENTREGADA, store delivery coords & notify pilgrim
       try {
@@ -2021,13 +2081,10 @@
         });
         const resData = await resp.json();
         if (resData.success) {
-          // If no more backpacks are in transit, stop GPS tracking!
           if (resData.remainingEnCamino === 0) {
             stopCourierGpsTracking();
           }
-
           await loadCourierReservationsFromDb();
-          dropStatusEl.innerHTML = `<div class="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold text-center">🏁 ¡Entrega confirmada! ${resData.deliveredCount} mochila(s) entregadas en ${selectedHostel}. Ubicación fijada: ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}.</div>`;
         }
       } catch (err) {
         console.error('Error confirmando entrega:', err);

@@ -1079,6 +1079,11 @@ const server = http.createServer(async (req, res) => {
           driverName: courier.driverName,
           vehicle: courier.vehicle,
           routes: courier.routes,
+          routeStart: courier.routeStart || '',
+          routeEnd: courier.routeEnd || '',
+          cif: courier.cif || '',
+          phone: courier.phone || '',
+          pricePerBag: courier.pricePerBag || 6.50,
           email: courier.email,
           isActive: courier.isActive
         }
