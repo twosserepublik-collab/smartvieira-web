@@ -543,6 +543,26 @@
             <h3 class="text-sm font-black text-slate-900 mt-1 flex items-center gap-1.5"><svg class="w-5 h-5 stroke-current fill-none mb-0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 17h4"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M2 5h12v12H2Z"/><path d="M14 8h4l3 3v6h-2"/></svg> <span>RECOGIDA DE MOCHILAS</span></h3>
             <p class="text-[10px] text-slate-600 mt-0.5 leading-snug">Al pulsar, la app conecta por Bluetooth solo con las SmartVieiras que están en este albergue, las hace parpadear en ámbar y <strong>empieza a enviar tu GPS en tiempo real</strong> al peregrino.</p>
           </div>
+          <select id="courierPickupHostelSelect" onchange="updatePickupHostelCounter()" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-amber-300 text-xs text-slate-900 font-bold focus:border-amber-500 focus:bg-white shadow-sm">
+            <option value="">Cargando albergues de recogida...</option>
+          </select>
+          <div id="pickupCounterPanel" class="hidden rounded-2xl bg-slate-50 border border-slate-200 p-3 space-y-2">
+            <div class="grid grid-cols-3 gap-2 text-center">
+              <div class="rounded-xl bg-white border border-slate-200 py-2 px-1">
+                <span class="block text-[9px] font-bold text-slate-500 uppercase">Total</span>
+                <span id="pickupCntTotal" class="text-lg font-black text-slate-900">0</span>
+              </div>
+              <div class="rounded-xl bg-emerald-50 border border-emerald-200 py-2 px-1">
+                <span class="block text-[9px] font-bold text-emerald-700 uppercase">Recogidas</span>
+                <span id="pickupCntDone" class="text-lg font-black text-emerald-700">0</span>
+              </div>
+              <div id="pickupCntLeftCard" class="rounded-xl bg-amber-50 border border-amber-300 py-2 px-1">
+                <span class="block text-[9px] font-bold text-amber-800 uppercase">Faltan</span>
+                <span id="pickupCntLeft" class="text-lg font-black text-amber-700">0</span>
+              </div>
+            </div>
+            <div id="pickupMissingList" class="hidden text-[11px] text-red-700 bg-red-50 border border-red-200 rounded-xl p-2 font-semibold"></div>
+          </div>
           <button onclick="triggerBulkPickupBlink()" id="btnPickup" class="w-full py-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm shadow-md flex items-center justify-center space-x-2.5 active:scale-95 transition-all">
             <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
             <span>RECOGIDA • Conectar BLE y Activar GPS</span>
@@ -1703,6 +1723,34 @@
           document.getElementById('lastRefreshLabel').innerText = `Última actualización: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')} • Auto-refresco cada 8 seg`;
 
           // Populate dropoff hostels (show destinations of backpacks currently EN_CAMINO or hired)
+          // Populate pickup origin hostels (preserve user selection across auto-refresh)
+          const pickupSelect = document.getElementById('courierPickupHostelSelect');
+          if (pickupSelect) {
+            const prevOrigin = pickupSelect.value;
+            const pendingOriginHostels = [...new Set(
+              myHired.filter(r => r.status !== 'ENTREGADA' && r.status !== 'EN_CAMINO').map(r => r.originAlbergue).filter(Boolean)
+            )];
+            const allOriginHostels = [...new Set(
+              myHired.filter(r => r.status !== 'ENTREGADA').map(r => r.originAlbergue).filter(Boolean)
+            )];
+            const originsToShow = pendingOriginHostels.length > 0 ? pendingOriginHostels : allOriginHostels;
+            if (originsToShow.length === 0) {
+              pickupSelect.innerHTML = `<option value="">Sin albergues de recogida pendientes</option>`;
+            } else {
+              pickupSelect.innerHTML = originsToShow.map(h => {
+                const pendCnt = myHired.filter(r => r.originAlbergue === h && r.status !== 'EN_CAMINO' && r.status !== 'ENTREGADA').length;
+                const totCnt = myHired.filter(r => r.originAlbergue === h && r.status !== 'ENTREGADA').length;
+                const safeVal = String(h).replace(/"/g, '&quot;');
+                const tag = pendCnt > 0 ? `${pendCnt} pendiente${pendCnt !== 1 ? 's' : ''}` : `${totCnt} recogida${totCnt !== 1 ? 's' : ''} ?`;
+                return `<option value="${safeVal}">?? ${h} (${tag})</option>`;
+              }).join('');
+              if (prevOrigin && originsToShow.includes(prevOrigin)) {
+                pickupSelect.value = prevOrigin;
+              }
+            }
+            if (typeof updatePickupHostelCounter === 'function') updatePickupHostelCounter();
+          }
+
           const dropSelect = document.getElementById('courierDropoffHostelSelect');
           const prevSelectedHostel = dropSelect ? dropSelect.value : '';
           const activeDropHostels = [...new Set(
@@ -1900,6 +1948,71 @@
 
     // ?? NATIVE BLE BATCH CONFIRMATION ENGINE ????????????????????????
     const nativeBleBatchResolvers = {};
+    let livePickupScanSession = null;
+
+    function updatePickupHostelCounter(liveConfirmedSet) {
+      const sel = document.getElementById('courierPickupHostelSelect');
+      const panel = document.getElementById('pickupCounterPanel');
+      const elTot = document.getElementById('pickupCntTotal');
+      const elDone = document.getElementById('pickupCntDone');
+      const elLeft = document.getElementById('pickupCntLeft');
+      const elLeftCard = document.getElementById('pickupCntLeftCard');
+      const elMissing = document.getElementById('pickupMissingList');
+      if (!sel || !panel) return;
+
+      const selectedOrigin = sel.value;
+      if (!selectedOrigin) {
+        panel.classList.add('hidden');
+        return;
+      }
+
+      const hostelRes = myHiredReservationsObjects.filter(r => r.originAlbergue === selectedOrigin && r.status !== 'ENTREGADA');
+      if (hostelRes.length === 0) {
+        panel.classList.add('hidden');
+        return;
+      }
+
+      panel.classList.remove('hidden');
+      const confirmedSet = liveConfirmedSet || new Set();
+      const doneRes = hostelRes.filter(r => r.status === 'EN_CAMINO' || confirmedSet.has(String(r.smartVieiraId || '').trim().toUpperCase()));
+      const leftRes = hostelRes.filter(r => r.status !== 'EN_CAMINO' && !confirmedSet.has(String(r.smartVieiraId || '').trim().toUpperCase()));
+
+      if (elTot) elTot.innerText = String(hostelRes.length);
+      if (elDone) elDone.innerText = String(doneRes.length);
+      if (elLeft) elLeft.innerText = String(leftRes.length);
+
+      if (elLeftCard && elLeft) {
+        if (leftRes.length === 0) {
+          elLeftCard.className = 'rounded-xl bg-emerald-100 border border-emerald-400 py-2 px-1';
+          elLeft.className = 'text-lg font-black text-emerald-800';
+        } else {
+          elLeftCard.className = 'rounded-xl bg-amber-50 border border-amber-300 py-2 px-1';
+          elLeft.className = 'text-lg font-black text-amber-700';
+        }
+      }
+
+      if (elMissing) {
+        if (liveConfirmedSet && leftRes.length > 0) {
+          const items = leftRes.map(r => `? <span class="font-mono">${r.smartVieiraId}</span> (${r.pilgrimEmail || 'Peregrino'})`).join('<br>');
+          elMissing.innerHTML = `?? <strong>Falta${leftRes.length !== 1 ? 'n' : ''} ${leftRes.length} mochila${leftRes.length !== 1 ? 's' : ''} por recoger aqu?:</strong><br>${items}`;
+          elMissing.classList.remove('hidden');
+        } else if (leftRes.length === 0) {
+          elMissing.innerHTML = '? <strong>?Todas las mochilas de este albergue recogidas! No queda ninguna atr?s.</strong>';
+          elMissing.className = 'text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-300 rounded-xl p-2 font-semibold text-center';
+          elMissing.classList.remove('hidden');
+        } else {
+          elMissing.classList.add('hidden');
+          elMissing.className = 'hidden text-[11px] text-red-700 bg-red-50 border border-red-200 rounded-xl p-2 font-semibold';
+        }
+      }
+    }
+
+    window.onNativeBleShellConfirmed = function(actionType, shellId) {
+      if (actionType === 'pickup' && livePickupScanSession && shellId) {
+        livePickupScanSession.confirmedSet.add(String(shellId).trim().toUpperCase());
+        updatePickupHostelCounter(livePickupScanSession.confirmedSet);
+      }
+    };
 
     window.onNativeBleBatchComplete = function(actionType, confirmedIds) {
       const resolver = nativeBleBatchResolvers[actionType];
@@ -2044,21 +2157,26 @@
       }
     }
 
-    // ?? RECOGIDA GENERAL (STRICT: ONLY MARKS EN_CAMINO SHELLS ACTUALLY DETECTED BY BLE) ??
+    // ?? RECOGIDA GENERAL POR ALBERGUE DE ORIGEN + CONTADOR EN VIVO ??
     async function triggerBulkPickupBlink() {
       if (myHiredSmartVieiraIds.length === 0) {
         alert('?? No tienes mochilas asignadas todav?a.\nEspera a que un peregrino contrate tu servicio o pulsa ?? para refrescar.');
         return;
       }
 
-      const pendingReservations = myHiredReservationsObjects.filter(r => r.status !== 'ENTREGADA' && r.status !== 'EN_CAMINO');
+      const selOrigin = document.getElementById('courierPickupHostelSelect');
+      const selectedOrigin = selOrigin ? selOrigin.value : '';
+      if (!selectedOrigin) {
+        alert('?? Selecciona el albergue de origen donde est?s recogiendo las mochilas.');
+        return;
+      }
+
+      const pendingReservations = myHiredReservationsObjects.filter(r =>
+        r.originAlbergue === selectedOrigin && r.status !== 'ENTREGADA' && r.status !== 'EN_CAMINO'
+      );
       if (pendingReservations.length === 0) {
-        const inTransit = myHiredReservationsObjects.filter(r => r.status === 'EN_CAMINO').length;
-        if (inTransit > 0) {
-          alert(`?? Tus ${inTransit} mochila(s) ya figuran EN CAMINO.`);
-        } else {
-          alert('? Todas las mochilas de tu empresa ya han sido entregadas.');
-        }
+        updatePickupHostelCounter(new Set());
+        alert(`? Ya has recogido todas las mochilas contratadas en "${selectedOrigin}".`);
         return;
       }
 
@@ -2067,24 +2185,37 @@
       const pickupStatusEl = document.getElementById('pickupStatus');
       if (btnPickup) btnPickup.disabled = true;
       pickupStatusEl.classList.remove('hidden');
-      pickupStatusEl.innerHTML = `<div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold text-center animate-pulse">?? Buscando ${pendingIds.length} SmartVieira(s) cercanas por Bluetooth...</div>`;
+      pickupStatusEl.innerHTML = `<div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold text-center animate-pulse">?? Buscando ${pendingIds.length} mochila(s) en "${selectedOrigin}" por Bluetooth...</div>`;
 
-      // 1. Scan & blink ONLY shells physically present nearby via BLE
+      // Start live countdown session (updates 1-by-1 as each shell connects & blinks!)
+      livePickupScanSession = { origin: selectedOrigin, confirmedSet: new Set() };
+      updatePickupHostelCounter(livePickupScanSession.confirmedSet);
+
+      // 1. Scan & blink ONLY shells physically present in this origin hostel
       const confirmedIds = await runNativeBleBatch(pendingIds, 'DELIVERY:255,165,0', 'pickup');
+
+      confirmedIds.forEach(id => livePickupScanSession.confirmedSet.add(String(id).trim().toUpperCase()));
+      updatePickupHostelCounter(livePickupScanSession.confirmedSet);
+      livePickupScanSession = null;
 
       if (!confirmedIds || confirmedIds.length === 0) {
         if (btnPickup) btnPickup.disabled = false;
         pickupStatusEl.innerHTML = `
           <div class="p-3 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs font-bold text-center">
-            ?? No se ha detectado ninguna SmartVieira asignada cerca por Bluetooth.<br>
+            ?? No se ha detectado ninguna SmartVieira de "${selectedOrigin}" cerca por Bluetooth.<br>
             <span class="font-normal text-[11px]">Ninguna mochila se ha marcado como recogida. Ac?rcate a las mochilas y vuelve a intentarlo.</span>
           </div>
         `;
         return;
       }
 
+      const remainingMissing = pendingIds.length - confirmedIds.length;
+      const titleMsg = remainingMissing === 0
+        ? `? ?TODAS RECOGIDAS (${confirmedIds.length}/${pendingIds.length})!`
+        : `?? RECOGIDAS ${confirmedIds.length}/${pendingIds.length} ? FALTA${remainingMissing !== 1 ? 'N' : ''} ${remainingMissing}`;
+
       // 2. Start visual blink timer ONLY for confirmed physical shells
-      startBlinkVisualTimer(confirmedIds, 'btnPickup', 'pickupStatus', '? RECOGIDA CONFIRMADA ? PARPADEO ACTIVO');
+      startBlinkVisualTimer(confirmedIds, 'btnPickup', 'pickupStatus', titleMsg);
 
       // 3. Mark EN_CAMINO in server ONLY for confirmedIds!
       try {
@@ -2100,6 +2231,10 @@
         if (resData.success) {
           startCourierGpsTracking();
           await loadCourierReservationsFromDb();
+          // Re-render missing list if any remained unpicked after refresh
+          if (remainingMissing > 0) {
+            updatePickupHostelCounter(new Set(confirmedIds.map(id => String(id).trim().toUpperCase())));
+          }
         }
       } catch (err) {
         console.error('Error registrando recogida en servidor:', err);
