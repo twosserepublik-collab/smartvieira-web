@@ -1769,12 +1769,35 @@
       return { lat: null, lng: null };
     }
 
+    function forceReturnToCourierLogin(reasonMsg) {
+      if (courierPollingInterval) { clearInterval(courierPollingInterval); courierPollingInterval = null; }
+      if (typeof stopCourierGpsTracking === 'function') stopCourierGpsTracking();
+      localStorage.removeItem('vieira_courier_session');
+      localStorage.removeItem('vieira_courier_token');
+      currentCourier = null;
+      const dash = document.getElementById('courierDashboard');
+      const auth = document.getElementById('courierAuthSection');
+      if (dash) dash.classList.add('hidden');
+      if (auth) auth.classList.remove('hidden');
+      if (reasonMsg && typeof showAuthError === 'function') {
+        showAuthError(reasonMsg);
+      }
+    }
+
     async function loadCourierReservationsFromDb() {
       if (!currentCourier) return;
       try {
         const compParam = (currentCourier && currentCourier.companyName) ? '?companyName=' + encodeURIComponent(currentCourier.companyName) : '';
         const res  = await fetch(getApiUrl('/api/courier/reservations' + compParam), { headers: getCourierAuthHeaders() });
+        if (res.status === 401 || res.status === 403) {
+          forceReturnToCourierLogin('Tu sesi?n ha caducado o no es v?lida. Inicia sesi?n de nuevo.');
+          return;
+        }
         const data = await res.json();
+        if (!data.success && data.message && /no autorizada|caducad|sesi?n/i.test(data.message)) {
+          forceReturnToCourierLogin(data.message);
+          return;
+        }
 
         if (data.success && data.reservations) {
           const allRes = data.reservations;

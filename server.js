@@ -22,10 +22,10 @@ const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
 
 const DEFAULT_COURIER_ACCESS_CODE = process.env.COURIER_ACCESS_CODE || 'VIEIRA-COURIER-2026';
 const STRICT_SHELL_VALIDATION = process.env.STRICT_SHELL_VALIDATION !== 'false';
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
-if (!process.env.JWT_SECRET) {
-  console.warn('[SECURITY WARN] JWT_SECRET no definido en env; usando secreto efimero aleatorio.');
-}
+// Secreto JWT estable entre reinicios/despliegues para que las sesiones de transportistas y peregrinos NO caduquen al redesplegar
+const JWT_SECRET = process.env.JWT_SECRET || crypto.createHash('sha256')
+  .update('smartvieira-persistent-jwt-v1:' + (process.env.STRIPE_SECRET_KEY || '') + ':' + (process.env.ADMIN_PASS || 'smartvieira2026'))
+  .digest('hex');
 
 // =========================================================================
 // PROCESS RESILIENCE & UNCAUGHT EXCEPTION ISOLATION (ANTI-CRASH)
@@ -85,7 +85,7 @@ function verifyPassword(password, hash, salt) {
 
 function generateToken(payload) {
   const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
-  const body = Buffer.from(JSON.stringify({ ...payload, exp: Math.floor(Date.now()/1000) + (86400 * 30) })).toString('base64url');
+  const body = Buffer.from(JSON.stringify({ ...payload, exp: Math.floor(Date.now()/1000) + (86400 * 365) })).toString('base64url');
   const sig = crypto.createHmac('sha256', JWT_SECRET).update(`${header}.${body}`).digest('base64url');
   return `${header}.${body}.${sig}`;
 }
