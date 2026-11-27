@@ -6911,21 +6911,44 @@
             </div>
           `;
         } else {
-          container.innerHTML = matchingCouriers.map((c, idx) => `
+          const nowObj = new Date();
+          const nowTotalMins = nowObj.getHours() * 60 + nowObj.getMinutes();
+          const getCutoffInfo = (c) => {
+            const cut = (c.cutoffTime && /^\d{2}:\d{2}$/.test(c.cutoffTime)) ? c.cutoffTime : '08:00';
+            const [hh, mm] = cut.split(':').map(n => parseInt(n, 10));
+            const availToday = nowTotalMins < (hh * 60 + mm);
+            return { cut, availToday };
+          };
+          matchingCouriers.sort((a, b) => {
+            const ia = getCutoffInfo(a).availToday ? 0 : 1;
+            const ib = getCutoffInfo(b).availToday ? 0 : 1;
+            if (ia !== ib) return ia - ib;
+            return (parseFloat(a.pricePerBag) || 6.5) - (parseFloat(b.pricePerBag) || 6.5);
+          });
+          availableCouriersFromDb = matchingCouriers;
+
+          container.innerHTML = matchingCouriers.map((c) => {
+            const { cut, availToday } = getCutoffInfo(c);
+            const availBadge = availToday
+              ? `<span class="inline-block text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">?? Disponible HOY (hasta ${cut})</span>`
+              : `<span class="inline-block text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40">?? Desde MA?ANA (l?mite ${cut})</span>`;
+            return `
             <div onclick="wizardSelectCompany('${c.id}')" id="compCard_${c.id}" class="p-4 rounded-2xl bg-slate-900/90 border border-slate-700 hover:border-amber-400 cursor-pointer space-y-2 transition-all">
               <div class="flex justify-between items-center">
                 <div>
                   <strong class="text-sm text-white block">${c.companyName}</strong>
-                  <span class="text-[10px] text-amber-300 font-extrabold">Conductor: ${c.driverName} (${c.vehicle || 'Furgón'})</span>
+                  <span class="text-[10px] text-amber-300 font-extrabold">Conductor: ${c.driverName} (${c.vehicle || 'Furg?n'})</span>
                 </div>
-                <span class="text-amber-400 font-black text-sm">${calculateFinalPrice(c.pricePerBag)} €</span>
+                <span class="text-amber-400 font-black text-sm">${calculateFinalPrice(c.pricePerBag)} ?</span>
               </div>
+              <div>${availBadge}</div>
               <div class="flex justify-between text-[11px] text-slate-400 border-t border-slate-800/80 pt-1.5">
-                <span>Tramo: ${c.routeStart ? (c.routeStart + ' → ' + c.routeEnd) : c.routes}</span>
-                <span id="compToggleHint_${c.id}" class="text-emerald-400 font-bold">Verificada BD ✓</span>
+                <span>Tramo: ${c.routeStart ? (c.routeStart + ' ? ' + c.routeEnd) : c.routes}</span>
+                <span id="compToggleHint_${c.id}" class="text-emerald-400 font-bold">Verificada BD ?</span>
               </div>
             </div>
-          `).join('');
+          `;
+          }).join('');
           if (typeof applyGlobalTranslations === "function") applyGlobalTranslations(currentAppLang);
         }
       } catch (err) {
