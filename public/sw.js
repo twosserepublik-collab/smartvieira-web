@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'vieira-app-FINAL-v13.55.1';
+const CACHE_NAME = 'vieira-app-FINAL-v13.55.1';
 const urlsToCache = [
   '/',
   '/caminos-data.js',
@@ -26,7 +26,7 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Borrando cachÃ© antigua:', cacheName);
+            console.log('Borrando caché antigua:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -36,7 +36,7 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Estrategia NETWORK-FIRST para garantizar siempre la Ãºltima versiÃ³n
+  // Estrategia NETWORK-FIRST para garantizar siempre la última versión
   event.respondWith(
     fetch(event.request)
       .then(response => {
@@ -58,7 +58,7 @@ self.addEventListener('fetch', event => {
 // =========================================================================
 self.addEventListener('push', event => {
   let data = {
-    title: 'ðŸŽ’ SmartVieira Repartidor',
+    title: '🎒 SmartVieira Repartidor',
     body: 'Tienes nuevas contrataciones de mochilas en tu ruta',
     url: '/courier-app.html',
     tag: 'smartvieira-push'
