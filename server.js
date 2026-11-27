@@ -759,7 +759,7 @@ const server = http.createServer(async (req, res) => {
       const backupData = await parseRequestBody(req);
       if (!backupData.pilgrims || !backupData.couriers) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ error: 'Formato de backup inv�lido' }));
+        return res.end(JSON.stringify({ error: 'Formato de backup inv?lido' }));
       }
       const curDb = loadDb();
       if (!backupData.smtpConfig && curDb.smtpConfig) backupData.smtpConfig = curDb.smtpConfig;
@@ -914,6 +914,12 @@ const server = http.createServer(async (req, res) => {
       if (!companyName || !driverName || !email || !password || !accessCode) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ success: false, message: 'Faltan campos obligatorios' }));
+      }
+
+      const cleanPhoneDigits = String(phone || '').replace(/\D/g, '');
+      if (cleanPhoneDigits.length < 9) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Introduce un n?mero de tel?fono m?vil v?lido (m?nimo 9 d?gitos)' }));
       }
 
       if ((accessCode || '').trim() !== DEFAULT_COURIER_ACCESS_CODE) {
