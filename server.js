@@ -1425,7 +1425,9 @@ const server = http.createServer(async (req, res) => {
 
       db.reservations.forEach(r => {
         const rId = (r.smartVieiraId || '').trim().toUpperCase();
-        if (idsToPickup.includes(rId) && r.status !== 'ENTREGADA') {
+        const isMyCompany = !r.companyName ||
+          r.companyName.trim().toLowerCase() === (courier.companyName || '').trim().toLowerCase();
+        if (idsToPickup.includes(rId) && r.status !== 'ENTREGADA' && isMyCompany) {
           r.status = 'EN_CAMINO';
           r.pickedUpAt = new Date().toISOString();
           r.courierId = courier.id;
@@ -1490,7 +1492,9 @@ const server = http.createServer(async (req, res) => {
 
       let activeBackpacks = 0;
       db.reservations.forEach(r => {
-        if (r.courierId === courierId && r.status === 'EN_CAMINO') {
+        const isMyCourier = (r.courierId === courierId) ||
+          (!r.courierId && r.companyName && r.companyName.trim().toLowerCase() === (courier.companyName || '').trim().toLowerCase());
+        if (isMyCourier && r.status === 'EN_CAMINO') {
           r.currentLocation = locObj;
           activeBackpacks++;
         }

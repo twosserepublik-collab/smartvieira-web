@@ -1681,10 +1681,22 @@
     function startCourierGpsTracking() {
       if (courierGpsWatchId) return; // already active
 
-      // 1. Immediate position acquisition
+      // 1. Immediate position acquisition (with native Android LocationManager fallback indoors)
       acquireRealPosition().then(pos => {
         sendLocationToServer(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 15);
       }).catch(err => {
+        try {
+          if (window.AndroidBleBridge && window.AndroidBleBridge.getNativeLocationJson) {
+            const raw = window.AndroidBleBridge.getNativeLocationJson();
+            if (raw) {
+              const p = JSON.parse(raw);
+              if (p && typeof p.lat === 'number' && typeof p.lng === 'number') {
+                sendLocationToServer(p.lat, p.lng, 25);
+                return;
+              }
+            }
+          }
+        } catch (e) {}
         showGpsErrorInUI(err);
       });
 
