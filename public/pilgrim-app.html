@@ -1110,6 +1110,13 @@
         </div>
 
         <div id="paymentBox" class="hidden p-4 rounded-2xl bg-slate-900/90 border border-amber-400 space-y-3">
+          <div class="p-3 rounded-xl bg-white/95 border border-amber-300/80 space-y-2 text-slate-900">
+            <div class="flex items-center justify-between gap-2">
+              <label for="bookingTransportDate" class="text-[11px] font-extrabold text-slate-700">?? Fecha del transporte:</label>
+              <input type="date" id="bookingTransportDate" class="px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-300 text-xs font-black text-slate-900">
+            </div>
+            <p id="bookingCutoffBanner" class="hidden text-[11px] font-bold leading-snug rounded-lg p-2"></p>
+          </div>
           <h4 class="text-xs font-bold text-amber-300">Pagar Reserva en 1 Clic:</h4>
           
           <div class="space-y-2">
@@ -6959,7 +6966,8 @@
           name: found.companyName,
           driverName: found.driverName,
           vehicle: found.vehicle,
-          price: parseFloat(calculateFinalPrice(found.pricePerBag))
+          price: parseFloat(calculateFinalPrice(found.pricePerBag)),
+          cutoffTime: found.cutoffTime || '08:00'
         };
       } else {
         selectedCompanyObj = { id: compId, companyName: 'Empresa Repartidora', name: 'Empresa Repartidora', price: 6.50 };
@@ -6987,6 +6995,7 @@
       if (selectedEl && paymentBox) {
         selectedEl.insertAdjacentElement('afterend', paymentBox);
         paymentBox.classList.remove('hidden');
+        if (typeof applyCourierCutoffDateRule === 'function') applyCourierCutoffDateRule(selectedCompanyObj);
       }
       if (typeof applyGlobalTranslations === "function") applyGlobalTranslations(currentAppLang);
     }
@@ -7229,6 +7238,54 @@
       });
     }
 
+    function getLocalIsoDate(daysOffset) {
+      const d = new Date();
+      d.setDate(d.getDate() + (daysOffset || 0));
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function applyCourierCutoffDateRule(companyObj) {
+      const dateInput = document.getElementById('bookingTransportDate');
+      const banner = document.getElementById('bookingCutoffBanner');
+      if (!dateInput) return;
+
+      const cutoffStr = (companyObj && companyObj.cutoffTime && /^\d{2}:\d{2}$/.test(companyObj.cutoffTime))
+        ? companyObj.cutoffTime
+        : '08:00';
+      const parts = cutoffStr.split(':');
+      const cutoffMins = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+      const now = new Date();
+      const nowMins = now.getHours() * 60 + now.getMinutes();
+
+      const todayIso = getLocalIsoDate(0);
+      const tomorrowIso = getLocalIsoDate(1);
+      const compName = (companyObj && (companyObj.companyName || companyObj.name)) || 'este transportista';
+
+      if (nowMins >= cutoffMins) {
+        dateInput.min = tomorrowIso;
+        if (!dateInput.value || dateInput.value < tomorrowIso) {
+          dateInput.value = tomorrowIso;
+        }
+        const tomLabel = tomorrowIso.split('-').reverse().join('/');
+        if (banner) {
+          banner.className = 'text-[11px] font-bold leading-snug rounded-lg p-2 bg-amber-100 text-amber-900 border border-amber-300';
+          banner.innerText = `? Son m?s de las ${cutoffStr}. Con ${compName}, las reservas a partir de esta hora pasan autom?ticamente para ma?ana (${tomLabel}) o d?as posteriores.`;
+        }
+      } else {
+        dateInput.min = todayIso;
+        if (!dateInput.value || dateInput.value < todayIso) {
+          dateInput.value = todayIso;
+        }
+        if (banner) {
+          banner.className = 'text-[11px] font-bold leading-snug rounded-lg p-2 bg-emerald-50 text-emerald-800 border border-emerald-200';
+          banner.innerText = `? A tiempo para hoy (hora l?mite de ${compName}: ${cutoffStr}). Tambi?n puedes elegir un d?a futuro.`;
+        }
+      }
+    }
+
     async function confirmBooking(method) {
       if (!currentUser) {
         alert('Debes Iniciar Sesión o Registrarte para poder completar el pago y guardar la reserva.');
@@ -7438,7 +7495,7 @@
             destinationAlbergue: pending.destinationAlbergue || 'Destino',
             companyName: pending.companyName || 'Empresa Repartidora',
             routeName: pending.routeName || 'Camino de Santiago',
-            transportDate: new Date().toISOString().split('T')[0],
+            transportDate: (document.getElementById('bookingTransportDate') && document.getElementById('bookingTransportDate').value) || getLocalIsoDate(0),
             luggageCount: 1,
             amountEuros: pending.amountEuros || 6.50
           })
@@ -7471,7 +7528,7 @@
             destinationAlbergue: document.getElementById('dropoffHostelSelect').value,
             companyName: selectedCompanyObj ? (selectedCompanyObj.companyName || selectedCompanyObj.name) : 'Empresa Repartidora',
             routeName: currentWizardRoute ? currentWizardRoute.name : 'Camino Inglés',
-            transportDate: new Date().toISOString().split('T')[0],
+            transportDate: (document.getElementById('bookingTransportDate') && document.getElementById('bookingTransportDate').value) || getLocalIsoDate(0),
             luggageCount: 1,
             amountEuros: selectedCompanyObj ? selectedCompanyObj.price : 6.50
           })

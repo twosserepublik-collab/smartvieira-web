@@ -909,7 +909,7 @@ const server = http.createServer(async (req, res) => {
   if (reqPath === '/api/register/courier' && req.method === 'POST') {
     try {
       const body = await parseRequestBody(req);
-      const { companyName, driverName, vehicle, routes, routeStart, routeEnd, accessCode, email, password, cif, pricePerBag, phone } = body;
+      const { companyName, driverName, vehicle, routes, routeStart, routeEnd, accessCode, email, password, cif, pricePerBag, phone, cutoffTime } = body;
 
       if (!companyName || !driverName || !email || !password || !accessCode) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -944,6 +944,7 @@ const server = http.createServer(async (req, res) => {
           cif: cif || '',
           pricePerBag: pricePerBag || 6.50,
           phone: (phone || '').trim(),
+          cutoffTime: /^\d{2}:\d{2}$/.test(String(cutoffTime || '').trim()) ? String(cutoffTime).trim() : '08:00',
           isActive: true,
         createdAt: new Date().toISOString()
       };
@@ -1084,6 +1085,7 @@ const server = http.createServer(async (req, res) => {
           cif: courier.cif || '',
           phone: courier.phone || '',
           pricePerBag: courier.pricePerBag || 6.50,
+          cutoffTime: courier.cutoffTime || '08:00',
           email: courier.email,
           isActive: courier.isActive
         }
@@ -1459,6 +1461,32 @@ const server = http.createServer(async (req, res) => {
         updatedCount,
         updatedReservations
       }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: false, message: e.message }));
+    }
+  }
+
+  // ── COURIER CUTOFF HOUR UPDATE (HORA LÍMITE RESERVAS MISMO DÍA) ──
+  if (reqPath === '/api/courier/cutoff' && req.method === 'POST') {
+    try {
+      const body = await parseRequestBody(req);
+      const { courierId, cutoffTime } = body;
+      if (!verifyCourierAuth(req, courierId).ok) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Sesión de repartidor no autorizada' }));
+      }
+      const cleanCutoff = /^\d{2}:\d{2}$/.test(String(cutoffTime || '').trim()) ? String(cutoffTime).trim() : '08:00';
+      const db = loadDb();
+      const courier = db.couriers.find(c => c.id === courierId);
+      if (!courier) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: 'Repartidor no encontrado' }));
+      }
+      courier.cutoffTime = cleanCutoff;
+      saveDb(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, cutoffTime: cleanCutoff }));
     } catch (e) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ success: false, message: e.message }));
@@ -1854,6 +1882,7 @@ const server = http.createServer(async (req, res) => {
         routeEnd: c.routeEnd || '',
         pricePerBag: c.pricePerBag || 6.50,
         phone: c.phone || '',
+        cutoffTime: c.cutoffTime || '08:00',
         isActive: true
       }));
 
