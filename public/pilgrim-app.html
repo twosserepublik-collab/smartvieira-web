@@ -352,6 +352,80 @@
       color: #1C2826 !important;
     }
 
+  
+  /* ?? SMARTVIEIRA SPLASH SCREEN (PROPUESTA C: BRILLO & CAMINO) ?? */
+  #svSplashScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.42s ease-out, visibility 0.42s ease-out;
+  }
+  #svSplashScreen.sv-splash-hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .sv-shimmer-box {
+    position: relative;
+    width: 108px;
+    height: 108px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(18px) scale(0.92);
+    animation: svCardEnter 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.04s forwards;
+  }
+  @keyframes svCardEnter {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .sv-shimmer-sweep {
+    position: absolute;
+    top: -40%;
+    left: -95%;
+    width: 55%;
+    height: 185%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.46), transparent);
+    transform: rotate(24deg);
+    animation: svSweepShine 0.85s ease-in-out 0.42s forwards;
+  }
+  @keyframes svSweepShine {
+    to { left: 145%; }
+  }
+  .sv-splash-brand {
+    margin-top: 22px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: svSlideUp 0.55s ease-out 0.32s forwards;
+  }
+  @keyframes svSlideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .sv-progress-track {
+    width: 116px;
+    height: 3.5px;
+    border-radius: 99px;
+    background: rgba(15, 23, 42, 0.10);
+    overflow: hidden;
+    margin-top: 24px;
+  }
+  .sv-progress-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: 99px;
+    animation: svLoadBar 1.25s cubic-bezier(0.4, 0, 0.2, 1) 0.12s forwards;
+  }
+  @keyframes svLoadBar {
+    to { width: 100%; }
+  }
+
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -359,6 +433,37 @@
   <script src="/camino-rich-data.js"></script>
 </head>
 <body class="min-h-screen pb-24 flex flex-col justify-between select-none">
+
+  <!-- SPLASH SCREEN ANIMADO (PROPUESTA C: BRILLO & CAMINO) -->
+  <div id="svSplashScreen" style="background: linear-gradient(180deg, #FAF7F0 0%, #F2ECE0 100%);">
+    <div class="sv-shimmer-box" style="background: linear-gradient(145deg, #1E4D3B, #133327); box-shadow: 0 18px 36px rgba(30, 77, 59, 0.28);">
+      <div class="sv-shimmer-sweep"></div>
+      <svg width="66" height="66" viewBox="0 0 64 64" fill="none">
+        <path d="M32 6C16.5 6 5 18.5 5 35.5C5 46.5 14.5 55 26 57.2L32 59L38 57.2C49.5 55 59 46.5 59 35.5C59 18.5 47.5 6 32 6Z" fill="#F4D06F"/>
+        <path d="M32 10V54M21 13L25.5 53M43 13L38.5 53M12 22L20 50M52 22L44 50M8 34L15 44M56 34L49 44" stroke="#133327" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="sv-splash-brand">
+      <div style="font-family: 'Fraunces', Georgia, serif; font-size: 29px; font-weight: 800; color: #1E4D3B; letter-spacing: -0.02em;">Smart<span style="color: #C9962B;">Vieira.</span></div>
+      <div style="font-size: 10px; font-weight: 800; letter-spacing: 0.22em; color: #4B6B5C; margin-top: 5px; text-transform: uppercase;">App Oficial del Peregrino</div>
+    </div>
+    <div class="sv-progress-track">
+      <div class="sv-progress-fill" style="background: linear-gradient(90deg, #1E4D3B, #E6B84C);"></div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      function hideSvSplash(){
+        var el = document.getElementById('svSplashScreen');
+        if (!el || el.dataset.hiding) return;
+        el.dataset.hiding = '1';
+        el.classList.add('sv-splash-hide');
+        setTimeout(function(){ if (el && el.parentNode) el.parentNode.removeChild(el); }, 480);
+      }
+      setTimeout(hideSvSplash, 1450);
+    })();
+  </script>
+
 
   <!-- SVG VIEIRA SANTIAGO ICON TEMPLATE (BLANCO PERLA) -->
   <svg style="display: none;">
