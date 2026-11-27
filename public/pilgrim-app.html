@@ -431,6 +431,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="/caminos-data.js"></script>
   <script src="/camino-rich-data.js"></script>
+  <script src="lume-knowledge.js"></script>
 </head>
 <body class="min-h-screen pb-24 flex flex-col justify-between select-none">
 
@@ -5699,6 +5700,18 @@
       const bookings = typeof getUserBookings === 'function' ? getUserBookings() : [];
       const activeRes = bookings.length > 0 ? bookings[bookings.length - 1] : null;
 
+      // 0. LUME Enciclopedia Inteligente (uso de la app, estados, hora limite, Camino de Santiago)
+      const lumeMatch = (typeof window.matchLumeKnowledge === 'function') ? window.matchLumeKnowledge(q) : null;
+      const isAskingMyLiveBackpack = (
+        q.includes("donde esta mi mochila") || q.includes("donde esta mi equipaje") ||
+        q.includes("ha llegado mi mochila") || q.includes("cuando llega mi mochila") ||
+        q.includes("estado de mi mochila") || q.includes("seguimiento de mi mochila") ||
+        q === "mochila" || q === "donde esta" || q === "seguimiento"
+      );
+      if (lumeMatch && lumeMatch.score >= 10 && !isAskingMyLiveBackpack) {
+        return lumeMatch.item.answer;
+      }
+
       // 1. Mochila / Estado / Dónde está / Seguimiento / Recogida / Entrega
       if (
         q.includes("mochila") ||
@@ -6122,6 +6135,11 @@
           "Es un honor acompañarte en tu viaje a Santiago. Recuerda que no hay prisa: el Camino es el viaje en sí mismo, no solo la meta.\n\n" +
           "¿Deseas consultar algo sobre tu mochila, tus albergues o tu concha Vieira?"
         );
+      }
+
+      // Respuesta de LUME Enciclopedia (coincidencia media si no coincidio pueblo/ruta)
+      if (lumeMatch && lumeMatch.item && lumeMatch.item.answer) {
+        return lumeMatch.item.answer;
       }
 
       // Fallback
