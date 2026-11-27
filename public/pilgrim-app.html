@@ -7091,6 +7091,28 @@
       }
     }
 
+    // ?? AUTO-REFRESCO EN TIEMPO REAL DEL ESTADO DE LA MOCHILA (cada 8s + al volver a la app) ??
+    window.lastKnownStatuses = window.lastKnownStatuses || {};
+    let _pilgrimAutoRefreshInFlight = false;
+    async function safeAutoRefreshPilgrimReservations() {
+      if (_pilgrimAutoRefreshInFlight) return;
+      if (!currentUser || !currentUser.email || currentUser.isDemo) return;
+      if (document.visibilityState === 'hidden') return;
+      _pilgrimAutoRefreshInFlight = true;
+      try {
+        await fetchUserProfileAndReservations();
+      } finally {
+        _pilgrimAutoRefreshInFlight = false;
+      }
+    }
+    if (!window._pilgrimAutoRefreshInterval) {
+      window._pilgrimAutoRefreshInterval = setInterval(safeAutoRefreshPilgrimReservations, 8000);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') safeAutoRefreshPilgrimReservations();
+      });
+      window.addEventListener('focus', safeAutoRefreshPilgrimReservations);
+    }
+
     function ensureStripeLoaded() {
       return new Promise((resolve) => {
         if (window.Stripe) return resolve(true);
