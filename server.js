@@ -1509,7 +1509,10 @@ const server = http.createServer(async (req, res) => {
   if (reqPath === '/api/courier/delivery' && req.method === 'POST') {
     try {
       const body = await parseRequestBody(req);
-      const { courierId, destinationAlbergue, lat, lng } = body;
+      const { courierId, destinationAlbergue, lat, lng, smartVieiraIds } = body;
+      const filterIds = Array.isArray(smartVieiraIds) && smartVieiraIds.length > 0
+        ? new Set(smartVieiraIds.map(id => String(id || '').trim().toUpperCase()).filter(Boolean))
+        : null;
       if (!verifyCourierAuth(req, courierId).ok) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ success: false, message: 'Sesión de repartidor no autorizada' }));
@@ -1541,7 +1544,10 @@ const server = http.createServer(async (req, res) => {
         const isCourierMatch = (r.courierId === courierId) ||
           (!r.courierId && r.companyName && r.companyName.toLowerCase() === courier.companyName.toLowerCase());
 
-        if (rDest === targetHostel && r.status === 'EN_CAMINO' && isCourierMatch) {
+        const rShellId = String(r.smartVieiraId || '').trim().toUpperCase();
+        const isShellAllowed = !filterIds || filterIds.has(rShellId);
+
+        if (rDest === targetHostel && r.status === 'EN_CAMINO' && isCourierMatch && isShellAllowed) {
           r.status = 'ENTREGADA';
           r.deliveredAt = nowIso;
           r.deliveredLocation = deliveryLoc;

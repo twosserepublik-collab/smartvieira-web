@@ -1610,19 +1610,40 @@
     }
 
     async function getCurrentCoordsFast() {
+      // 1. Try standard browser/WebView Geolocation (now granted via onGeolocationPermissionsShowPrompt)
       try {
         const pos = await acquireRealPosition();
-        return { lat: pos.coords.latitude, lng: pos.coords.longitude };
-      } catch (err) {
-        if (lastKnownCoords) {
-          return { lat: lastKnownCoords.lat, lng: lastKnownCoords.lng };
+        if (pos && pos.coords) {
+          lastKnownCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          return { lat: pos.coords.latitude, lng: pos.coords.longitude };
         }
-        alert('⚠️ No se ha podido obtener la ubicación GPS real de tu teléfono.\nActiva el GPS en tu móvil para registrar las coordenadas de entrega.');
-        throw err;
+      } catch (err) {
+        console.log('WebView geolocation fallback:', err && err.message ? err.message : err);
       }
+
+      // 2. Fallback to native Android LocationManager (GPS + Network + Passive, instant indoors!)
+      try {
+        if (window.AndroidBleBridge && window.AndroidBleBridge.getNativeLocationJson) {
+          const raw = window.AndroidBleBridge.getNativeLocationJson();
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed.lat === 'number' && typeof parsed.lng === 'number') {
+              lastKnownCoords = { lat: parsed.lat, lng: parsed.lng };
+              return { lat: parsed.lat, lng: parsed.lng };
+            }
+          }
+        }
+      } catch (e) {}
+
+      // 3. Fallback to cached coords if available
+      if (lastKnownCoords) {
+        return { lat: lastKnownCoords.lat, lng: lastKnownCoords.lng };
+      }
+
+      // 4. Never block confirmed BLE delivery if GPS signal is unavailable indoors
+      return { lat: null, lng: null };
     }
 
-    // ── LOAD RESERVATIONS FROM SERVER ─────────────────────────────
     async function loadCourierReservationsFromDb() {
       if (!currentCourier) return;
       try {
@@ -1877,24 +1898,71 @@
       if (typeof switchCourierTab === 'function') switchCourierTab('mochilas');
     }
 
-    // ?? Connect to ALL ids, send single autonomous blink command, show live timer ??
+    // ?? NATIVE BLE BATCH CONFIRMATION ENGINE ????????????????????????
+    const nativeBleBatchResolvers = {};
+
+    window.onNativeBleBatchComplete = function(actionType, confirmedIds) {
+      const resolver = nativeBleBatchResolvers[actionType];
+      if (resolver) {
+        delete nativeBleBatchResolvers[actionType];
+        resolver(Array.isArray(confirmedIds) ? confirmedIds : []);
+      }
+    };
+
+    function runNativeBleBatch(ids, command, actionType) {
+      const targetList = Array.isArray(ids) ? [...new Set(ids.filter(Boolean))] : [];
+      if (targetList.length === 0) return Promise.resolve([]);
+
+      if (window.AndroidBleBridge && window.AndroidBleBridge.sendBleToTargetsWithCallback) {
+        return new Promise((resolve) => {
+          let settled = false;
+          const finish = (arr) => {
+            if (settled) return;
+            settled = true;
+            delete nativeBleBatchResolvers[actionType];
+            resolve(arr);
+          };
+          nativeBleBatchResolvers[actionType] = finish;
+          setTimeout(() => finish([]), 12000);
+          window.AndroidBleBridge.sendBleToTargetsWithCallback(targetList.join(','), command, actionType);
+        });
+      }
+
+      // Web Bluetooth fallback (strict: only returns IDs that actually connected & wrote!)
+      return (async () => {
+        const confirmed = [];
+        for (const id of targetList) {
+          try {
+            const char = await Promise.race([
+              autoConnectToVieira(id),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2500))
+            ]);
+            if (char) {
+              const encoder = new TextEncoder();
+              await char.writeValue(encoder.encode(command));
+              confirmed.push(id);
+            }
+          } catch (e) {}
+        }
+        return confirmed;
+      })();
+    }
+
+    // ?? Visual 2-minute countdown timer (only started AFTER real BLE confirmation) ??
     let blinkIntervalMap = {};
     let activeBlinkTargetsMap = {};
 
-    async function autoBlinkAll(ids, command, btnId, statusId) {
+    function startBlinkVisualTimer(confirmedIds, btnId, statusId, headerTitle) {
       const btn    = document.getElementById(btnId);
       const status = document.getElementById(statusId);
-      const targetIds = Array.isArray(ids) ? ids.filter(Boolean) : [];
+      const targetIds = Array.isArray(confirmedIds) ? confirmedIds.filter(Boolean) : [];
       const total  = targetIds.length;
 
       activeBlinkTargetsMap[statusId] = targetIds;
       if (status) status.classList.remove('hidden');
 
-      // Send autonomous blink command ONCE (ESP32-S3 blinks autonomously in STATE_DELIVERY without BLE spam!)
-      sendBleToAllDevices(targetIds, command);
-
       if (blinkIntervalMap[statusId]) clearInterval(blinkIntervalMap[statusId]);
-      let secondsLeft = 120; // 2 minutes visual timer
+      let secondsLeft = 120;
 
       if (btn) {
         btn.disabled = true;
@@ -1907,9 +1975,9 @@
           <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold text-center space-y-1.5 shadow-sm">
             <div class="flex items-center justify-center space-x-2">
               <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
-              <span class="text-sm font-black text-slate-900">? PARPADEO ESP32 ACTIVO (2 MIN)</span>
+              <span class="text-sm font-black text-slate-900">${headerTitle || '? PARPADEO ESP32 ACTIVO (2 MIN)'}</span>
             </div>
-            <p class="font-mono text-emerald-700 text-sm font-extrabold">?? Restan ${secondsLeft} seg (${total} Vieira${total !== 1 ? 's' : ''} asignada${total !== 1 ? 's' : ''})</p>
+            <p class="font-mono text-emerald-700 text-sm font-extrabold">?? Restan ${secondsLeft} seg (${total} Vieira${total !== 1 ? 's' : ''} confirmada${total !== 1 ? 's' : ''})</p>
             <button type="button" onclick="stopBlinkCountdown('${btnId}', '${statusId}')" class="px-4 py-1.5 bg-red-100 text-red-700 text-[11px] rounded-xl font-black border border-red-300 hover:bg-red-200 transition-all">
               ?? Detener Parpadeo
             </button>
@@ -1930,7 +1998,6 @@
 
     function sendBleToAllDevices(ids, command) {
       const targetList = Array.isArray(ids) ? [...new Set(ids.filter(Boolean))] : [];
-      // 1. Android Native Bridge: Strict target-list BLE command ONLY (never fall through to Web BT on Android!)
       if (window.AndroidBleBridge) {
         if (window.AndroidBleBridge.sendBleToTargets && targetList.length > 0) {
           window.AndroidBleBridge.sendBleToTargets(targetList.join(','), command);
@@ -1939,8 +2006,6 @@
         }
         return;
       }
-
-      // 2. Web Bluetooth Fallback (browser desktop/Android Chrome only)
       targetList.forEach(async (id) => {
         try {
           const char = await autoConnectToVieira(id);
@@ -1962,7 +2027,6 @@
         : myHiredSmartVieiraIds;
       delete activeBlinkTargetsMap[statusId];
 
-      // Send OFF command ONCE to stop blinking LEDs on ESP32
       sendBleToAllDevices(targetsToStop, 'OFF');
 
       const btn = document.getElementById(btnId);
@@ -1980,53 +2044,56 @@
       }
     }
 
-    // ?? RECOGIDA GENERAL (GOLDEN AMBER RGB BLINK + BLE DETECTION + GPS ACTIVATION) ??
+    // ?? RECOGIDA GENERAL (STRICT: ONLY MARKS EN_CAMINO SHELLS ACTUALLY DETECTED BY BLE) ??
     async function triggerBulkPickupBlink() {
       if (myHiredSmartVieiraIds.length === 0) {
         alert('?? No tienes mochilas asignadas todav?a.\nEspera a que un peregrino contrate tu servicio o pulsa ?? para refrescar.');
         return;
       }
 
-      const pendingReservations = myHiredReservationsObjects.filter(r => r.status !== 'ENTREGADA');
+      const pendingReservations = myHiredReservationsObjects.filter(r => r.status !== 'ENTREGADA' && r.status !== 'EN_CAMINO');
       if (pendingReservations.length === 0) {
-        alert('? Todas las mochilas de tu empresa ya han sido entregadas.');
+        const inTransit = myHiredReservationsObjects.filter(r => r.status === 'EN_CAMINO').length;
+        if (inTransit > 0) {
+          alert(`?? Tus ${inTransit} mochila(s) ya figuran EN CAMINO.`);
+        } else {
+          alert('? Todas las mochilas de tu empresa ya han sido entregadas.');
+        }
         return;
       }
 
       const pendingIds = [...new Set(pendingReservations.map(r => r.smartVieiraId).filter(Boolean))];
+      const btnPickup = document.getElementById('btnPickup');
       const pickupStatusEl = document.getElementById('pickupStatus');
+      if (btnPickup) btnPickup.disabled = true;
       pickupStatusEl.classList.remove('hidden');
-      pickupStatusEl.innerHTML = '<span class="text-amber-700 font-bold animate-pulse">?? Buscando y haciendo parpadear tus SmartVieiras por Bluetooth...</span>';
+      pickupStatusEl.innerHTML = `<div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold text-center animate-pulse">?? Buscando ${pendingIds.length} SmartVieira(s) cercanas por Bluetooth...</div>`;
 
-      // On Android Native App, pass all pendingIds directly to NativeBleBridge (multi-shell parallel BLE)
-      let idsToMark = pendingIds;
-      if (!window.AndroidBleBridge) {
-        const connectedIds = [];
-        for (const id of pendingIds) {
-          try {
-            const char = await Promise.race([
-              autoConnectToVieira(id),
-              new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout fuera de rango')), 2500))
-            ]);
-            if (char) connectedIds.push(id);
-          } catch (e) {
-            console.log(`[BLE SCAN] Concha ${id} no responde en este albergue (${e.message})`);
-          }
-        }
-        idsToMark = connectedIds.length > 0 ? connectedIds : pendingIds;
+      // 1. Scan & blink ONLY shells physically present nearby via BLE
+      const confirmedIds = await runNativeBleBatch(pendingIds, 'DELIVERY:255,165,0', 'pickup');
+
+      if (!confirmedIds || confirmedIds.length === 0) {
+        if (btnPickup) btnPickup.disabled = false;
+        pickupStatusEl.innerHTML = `
+          <div class="p-3 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs font-bold text-center">
+            ?? No se ha detectado ninguna SmartVieira asignada cerca por Bluetooth.<br>
+            <span class="font-normal text-[11px]">Ninguna mochila se ha marcado como recogida. Ac?rcate a las mochilas y vuelve a intentarlo.</span>
+          </div>
+        `;
+        return;
       }
 
-      // 1. Physically blink ESP32 autonomously in Golden Amber via BLE (DELIVERY:255,165,0)
-      await autoBlinkAll(idsToMark, 'DELIVERY:255,165,0', 'btnPickup', 'pickupStatus');
+      // 2. Start visual blink timer ONLY for confirmed physical shells
+      startBlinkVisualTimer(confirmedIds, 'btnPickup', 'pickupStatus', '? RECOGIDA CONFIRMADA ? PARPADEO ACTIVO');
 
-      // 2. Call Server to mark these reservations as EN_CAMINO and create Pilgrim Notification 1
+      // 3. Mark EN_CAMINO in server ONLY for confirmedIds!
       try {
         const resp = await fetch(getApiUrl('/api/courier/pickup'), {
           method: 'POST',
           headers: getCourierAuthHeaders(true),
           body: JSON.stringify({
             courierId: currentCourier.id,
-            smartVieiraIds: idsToMark
+            smartVieiraIds: confirmedIds
           })
         });
         const resData = await resp.json();
@@ -2039,7 +2106,7 @@
       }
     }
 
-    // ?? ENTREGA EN ALBERGUE (PURPLE VIOLET RGB BLINK + SAVE COORDINATE + STOP GPS) ??
+    // ?? ENTREGA EN ALBERGUE (STRICT: ONLY EN_CAMINO + ONLY SHELLS DETECTED BY BLE) ??
     async function triggerHostelDropoffBlink() {
       const selectedHostel = document.getElementById('courierDropoffHostelSelect').value;
       if (!selectedHostel) {
@@ -2047,27 +2114,44 @@
         return;
       }
 
+      // STRICT: Only backpacks already picked up (EN_CAMINO) can be delivered!
       const targetReservations = myHiredReservationsObjects.filter(r =>
-        r.destinationAlbergue === selectedHostel && (r.status === 'EN_CAMINO' || r.status === 'PAID')
+        r.destinationAlbergue === selectedHostel && r.status === 'EN_CAMINO'
       );
       const targetIds = [...new Set(targetReservations.map(r => r.smartVieiraId).filter(Boolean))];
 
       if (targetIds.length === 0) {
-        alert(`?? No hay mochilas en ruta pendientes de entrega para "${selectedHostel}".`);
+        alert(`?? No hay mochilas recogidas (EN CAMINO) para entregar en "${selectedHostel}".\nDebes realizar la Recogida primero.`);
         return;
       }
 
+      const btnDropoff = document.getElementById('btnDropoff');
       const dropStatusEl = document.getElementById('dropoffStatus');
+      if (btnDropoff) btnDropoff.disabled = true;
       dropStatusEl.classList.remove('hidden');
-      dropStatusEl.innerHTML = '<span class="text-blue-700 font-bold animate-pulse">?? Fijando coordenadas de entrega y haciendo parpadear vieiras...</span>';
+      dropStatusEl.innerHTML = `<div class="p-3 rounded-xl bg-blue-50 border border-blue-300 text-blue-900 text-xs font-bold text-center animate-pulse">?? Buscando ${targetIds.length} SmartVieira(s) de este albergue por Bluetooth...</div>`;
 
-      // 1. Physically blink ESP32 autonomously in Violet/Purple via BLE immediately!
-      await autoBlinkAll(targetIds, 'DELIVERY:168,85,247', 'btnDropoff', 'dropoffStatus');
+      // 1. Scan & blink ONLY shells physically present in the van for this hostel
+      const confirmedIds = await runNativeBleBatch(targetIds, 'DELIVERY:168,85,247', 'dropoff');
 
-      // 2. Get exact current GPS coordinates of the delivery
+      if (!confirmedIds || confirmedIds.length === 0) {
+        if (btnDropoff) btnDropoff.disabled = false;
+        dropStatusEl.innerHTML = `
+          <div class="p-3 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs font-bold text-center">
+            ?? No se ha detectado ninguna SmartVieira de "${selectedHostel}" cerca por Bluetooth.<br>
+            <span class="font-normal text-[11px]">Ninguna mochila se ha marcado como entregada.</span>
+          </div>
+        `;
+        return;
+      }
+
+      // 2. Start visual timer ONLY for confirmed physical shells
+      startBlinkVisualTimer(confirmedIds, 'btnDropoff', 'dropoffStatus', '?? ENTREGA CONFIRMADA ? PARPADEO ACTIVO');
+
+      // 3. Get exact GPS coordinates (WebView Geolocation + Native Android fallback)
       const coords = await getCurrentCoordsFast();
 
-      // 3. Call Server to mark ENTREGADA, store delivery coords & notify pilgrim
+      // 4. Mark ENTREGADA in server ONLY for confirmedIds!
       try {
         const resp = await fetch(getApiUrl('/api/courier/delivery'), {
           method: 'POST',
@@ -2075,6 +2159,7 @@
           body: JSON.stringify({
             courierId: currentCourier.id,
             destinationAlbergue: selectedHostel,
+            smartVieiraIds: confirmedIds,
             lat: coords.lat,
             lng: coords.lng
           })
